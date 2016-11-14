@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    
+    <title>Hibernate Many-To-One with Secondary Tables | λ</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+        <meta name="keywords" content="java" />
+    
+    <meta name="description" content="Hibernate Secondary Tables1. Hibernate Secondary Table的应用场景
+两张表有外键关联，主要应用于One-To-One或Many-To-One的两张表之间。
+比如，以Many-To-One为例：
+表一:
+CREATE TABLE Person (
+    id INT NOT NULL PRIMARY KEY,
+    parent_id INT,">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hibernate Many-To-One with Secondary Tables">
+<meta property="og:url" content="https://lameta.com/2013/12/20/hibernate-many-to-one-with-secondary-tables/index.html">
+<meta property="og:site_name" content="λ">
+<meta property="og:description" content="Hibernate Secondary Tables1. Hibernate Secondary Table的应用场景
+两张表有外键关联，主要应用于One-To-One或Many-To-One的两张表之间。
+比如，以Many-To-One为例：
+表一:
+CREATE TABLE Person (
+    id INT NOT NULL PRIMARY KEY,
+    parent_id INT,">
+<meta property="og:updated_time" content="2016-09-07T07:43:58.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hibernate Many-To-One with Secondary Tables">
+<meta name="twitter:description" content="Hibernate Secondary Tables1. Hibernate Secondary Table的应用场景
+两张表有外键关联，主要应用于One-To-One或Many-To-One的两张表之间。
+比如，以Many-To-One为例：
+表一:
+CREATE TABLE Person (
+    id INT NOT NULL PRIMARY KEY,
+    parent_id INT,">
+    
+
+    
+        <link rel="alternate" href="/atom.xml" title="λ" type="application/atom+xml" />
+    
+
+    
+        <link rel="icon" href="/favicon.ico# path to favicon" />
+    
+
+    <link rel="stylesheet" href="/vendor/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/vendor/titillium-web/styles.css">
+    <link rel="stylesheet" href="/vendor/source-code-pro/styles.css">
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <script src="/vendor/jquery/2.0.3/jquery.min.js"></script>
+    
+    
+        <link rel="stylesheet" href="/vendor/lightgallery/css/lightgallery.min.css">
+    
+    
+        <script type="text/javascript">
+(function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-83870107-1# enter the tracking ID for your Google Analytics', 'auto');
+ga('send', 'pageview');
+
+</script>
+    
+    
+        <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?e6231610fe66acf322391d7546c28f21# enter Baidu Analytics hash key";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+    
+
+</head>
+
+<body>
+    <div id="wrap">
+        <header id="header">
+    <div id="header-outer" class="outer">
+        <div class="container">
+            <div class="container-inner">
+                <div id="header-title">
+                    <h1 class="logo-wrap">
+                        <a href="/" class="logo"></a>
+                    </h1>
+                    
+                        <h2 class="subtitle-wrap">
+                            <p class="subtitle">(conj clojurians me)</p>
+                        </h2>
+                    
+                </div>
+                <div id="header-inner" class="nav-container">
+                    <a id="main-nav-toggle" class="nav-icon fa fa-bars"></a>
+                    <div class="nav-container-inner">
+                        <ul id="main-nav">
+                            
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" href="/">主页</a>
+                                </li>
+                            
+                                        <ul class="main-nav-list"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Clojure/">Clojure</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/技术/">技术</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/生活/">生活</a></li></ul>
+                                    
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" href="/about/index.html">关于</a>
+                                </li>
+                            
+                        </ul>
+                        <nav id="sub-nav">
+                            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="想要查找什么..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+        <div class="container">
+            <div class="main-body container-inner">
+                <div class="main-body-inner">
+                    <section id="main">
+                        <div class="main-body-header">
+    <h1 class="header">
+    
+    <a class="page-title-link" href="/categories/技术/">技术</a>
+    </h1>
+</div>
+                        <div class="main-body-content">
+                            <article id="post-hibernate-many-to-one-with-secondary-tables" class="article article-single article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+        Hibernate Many-To-One with Secondary Tables
+        </h1>
+    
+
+            </header>
+        
+        
+            <div class="article-subtitle">
+                <a href="/2013/12/20/hibernate-many-to-one-with-secondary-tables/" class="article-date">
+    <time datetime="2013-12-20T05:26:03.000Z" itemprop="datePublished">2013-12-20</time>
+</a>
+                
+    <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li></ul>
+
+            </div>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+            <h3 id="Hibernate-Secondary-Tables"><a href="#Hibernate-Secondary-Tables" class="headerlink" title="Hibernate Secondary Tables"></a>Hibernate Secondary Tables</h3><h2 id="1-Hibernate-Secondary-Table的应用场景"><a href="#1-Hibernate-Secondary-Table的应用场景" class="headerlink" title="1. Hibernate Secondary Table的应用场景"></a>1. Hibernate Secondary Table的应用场景</h2><blockquote>
+<p>两张表有外键关联，主要应用于One-To-One或Many-To-One的两张表之间。</p>
+<p>比如，以Many-To-One为例：</p>
+<p>表一:</p>
+<pre><code>CREATE TABLE Person (
+    id INT NOT NULL PRIMARY KEY,
+    parent_id INT,
+    num INT NOT NULL
+);
+</code></pre><p>表二:</p>
+<pre><code>CREATE TABLE Name (
+   id INT NOT NULL PRIMARY KEY,
+   name VARCHAR(20) NOT NULL,
+   person_id INT NOT NULL,
+   FOREIGN KEY(person_id) REFERENCES Person(id)
+);
+</code></pre></blockquote>
+<h2 id="2-对应的映射实体"><a href="#2-对应的映射实体" class="headerlink" title="2. 对应的映射实体"></a>2. 对应的映射实体</h2><p>&gt;<br>    @Entity<br>    @Table(name = “Person”)<br>    @SecondaryTable(name = “Name”,<br>    pkJoinColumns={ @PrimaryKeyJoinColumn(name=”id”, referencedColumnName=”person_id”) )<br>    public class Person {<br>       @Id<br>       @GeneratedValue(strategy = GenerationType.AUTO)<br>       @Column(name = “id”)<br>       private int id;</p>
+<blockquote>
+<pre><code>   @Column(name = &quot;num&quot;, nullable = false)
+   private int num;
+
+   @Column(name = &quot;parent_id&quot;, nullable = false)
+   private Person parent;
+
+   @Column(name = &quot;name&quot;, table = &quot;Name&quot;)
+   private String name;
+}
+</code></pre></blockquote>
+<h2 id="3-业务需求"><a href="#3-业务需求" class="headerlink" title="3. 业务需求"></a>3. 业务需求</h2><blockquote>
+<p><strong>现在要求查询固定的num=<em>123</em>下所有的孩子中名字叫做name=<em>english_name</em>的人（注意这里的num不是主键，但是唯一标识这个人)</strong></p>
+<p>我们很轻易地写出下面这样的语句</p>
+<pre><code>SELECT a FROM person a WHERE a.parent.num=&apos;123&apos; AND a.name=&apos;english_name&apos;;
+</code></pre><p>但是结果出乎我们意料，假如这里我们的Name表中每个人都对应<em>中文名</em>,<em>english_name</em>，<em>japanese_name</em>，那么返回的就是连续的3组含有<em>english_name</em>的记录。</p>
+<p>这个显然不符合我们的要求,那么到底什么地方出了错误呢？</p>
+<p>我首先想到的解决方案是</p>
+<pre><code>SELECT DISTINCT(a) FROM person a WHERE a.parent.num=&apos;123&apos; AND a.name=&apos;english_name&apos;;
+</code></pre><p>添加了DISTINCT。此时，返回的结果果然正确。但是这不符合我的直觉，试想想每次平白无故地拿回许多不需要的数据，最后还要进行筛选，实在得不偿失。</p>
+</blockquote>
+<ul>
+<li><p>由于我选择的ORM框架是Hibernate，这其中有一个好处就是可以直接打印发送给数据库服务器的SQL语句。没有办法，为了解原因所在，不得不动手分析起万恶的SQL语句。</p>
+<blockquote>
+<p>语句是这样的，为了可读，我对Hibernate生成的SQL语句进行了一些调整,结构没有改变。</p>
+<p>  select</p>
+<pre><code>person_A.id as ID,
+person_A.num as NUM,
+person_A.parent_id as PARENT,
+name_A.name as NAME 
+</code></pre><p>  from</p>
+<pre><code>Person person_A 
+</code></pre><p>  left outer join</p>
+<pre><code>Name name_A 
+    on person_A.ID=name_A.person_id cross 
+</code></pre><p>  join</p>
+<pre><code>Person person_B 
+</code></pre><p>  left outer join</p>
+<pre><code>Name name_B 
+    on person_B.id=name_B.person_id 
+</code></pre><p>  where</p>
+<pre><code>person_A.parent_id=person_B.id 
+and person_B.num=123 
+and name_B.name=&apos;english_name&apos;
+</code></pre><p>起初，我以为是cross join的问题，cross join顾名思义，就是著名的笛卡尔乘积，即叉乘。但是cross join在这里的作用不过是一个<strong>逗号</strong>。<br>这样的语句就和我们熟悉的联合两张表来查是一样的了。<br>举个例子， 即</p>
+<p>  SELECT * FROM A, B WHERE A.ID=B.a_id AND B.num=222;<br>因为有了B.num=222和A.Id=B.a_id的限制，就不会有叉乘的结果出现。</p>
+</blockquote>
+</li>
+<li><p>那么为什么会出3组重复的数据呢？</p>
+<blockquote>
+<p>进一步分析，我发现where子句中</p>
+<p>  person_A.parent_id=person_B.id<br>  and person_B.num=123<br>已经限定了person_A的父Id，但是最重要的是，该父Id在两张联合表中不是唯一的！它对应了3条不同记录，这3条记录中的name字段取值不同。<br>明确这点，我又进一步分析得出<br>3条不同的父Id记录，分别派生出3组不同的子记录群，每组中的每条记录也不是唯一的，它们一样对应3种不同的名字。<br>最后，分析where子句限定</p>
+<p>  and name_B.name=’english_name’<br>这条语句不过是将每组中名字是english_name的字段取出来，取出来的记录仍然是3组重复的记录。<br>所以得出的结果是必然的。</p>
+</blockquote>
+</li>
+</ul>
+<h2 id="4-解决方案"><a href="#4-解决方案" class="headerlink" title="4. 解决方案"></a>4. 解决方案</h2><blockquote>
+<p>仔细分析之后我发现，其实只需要将限定person_A的Parent Person的名字先限制在<strong>english_name</strong>上，那么这样的Parent Person就是唯一的。通过这个唯一的Parent Person，就会得到了一组子记录，它们的名字还是会有不同（对应各自的中文名，英文名或者日文名），这样的结果还不是我所期望的，所以更进一步，我将这样一组子记录的名字也限定在<strong>english_name</strong>上。那么查出的结果就是唯一的了。</p>
+<pre><code>SELECT a FROM person a WHERE a.parent.num=&apos;123&apos; AND 
+a.parent.name = &apos;english_name&apos; AND a.name = &apos;english_name&apos;;
+</code></pre><p>以上就是我解决整个问题的过程。</p>
+</blockquote>
+<h2 id="5-总结"><a href="#5-总结" class="headerlink" title="5. 总结"></a>5. 总结</h2><blockquote>
+<p>任何问题都有解决方案</p>
+<p>不要想当然认为工具会按照你的想法去工作</p>
+<p>SQL万恶，但是不熟悉它，你的代码会更邪恶。</p>
+</blockquote>
+
+        </div>
+        <footer class="article-footer">
+            
+
+
+
+    <a data-url="https://lameta.com/2013/12/20/hibernate-many-to-one-with-secondary-tables/" data-id="civhg12qo0008ctm4exlbvtux" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
+<script>
+    (function ($) {
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+</script>
+
+        </footer>
+    </div>
+</article>
+
+    <section id="comments">
+    
+        
+    <div class="ds-thread" data-thread-key="2013/12/20/hibernate-many-to-one-with-secondary-tables/" data-title="Hibernate Many-To-One with Secondary Tables" data-url="https://lameta.com/2013/12/20/hibernate-many-to-one-with-secondary-tables/"></div>
+    <style>
+        #ds-thread #ds-reset .ds-textarea-wrapper {
+            background: none;
+        }
+        #ds-reset .ds-avatar img {
+            box-shadow: none;
+        }
+        #ds-reset .ds-gradient-bg {
+            background: #f7f7f7;
+        }
+        #ds-thread #ds-reset li.ds-tab a {
+            border-radius: 3px;
+        }
+        #ds-thread #ds-reset .ds-post-button {
+            color: white;
+            border: none;
+            box-shadow: none;
+            background: #d32;
+            text-shadow: none;
+            font-weight: normal;
+            font-family: 'Microsoft Yahei';
+        }
+        #ds-thread #ds-reset .ds-post-button:hover {
+            color: white;
+            background: #DE594C;
+        }
+        #ds-thread #ds-reset .ds-post-button:active {
+            background: #d32;
+        }
+        #ds-smilies-tooltip ul.ds-smilies-tabs li a.ds-current {
+            color: white;
+            background: #d32;
+            box-shadow: none;
+            text-shadow: none;
+            font-weight: normal;
+        }
+    </style>
+
+    
+    </section>
+
+                        </div>
+                    </section>
+                    <aside id="sidebar">
+    <a class="sidebar-toggle" title="Expand Sidebar"><i class="toggle icon"></i></a>
+    <div class="sidebar-top">
+        <p>关注我 :</p>
+        <ul class="social-links">
+            
+                
+                <li>
+                    <a class="social-tooltip" title="twitter" href="https://twitter.com/lambetaX" target="_blank">
+                        <i class="icon fa fa-twitter"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="github" href="https://github.com/qianyan" target="_blank">
+                        <i class="icon fa fa-github"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="weibo" href="http://weibo.com/3672207020/" target="_blank">
+                        <i class="icon fa fa-weibo"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="rss" href="/atom.xml" target="_blank">
+                        <i class="icon fa fa-rss"></i>
+                    </a>
+                </li>
+                
+            
+        </ul>
+    </div>
+    
+        
+<nav id="article-nav">
+    
+        <a href="/2014/01/01/zeal-api-searing-tool-on-linux/" id="article-nav-newer" class="article-nav-link-wrap">
+        <strong class="article-nav-caption">下一篇</strong>
+        <p class="article-nav-title">
+        
+            Zeal
+        
+        </p>
+        <i class="icon fa fa-chevron-right" id="icon-chevron-right"></i>
+    </a>
+    
+    
+        <a href="/2013/12/17/yeoman/" id="article-nav-older" class="article-nav-link-wrap">
+        <strong class="article-nav-caption">上一篇</strong>
+        <p class="article-nav-title">Build Js backbone with YEOMAN under Ubuntu</p>
+        <i class="icon fa fa-chevron-left" id="icon-chevron-left"></i>
+        </a>
+    
+</nav>
+
+    
+    <div class="widgets-container">
+        
+            
+                
+    <div class="widget-wrap">
+        <h3 class="widget-title">最新文章</h3>
+        <div class="widget">
+            <ul id="recent-post" class="no-thumbnail">
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Clojure/">Clojure</a></p>
+                            <p class="item-title"><a href="/2016/11/04/Generative-Testing/" class="title">Generative Testing</a></p>
+                            <p class="item-date"><time datetime="2016-11-03T23:21:34.000Z" itemprop="datePublished">2016-11-04</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Clojure/">Clojure</a></p>
+                            <p class="item-title"><a href="/2016/09/12/Collection-Pipelines-By-TDD/" class="title">Clojure集合管道函数练习</a></p>
+                            <p class="item-date"><time datetime="2016-09-12T01:26:24.000Z" itemprop="datePublished">2016-09-12</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Clojure/">Clojure</a></p>
+                            <p class="item-title"><a href="/2016/09/04/Reading-and-Writing-Files/" class="title">Reading and Writing Files</a></p>
+                            <p class="item-date"><time datetime="2016-09-04T02:10:44.000Z" itemprop="datePublished">2016-09-04</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/技术/">技术</a></p>
+                            <p class="item-title"><a href="/2016/06/24/SonarQube-Plugin-Step-by-Step/" class="title">SonarQube Plugin Step by Step</a></p>
+                            <p class="item-date"><time datetime="2016-06-23T16:40:23.000Z" itemprop="datePublished">2016-06-24</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Clojure/">Clojure</a></p>
+                            <p class="item-title"><a href="/2016/05/30/Leiningen-Profile/" class="title">Leiningen Profile</a></p>
+                            <p class="item-date"><time datetime="2016-05-30T13:21:26.000Z" itemprop="datePublished">2016-05-30</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">分类</h3>
+        <div class="widget">
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Clojure/">Clojure</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/技术/">技术</a><span class="category-list-count">38</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/生活/">生活</a><span class="category-list-count">2</span></li></ul>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">归档</h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">九月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">五月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">四月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">十一月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">七月 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">三月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">二月 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">一月 2015</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/11/">十一月 2014</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/10/">十月 2014</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/09/">九月 2014</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/07/">七月 2014</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/05/">五月 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02/">二月 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/01/">一月 2014</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/12/">十二月 2013</a><span class="archive-list-count">5</span></li></ul>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-float">
+        <h3 class="widget-title">标签云</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/FP/" style="font-size: 12px;">FP</a> <a href="/tags/Mistakes-I-Hav-Made/" style="font-size: 14px;">Mistakes I Hav Made</a> <a href="/tags/OO/" style="font-size: 10px;">OO</a> <a href="/tags/angularJs/" style="font-size: 10px;">angularJs</a> <a href="/tags/concurrency/" style="font-size: 10px;">concurrency</a> <a href="/tags/file/" style="font-size: 10px;">file</a> <a href="/tags/geek/" style="font-size: 10px;">geek</a> <a href="/tags/gradle/" style="font-size: 10px;">gradle</a> <a href="/tags/java/" style="font-size: 16px;">java</a> <a href="/tags/javascript/" style="font-size: 20px;">javascript</a> <a href="/tags/kata/" style="font-size: 10px;">kata</a> <a href="/tags/language/" style="font-size: 14px;">language</a> <a href="/tags/leiningen/" style="font-size: 10px;">leiningen</a> <a href="/tags/maven/" style="font-size: 10px;">maven</a> <a href="/tags/mysql/" style="font-size: 12px;">mysql</a> <a href="/tags/node/" style="font-size: 12px;">node</a> <a href="/tags/promise/" style="font-size: 10px;">promise</a> <a href="/tags/q/" style="font-size: 10px;">q</a> <a href="/tags/rake/" style="font-size: 10px;">rake</a> <a href="/tags/shell/" style="font-size: 14px;">shell</a> <a href="/tags/sublime/" style="font-size: 10px;">sublime</a> <a href="/tags/test/" style="font-size: 10px;">test</a> <a href="/tags/testing/" style="font-size: 10px;">testing</a> <a href="/tags/thinking/" style="font-size: 18px;">thinking</a> <a href="/tags/transaction/" style="font-size: 10px;">transaction</a> <a href="/tags/vim/" style="font-size: 12px;">vim</a> <a href="/tags/yeoman/" style="font-size: 10px;">yeoman</a> <a href="/tags/zeal/" style="font-size: 10px;">zeal</a> <a href="/tags/散文/" style="font-size: 10px;">散文</a>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">链接</h3>
+        <div class="widget">
+            <ul>
+                
+                    <li>
+                        <a href="http://blog.jayfields.com/">Jay Fields</a>
+                    </li>
+                
+                    <li>
+                        <a href="https://aphyr.com">Aphyr</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://bucharestfp.ro">Bucharest FP</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://www.yinwang.org">Wangyin</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://blog.rlmflores.me/">Rodrigo Flores</a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+
+            
+        
+    </div>
+</aside>
+                </div>
+            </div>
+        </div>
+        <footer id="footer">
+    <div class="container">
+        <div class="container-inner">
+            <a id="back-to-top" href="javascript:;"><i class="icon fa fa-angle-up"></i></a>
+            <div class="credit">
+                <h1 class="logo-wrap">
+                    <a href="/" class="logo"></a>
+                </h1>
+                <p>&copy; 2016 lambeta</p>
+                <p>Powered by <a href="//hexo.io/" target="_blank">Hexo</a>. Theme by <a href="//github.com/ppoffice" target="_blank">PPOffice</a></p>
+            </div>
+        </div>
+    </div>
+</footer>
+        
+    
+    <script type="text/javascript">
+    var duoshuoQuery = {short_name:'lambeta'};
+    (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0]
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+    </script>
+
+
+
+    
+        <script src="/vendor/lightgallery/js/lightgallery.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-thumbnail.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-pager.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-autoplay.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-fullscreen.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-zoom.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-hash.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-share.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-video.min.js"></script>
+    
+
+
+<!-- Custom Scripts -->
+<script src="/js/main.js"></script>
+
+    </div>
+</body>
+</html>

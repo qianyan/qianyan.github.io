@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    
+    <title>Javascript Hoisting | λ</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+        <meta name="keywords" content="javascript" />
+    
+    <meta name="description" content="编程过程中，别人谈到Javascript中的funcation是顺序执行的，所以书写的顺序要留心，不然会出未定义就执行的错误。当然，C语言出身的程序员不以为意，会认为理所当然，C语言就是这么干的。但Javascript并非如此！
+ints.js12345678910function ints(arrOfNumberStr) &amp;#123;	return arrOfNumberStr.map(toIn">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Javascript Hoisting">
+<meta property="og:url" content="https://lameta.com/2015/01/27/Javascript-Hoisting/index.html">
+<meta property="og:site_name" content="λ">
+<meta property="og:description" content="编程过程中，别人谈到Javascript中的funcation是顺序执行的，所以书写的顺序要留心，不然会出未定义就执行的错误。当然，C语言出身的程序员不以为意，会认为理所当然，C语言就是这么干的。但Javascript并非如此！
+ints.js12345678910function ints(arrOfNumberStr) &amp;#123;	return arrOfNumberStr.map(toIn">
+<meta property="og:updated_time" content="2016-09-06T14:58:09.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Javascript Hoisting">
+<meta name="twitter:description" content="编程过程中，别人谈到Javascript中的funcation是顺序执行的，所以书写的顺序要留心，不然会出未定义就执行的错误。当然，C语言出身的程序员不以为意，会认为理所当然，C语言就是这么干的。但Javascript并非如此！
+ints.js12345678910function ints(arrOfNumberStr) &amp;#123;	return arrOfNumberStr.map(toIn">
+    
+
+    
+        <link rel="alternate" href="/atom.xml" title="λ" type="application/atom+xml" />
+    
+
+    
+        <link rel="icon" href="/favicon.ico# path to favicon" />
+    
+
+    <link rel="stylesheet" href="/vendor/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/vendor/titillium-web/styles.css">
+    <link rel="stylesheet" href="/vendor/source-code-pro/styles.css">
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <script src="/vendor/jquery/2.0.3/jquery.min.js"></script>
+    
+    
+        <link rel="stylesheet" href="/vendor/lightgallery/css/lightgallery.min.css">
+    
+    
+        <script type="text/javascript">
+(function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-83870107-1# enter the tracking ID for your Google Analytics', 'auto');
+ga('send', 'pageview');
+
+</script>
+    
+    
+        <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?e6231610fe66acf322391d7546c28f21# enter Baidu Analytics hash key";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+    
+
+</head>
+
+<body>
+    <div id="wrap">
+        <header id="header">
+    <div id="header-outer" class="outer">
+        <div class="container">
+            <div class="container-inner">
+                <div id="header-title">
+                    <h1 class="logo-wrap">
+                        <a href="/" class="logo"></a>
+                    </h1>
+                    
+                        <h2 class="subtitle-wrap">
+                            <p class="subtitle">(conj clojurians me)</p>
+                        </h2>
+                    
+                </div>
+                <div id="header-inner" class="nav-container">
+                    <a id="main-nav-toggle" class="nav-icon fa fa-bars"></a>
+                    <div class="nav-container-inner">
+                        <ul id="main-nav">
+                            
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" href="/">主页</a>
+                                </li>
+                            
+                                        <ul class="main-nav-list"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Clojure/">Clojure</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/技术/">技术</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/生活/">生活</a></li></ul>
+                                    
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" href="/about/index.html">关于</a>
+                                </li>
+                            
+                        </ul>
+                        <nav id="sub-nav">
+                            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="想要查找什么..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+        <div class="container">
+            <div class="main-body container-inner">
+                <div class="main-body-inner">
+                    <section id="main">
+                        <div class="main-body-header">
+    <h1 class="header">
+    
+    <a class="page-title-link" href="/categories/技术/">技术</a>
+    </h1>
+</div>
+                        <div class="main-body-content">
+                            <article id="post-Javascript-Hoisting" class="article article-single article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+        Javascript Hoisting
+        </h1>
+    
+
+            </header>
+        
+        
+            <div class="article-subtitle">
+                <a href="/2015/01/27/Javascript-Hoisting/" class="article-date">
+    <time datetime="2015-01-27T14:47:12.000Z" itemprop="datePublished">2015-01-27</time>
+</a>
+                
+    <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/javascript/">javascript</a></li></ul>
+
+            </div>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+            <p>编程过程中，别人谈到Javascript中的funcation是顺序执行的，所以书写的顺序要留心，不然会出未定义就执行的错误。当然，C语言出身的程序员不以为意，会认为理所当然，C语言就是这么干的。但Javascript并非如此！</p>
+<figure class="highlight javascript"><figcaption><span>ints.js</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">ints</span>(<span class="params">arrOfNumberStr</span>) </span>&#123;</div><div class="line">	<span class="keyword">return</span> arrOfNumberStr.map(toInt);</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">function</span> <span class="title">toInt</span>(<span class="params">str</span>) </span>&#123;</div><div class="line">		<span class="keyword">return</span> <span class="built_in">parseInt</span>(str, <span class="number">10</span>);</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">ints([<span class="string">'11'</span>, <span class="string">'11'</span>, <span class="string">'11'</span>]);</div><div class="line">-&gt; [<span class="number">11</span>, <span class="number">11</span>, <span class="number">11</span>]</div></pre></td></tr></table></figure>
+<p>从执行结果上来看，先调用后执行时正确的。但是JS是解析执行的，如果没有预先定义，执行到调用处必然会失败，那么为什么这段代码可以工作呢？</p>
+<p>先看一段略做修改之后的代码</p>
+<figure class="highlight javascript"><figcaption><span>ints_fail.js</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">ints</span>(<span class="params">arrOfNumberStr</span>) </span>&#123;</div><div class="line">	<span class="keyword">return</span> arrOfNumberStr.map(toInt);</div><div class="line"></div><div class="line">	<span class="keyword">var</span> toInt = <span class="function"><span class="keyword">function</span>(<span class="params">str</span>) </span>&#123;</div><div class="line">		<span class="keyword">return</span> <span class="built_in">parseInt</span>(str, <span class="number">10</span>);</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">ints([<span class="string">'11'</span>, <span class="string">'11'</span>, <span class="string">'11'</span>]);</div><div class="line">-&gt; <span class="built_in">TypeError</span>: <span class="literal">undefined</span> is not a <span class="function"><span class="keyword">function</span></span></div></pre></td></tr></table></figure>
+<p>执行结果失败了。回头看这两段代码的定义，不难发现程序对于<code>toInt</code>的定义方式有差别，一种用常规的函数定义方式，一种使用<strong>var</strong>定义。</p>
+<p>接着再看一段代码</p>
+<figure class="highlight javascript"><figcaption><span>variables.js</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">loop</span>(<span class="params">n</span>) </span>&#123;</div><div class="line">	<span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">0</span>; i&lt;n; i++);</div><div class="line"></div><div class="line">	<span class="keyword">return</span> i;</div><div class="line">&#125;</div><div class="line"></div><div class="line">loop(<span class="number">10</span>);</div><div class="line">-&gt; <span class="number">10</span></div></pre></td></tr></table></figure>
+<p>估计学习C语言的人开始惊讶了：这个<code>i</code>的作用域不是应该只在<code>for loop</code>中吗？</p>
+<p>那么到底是什么原因造成的呢？这就是Javascript Hoisting！简单解释，声明提升到作用域的最前面。</p>
+<p>接上面的<em>variable.js</em></p>
+<figure class="highlight javascript"><figcaption><span>variables_hoisting.js</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">loop</span>(<span class="params">n</span>) </span>&#123;</div><div class="line">	<span class="keyword">var</span> i;</div><div class="line">	<span class="keyword">for</span>(i=<span class="number">0</span>; i&lt;n; i++);</div><div class="line"></div><div class="line">	<span class="keyword">return</span> i;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这和原来的写法是等价的，所以<code>i</code>的作用域在整个<code>function</code>中都是有效的。依次类推，<em>init_fail.js</em>中的<code>var toInt</code>这样的函数声明也会被提升到作用域的最上方，但是只是声明被提升了，真正赋值还是在后面，所以此时调用该函数，它还是<code>undefined</code>。</p>
+<p>但是对于<em>init.js</em>而言，它的声明方式会将整个函数都提升，所以它是先于调用方赋值初始化的，所以能工作。</p>
+<h2 id="’use-strict’可以防止-only-reference-hoisting"><a href="#’use-strict’可以防止-only-reference-hoisting" class="headerlink" title="###’use strict’可以防止 only reference hoisting?"></a>###’use strict’可以防止 only reference hoisting?</h2><p>如果变量未声明，<strong>use strict</strong>模式下赋值会报错。</p>
+<figure class="highlight javascript"><figcaption><span>use_strict.js</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line"><span class="meta">    'use strict'</span>;</div><div class="line">    <span class="keyword">var</span> foo = <span class="number">123</span>;<span class="comment">//works fine</span></div><div class="line">    bar = <span class="number">345</span>;<span class="comment">//ReferenceError: bar is not defined</span></div><div class="line">&#125;());</div></pre></td></tr></table></figure>
+<p>如果在以前例子中使用<strong>use strict</strong>，并不能提前报出<code>toInt</code>未赋值的错误。直到运行期间，才会发现<code>toInt</code>依然<code>undefined</code>。</p>
+<figure class="highlight javascript"><figcaption><span>use_strict_for_hoisting.js</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">(<span class="function"><span class="keyword">function</span> <span class="title">ints</span>(<span class="params">arrOfNumberStr</span>) </span>&#123;</div><div class="line"><span class="meta">	'use strict'</span>;</div><div class="line">	<span class="keyword">return</span> arrOfNumberStr.map(toInt);</div><div class="line">	<span class="keyword">var</span> toInt = <span class="function"><span class="keyword">function</span>(<span class="params">str</span>) </span>&#123;</div><div class="line">		<span class="keyword">return</span> <span class="built_in">parseInt</span>(str, <span class="number">10</span>);</div><div class="line">	&#125;</div><div class="line">&#125;)([<span class="string">'11'</span>, <span class="string">'11'</span>]);</div><div class="line">-&gt; Uncaught <span class="built_in">TypeError</span>: <span class="literal">undefined</span> is not a <span class="function"><span class="keyword">function</span>(<span class="params">…</span>)</span></div></pre></td></tr></table></figure>
+<h2 id="优先使用function-declaration"><a href="#优先使用function-declaration" class="headerlink" title="###优先使用function declaration"></a>###优先使用function declaration</h2><blockquote>
+<p>Why? Function declarations are named, so they’re easier to identify in call stacks. Also, the whole body of a function declaration is hoisted, whereas only the reference of a function expression is hoisted. This rule makes it possible to always use Arrow Functions in place of function expressions. – from <a href="https://github.com/airbnb/javascript#functions" target="_blank" rel="external">javascript style guide</a></p>
+</blockquote>
+<p>下篇会记录Javascript的作用域，<code>Global Scope, Lexical Scope, Dynamic Scope, Function Scope</code></p>
+
+        </div>
+        <footer class="article-footer">
+            
+
+
+
+    <a data-url="https://lameta.com/2015/01/27/Javascript-Hoisting/" data-id="civhg12s3001xctm41te2kb20" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
+<script>
+    (function ($) {
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+</script>
+
+        </footer>
+    </div>
+</article>
+
+    <section id="comments">
+    
+        
+    <div class="ds-thread" data-thread-key="2015/01/27/Javascript-Hoisting/" data-title="Javascript Hoisting" data-url="https://lameta.com/2015/01/27/Javascript-Hoisting/"></div>
+    <style>
+        #ds-thread #ds-reset .ds-textarea-wrapper {
+            background: none;
+        }
+        #ds-reset .ds-avatar img {
+            box-shadow: none;
+        }
+        #ds-reset .ds-gradient-bg {
+            background: #f7f7f7;
+        }
+        #ds-thread #ds-reset li.ds-tab a {
+            border-radius: 3px;
+        }
+        #ds-thread #ds-reset .ds-post-button {
+            color: white;
+            border: none;
+            box-shadow: none;
+            background: #d32;
+            text-shadow: none;
+            font-weight: normal;
+            font-family: 'Microsoft Yahei';
+        }
+        #ds-thread #ds-reset .ds-post-button:hover {
+            color: white;
+            background: #DE594C;
+        }
+        #ds-thread #ds-reset .ds-post-button:active {
+            background: #d32;
+        }
+        #ds-smilies-tooltip ul.ds-smilies-tabs li a.ds-current {
+            color: white;
+            background: #d32;
+            box-shadow: none;
+            text-shadow: none;
+            font-weight: normal;
+        }
+    </style>
+
+    
+    </section>
+
+                        </div>
+                    </section>
+                    <aside id="sidebar">
+    <a class="sidebar-toggle" title="Expand Sidebar"><i class="toggle icon"></i></a>
+    <div class="sidebar-top">
+        <p>关注我 :</p>
+        <ul class="social-links">
+            
+                
+                <li>
+                    <a class="social-tooltip" title="twitter" href="https://twitter.com/lambetaX" target="_blank">
+                        <i class="icon fa fa-twitter"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="github" href="https://github.com/qianyan" target="_blank">
+                        <i class="icon fa fa-github"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="weibo" href="http://weibo.com/3672207020/" target="_blank">
+                        <i class="icon fa fa-weibo"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="rss" href="/atom.xml" target="_blank">
+                        <i class="icon fa fa-rss"></i>
+                    </a>
+                </li>
+                
+            
+        </ul>
+    </div>
+    
+        
+<nav id="article-nav">
+    
+        <a href="/2015/01/28/Javascript-Reference/" id="article-nav-newer" class="article-nav-link-wrap">
+        <strong class="article-nav-caption">下一篇</strong>
+        <p class="article-nav-title">
+        
+            Javascript Reference
+        
+        </p>
+        <i class="icon fa fa-chevron-right" id="icon-chevron-right"></i>
+    </a>
+    
+    
+        <a href="/2015/01/27/Javascript-Modularize-2nd/" id="article-nav-older" class="article-nav-link-wrap">
+        <strong class="article-nav-caption">上一篇</strong>
+        <p class="article-nav-title">Javascript Modularize 2nd</p>
+        <i class="icon fa fa-chevron-left" id="icon-chevron-left"></i>
+        </a>
+    
+</nav>
+
+    
+    <div class="widgets-container">
+        
+            
+                
+    <div class="widget-wrap">
+        <h3 class="widget-title">最新文章</h3>
+        <div class="widget">
+            <ul id="recent-post" class="no-thumbnail">
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Clojure/">Clojure</a></p>
+                            <p class="item-title"><a href="/2016/11/04/Generative-Testing/" class="title">Generative Testing</a></p>
+                            <p class="item-date"><time datetime="2016-11-03T23:21:34.000Z" itemprop="datePublished">2016-11-04</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Clojure/">Clojure</a></p>
+                            <p class="item-title"><a href="/2016/09/12/Collection-Pipelines-By-TDD/" class="title">Clojure集合管道函数练习</a></p>
+                            <p class="item-date"><time datetime="2016-09-12T01:26:24.000Z" itemprop="datePublished">2016-09-12</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Clojure/">Clojure</a></p>
+                            <p class="item-title"><a href="/2016/09/04/Reading-and-Writing-Files/" class="title">Reading and Writing Files</a></p>
+                            <p class="item-date"><time datetime="2016-09-04T02:10:44.000Z" itemprop="datePublished">2016-09-04</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/技术/">技术</a></p>
+                            <p class="item-title"><a href="/2016/06/24/SonarQube-Plugin-Step-by-Step/" class="title">SonarQube Plugin Step by Step</a></p>
+                            <p class="item-date"><time datetime="2016-06-23T16:40:23.000Z" itemprop="datePublished">2016-06-24</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Clojure/">Clojure</a></p>
+                            <p class="item-title"><a href="/2016/05/30/Leiningen-Profile/" class="title">Leiningen Profile</a></p>
+                            <p class="item-date"><time datetime="2016-05-30T13:21:26.000Z" itemprop="datePublished">2016-05-30</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">分类</h3>
+        <div class="widget">
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Clojure/">Clojure</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/技术/">技术</a><span class="category-list-count">38</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/生活/">生活</a><span class="category-list-count">2</span></li></ul>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">归档</h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">九月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">五月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">四月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">十一月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">七月 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">三月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">二月 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">一月 2015</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/11/">十一月 2014</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/10/">十月 2014</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/09/">九月 2014</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/07/">七月 2014</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/05/">五月 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02/">二月 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/01/">一月 2014</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/12/">十二月 2013</a><span class="archive-list-count">5</span></li></ul>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-float">
+        <h3 class="widget-title">标签云</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/FP/" style="font-size: 12px;">FP</a> <a href="/tags/Mistakes-I-Hav-Made/" style="font-size: 14px;">Mistakes I Hav Made</a> <a href="/tags/OO/" style="font-size: 10px;">OO</a> <a href="/tags/angularJs/" style="font-size: 10px;">angularJs</a> <a href="/tags/concurrency/" style="font-size: 10px;">concurrency</a> <a href="/tags/file/" style="font-size: 10px;">file</a> <a href="/tags/geek/" style="font-size: 10px;">geek</a> <a href="/tags/gradle/" style="font-size: 10px;">gradle</a> <a href="/tags/java/" style="font-size: 16px;">java</a> <a href="/tags/javascript/" style="font-size: 20px;">javascript</a> <a href="/tags/kata/" style="font-size: 10px;">kata</a> <a href="/tags/language/" style="font-size: 14px;">language</a> <a href="/tags/leiningen/" style="font-size: 10px;">leiningen</a> <a href="/tags/maven/" style="font-size: 10px;">maven</a> <a href="/tags/mysql/" style="font-size: 12px;">mysql</a> <a href="/tags/node/" style="font-size: 12px;">node</a> <a href="/tags/promise/" style="font-size: 10px;">promise</a> <a href="/tags/q/" style="font-size: 10px;">q</a> <a href="/tags/rake/" style="font-size: 10px;">rake</a> <a href="/tags/shell/" style="font-size: 14px;">shell</a> <a href="/tags/sublime/" style="font-size: 10px;">sublime</a> <a href="/tags/test/" style="font-size: 10px;">test</a> <a href="/tags/testing/" style="font-size: 10px;">testing</a> <a href="/tags/thinking/" style="font-size: 18px;">thinking</a> <a href="/tags/transaction/" style="font-size: 10px;">transaction</a> <a href="/tags/vim/" style="font-size: 12px;">vim</a> <a href="/tags/yeoman/" style="font-size: 10px;">yeoman</a> <a href="/tags/zeal/" style="font-size: 10px;">zeal</a> <a href="/tags/散文/" style="font-size: 10px;">散文</a>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">链接</h3>
+        <div class="widget">
+            <ul>
+                
+                    <li>
+                        <a href="http://blog.jayfields.com/">Jay Fields</a>
+                    </li>
+                
+                    <li>
+                        <a href="https://aphyr.com">Aphyr</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://bucharestfp.ro">Bucharest FP</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://www.yinwang.org">Wangyin</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://blog.rlmflores.me/">Rodrigo Flores</a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+
+            
+        
+    </div>
+</aside>
+                </div>
+            </div>
+        </div>
+        <footer id="footer">
+    <div class="container">
+        <div class="container-inner">
+            <a id="back-to-top" href="javascript:;"><i class="icon fa fa-angle-up"></i></a>
+            <div class="credit">
+                <h1 class="logo-wrap">
+                    <a href="/" class="logo"></a>
+                </h1>
+                <p>&copy; 2016 lambeta</p>
+                <p>Powered by <a href="//hexo.io/" target="_blank">Hexo</a>. Theme by <a href="//github.com/ppoffice" target="_blank">PPOffice</a></p>
+            </div>
+        </div>
+    </div>
+</footer>
+        
+    
+    <script type="text/javascript">
+    var duoshuoQuery = {short_name:'lambeta'};
+    (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0]
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+    </script>
+
+
+
+    
+        <script src="/vendor/lightgallery/js/lightgallery.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-thumbnail.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-pager.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-autoplay.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-fullscreen.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-zoom.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-hash.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-share.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-video.min.js"></script>
+    
+
+
+<!-- Custom Scripts -->
+<script src="/js/main.js"></script>
+
+    </div>
+</body>
+</html>

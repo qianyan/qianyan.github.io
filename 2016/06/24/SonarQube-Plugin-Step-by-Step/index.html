@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    
+    <title>SonarQube Plugin Step by Step | λ</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+        <meta name="keywords" content="java" />
+    
+    <meta name="description" content="插件不好写？！插件确实不好写，因为插件是插入庞大的系统当中工作的，那也就意味着写插件需要具备一定的领域知识，包括系统架构、扩展点、业务共性及差异、API及其业务模型对应、安装和测试。而对于开发者而言，学习这些知识的代价绝对是昂贵的。在《函数式编程思想》一书中，作者Neal Ford提到开发过程当中的两种抽象方式——composable and contextual abstract. 谈及cont">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SonarQube Plugin Step by Step">
+<meta property="og:url" content="https://lameta.com/2016/06/24/SonarQube-Plugin-Step-by-Step/index.html">
+<meta property="og:site_name" content="λ">
+<meta property="og:description" content="插件不好写？！插件确实不好写，因为插件是插入庞大的系统当中工作的，那也就意味着写插件需要具备一定的领域知识，包括系统架构、扩展点、业务共性及差异、API及其业务模型对应、安装和测试。而对于开发者而言，学习这些知识的代价绝对是昂贵的。在《函数式编程思想》一书中，作者Neal Ford提到开发过程当中的两种抽象方式——composable and contextual abstract. 谈及cont">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/217988-a6ad47ad581e7fc4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2016-09-06T14:59:18.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SonarQube Plugin Step by Step">
+<meta name="twitter:description" content="插件不好写？！插件确实不好写，因为插件是插入庞大的系统当中工作的，那也就意味着写插件需要具备一定的领域知识，包括系统架构、扩展点、业务共性及差异、API及其业务模型对应、安装和测试。而对于开发者而言，学习这些知识的代价绝对是昂贵的。在《函数式编程思想》一书中，作者Neal Ford提到开发过程当中的两种抽象方式——composable and contextual abstract. 谈及cont">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/217988-a6ad47ad581e7fc4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+    
+
+    
+        <link rel="alternate" href="/atom.xml" title="λ" type="application/atom+xml" />
+    
+
+    
+        <link rel="icon" href="/favicon.ico# path to favicon" />
+    
+
+    <link rel="stylesheet" href="/vendor/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/vendor/titillium-web/styles.css">
+    <link rel="stylesheet" href="/vendor/source-code-pro/styles.css">
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <script src="/vendor/jquery/2.0.3/jquery.min.js"></script>
+    
+    
+        <link rel="stylesheet" href="/vendor/lightgallery/css/lightgallery.min.css">
+    
+    
+        <script type="text/javascript">
+(function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-83870107-1# enter the tracking ID for your Google Analytics', 'auto');
+ga('send', 'pageview');
+
+</script>
+    
+    
+        <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?e6231610fe66acf322391d7546c28f21# enter Baidu Analytics hash key";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+    
+
+</head>
+
+<body>
+    <div id="wrap">
+        <header id="header">
+    <div id="header-outer" class="outer">
+        <div class="container">
+            <div class="container-inner">
+                <div id="header-title">
+                    <h1 class="logo-wrap">
+                        <a href="/" class="logo"></a>
+                    </h1>
+                    
+                        <h2 class="subtitle-wrap">
+                            <p class="subtitle">(conj clojurians me)</p>
+                        </h2>
+                    
+                </div>
+                <div id="header-inner" class="nav-container">
+                    <a id="main-nav-toggle" class="nav-icon fa fa-bars"></a>
+                    <div class="nav-container-inner">
+                        <ul id="main-nav">
+                            
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" href="/">主页</a>
+                                </li>
+                            
+                                        <ul class="main-nav-list"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Clojure/">Clojure</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/技术/">技术</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/生活/">生活</a></li></ul>
+                                    
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" href="/about/index.html">关于</a>
+                                </li>
+                            
+                        </ul>
+                        <nav id="sub-nav">
+                            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="想要查找什么..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+        <div class="container">
+            <div class="main-body container-inner">
+                <div class="main-body-inner">
+                    <section id="main">
+                        <div class="main-body-header">
+    <h1 class="header">
+    
+    <a class="page-title-link" href="/categories/技术/">技术</a>
+    </h1>
+</div>
+                        <div class="main-body-content">
+                            <article id="post-SonarQube-Plugin-Step-by-Step" class="article article-single article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+        SonarQube Plugin Step by Step
+        </h1>
+    
+
+            </header>
+        
+        
+            <div class="article-subtitle">
+                <a href="/2016/06/24/SonarQube-Plugin-Step-by-Step/" class="article-date">
+    <time datetime="2016-06-23T16:40:23.000Z" itemprop="datePublished">2016-06-24</time>
+</a>
+                
+    <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li></ul>
+
+            </div>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+            <h2 id="插件不好写？！"><a href="#插件不好写？！" class="headerlink" title="插件不好写？！"></a>插件不好写？！</h2><p>插件确实不好写，因为插件是插入庞大的系统当中工作的，那也就意味着写插件需要具备一定的领域知识，包括系统架构、扩展点、业务共性及差异、API及其业务模型对应、安装和测试。而对于开发者而言，学习这些知识的代价绝对是昂贵的。<br>在《函数式编程思想》一书中，作者Neal Ford提到开发过程当中的两种抽象方式——composable and contextual abstract. 谈及contextual抽象的时候，他把插件系统列为这一抽象中最经典的例子。</p>
+<blockquote>
+<p>Plugin-based architectures are excellent examples of the contextual abstraction. The plug-in API provides a plethora of data structures and other useful context that developers inherit from or summon via already existing methods. But to use the API, a developer must understand what that context provides, and that understanding is sometimes expensive. </p>
+</blockquote>
+<p>大意是开发者能够借助已存在的方法来使用Plugin API中提供的大量数据结构和有用的上下文信息。但是，理解起这些上下文信息有时是很昂贵的。</p>
+<p>基于一个共识：开发者的时间都是宝贵的。知道插件难写之后，我的这篇文章才有价值。</p>
+<h2 id="理解领域模型"><a href="#理解领域模型" class="headerlink" title="理解领域模型"></a>理解领域模型</h2><p>一说写插件，估计大家都会上官网寻找开发指南或者google大量博客来快速完成开发任务。这里不是说这种方式不好，其实一开始我也是这么做的，但是着手开发以后，很快就遭遇处处掣肘。比如：开发sonar plugin，会用到<em>Profile、Rule、Language</em>和<em>Repository</em>等概念。单从代码层面上看，我们很难理清这些概念所代表的模型和它们之间的<strong>关系</strong>。所以需要从用户的视角来<strong>感受</strong>这些领域知识。</p>
+<p>而用户视角大部分情况下就是UI界面。</p>
+<h3 id="规则（Rules）"><a href="#规则（Rules）" class="headerlink" title="规则（Rules）"></a>规则（Rules）</h3><p>我们先看看<em>Rules</em>导航栏，左边的单选框是这些规则的过滤条件。<br>说明规则包含或者被包含这些属性之下：</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/217988-a6ad47ad581e7fc4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Rules"></p>
+<ul>
+<li>Language：规则对应的某种编程语言。</li>
+<li>Type：规则的类型，比如：缺陷（Bug）、代码坏味道（Code Smell）、易受攻击（Vulnerability）。</li>
+<li>Tag：规则设置的标签，易于检索。</li>
+<li>Repository：承载特定语言下各种规则的容器；通过它可以通过规则的键值（ruleKey）检索。</li>
+<li>Default Severity：触犯规则的严重程度。<ul>
+<li>Blocker：最高等级，阻碍的</li>
+<li>Critical：高等级，极为严重的</li>
+<li>Major：较高等级，主要的；默认级别。</li>
+<li>Minor：较低等级</li>
+<li>Info：低等级</li>
+</ul>
+</li>
+<li>Status：规则现在的状态，可用、废弃还是实验版（Beta）。</li>
+<li>Avaiable Since：什么时候开始可用。</li>
+<li>Template：规则模板：比如某些参数可以运行时传入。</li>
+<li>Quality Profile：挑选特定语言下各种规则组成的配置；其中可以启用或禁用一部分规则。</li>
+</ul>
+<h3 id="质量Profile（Quality-Profile）"><a href="#质量Profile（Quality-Profile）" class="headerlink" title="质量Profile（Quality Profile）"></a>质量Profile（Quality Profile）</h3><p>再看看<em>Quality Profiles</em>导航栏，左侧栏显示的是某种语言包含的所有Profiles.</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/217988-7b8bbbf54b9462dd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Profiles"></p>
+<p>从关系型数据库的角度，Language和Profile是1对多（one-to-many）关系，但是从领域建模的角度，Profile其实和Language是1对1的关系。所以可以是Profile包含Language属性。利用领域建模的思考方式，可以联想到Repository和Rules是1对多的关系，所以Repository包含一个Rules的集合。Repository和Language是1对1的关系，Repository包含Language属性。那么Rules和Profiles的对应关系呢？多对多。但是我们更关心Profile到Rules这一层的关系，所以选择Profile包含一个Rules的集合。</p>
+<p>我整理出这样一份对应关系图：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">profile</div><div class="line">    - language</div><div class="line">    - [rules]</div><div class="line">respository</div><div class="line">    - lanuage</div><div class="line">    - [rules]</div></pre></td></tr></table></figure></p>
+<p>现在，缺少Profile和Repository的关系。不过既然有了Rule这一层联系，那么就可以这样考虑，Rule和Repository是1对1的关系（为什么呢？因为每个Rule显然只能存在于一个特定的Repository当中）。所以原图可以修改为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">profile</div><div class="line">    - language</div><div class="line">    - [rules]</div><div class="line">      - rule</div><div class="line">        - respository</div><div class="line">respository</div><div class="line">    - language</div><div class="line">    - [rules]</div></pre></td></tr></table></figure></p>
+<p>好了。梳理完这些领域知识，我们可以开始依照官方的教程<a href="http://docs.sonarqube.org/display/DEV/Developing+a+Plugin" target="_blank" rel="external">Developing a Plugin</a>.</p>
+<h2 id="扫描特定领域语言（DSL）的SonarQube插件"><a href="#扫描特定领域语言（DSL）的SonarQube插件" class="headerlink" title="扫描特定领域语言（DSL）的SonarQube插件"></a>扫描特定领域语言（DSL）的SonarQube插件</h2><p>SonarQube 5.6现在只支持Java 8、Maven 3.1以上。当然也支持Gradle。</p>
+<h3 id="第一步-创建一个Maven工程"><a href="#第一步-创建一个Maven工程" class="headerlink" title="第一步 创建一个Maven工程"></a>第一步 创建一个Maven工程</h3><p>这里有两种方式。第一种方式就是从头开始写起，包括创建工程；另一种就是拷贝官方的<a href="https://github.com/SonarSource/sonar-examples" target="_blank" rel="external">样例程序</a>。我自然是推荐第二种做法，不过这里我从零开始开发。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ mvn archetype:create -DgroupId=com.lambeta -DartifactId=sonar-lambeta -DarchetypeArtifactId=maven-archetype-quickstart</div></pre></td></tr></table></figure>
+<p>依照官方文档将pom.xml修改如下：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">project</span> <span class="attr">xmlns</span>=<span class="string">"http://maven.apache.org/POM/4.0.0"</span> <span class="attr">xmlns:xsi</span>=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span></span></div><div class="line">    <span class="attr">xsi:schemaLocation</span>=<span class="string">"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"</span>&gt;</div><div class="line">    <span class="tag">&lt;<span class="name">modelVersion</span>&gt;</span>4.0.0<span class="tag">&lt;/<span class="name">modelVersion</span>&gt;</span></div><div class="line"></div><div class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.lambeta<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>sonar-custom<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.0-SNAPSHOT<span class="tag">&lt;/<span class="name">version</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">packaging</span>&gt;</span>sonar-plugin<span class="tag">&lt;/<span class="name">packaging</span>&gt;</span></div><div class="line"></div><div class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>sonar-custom<span class="tag">&lt;/<span class="name">name</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">url</span>&gt;</span>https://www.lambeta.com<span class="tag">&lt;/<span class="name">url</span>&gt;</span></div><div class="line"></div><div class="line">    <span class="tag">&lt;<span class="name">properties</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">project.build.sourceEncoding</span>&gt;</span>UTF-8<span class="tag">&lt;/<span class="name">project.build.sourceEncoding</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">properties</span>&gt;</span></div><div class="line"></div><div class="line">    <span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.sonarsource.sonarqube<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>sonar-plugin-api<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></div><div class="line">            <span class="comment">&lt;!-- minimal version of SonarQube to support. Note that the groupId was "org.codehaus.sonar" before version 5.2 --&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">version</span>&gt;</span>5.6<span class="tag">&lt;/<span class="name">version</span>&gt;</span></div><div class="line">            <span class="comment">&lt;!-- mandatory scope --&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">scope</span>&gt;</span>provided<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></div><div class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>net.sourceforge.pmd<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>pmd-xml<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">version</span>&gt;</span>5.4.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></div><div class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>dom4j<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>dom4j<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.6.1<span class="tag">&lt;/<span class="name">version</span>&gt;</span></div><div class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>junit<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>junit<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">version</span>&gt;</span>3.8.1<span class="tag">&lt;/<span class="name">version</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">scope</span>&gt;</span>test<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></div><div class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">dependencies</span>&gt;</span></div><div class="line"></div><div class="line">    <span class="tag">&lt;<span class="name">build</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">plugins</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">plugin</span>&gt;</span></div><div class="line">                <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.sonarsource.sonar-packaging-maven-plugin<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></div><div class="line">                <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>sonar-packaging-maven-plugin<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></div><div class="line">                <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.16<span class="tag">&lt;/<span class="name">version</span>&gt;</span></div><div class="line">                <span class="tag">&lt;<span class="name">extensions</span>&gt;</span>true<span class="tag">&lt;/<span class="name">extensions</span>&gt;</span></div><div class="line">                <span class="tag">&lt;<span class="name">configuration</span>&gt;</span></div><div class="line">                    <span class="tag">&lt;<span class="name">pluginClass</span>&gt;</span>com.lambeta.CustomPlugin<span class="tag">&lt;/<span class="name">pluginClass</span>&gt;</span></div><div class="line">                    <span class="tag">&lt;<span class="name">pluginDescription</span>&gt;</span>how to write sonar plugin<span class="tag">&lt;/<span class="name">pluginDescription</span>&gt;</span></div><div class="line">                <span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></div><div class="line">            <span class="tag">&lt;/<span class="name">plugin</span>&gt;</span></div><div class="line">        <span class="tag">&lt;/<span class="name">plugins</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">build</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">project</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<blockquote>
+<p><strong>注意：</strong> pmd-xml、dom4j会在后面的编程当中使用到。</p>
+</blockquote>
+<p>依据标准的代码结构，新建<em>CustomPlugin.java</em>文件。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">├── src</div><div class="line">│   ├── main</div><div class="line">│   │   ├── java</div><div class="line">│   │   │   └── com</div><div class="line">│   │   │       └── lambeta</div><div class="line">│   │   │           ├── CustomPlugin.java</div></pre></td></tr></table></figure></p>
+<h3 id="第二步-识别扩展点"><a href="#第二步-识别扩展点" class="headerlink" title="第二步 识别扩展点"></a>第二步 识别扩展点</h3><p>此时，该去查看<a href="http://docs.sonarqube.org/display/DEV/API+Basics" target="_blank" rel="external">API Basics</a>了。不过在写代码之前，还得先了解所谓的扩展点（Extension Points）。</p>
+<blockquote>
+<p>Scanner, which runs the source code analysis<br>Compute Engine, which consolidates the output of scanners, for example by<br>computing 2nd-level measures such as ratings<br>aggregating measures (for example number of lines of code of project = sum of lines of code of all files)<br>assigning new issues to developers<br>persisting everything in data stores<br>Web application</p>
+</blockquote>
+<p>翻译如下</p>
+<ul>
+<li>扫描器：分析源代码</li>
+<li>计算引擎：聚合扫描器的输出。举例：计算第二轮measures，如打分；聚合measures（举例：工程中所有代码的行数 = 所有文件的代码行的综合）；给开发者安排新的问题；持久化。</li>
+<li>Web应用程序。<br>翻译还不如不翻译！一言不合，去看例子程序…的<a href="https://github.com/SonarSource/sonar-examples/blob/master/plugins/sonar-example-plugin/src/main/java/org/sonarsource/plugins/example/ExamplePlugin.java" target="_blank" rel="external">注释</a></li>
+</ul>
+<p>这三个扩展点，其实对应于API中的三个接口。<br><figure class="highlight clean"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">扫描器 -&gt; Sensor</div><div class="line">计算引擎 -&gt; MeasureComputer</div><div class="line">Web应用程序 -&gt; Widget</div></pre></td></tr></table></figure></p>
+<h3 id="第三步-定义Sensor（Scanner"><a href="#第三步-定义Sensor（Scanner" class="headerlink" title="第三步 定义Sensor（Scanner)"></a>第三步 定义Sensor（Scanner)</h3><p>基于扫描DSL源码的需求，我们需要扩展Sensor这个接口。新建<em>CustomSensor.java</em>如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> class CustomSensor implements Sensor</span></div><div class="line"></div><div class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">describe</span><span class="params">(SensorDescriptor descriptor)</span> </div><div class="line">    ...</div><div class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">execute</span><span class="params">(SensorContext context)</span></div><div class="line">    ...</div></pre></td></tr></table></figure></p>
+<p>接下来，我们需要定义这门DSL语言的某些属性，以便于识别以及扫描时过滤相关的源文件（通过文件的后缀）。</p>
+<h3 id="第四步-定义语言（Language）"><a href="#第四步-定义语言（Language）" class="headerlink" title="第四步 定义语言（Language）"></a>第四步 定义语言（Language）</h3><p>新建<em>CustomLanguage</em>如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> com.lambeta;</div><div class="line"><span class="keyword">import</span> org.sonar.api.resources.AbstractLanguage;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CustomLanguage</span> <span class="keyword">extends</span> <span class="title">AbstractLanguage</span> </span>&#123;</div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String KEY = <span class="string">"custom-key"</span>;</div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String NAME = <span class="string">"custom-name"</span>;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">CustomLanguage</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">super</span>(KEY, NAME);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">public</span> String[] getFileSuffixes() &#123;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">new</span> String[] &#123;<span class="string">"csm.xml"</span>&#125;; <span class="comment">//custom这门基于xml的内部DSL的文件后缀</span></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>我定义了一门基于xml语法的内部DSL，其文件的后缀是<em>csm.xml</em>。比如：<em>right-syntax.csm.xml</em></p>
+<p>Language定义出来了，我们还得定义rule、profile和repository. 回到上文提及的language、rule、profile以及repository的关系图：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">profile</div><div class="line">    - language</div><div class="line">    - [rules]</div><div class="line">      - rule</div><div class="line">        - respository</div><div class="line">respository</div><div class="line">    - language</div><div class="line">    - [rules]</div></pre></td></tr></table></figure></p>
+<h3 id="第五步-定义规则（Rule）"><a href="#第五步-定义规则（Rule）" class="headerlink" title="第五步 定义规则（Rule）"></a>第五步 定义规则（Rule）</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">respository</div><div class="line">    - language</div><div class="line">    - [rules]</div></pre></td></tr></table></figure>
+<p>我们需要实现接口<em>RulesDefinition</em><br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> com.lambeta;</div><div class="line"><span class="keyword">import</span> org.apache.commons.io.Charsets;</div><div class="line"><span class="keyword">import</span> org.apache.commons.io.IOUtils;</div><div class="line"><span class="keyword">import</span> org.sonar.api.server.rule.RulesDefinition;</div><div class="line"><span class="keyword">import</span> org.sonar.api.server.rule.RulesDefinitionXmlLoader;</div><div class="line"></div><div class="line"><span class="keyword">import</span> java.io.InputStream;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CustomRulesDefinition</span> <span class="keyword">implements</span> <span class="title">RulesDefinition</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String REPOSITORY_KEY = <span class="string">"custom-repo"</span>;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">final</span> RulesDefinitionXmlLoader xmlLoader;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">CustomRulesDefinition</span><span class="params">(RulesDefinitionXmlLoader xmlLoader)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.xmlLoader = xmlLoader;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">define</span><span class="params">(Context context)</span> </span>&#123;</div><div class="line"></div><div class="line">        <span class="keyword">final</span> InputStream stream = getClass().getResourceAsStream(<span class="string">"/rules.xml"</span>);</div><div class="line">        <span class="keyword">final</span> NewRepository repository = context.createRepository(REPOSITORY_KEY, CustomLanguage.KEY);</div><div class="line"></div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">            <span class="keyword">if</span> (stream != <span class="keyword">null</span>) &#123;</div><div class="line">                xmlLoader.load(repository, stream, Charsets.UTF_8);</div><div class="line">            &#125;</div><div class="line">            repository.done();</div><div class="line">        &#125; <span class="keyword">finally</span> &#123;</div><div class="line">            IOUtils.closeQuietly(stream);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>我们通过context新建出一个repository。respository需要一个唯一key作为其标识（可以通过setName方法设置名称）以及一个language key来关联（从UI上可以看出来）。然后，通过DI进来的<em>RulesDefinitionXmlLoader</em>将<em>rules.xml</em>中定义的rules加载进repository中。最后，调用<em>reposiotory.done()</em>宣告加载完成。</p>
+<p>定义的<em>rules.xml</em>内容如下：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="php"><span class="meta">&lt;?</span>xml version=<span class="string">"1.0"</span> encoding=<span class="string">"UTF-8"</span> <span class="meta">?&gt;</span></span></div><div class="line"><span class="tag">&lt;<span class="name">rules</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">rule</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">key</span>&gt;</span>ComponentsMustNotBeFollowedByComponentsRule<span class="tag">&lt;/<span class="name">key</span>&gt;</span></div><div class="line"></div><div class="line">        <span class="tag">&lt;<span class="name">name</span>&gt;</span>Components标签后不能跟随Components标签规则<span class="tag">&lt;/<span class="name">name</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">description</span>&gt;</span></div><div class="line">            &lt;![CDATA[</div><div class="line">                Components标签后不能跟随Components标签</div><div class="line">            ]]&gt;</div><div class="line">        <span class="tag">&lt;/<span class="name">description</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">severity</span>&gt;</span>MINOR<span class="tag">&lt;/<span class="name">severity</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">cardinality</span>&gt;</span>SINGLE<span class="tag">&lt;/<span class="name">cardinality</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">status</span>&gt;</span>READY<span class="tag">&lt;/<span class="name">status</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">tag</span>&gt;</span>custom<span class="tag">&lt;/<span class="name">tag</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">example</span>&gt;</span></div><div class="line">            &lt;![CDATA[</div><div class="line">                &lt;components&gt;</div><div class="line">                &lt;!-- Error, components must be here! --&gt;</div><div class="line">                    &lt;components/&gt;</div><div class="line">                &lt;/components&gt;</div><div class="line">            ]]&gt;</div><div class="line">        <span class="tag">&lt;/<span class="name">example</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">rule</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">rules</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<p>包含了rule的key和其他相关的属性。它们最终显示在UI上，会是这样：</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/217988-91243613d40090e7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Rule"></p>
+<h3 id="第六步-定义Profile"><a href="#第六步-定义Profile" class="headerlink" title="第六步 定义Profile"></a>第六步 定义Profile</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">profile</div><div class="line">    - language</div><div class="line">    - [rules]</div><div class="line">      - rule</div><div class="line">        - respository</div></pre></td></tr></table></figure>
+<p>我们需要实现接口<em>ProfileDefinition</em>.<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> com.lambeta;</div><div class="line"><span class="keyword">import</span> org.apache.commons.io.IOUtils;</div><div class="line"><span class="keyword">import</span> org.sonar.api.profiles.ProfileDefinition;</div><div class="line"><span class="keyword">import</span> org.sonar.api.profiles.RulesProfile;</div><div class="line"><span class="keyword">import</span> org.sonar.api.profiles.XMLProfileParser;</div><div class="line"><span class="keyword">import</span> org.sonar.api.utils.ValidationMessages;</div><div class="line"></div><div class="line"><span class="keyword">import</span> java.io.InputStreamReader;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CustomProfileDefinition</span> <span class="keyword">extends</span> <span class="title">ProfileDefinition</span> </span>&#123;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">final</span> XMLProfileParser xmlProfileParser;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">CustomProfileDefinition</span><span class="params">(XMLProfileParser xmlProfileParser)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.xmlProfileParser = xmlProfileParser;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> RulesProfile <span class="title">createProfile</span><span class="params">(ValidationMessages validation)</span> </span>&#123;</div><div class="line">        <span class="keyword">final</span> InputStreamReader reader = <span class="keyword">new</span> InputStreamReader(getClass().getResourceAsStream(<span class="string">"/profile.xml"</span>));</div><div class="line"></div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">            <span class="keyword">return</span> xmlProfileParser.parse(reader, validation);</div><div class="line">        &#125; <span class="keyword">finally</span> &#123;</div><div class="line">            IOUtils.closeQuietly(reader);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>使用DI注入的XMLProfileParser解析<em>profile.xml</em>文件，并生成RulesProfile对象。我们来看看<em>profile.xml</em>的内容：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="php"><span class="meta">&lt;?</span>xml version=<span class="string">"1.0"</span> encoding=<span class="string">"utf-8"</span> <span class="meta">?&gt;</span></span></div><div class="line"><span class="tag">&lt;<span class="name">profile</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">language</span>&gt;</span>custom-key<span class="tag">&lt;/<span class="name">language</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>Custom Quality<span class="tag">&lt;/<span class="name">name</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">rules</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">rule</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">repositoryKey</span>&gt;</span>custom-repo<span class="tag">&lt;/<span class="name">repositoryKey</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">key</span>&gt;</span>ComponentsMustNotBeFollowedByComponentsRule<span class="tag">&lt;/<span class="name">key</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">priority</span>&gt;</span>MAJOR<span class="tag">&lt;/<span class="name">priority</span>&gt;</span></div><div class="line">        <span class="tag">&lt;/<span class="name">rule</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">rules</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">profile</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<p>这里定义一个名为<em>Custom Quality</em>的profile，它关联CustomLanguage的键值：custom-key. 同时包含了多条rules，每条rule拥有自己的标识key以及其所在的repository（事实上，profile会在repository中通过ruleKey来查找rule）。</p>
+<p>写到这里，一个DSL的SonarQube Plugin已经几近完善。但是，我们还缺少至关重要的一环——<strong>规则的执行！</strong></p>
+<h3 id="第七步-运行PMD扫描代码"><a href="#第七步-运行PMD扫描代码" class="headerlink" title="第七步 运行PMD扫描代码"></a>第七步 运行PMD扫描代码</h3><h4 id="PMD简介"><a href="#PMD简介" class="headerlink" title="PMD简介"></a>PMD简介</h4><p>我们需要一个静态扫描工具来扫描源代码，发现这些代码存在的缺陷和坏味道。PMD就是这么一款好用的工具。</p>
+<blockquote>
+<p>PMD is a source code analyzer. It finds common programming flaws like unused variables, empty catch blocks, unnecessary object creation, and so forth. It supports Java, JavaScript, PLSQL, Apache Velocity, XML, XSL.</p>
+</blockquote>
+<p>翻译：<br>PMD是一款源码分析工具。它会发现编程中的普遍缺陷，如未使用的变量、空的catch块、不必要的对象创建等等。它支持分析Java、Javascript、PLSQL、Apache Velocity、XML、XSL语言。</p>
+<p>前面提到我定义的是一门基于XML的DSL，那么理所当然，可以借助PMD，扩展XML的扫描规则来满足自己的需求。</p>
+<p>PMD在命令行中执行的方式如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pmd -d src/ -f xml -R myrule.xml -r dest/report.xml</div></pre></td></tr></table></figure></p>
+<ul>
+<li>-d 代表要扫描的源码目录</li>
+<li>-f 代表报告输出的格式</li>
+<li>-R 代表采用哪些规则来扫描源代码</li>
+<li>-r 代表报告的输出路径</li>
+</ul>
+<blockquote>
+<p><strong>注意：</strong>这里PMD的规则和SonarQube中的规则其实没有太大关系，属于两种事物。不过，为方便后续提取PMD输出的报告，需要将PMD规则的名字和Sonar规则的键值保持一致。</p>
+</blockquote>
+<p>我们定义PMD需要使用到的规则集<em>custom-pmd-rules.xml</em>：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line"><span class="php"><span class="meta">&lt;?</span>xml version=<span class="string">"1.0"</span><span class="meta">?&gt;</span></span></div><div class="line"><span class="tag">&lt;<span class="name">ruleset</span> <span class="attr">name</span>=<span class="string">"ExamplePmdRuleset"</span></span></div><div class="line">         <span class="attr">xmlns</span>=<span class="string">"http://pmd.sourceforge.net/ruleset/2.0.0"</span></div><div class="line">         <span class="attr">xmlns:xsi</span>=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span></div><div class="line">         <span class="attr">xsi:schemaLocation</span>=<span class="string">"http://pmd.sourceforge.net/ruleset/2.0.0 http://pmd.sourceforge.net/ruleset_2_0_0.xsd"</span>&gt;</div><div class="line"></div><div class="line">    <span class="tag">&lt;<span class="name">description</span>&gt;</span></div><div class="line">        Example set of configured PMD rules</div><div class="line">    <span class="tag">&lt;/<span class="name">description</span>&gt;</span></div><div class="line"></div><div class="line">    <span class="tag">&lt;<span class="name">rule</span> <span class="attr">name</span>=<span class="string">"ComponentsMustNotBeFollowedByComponentsRule"</span></span></div><div class="line">          <span class="attr">message</span>=<span class="string">"Components tags followed by components tag found!"</span></div><div class="line">          <span class="attr">language</span>=<span class="string">"xml"</span></div><div class="line">          <span class="attr">class</span>=<span class="string">"net.sourceforge.pmd.lang.rule.XPathRule"</span>&gt;</div><div class="line"></div><div class="line">        <span class="tag">&lt;<span class="name">description</span>&gt;</span></div><div class="line">            Tag components must not be followed by components tag.</div><div class="line">        <span class="tag">&lt;/<span class="name">description</span>&gt;</span></div><div class="line"></div><div class="line">        <span class="tag">&lt;<span class="name">priority</span>&gt;</span>1<span class="tag">&lt;/<span class="name">priority</span>&gt;</span></div><div class="line"></div><div class="line">        <span class="tag">&lt;<span class="name">properties</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"xpath"</span>&gt;</span></div><div class="line">                <span class="tag">&lt;<span class="name">value</span>&gt;</span>//components/components<span class="tag">&lt;/<span class="name">value</span>&gt;</span></div><div class="line">            <span class="tag">&lt;/<span class="name">property</span>&gt;</span></div><div class="line">        <span class="tag">&lt;/<span class="name">properties</span>&gt;</span></div><div class="line"></div><div class="line">        <span class="tag">&lt;<span class="name">example</span>&gt;</span></div><div class="line">            &lt;![CDATA[</div><div class="line">                &lt;components&gt;</div><div class="line">                    &lt;components&gt;</div><div class="line">                &lt;/components&gt;</div><div class="line">            ]]&gt;</div><div class="line">        <span class="tag">&lt;/<span class="name">example</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">rule</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">ruleset</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<p>这里的类<em>net.sourceforge.pmd.lang.rule.XPathRule</em>来自于我们先前在pom.xml中声明的pmd-xml这个依赖包。它可以让我们通过设置<em>xpath</em>这一属性的值来构建各种不同规则。扫描中XML文件一旦匹配这些xpath规则，就会输出错误报告。</p>
+<p>以<em>ComponentsMustNotBeFollowedByComponentsRule</em>这个自定义的规则为例。顾名思义，Components元素下不能再跟着Components元素。它在PMD扫描过程中如果被匹配上，会输出这样的报告：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="php"><span class="meta">&lt;?</span>xml version=<span class="string">"1.0"</span> encoding=<span class="string">"UTF-8"</span><span class="meta">?&gt;</span></span></div><div class="line"><span class="tag">&lt;<span class="name">pmd</span> <span class="attr">version</span>=<span class="string">"5.4.2"</span> <span class="attr">timestamp</span>=<span class="string">"2016-06-23T23:06:04.120"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">file</span> <span class="attr">name</span>=<span class="string">"/Users/qianyan/github/sonar/sonar-custom/src/test/resources/wrong-syntax-but-not-csm.xml"</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">violation</span> <span class="attr">beginline</span>=<span class="string">"4"</span></span></div><div class="line">                   <span class="attr">endline</span>=<span class="string">"4"</span></div><div class="line">                   <span class="attr">begincolumn</span>=<span class="string">"5"</span></div><div class="line">                   <span class="attr">endcolumn</span>=<span class="string">"17"</span></div><div class="line">                   <span class="attr">rule</span>=<span class="string">"ComponentsMustNotBeFollowedByComponentsRule"</span></div><div class="line">                   <span class="attr">ruleset</span>=<span class="string">"ExamplePmdRuleset"</span></div><div class="line">                   <span class="attr">priority</span>=<span class="string">"1"</span>&gt;</div><div class="line">            Components tags followed by components tag found!</div><div class="line">        <span class="tag">&lt;/<span class="name">violation</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">file</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">file</span> <span class="attr">name</span>=<span class="string">"/Users/qianyan/github/sonar/sonar-custom/src/test/resources/wrong-syntax.csm.xml"</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">violation</span> <span class="attr">beginline</span>=<span class="string">"4"</span></span></div><div class="line">                   <span class="attr">endline</span>=<span class="string">"4"</span></div><div class="line">                   <span class="attr">begincolumn</span>=<span class="string">"5"</span></div><div class="line">                   <span class="attr">endcolumn</span>=<span class="string">"17"</span></div><div class="line">                   <span class="attr">rule</span>=<span class="string">"ComponentsMustNotBeFollowedByComponentsRule"</span></div><div class="line">                   <span class="attr">ruleset</span>=<span class="string">"ExamplePmdRuleset"</span></div><div class="line">                   <span class="attr">priority</span>=<span class="string">"1"</span>&gt;</div><div class="line">            Components tags followed by components tag found!</div><div class="line">        <span class="tag">&lt;/<span class="name">violation</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">file</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">pmd</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<h4 id="PMD报告转化为Sonar的Issue"><a href="#PMD报告转化为Sonar的Issue" class="headerlink" title="PMD报告转化为Sonar的Issue"></a>PMD报告转化为Sonar的Issue</h4><p>由于PMD是由Java编写的，所以我们可以在代码中调用PMD这个类<em>net.sourceforge.pmd.PMD</em>根据我们写好的PMD规则，来扫描Sonar指定的目录及其文件。最后，将PMD输出的XML格式的报告转化成Sonar能够理解的Issue。</p>
+<p>代码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">execute</span><span class="params">(SensorContext context)</span> </span>&#123;</div><div class="line">        File reportFile = <span class="keyword">new</span> File(context.fileSystem().workDir(), <span class="string">"report.xml"</span>); <span class="comment">// 1</span></div><div class="line">        runPMD(context, reportFile); <span class="comment">// 2</span></div><div class="line">        convertToIssues(context, doc(reportFile)); <span class="comment">// 3</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<ol>
+<li>指定PMD输出文件的路径；</li>
+<li>运行PMD，输出XML格式的报告到1指定的文件当中；</li>
+<li>解析报告，并转化为Issue。</li>
+</ol>
+<p>下面我们一步步来解释对应的代码：</p>
+<ul>
+<li>runPMD<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">runPMD</span><span class="params">(SensorContext context, File reportFile)</span> </span>&#123;</div><div class="line">    <span class="keyword">final</span> String dir = context.settings().getString(<span class="string">"sonar.sources"</span>);</div><div class="line">    <span class="keyword">final</span> File file = <span class="keyword">new</span> File(dir);</div><div class="line">    String[] pmdArgs = &#123;</div><div class="line">            <span class="string">"-f"</span>, <span class="string">"xml"</span>,</div><div class="line">            <span class="string">"-R"</span>, <span class="string">"custom-pmd-rules.xml"</span>,</div><div class="line">            <span class="string">"-d"</span>, dir,</div><div class="line">            <span class="string">"-r"</span>, reportFile.getAbsolutePath(),</div><div class="line">            <span class="string">"-e"</span>, context.settings().getString(<span class="string">"sonar.sourceEncoding"</span>),</div><div class="line">            <span class="string">"-language"</span>, <span class="string">"xml"</span>,</div><div class="line">            <span class="string">"-version"</span>, <span class="string">"1.0"</span></div><div class="line">    &#125;;</div><div class="line">    <span class="keyword">final</span> ClassLoader loader = Thread.currentThread().getContextClassLoader();</div><div class="line">    <span class="keyword">try</span> &#123;</div><div class="line">        Thread.currentThread().setContextClassLoader(getClass().getClassLoader());</div><div class="line">        PMD.run(pmdArgs);</div><div class="line">    &#125; <span class="keyword">finally</span> &#123;</div><div class="line">        Thread.currentThread().setContextClassLoader(loader);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>我们通过PMD这个类运行pmdArgs。这里值得注意的是自SonarQube 5.6之后，我们可以通过context.settings()来获取工程的配置了，而不像以前那样依赖注入Settings对象了。</p>
+<p>至于<code>Thread.currentThread().setContextClassLoader(getClass().getClassLoader());</code>这步操作和Sonar使用独立的classLoader加载自己的类有关。</p>
+<ul>
+<li>convertToIssues<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">convertToIssues</span><span class="params">(SensorContext context, Document doc)</span> </span>&#123;</div><div class="line">    <span class="keyword">final</span> Element root = doc.getRootElement();</div><div class="line">    <span class="keyword">final</span> List&lt;Element&gt; files = root.elements(<span class="string">"file"</span>);</div><div class="line">    <span class="keyword">for</span> (Element file : files) &#123;</div><div class="line"></div><div class="line">        <span class="keyword">final</span> List&lt;Element&gt; violations = file.elements(<span class="string">"violation"</span>);</div><div class="line">        <span class="keyword">final</span> String filePath = file.attributeValue(<span class="string">"name"</span>);</div><div class="line">        <span class="keyword">final</span> FileSystem fs = context.fileSystem();</div><div class="line">        <span class="keyword">final</span> InputFile inputFile = fs.inputFile(fs.predicates().hasAbsolutePath(filePath));</div><div class="line">        <span class="keyword">if</span> (inputFile == <span class="keyword">null</span>) &#123;</div><div class="line">            LOG.info(<span class="string">"fs predicates that there is no &#123;&#125;"</span>, filePath);</div><div class="line">            <span class="keyword">continue</span>;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">for</span> (Element violation : violations) &#123;</div><div class="line">            <span class="keyword">final</span> String rule = violation.attributeValue(<span class="string">"rule"</span>);</div><div class="line">            <span class="keyword">final</span> <span class="keyword">int</span> beginLine = Integer.parseInt(violation.attributeValue(<span class="string">"beginline"</span>));</div><div class="line">            <span class="keyword">final</span> <span class="keyword">int</span> endLine = Integer.parseInt(violation.attributeValue(<span class="string">"endline"</span>));</div><div class="line">            <span class="keyword">final</span> <span class="keyword">int</span> beginColumn = Integer.parseInt(violation.attributeValue(<span class="string">"begincolumn"</span>));</div><div class="line">            <span class="keyword">final</span> <span class="keyword">int</span> endColumn = Integer.parseInt(violation.attributeValue(<span class="string">"endcolumn"</span>));</div><div class="line">            <span class="keyword">final</span> NewIssue newIssue = context.newIssue()</div><div class="line">                    .forRule(RuleKey.of(CustomRulesDefinition.REPOSITORY_KEY, rule));</div><div class="line">            <span class="keyword">final</span> NewIssueLocation newIssueLocation = newIssue</div><div class="line">                    .newLocation()</div><div class="line">                    .on(inputFile)</div><div class="line">                    .at(inputFile.newRange(beginLine, beginColumn, endLine, endColumn))</div><div class="line">                    .message(violation.getText());</div><div class="line">            newIssue.at(newIssueLocation).save();</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>这里主要是对PMD生成XML报告的解析和转换。比较需要关注是这块代码：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">final</span> InputFile inputFile = fs.inputFile(fs.predicates().hasAbsolutePath(filePath));</div><div class="line"><span class="keyword">if</span> (inputFile == <span class="keyword">null</span>) &#123;</div><div class="line">    LOG.info(<span class="string">"fs predicates that there is no &#123;&#125;"</span>, filePath);</div><div class="line">    <span class="keyword">continue</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>InputFile这是Sonar定义的合法的待扫描文件。举个例子：我们定义了一门基于XML的DSL，其文件的后缀是<em>csm.xml</em>，那么合法的待扫描文件就只能是这个后缀的文件了。像上述PMD输出的那份报告中出现的<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">file</span> <span class="attr">name</span>=<span class="string">"/Users/qianyan/github/sonar/sonar-custom/src/test/resources/wrong-syntax-but-not-csm.xml"</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<p>就是不合法的。这个文件是以xml作为后缀的，PMD肯定可以扫描它，但是对于Sonar而言，它并不是InputFile（如果不作处理，就会返回null），所以我们需要在转换为Issue之前剔除掉。</p>
+<p>最后，不要忘记保存，<code>newIssue.at(newIssueLocation).save();</code>。</p>
+<p>Issue呈现在UI上，是这样的：</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/217988-87d84e5cc8a49c37.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Issue"></p>
+<h3 id="第八步-注册所有组件"><a href="#第八步-注册所有组件" class="headerlink" title="第八步 注册所有组件"></a>第八步 注册所有组件</h3><p>现在所有的组件已经就绪，是时候将这些组件注册进插件当中了。还记得第一步我们创建的<em>CustomPlugin.java</em>? 所有上述组件，包括Language、Rules、Profiles以及Sensor都得在这个类中进行注册。代码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> com.lambeta;</div><div class="line"></div><div class="line"><span class="keyword">import</span> org.sonar.api.Plugin;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CustomPlugin</span> <span class="keyword">implements</span> <span class="title">Plugin</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">define</span><span class="params">(Context context)</span> </span>&#123;</div><div class="line">        context.addExtension(CustomLanguage.class)</div><div class="line">                .addExtension(CustomRulesDefinition.class)</div><div class="line">                .addExtension(CustomProfileDefinition.class)</div><div class="line">                .addExtension(CustomSensor.class);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>到此，这个插件算是写完了。那么接下来的问题就是如何运行它？</p>
+<h2 id="使用插件扫描工程"><a href="#使用插件扫描工程" class="headerlink" title="使用插件扫描工程"></a>使用插件扫描工程</h2><h3 id="下载sonarqube-docker镜像"><a href="#下载sonarqube-docker镜像" class="headerlink" title="下载sonarqube docker镜像"></a>下载sonarqube docker镜像</h3><p>最易于调试的地方莫过于本地了。如果机器是Mac，建议使用Kitematic这个Docker的客户端下载sonarqube的官方镜像，同时将映射的Port定在9000端口上，启动该镜像的容器实例。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/217988-2e1f14fff13e1fd7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="sonarqube docker"></p>
+<h3 id="构建和Copy插件包"><a href="#构建和Copy插件包" class="headerlink" title="构建和Copy插件包"></a>构建和Copy插件包</h3><p>在插件的工程根目录下，运行<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mvn clean package</div></pre></td></tr></table></figure></p>
+<p>然后执行<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cp target/sonar-custom-1.0-SNAPSHOT.jar /Users/your-name/Documents/Kitematic/sonarqube/opt/sonarqube/extensions/plugins</div></pre></td></tr></table></figure></p>
+<p>如果plugins目录不存在，可以手动创建。执行完命令之后，重启容器。</p>
+<h3 id="安装Maven的sonar插件"><a href="#安装Maven的sonar插件" class="headerlink" title="安装Maven的sonar插件"></a>安装Maven的sonar插件</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line"><span class="comment">&lt;!-- settings.xml --&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">settings</span> <span class="attr">xmlns</span>=<span class="string">"http://maven.apache.org/SETTINGS/1.0.0"</span></span></div><div class="line">    <span class="attr">xmlns:xsi</span>=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span></div><div class="line">    <span class="attr">xsi:schemaLocation</span>=<span class="string">"http://maven.apache.org/SETTINGS/1.0.0</span></div><div class="line">    https://maven.apache.org/xsd/settings-1.0.0.xsd"&gt;</div><div class="line">    <span class="tag">&lt;<span class="name">localRepository</span>/&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">interactiveMode</span>/&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">usePluginRegistry</span>/&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">offline</span>/&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">pluginGroups</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">pluginGroup</span>&gt;</span>org.sonarsource.scanner.maven<span class="tag">&lt;/<span class="name">pluginGroup</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">pluginGroups</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">profiles</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">profile</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">id</span>&gt;</span>sonar<span class="tag">&lt;/<span class="name">id</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">activation</span>&gt;</span></div><div class="line">                <span class="tag">&lt;<span class="name">activeByDefault</span>&gt;</span>true<span class="tag">&lt;/<span class="name">activeByDefault</span>&gt;</span></div><div class="line">            <span class="tag">&lt;/<span class="name">activation</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">properties</span>&gt;</span></div><div class="line">                <span class="comment">&lt;!-- Optional URL to server. Default value is http://localhost:9000 --&gt;</span></div><div class="line">                <span class="tag">&lt;<span class="name">sonar.host.url</span>&gt;</span></div><div class="line">                  http://192.168.99.100:9000</div><div class="line">                <span class="tag">&lt;/<span class="name">sonar.host.url</span>&gt;</span></div><div class="line">            <span class="tag">&lt;/<span class="name">properties</span>&gt;</span></div><div class="line">        <span class="tag">&lt;/<span class="name">profile</span>&gt;</span></div><div class="line">     <span class="tag">&lt;/<span class="name">profiles</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">servers</span>/&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">mirrors</span>/&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">proxies</span>/&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">activeProfiles</span>/&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">settings</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>将这个settings.xml的文件放到~/.m2下。</p>
+<h3 id="运行Maven-sonar-sonar"><a href="#运行Maven-sonar-sonar" class="headerlink" title="运行Maven sonar:sonar"></a>运行Maven sonar:sonar</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mvn sonar:sonar -Dsonar.sources=src/test/resources/ -Dsonar.language=custom-key -X</div></pre></td></tr></table></figure>
+<p><em>src/test/resources</em>目录展开如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">src/test/resources</div><div class="line">├── right-syntax.csm.xml</div><div class="line">├── wrong-syntax-but-not-csm.xml</div><div class="line">└── wrong-syntax.csm.xml</div></pre></td></tr></table></figure></p>
+<p>然后，根据输出提示，访问<br><a href="http://192.168.99.100:9000/dashboard/index/com.lambeta:sonar-custom" target="_blank" rel="external">http://192.168.99.100:9000/dashboard/index/com.lambeta:sonar-custom</a></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p><img src="http://upload-images.jianshu.io/upload_images/217988-136f034d165b9c38.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Sonar Plugin"></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/217988-fd2a3f30fc23d31d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Plugin implements details"></p>
+<p>[1] <a href="http://docs.sonarqube.org/display/DEV/Developing+a+Plugin" target="_blank" rel="external">官方教程</a><br>[2] <a href="https://deors.wordpress.com/2014/03/20/sonarqube-plugins-1/" target="_blank" rel="external">博客</a><br>[3] <a href="https://github.com/SonarSource/sonar-examples/tree/master/plugins/sonar-example-plugin" target="_blank" rel="external">官方样例</a><br>[4] <a href="https://github.com/qianyan/sonar-custom-plugin" target="_blank" rel="external">本文样例</a></p>
+
+        </div>
+        <footer class="article-footer">
+            
+
+
+
+    <a data-url="https://lameta.com/2016/06/24/SonarQube-Plugin-Step-by-Step/" data-id="civhg12sy003ectm4kk91dnmk" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
+<script>
+    (function ($) {
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+</script>
+
+        </footer>
+    </div>
+</article>
+
+    <section id="comments">
+    
+        
+    <div class="ds-thread" data-thread-key="2016/06/24/SonarQube-Plugin-Step-by-Step/" data-title="SonarQube Plugin Step by Step" data-url="https://lameta.com/2016/06/24/SonarQube-Plugin-Step-by-Step/"></div>
+    <style>
+        #ds-thread #ds-reset .ds-textarea-wrapper {
+            background: none;
+        }
+        #ds-reset .ds-avatar img {
+            box-shadow: none;
+        }
+        #ds-reset .ds-gradient-bg {
+            background: #f7f7f7;
+        }
+        #ds-thread #ds-reset li.ds-tab a {
+            border-radius: 3px;
+        }
+        #ds-thread #ds-reset .ds-post-button {
+            color: white;
+            border: none;
+            box-shadow: none;
+            background: #d32;
+            text-shadow: none;
+            font-weight: normal;
+            font-family: 'Microsoft Yahei';
+        }
+        #ds-thread #ds-reset .ds-post-button:hover {
+            color: white;
+            background: #DE594C;
+        }
+        #ds-thread #ds-reset .ds-post-button:active {
+            background: #d32;
+        }
+        #ds-smilies-tooltip ul.ds-smilies-tabs li a.ds-current {
+            color: white;
+            background: #d32;
+            box-shadow: none;
+            text-shadow: none;
+            font-weight: normal;
+        }
+    </style>
+
+    
+    </section>
+
+                        </div>
+                    </section>
+                    <aside id="sidebar">
+    <a class="sidebar-toggle" title="Expand Sidebar"><i class="toggle icon"></i></a>
+    <div class="sidebar-top">
+        <p>关注我 :</p>
+        <ul class="social-links">
+            
+                
+                <li>
+                    <a class="social-tooltip" title="twitter" href="https://twitter.com/lambetaX" target="_blank">
+                        <i class="icon fa fa-twitter"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="github" href="https://github.com/qianyan" target="_blank">
+                        <i class="icon fa fa-github"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="weibo" href="http://weibo.com/3672207020/" target="_blank">
+                        <i class="icon fa fa-weibo"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="rss" href="/atom.xml" target="_blank">
+                        <i class="icon fa fa-rss"></i>
+                    </a>
+                </li>
+                
+            
+        </ul>
+    </div>
+    
+        
+<nav id="article-nav">
+    
+        <a href="/2016/09/04/Reading-and-Writing-Files/" id="article-nav-newer" class="article-nav-link-wrap">
+        <strong class="article-nav-caption">下一篇</strong>
+        <p class="article-nav-title">
+        
+            Reading and Writing Files
+        
+        </p>
+        <i class="icon fa fa-chevron-right" id="icon-chevron-right"></i>
+    </a>
+    
+    
+        <a href="/2016/05/30/Leiningen-Profile/" id="article-nav-older" class="article-nav-link-wrap">
+        <strong class="article-nav-caption">上一篇</strong>
+        <p class="article-nav-title">Leiningen Profile</p>
+        <i class="icon fa fa-chevron-left" id="icon-chevron-left"></i>
+        </a>
+    
+</nav>
+
+    
+    <div class="widgets-container">
+        
+            
+                
+    <div class="widget-wrap">
+        <h3 class="widget-title">最新文章</h3>
+        <div class="widget">
+            <ul id="recent-post" class="no-thumbnail">
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Clojure/">Clojure</a></p>
+                            <p class="item-title"><a href="/2016/11/04/Generative-Testing/" class="title">Generative Testing</a></p>
+                            <p class="item-date"><time datetime="2016-11-03T23:21:34.000Z" itemprop="datePublished">2016-11-04</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Clojure/">Clojure</a></p>
+                            <p class="item-title"><a href="/2016/09/12/Collection-Pipelines-By-TDD/" class="title">Clojure集合管道函数练习</a></p>
+                            <p class="item-date"><time datetime="2016-09-12T01:26:24.000Z" itemprop="datePublished">2016-09-12</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Clojure/">Clojure</a></p>
+                            <p class="item-title"><a href="/2016/09/04/Reading-and-Writing-Files/" class="title">Reading and Writing Files</a></p>
+                            <p class="item-date"><time datetime="2016-09-04T02:10:44.000Z" itemprop="datePublished">2016-09-04</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/技术/">技术</a></p>
+                            <p class="item-title"><a href="/2016/06/24/SonarQube-Plugin-Step-by-Step/" class="title">SonarQube Plugin Step by Step</a></p>
+                            <p class="item-date"><time datetime="2016-06-23T16:40:23.000Z" itemprop="datePublished">2016-06-24</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Clojure/">Clojure</a></p>
+                            <p class="item-title"><a href="/2016/05/30/Leiningen-Profile/" class="title">Leiningen Profile</a></p>
+                            <p class="item-date"><time datetime="2016-05-30T13:21:26.000Z" itemprop="datePublished">2016-05-30</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">分类</h3>
+        <div class="widget">
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Clojure/">Clojure</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/技术/">技术</a><span class="category-list-count">38</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/生活/">生活</a><span class="category-list-count">2</span></li></ul>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">归档</h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">九月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">五月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">四月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">十一月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">七月 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">三月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">二月 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">一月 2015</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/11/">十一月 2014</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/10/">十月 2014</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/09/">九月 2014</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/07/">七月 2014</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/05/">五月 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02/">二月 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/01/">一月 2014</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/12/">十二月 2013</a><span class="archive-list-count">5</span></li></ul>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-float">
+        <h3 class="widget-title">标签云</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/FP/" style="font-size: 12px;">FP</a> <a href="/tags/Mistakes-I-Hav-Made/" style="font-size: 14px;">Mistakes I Hav Made</a> <a href="/tags/OO/" style="font-size: 10px;">OO</a> <a href="/tags/angularJs/" style="font-size: 10px;">angularJs</a> <a href="/tags/concurrency/" style="font-size: 10px;">concurrency</a> <a href="/tags/file/" style="font-size: 10px;">file</a> <a href="/tags/geek/" style="font-size: 10px;">geek</a> <a href="/tags/gradle/" style="font-size: 10px;">gradle</a> <a href="/tags/java/" style="font-size: 16px;">java</a> <a href="/tags/javascript/" style="font-size: 20px;">javascript</a> <a href="/tags/kata/" style="font-size: 10px;">kata</a> <a href="/tags/language/" style="font-size: 14px;">language</a> <a href="/tags/leiningen/" style="font-size: 10px;">leiningen</a> <a href="/tags/maven/" style="font-size: 10px;">maven</a> <a href="/tags/mysql/" style="font-size: 12px;">mysql</a> <a href="/tags/node/" style="font-size: 12px;">node</a> <a href="/tags/promise/" style="font-size: 10px;">promise</a> <a href="/tags/q/" style="font-size: 10px;">q</a> <a href="/tags/rake/" style="font-size: 10px;">rake</a> <a href="/tags/shell/" style="font-size: 14px;">shell</a> <a href="/tags/sublime/" style="font-size: 10px;">sublime</a> <a href="/tags/test/" style="font-size: 10px;">test</a> <a href="/tags/testing/" style="font-size: 10px;">testing</a> <a href="/tags/thinking/" style="font-size: 18px;">thinking</a> <a href="/tags/transaction/" style="font-size: 10px;">transaction</a> <a href="/tags/vim/" style="font-size: 12px;">vim</a> <a href="/tags/yeoman/" style="font-size: 10px;">yeoman</a> <a href="/tags/zeal/" style="font-size: 10px;">zeal</a> <a href="/tags/散文/" style="font-size: 10px;">散文</a>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">链接</h3>
+        <div class="widget">
+            <ul>
+                
+                    <li>
+                        <a href="http://blog.jayfields.com/">Jay Fields</a>
+                    </li>
+                
+                    <li>
+                        <a href="https://aphyr.com">Aphyr</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://bucharestfp.ro">Bucharest FP</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://www.yinwang.org">Wangyin</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://blog.rlmflores.me/">Rodrigo Flores</a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+
+            
+        
+    </div>
+</aside>
+                </div>
+            </div>
+        </div>
+        <footer id="footer">
+    <div class="container">
+        <div class="container-inner">
+            <a id="back-to-top" href="javascript:;"><i class="icon fa fa-angle-up"></i></a>
+            <div class="credit">
+                <h1 class="logo-wrap">
+                    <a href="/" class="logo"></a>
+                </h1>
+                <p>&copy; 2016 lambeta</p>
+                <p>Powered by <a href="//hexo.io/" target="_blank">Hexo</a>. Theme by <a href="//github.com/ppoffice" target="_blank">PPOffice</a></p>
+            </div>
+        </div>
+    </div>
+</footer>
+        
+    
+    <script type="text/javascript">
+    var duoshuoQuery = {short_name:'lambeta'};
+    (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0]
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+    </script>
+
+
+
+    
+        <script src="/vendor/lightgallery/js/lightgallery.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-thumbnail.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-pager.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-autoplay.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-fullscreen.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-zoom.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-hash.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-share.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-video.min.js"></script>
+    
+
+
+<!-- Custom Scripts -->
+<script src="/js/main.js"></script>
+
+    </div>
+</body>
+</html>

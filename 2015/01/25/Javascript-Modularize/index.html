@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    
+    <title>Javascript Modularize | λ</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+        <meta name="keywords" content="javascript" />
+    
+    <meta name="description" content="Closure什么是闭包？
+一个包含了自由变量的开发表达式，和该自由变量的约束环境组合之后，产生了一种封闭的状态。
+
+举个例子，如下
+123456789101112function inc() &amp;#123;	var counter = 0;	return function() &amp;#123;		return counter++;	&amp;#125;&amp;#125;//invokevar id = inc();">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Javascript Modularize">
+<meta property="og:url" content="https://lameta.com/2015/01/25/Javascript-Modularize/index.html">
+<meta property="og:site_name" content="λ">
+<meta property="og:description" content="Closure什么是闭包？
+一个包含了自由变量的开发表达式，和该自由变量的约束环境组合之后，产生了一种封闭的状态。
+
+举个例子，如下
+123456789101112function inc() &amp;#123;	var counter = 0;	return function() &amp;#123;		return counter++;	&amp;#125;&amp;#125;//invokevar id = inc();">
+<meta property="og:updated_time" content="2016-09-06T14:55:53.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Javascript Modularize">
+<meta name="twitter:description" content="Closure什么是闭包？
+一个包含了自由变量的开发表达式，和该自由变量的约束环境组合之后，产生了一种封闭的状态。
+
+举个例子，如下
+123456789101112function inc() &amp;#123;	var counter = 0;	return function() &amp;#123;		return counter++;	&amp;#125;&amp;#125;//invokevar id = inc();">
+    
+
+    
+        <link rel="alternate" href="/atom.xml" title="λ" type="application/atom+xml" />
+    
+
+    
+        <link rel="icon" href="/favicon.ico# path to favicon" />
+    
+
+    <link rel="stylesheet" href="/vendor/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/vendor/titillium-web/styles.css">
+    <link rel="stylesheet" href="/vendor/source-code-pro/styles.css">
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <script src="/vendor/jquery/2.0.3/jquery.min.js"></script>
+    
+    
+        <link rel="stylesheet" href="/vendor/lightgallery/css/lightgallery.min.css">
+    
+    
+        <script type="text/javascript">
+(function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-83870107-1# enter the tracking ID for your Google Analytics', 'auto');
+ga('send', 'pageview');
+
+</script>
+    
+    
+        <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?e6231610fe66acf322391d7546c28f21# enter Baidu Analytics hash key";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+    
+
+</head>
+
+<body>
+    <div id="wrap">
+        <header id="header">
+    <div id="header-outer" class="outer">
+        <div class="container">
+            <div class="container-inner">
+                <div id="header-title">
+                    <h1 class="logo-wrap">
+                        <a href="/" class="logo"></a>
+                    </h1>
+                    
+                        <h2 class="subtitle-wrap">
+                            <p class="subtitle">(conj clojurians me)</p>
+                        </h2>
+                    
+                </div>
+                <div id="header-inner" class="nav-container">
+                    <a id="main-nav-toggle" class="nav-icon fa fa-bars"></a>
+                    <div class="nav-container-inner">
+                        <ul id="main-nav">
+                            
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" href="/">主页</a>
+                                </li>
+                            
+                                        <ul class="main-nav-list"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Clojure/">Clojure</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/技术/">技术</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/生活/">生活</a></li></ul>
+                                    
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" href="/about/index.html">关于</a>
+                                </li>
+                            
+                        </ul>
+                        <nav id="sub-nav">
+                            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="想要查找什么..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+        <div class="container">
+            <div class="main-body container-inner">
+                <div class="main-body-inner">
+                    <section id="main">
+                        <div class="main-body-header">
+    <h1 class="header">
+    
+    <a class="page-title-link" href="/categories/技术/">技术</a>
+    </h1>
+</div>
+                        <div class="main-body-content">
+                            <article id="post-Javascript-Modularize" class="article article-single article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+        Javascript Modularize
+        </h1>
+    
+
+            </header>
+        
+        
+            <div class="article-subtitle">
+                <a href="/2015/01/25/Javascript-Modularize/" class="article-date">
+    <time datetime="2015-01-25T09:28:40.000Z" itemprop="datePublished">2015-01-25</time>
+</a>
+                
+    <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/javascript/">javascript</a></li></ul>
+
+            </div>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+            <h3 id="Closure"><a href="#Closure" class="headerlink" title="Closure"></a>Closure</h3><h4 id="什么是闭包？"><a href="#什么是闭包？" class="headerlink" title="什么是闭包？"></a>什么是闭包？</h4><blockquote>
+<p>一个包含了自由变量的开发表达式，和该自由变量的约束环境组合之后，产生了一种封闭的状态。</p>
+</blockquote>
+<p>举个例子，如下</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">inc</span>(<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="keyword">var</span> counter = <span class="number">0</span>;</div><div class="line">	<span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">		<span class="keyword">return</span> counter++;</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//invoke</span></div><div class="line"><span class="keyword">var</span> id = inc();</div><div class="line">id(); <span class="comment">//0</span></div><div class="line">id(); <span class="comment">//1</span></div><div class="line">...</div></pre></td></tr></table></figure>
+<p>变量counter只在inc中可见，inc就是counter的约束环境，而内部的function就是开放的表达式，达到的封闭状态就是闭包。</p>
+<h3 id="Javascript-Closure"><a href="#Javascript-Closure" class="headerlink" title="Javascript Closure"></a>Javascript Closure</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">	<span class="built_in">console</span>.log(<span class="built_in">window</span>);</div><div class="line">&#125;())</div><div class="line">or</div><div class="line">(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">	<span class="built_in">console</span>.log(<span class="built_in">window</span>);</div><div class="line">&#125;)()</div></pre></td></tr></table></figure>
+<p>注意两种闭包的写法: <strong>()</strong>一个在内，另一个在外，两者是等价的。<br>这种写法有两个作用</p>
+<ol>
+<li>立即执行(Immediately-Invoked Function Expression, IIFE)</li>
+<li>封装内部变量，使之对外不可见</li>
+</ol>
+<p><strong>NOTICE</strong><br><code>对外不可见，不代表闭包内部不能访问全局变量。闭包内部是可以访问外部变量的，如上面的例子所示</code></p>
+<blockquote>
+<p>JavaScript has a feature known as implied globals. Whenever a name is used, the interpreter walks the scope chain backwards looking for a var statement for that name. If none is found, that variable is assumed to be global. If it’s used in an assignment, the global is created if it doesn’t already exist. This means that using or creating global variables in an anonymous closure is easy. Unfortunately, this leads to hard-to-manage code, as it’s not obvious (to humans) which variables are global in a given file.</p>
+</blockquote>
+<p>以上就是理由。这种做法不好的地方有三个：</p>
+<ol>
+<li>代码不便管理，这是全局变量的弊病</li>
+<li>依赖关系不明确</li>
+<li>性能损失，因为需要向后查找变量声明</li>
+</ol>
+<p>正确的做法是导入作用域</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">(<span class="name">function</span>(<span class="name">window</span>)&#123;</div><div class="line">	console.log(<span class="name">window</span>)<span class="comment">;</span></div><div class="line">&#125;)(<span class="name">window</span>)</div></pre></td></tr></table></figure>
+<p>借助closure，我们可以简单实现JS的模块化</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> <span class="built_in">module</span> = (<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">	<span class="keyword">var</span> counter = <span class="number">0</span>;</div><div class="line">	<span class="keyword">return</span> &#123;</div><div class="line">		<span class="attr">inc</span>: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">			<span class="keyword">return</span> counter++;</div><div class="line">		&#125;</div><div class="line">	&#125;;</div><div class="line">&#125;)();</div><div class="line"></div><div class="line"><span class="comment">//invoke</span></div><div class="line"><span class="built_in">module</span>.counter <span class="comment">//undefined</span></div><div class="line"><span class="built_in">module</span>.inc(); <span class="comment">//0</span></div><div class="line"><span class="built_in">module</span>.inc(); <span class="comment">//1</span></div><div class="line">...</div></pre></td></tr></table></figure>
+<h3 id="Augmentation-mixin-trait-…"><a href="#Augmentation-mixin-trait-…" class="headerlink" title="Augmentation (mixin, trait …)"></a>Augmentation (mixin, trait …)</h3><p>模块化之后，如何扩展这部分的功能？</p>
+<h4 id="Loose-augmentation"><a href="#Loose-augmentation" class="headerlink" title="Loose augmentation"></a>Loose augmentation</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> <span class="built_in">module</span> = (<span class="function"><span class="keyword">function</span>(<span class="params">self</span>)</span>&#123;</div><div class="line"></div><div class="line">	self.todo = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">		<span class="built_in">console</span>.log(<span class="string">'cannot access counter'</span>);</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">return</span> self;</div><div class="line">&#125;)(<span class="built_in">module</span> || &#123;&#125;)</div></pre></td></tr></table></figure>
+<p>之所以称为宽松augmentation，是因为多个modules可以异步加载。如果变量没有声明，就会重新创建。与之对应的就是Tight augmentation</p>
+<h4 id="Tight-augmentation"><a href="#Tight-augmentation" class="headerlink" title="Tight augmentation"></a>Tight augmentation</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> <span class="built_in">module</span> = (<span class="function"><span class="keyword">function</span>(<span class="params">self</span>)</span>&#123;</div><div class="line"></div><div class="line">	self.todo = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">		<span class="built_in">console</span>.log(<span class="string">'cannot access counter'</span>);</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">return</span> self;</div><div class="line">&#125;)(<span class="built_in">module</span>)</div></pre></td></tr></table></figure>
+<p>这样就要求严格的加载顺序了。</p>
+<p>更多模式参考 <a href="http://www.adequatelygood.com/JavaScript-Module-Pattern-In-Depth.html" target="_blank" rel="external">JavaScript Module Pattern: In-Depth</a></p>
+<p>通用的JS规范共有两种：CommonJS和AMD</p>
+<h3 id="CommonJS"><a href="#CommonJS" class="headerlink" title="CommonJS"></a>CommonJS</h3><p>该标准中，有一个自由函数require，用于加载模块。</p>
+<figure class="highlight maxima"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">//math.js</div><div class="line">exports.add = function() &#123;</div><div class="line">    <span class="built_in">var</span> <span class="built_in">sum</span> = <span class="number">0</span>, i = <span class="number">0</span>, <span class="built_in">args</span> = arguments, l = <span class="built_in">args</span>.<span class="built_in">length</span>;</div><div class="line">    <span class="keyword">while</span> (i &lt; l) &#123;</div><div class="line">        <span class="built_in">sum</span> += <span class="built_in">args</span>[i++];</div><div class="line">    &#125;</div><div class="line">    <span class="built_in">return</span> <span class="built_in">sum</span>;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>这样就可以在其他模块中引用</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//increment.js</span></div><div class="line"><span class="keyword">var</span> add = <span class="built_in">require</span>(<span class="string">'math'</span>).add;</div><div class="line">exports.increment = <span class="function"><span class="keyword">function</span>(<span class="params">val</span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> add(val,<span class="number">1</span>);</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p><strong>NOTICE</strong></p>
+<p><code>任何require进来的模块，其变量都是私有的</code></p>
+<p>举个例子</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//program.js</span></div><div class="line"><span class="keyword">var</span> inc = <span class="built_in">require</span>(<span class="string">'increment'</span>).increment;</div><div class="line"><span class="keyword">var</span> a = <span class="number">1</span>;</div><div class="line">inc(a); <span class="comment">// 2</span></div><div class="line">inc.add <span class="comment">//undefined</span></div><div class="line"><span class="built_in">module</span>.id == <span class="string">"program"</span>;</div></pre></td></tr></table></figure>
+<p>这里的inc.add对于program.js是不可见的。</p>
+<p>NodeJs的模块系统实现了改标准 <a href="http://nodejs.org/docs/latest/api/modules.html" target="_blank" rel="external">Nodejs Module</a></p>
+<h3 id="AMD-Asynchronous-Module-Definition"><a href="#AMD-Asynchronous-Module-Definition" class="headerlink" title="AMD (Asynchronous Module Definition)"></a>AMD (Asynchronous Module Definition)</h3><p>对于浏览器环境，由于js文件在服务端，异步加载使得CommonJS不实用了。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">define(<span class="string">"alpha"</span>, [<span class="string">"require"</span>, <span class="string">"exports"</span>, <span class="string">"beta"</span>],</div><div class="line"><span class="function"><span class="keyword">function</span> (<span class="params">require, exports, beta</span>) </span>&#123;</div><div class="line">       exports.verb = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">           <span class="keyword">return</span> beta.verb();</div><div class="line">           <span class="comment">//Or:</span></div><div class="line">           <span class="keyword">return</span> <span class="built_in">require</span>(<span class="string">"beta"</span>).verb();</div><div class="line">       &#125;</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>这样，只有等到所有的模块加载成功后，才会调用回调函数。</p>
+
+        </div>
+        <footer class="article-footer">
+            
+
+
+
+    <a data-url="https://lameta.com/2015/01/25/Javascript-Modularize/" data-id="civhg12s0001vctm4v14zp6ji" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
+<script>
+    (function ($) {
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+</script>
+
+        </footer>
+    </div>
+</article>
+
+    <section id="comments">
+    
+        
+    <div class="ds-thread" data-thread-key="2015/01/25/Javascript-Modularize/" data-title="Javascript Modularize" data-url="https://lameta.com/2015/01/25/Javascript-Modularize/"></div>
+    <style>
+        #ds-thread #ds-reset .ds-textarea-wrapper {
+            background: none;
+        }
+        #ds-reset .ds-avatar img {
+            box-shadow: none;
+        }
+        #ds-reset .ds-gradient-bg {
+            background: #f7f7f7;
+        }
+        #ds-thread #ds-reset li.ds-tab a {
+            border-radius: 3px;
+        }
+        #ds-thread #ds-reset .ds-post-button {
+            color: white;
+            border: none;
+            box-shadow: none;
+            background: #d32;
+            text-shadow: none;
+            font-weight: normal;
+            font-family: 'Microsoft Yahei';
+        }
+        #ds-thread #ds-reset .ds-post-button:hover {
+            color: white;
+            background: #DE594C;
+        }
+        #ds-thread #ds-reset .ds-post-button:active {
+            background: #d32;
+        }
+        #ds-smilies-tooltip ul.ds-smilies-tabs li a.ds-current {
+            color: white;
+            background: #d32;
+            box-shadow: none;
+            text-shadow: none;
+            font-weight: normal;
+        }
+    </style>
+
+    
+    </section>
+
+                        </div>
+                    </section>
+                    <aside id="sidebar">
+    <a class="sidebar-toggle" title="Expand Sidebar"><i class="toggle icon"></i></a>
+    <div class="sidebar-top">
+        <p>关注我 :</p>
+        <ul class="social-links">
+            
+                
+                <li>
+                    <a class="social-tooltip" title="twitter" href="https://twitter.com/lambetaX" target="_blank">
+                        <i class="icon fa fa-twitter"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="github" href="https://github.com/qianyan" target="_blank">
+                        <i class="icon fa fa-github"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="weibo" href="http://weibo.com/3672207020/" target="_blank">
+                        <i class="icon fa fa-weibo"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="rss" href="/atom.xml" target="_blank">
+                        <i class="icon fa fa-rss"></i>
+                    </a>
+                </li>
+                
+            
+        </ul>
+    </div>
+    
+        
+<nav id="article-nav">
+    
+        <a href="/2015/01/27/Javascript-Modularize-2nd/" id="article-nav-newer" class="article-nav-link-wrap">
+        <strong class="article-nav-caption">下一篇</strong>
+        <p class="article-nav-title">
+        
+            Javascript Modularize 2nd
+        
+        </p>
+        <i class="icon fa fa-chevron-right" id="icon-chevron-right"></i>
+    </a>
+    
+    
+        <a href="/2014/11/19/maven-in-action/" id="article-nav-older" class="article-nav-link-wrap">
+        <strong class="article-nav-caption">上一篇</strong>
+        <p class="article-nav-title">maven in action</p>
+        <i class="icon fa fa-chevron-left" id="icon-chevron-left"></i>
+        </a>
+    
+</nav>
+
+    
+    <div class="widgets-container">
+        
+            
+                
+    <div class="widget-wrap">
+        <h3 class="widget-title">最新文章</h3>
+        <div class="widget">
+            <ul id="recent-post" class="no-thumbnail">
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Clojure/">Clojure</a></p>
+                            <p class="item-title"><a href="/2016/11/04/Generative-Testing/" class="title">Generative Testing</a></p>
+                            <p class="item-date"><time datetime="2016-11-03T23:21:34.000Z" itemprop="datePublished">2016-11-04</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Clojure/">Clojure</a></p>
+                            <p class="item-title"><a href="/2016/09/12/Collection-Pipelines-By-TDD/" class="title">Clojure集合管道函数练习</a></p>
+                            <p class="item-date"><time datetime="2016-09-12T01:26:24.000Z" itemprop="datePublished">2016-09-12</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Clojure/">Clojure</a></p>
+                            <p class="item-title"><a href="/2016/09/04/Reading-and-Writing-Files/" class="title">Reading and Writing Files</a></p>
+                            <p class="item-date"><time datetime="2016-09-04T02:10:44.000Z" itemprop="datePublished">2016-09-04</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/技术/">技术</a></p>
+                            <p class="item-title"><a href="/2016/06/24/SonarQube-Plugin-Step-by-Step/" class="title">SonarQube Plugin Step by Step</a></p>
+                            <p class="item-date"><time datetime="2016-06-23T16:40:23.000Z" itemprop="datePublished">2016-06-24</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Clojure/">Clojure</a></p>
+                            <p class="item-title"><a href="/2016/05/30/Leiningen-Profile/" class="title">Leiningen Profile</a></p>
+                            <p class="item-date"><time datetime="2016-05-30T13:21:26.000Z" itemprop="datePublished">2016-05-30</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">分类</h3>
+        <div class="widget">
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Clojure/">Clojure</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/技术/">技术</a><span class="category-list-count">38</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/生活/">生活</a><span class="category-list-count">2</span></li></ul>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">归档</h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">九月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">五月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">四月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">十一月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">七月 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">三月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">二月 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">一月 2015</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/11/">十一月 2014</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/10/">十月 2014</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/09/">九月 2014</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/07/">七月 2014</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/05/">五月 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02/">二月 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/01/">一月 2014</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/12/">十二月 2013</a><span class="archive-list-count">5</span></li></ul>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-float">
+        <h3 class="widget-title">标签云</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/FP/" style="font-size: 12px;">FP</a> <a href="/tags/Mistakes-I-Hav-Made/" style="font-size: 14px;">Mistakes I Hav Made</a> <a href="/tags/OO/" style="font-size: 10px;">OO</a> <a href="/tags/angularJs/" style="font-size: 10px;">angularJs</a> <a href="/tags/concurrency/" style="font-size: 10px;">concurrency</a> <a href="/tags/file/" style="font-size: 10px;">file</a> <a href="/tags/geek/" style="font-size: 10px;">geek</a> <a href="/tags/gradle/" style="font-size: 10px;">gradle</a> <a href="/tags/java/" style="font-size: 16px;">java</a> <a href="/tags/javascript/" style="font-size: 20px;">javascript</a> <a href="/tags/kata/" style="font-size: 10px;">kata</a> <a href="/tags/language/" style="font-size: 14px;">language</a> <a href="/tags/leiningen/" style="font-size: 10px;">leiningen</a> <a href="/tags/maven/" style="font-size: 10px;">maven</a> <a href="/tags/mysql/" style="font-size: 12px;">mysql</a> <a href="/tags/node/" style="font-size: 12px;">node</a> <a href="/tags/promise/" style="font-size: 10px;">promise</a> <a href="/tags/q/" style="font-size: 10px;">q</a> <a href="/tags/rake/" style="font-size: 10px;">rake</a> <a href="/tags/shell/" style="font-size: 14px;">shell</a> <a href="/tags/sublime/" style="font-size: 10px;">sublime</a> <a href="/tags/test/" style="font-size: 10px;">test</a> <a href="/tags/testing/" style="font-size: 10px;">testing</a> <a href="/tags/thinking/" style="font-size: 18px;">thinking</a> <a href="/tags/transaction/" style="font-size: 10px;">transaction</a> <a href="/tags/vim/" style="font-size: 12px;">vim</a> <a href="/tags/yeoman/" style="font-size: 10px;">yeoman</a> <a href="/tags/zeal/" style="font-size: 10px;">zeal</a> <a href="/tags/散文/" style="font-size: 10px;">散文</a>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">链接</h3>
+        <div class="widget">
+            <ul>
+                
+                    <li>
+                        <a href="http://blog.jayfields.com/">Jay Fields</a>
+                    </li>
+                
+                    <li>
+                        <a href="https://aphyr.com">Aphyr</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://bucharestfp.ro">Bucharest FP</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://www.yinwang.org">Wangyin</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://blog.rlmflores.me/">Rodrigo Flores</a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+
+            
+        
+    </div>
+</aside>
+                </div>
+            </div>
+        </div>
+        <footer id="footer">
+    <div class="container">
+        <div class="container-inner">
+            <a id="back-to-top" href="javascript:;"><i class="icon fa fa-angle-up"></i></a>
+            <div class="credit">
+                <h1 class="logo-wrap">
+                    <a href="/" class="logo"></a>
+                </h1>
+                <p>&copy; 2016 lambeta</p>
+                <p>Powered by <a href="//hexo.io/" target="_blank">Hexo</a>. Theme by <a href="//github.com/ppoffice" target="_blank">PPOffice</a></p>
+            </div>
+        </div>
+    </div>
+</footer>
+        
+    
+    <script type="text/javascript">
+    var duoshuoQuery = {short_name:'lambeta'};
+    (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0]
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+    </script>
+
+
+
+    
+        <script src="/vendor/lightgallery/js/lightgallery.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-thumbnail.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-pager.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-autoplay.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-fullscreen.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-zoom.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-hash.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-share.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-video.min.js"></script>
+    
+
+
+<!-- Custom Scripts -->
+<script src="/js/main.js"></script>
+
+    </div>
+</body>
+</html>

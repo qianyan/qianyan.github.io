@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    
+    <title>内部类的异常处理 | λ</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+        <meta name="keywords" content="java,Mistakes I Hav Made" />
+    
+    <meta name="description" content="问题最近遇到一个问题，使用Java写某个DSL标记语言X的parser（解析器）Maven插件的时候，对外暴露一个名为Callback的接口和一个待实现的方法getHTML()——基于调用处传入的文件名srcX构造出HTML文件的输出路径（其实此处的Callback就是一个闭包，文件名是一个自由变量）。大致代码如下：
+1234567891011121314151617parser.parse(sr">
+<meta property="og:type" content="article">
+<meta property="og:title" content="内部类的异常处理">
+<meta property="og:url" content="https://lameta.com/2016/04/26/Java-Inner-Class-Exception-Handler/index.html">
+<meta property="og:site_name" content="λ">
+<meta property="og:description" content="问题最近遇到一个问题，使用Java写某个DSL标记语言X的parser（解析器）Maven插件的时候，对外暴露一个名为Callback的接口和一个待实现的方法getHTML()——基于调用处传入的文件名srcX构造出HTML文件的输出路径（其实此处的Callback就是一个闭包，文件名是一个自由变量）。大致代码如下：
+1234567891011121314151617parser.parse(sr">
+<meta property="og:updated_time" content="2016-09-06T14:41:53.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="内部类的异常处理">
+<meta name="twitter:description" content="问题最近遇到一个问题，使用Java写某个DSL标记语言X的parser（解析器）Maven插件的时候，对外暴露一个名为Callback的接口和一个待实现的方法getHTML()——基于调用处传入的文件名srcX构造出HTML文件的输出路径（其实此处的Callback就是一个闭包，文件名是一个自由变量）。大致代码如下：
+1234567891011121314151617parser.parse(sr">
+    
+
+    
+        <link rel="alternate" href="/atom.xml" title="λ" type="application/atom+xml" />
+    
+
+    
+        <link rel="icon" href="/favicon.ico# path to favicon" />
+    
+
+    <link rel="stylesheet" href="/vendor/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/vendor/titillium-web/styles.css">
+    <link rel="stylesheet" href="/vendor/source-code-pro/styles.css">
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <script src="/vendor/jquery/2.0.3/jquery.min.js"></script>
+    
+    
+        <link rel="stylesheet" href="/vendor/lightgallery/css/lightgallery.min.css">
+    
+    
+        <script type="text/javascript">
+(function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-83870107-1# enter the tracking ID for your Google Analytics', 'auto');
+ga('send', 'pageview');
+
+</script>
+    
+    
+        <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?e6231610fe66acf322391d7546c28f21# enter Baidu Analytics hash key";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+    
+
+</head>
+
+<body>
+    <div id="wrap">
+        <header id="header">
+    <div id="header-outer" class="outer">
+        <div class="container">
+            <div class="container-inner">
+                <div id="header-title">
+                    <h1 class="logo-wrap">
+                        <a href="/" class="logo"></a>
+                    </h1>
+                    
+                        <h2 class="subtitle-wrap">
+                            <p class="subtitle">(conj clojurians me)</p>
+                        </h2>
+                    
+                </div>
+                <div id="header-inner" class="nav-container">
+                    <a id="main-nav-toggle" class="nav-icon fa fa-bars"></a>
+                    <div class="nav-container-inner">
+                        <ul id="main-nav">
+                            
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" href="/">主页</a>
+                                </li>
+                            
+                                        <ul class="main-nav-list"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Clojure/">Clojure</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/技术/">技术</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/生活/">生活</a></li></ul>
+                                    
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" href="/about/index.html">关于</a>
+                                </li>
+                            
+                        </ul>
+                        <nav id="sub-nav">
+                            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="想要查找什么..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+        <div class="container">
+            <div class="main-body container-inner">
+                <div class="main-body-inner">
+                    <section id="main">
+                        <div class="main-body-header">
+    <h1 class="header">
+    
+    <a class="page-title-link" href="/categories/技术/">技术</a>
+    </h1>
+</div>
+                        <div class="main-body-content">
+                            <article id="post-Java-Inner-Class-Exception-Handler" class="article article-single article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+        内部类的异常处理
+        </h1>
+    
+
+            </header>
+        
+        
+            <div class="article-subtitle">
+                <a href="/2016/04/26/Java-Inner-Class-Exception-Handler/" class="article-date">
+    <time datetime="2016-04-25T23:29:50.000Z" itemprop="datePublished">2016-04-26</time>
+</a>
+                
+    <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Mistakes-I-Hav-Made/">Mistakes I Hav Made</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li></ul>
+
+            </div>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+            <h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>最近遇到一个问题，使用Java写某个DSL标记语言X的<em>parser（解析器）Maven</em>插件的时候，对外暴露一个名为<code>Callback</code>的接口和一个待实现的方法<em>getHTML()</em>——基于调用处传入的文件名<code>srcX</code>构造出HTML文件的输出路径（其实此处的<code>Callback</code>就是一个闭包，文件名是一个自由变量）。大致代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">parser.parse(srcX, <span class="keyword">new</span> Callback() &#123;</div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> FileWriter <span class="title">getHTML</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">new</span> FileWriter(outputPath(suffix(srcX, <span class="string">"html"</span>)));</div><div class="line">    &#125;</div><div class="line">&#125;);</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">private</span> String <span class="title">suffix</span><span class="params">(String filename, String suffix)</span> </span>&#123;</div><div class="line">	<span class="keyword">return</span> Joiner.on(<span class="string">"."</span>).join(filename, suffix);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//这里假设输入和输出根路径地址已知</span></div><div class="line"><span class="function"><span class="keyword">private</span> File <span class="title">outputPath</span><span class="params">(String file)</span> </span>&#123;</div><div class="line">	<span class="keyword">return</span> <span class="keyword">new</span> File(</div><div class="line">	           file.replace(srcDir.getAbsolutePath(), <span class="comment">//srcDir: File</span></div><div class="line">	             outputDir.getAbsolutePath())); <span class="comment">//outputDir: File</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>目前为止还没有任何问题。但若是运行时，这段程序很可能抛出异常<em>java.io.FileNotFoundException: your-file-name (No such file or directory)</em>。原因在于<em>file</em>的路径当中可能存在多级父级目录，例如：<em>outputDir/p1/p2/srcX.html</em>，那么当<em>FileWriter</em>尝试创建<em>srcX.html</em>就会失败。此时最简单的方法就是提前创建好所有的父级目录，于是<em>outputPath()</em>方法会变成下面这样：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">private</span> File <span class="title">outputPath</span><span class="params">(String file)</span> </span>&#123;</div><div class="line">    File outputFile = <span class="keyword">new</span> File(</div><div class="line">            file.replace(srcDir.getAbsolutePath(),</div><div class="line">                    outputDir.getAbsolutePath()));</div><div class="line">    outputFile.getParentFile().mkdirs(); <span class="comment">//创建可能不存在的父级目录</span></div><div class="line"></div><div class="line">    <span class="keyword">return</span> outputFile;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>似乎这段程序可以正常工作了，但是创建文件夹这样的操作是可能失败的。所以我们需要关注是否创建成功，若失败，则写入Log文件当中。修改程序如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">private</span> File <span class="title">outputPath</span><span class="params">(String file)</span> </span>&#123;</div><div class="line">    File outputFile = <span class="keyword">new</span> File(</div><div class="line">            file.replace(srcDir.getAbsolutePath(),</div><div class="line">                    outputDir.getAbsolutePath()));</div><div class="line">    <span class="keyword">final</span> File parentDirs = outputFile.getParentFile();</div><div class="line">    <span class="keyword">if</span> (!parentDirs.exists()) &#123;</div><div class="line">        <span class="keyword">if</span> (!parentDirs.mkdirs()) &#123;<span class="comment">//创建可能不存在的父级目录</span></div><div class="line">            getLog().error(<span class="string">"Cannot create parent dirs for &#123;&#125;"</span>, outputFile);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> outputFile;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p><strong>注意</strong><br>这里我们需要先判断父级目录是否存在，即<em>parentDirs.exists()？</em>可是<em>parentDirs.mkdirs()</em>不是直接返回boolean值来表示是否创建成功吗？是这样么？这儿有<em>mkdirs()</em>方法的说明：</p>
+<blockquote>
+<p>public boolean mkdirs()<br>Creates the directory named by this abstract pathname, including any necessary but nonexistent parent directories. Note that if this operation fails it may have succeeded in creating some of the necessary parent directories.<br>Returns:<br>true if and only if the directory was created, along with all necessary parent directories; false otherwise</p>
+</blockquote>
+<p>也就是说只有当这个目录及其所有的父级目录都被创建时，才返回true，反之返回false。照这个推论，如果所有目录事先已经存在了，这个方法应该也会返回true，毕竟都被创建过了嘛。但是只要稍微看一眼源码，你就会发现事实并非如此：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//mkdirs源码</span></div><div class="line"><span class="keyword">if</span> (exists()) &#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">false</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>所以这里需要特别强调<strong>was created</strong>是一种操作，如果没有进行这个操作，那就不能算这个方法成功。</p>
+<p>前面已经提到过，我需要写一个maven的插件，所以最好在这种导致程序崩溃的地方抛出一个maven中通用的异常<em>MojoExecutionException</em>。这样，更改代码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">private</span> File <span class="title">outputPath</span><span class="params">(String file)</span> </span>&#123;</div><div class="line">    File outputFile = <span class="keyword">new</span> File(</div><div class="line">            file.replace(srcDir.getAbsolutePath(),</div><div class="line">                    outputDir.getAbsolutePath()));</div><div class="line">    <span class="keyword">final</span> File parentDirs = outputFile.getParentFile();</div><div class="line">    <span class="keyword">if</span> (!parentDirs.exists()) &#123;</div><div class="line">        <span class="keyword">if</span> (!parentDirs.mkdirs()) &#123;<span class="comment">//创建可能不存在的父级目录</span></div><div class="line">            getLog().error(<span class="string">"Cannot create parent dirs for &#123;&#125;"</span>, outputFile);</div><div class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> MojoExecutionException(<span class="string">"Cannot create parent dirs"</span>);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> outputFile;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>此时，问题才显出端倪——异常<em>MojoExecutionException</em>是一个受检的异常(checked Exception)，它间接继承自<em>java.lang.Exception</em>。可是我们的<em>getHTML()</em>方法并没有在签名中抛出任何异常，编译无法通过。那唯一的办法就是<em>try…catch</em>了，但是我不应该捕获自己<strong>刚刚</strong>抛出来的异常，否则抛出受检异常的意义何在？</p>
+<p>这时，自然而然会想到，将方法签名改成<em>getHTML() throws MojoExecutionException</em>。确实可行，但是并不合适，因为<em>MojoExecutionException</em>只是Maven插件规定的异常，而getHTML()则是一个对外暴露的API，不应该依赖于某个具体的异常。所以我将异常扩大化：<em>getHTML() throws Exception</em>，这样做的好处很明显，坏处也很显眼。</p>
+<h3 id="好处"><a href="#好处" class="headerlink" title="好处"></a>好处</h3><ol>
+<li>牢记《Unix编程艺术》中的“宽收严发”原则。即子类实现父类、接口的方法，入参可以扩大，出参可以缩小。举个例子：父类、接口有个方法</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> Object <span class="title">something</span><span class="params">(HashMap map)</span> <span class="keyword">throws</span> Exception</span></div></pre></td></tr></table></figure>
+<p>那么子类实现这个方法可以这样写</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> String <span class="title">something</span><span class="params">(Map map)</span></span></div><div class="line">                  <span class="keyword">throws</span> ExecutionException, NoSuchMethodException</div></pre></td></tr></table></figure>
+<p>这里，入参是HashMap，出参是Object和Exception。入参扩大，所以子类出现了Map；出参缩小，所以子类出现了String和ExecutionException和NoSuchMethodException。同理，此处<em>getHTML() throws Exception</em>由子类实现的形式可以是<em>getHTML() throws MojoExecutionException</em>。</p>
+<h3 id="坏处"><a href="#坏处" class="headerlink" title="坏处"></a>坏处</h3><ol>
+<li>不管getHTML()是否需要抛出异常，你都得在实现代码中抛出异常；</li>
+<li>由于对外表现的是抛出较宽泛的Exception，所以丧失了对于具体受检 (checked exception)异常进行检查的好处。</li>
+</ol>
+<p>这里有个JDK中比较类似的例子，就是关于<code>Runnable</code>和<code>Callable</code>接口的设计问题：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Runnable</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Callable</span>&lt;<span class="title">V</span>&gt; </span>&#123;</div><div class="line">    <span class="function">V <span class="title">call</span><span class="params">()</span> <span class="keyword">throws</span> Exception</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>它们就是两个极端，<code>Runnable</code>必须将受检的异常转换成非受检(unchecked exception)或者发明一种方式来将异常暴露给调用者；<code>Callable</code>就是无论如何都得抛出异常，而且迫使用户去捕获一个较宽泛的异常。</p>
+<h2 id="解决方式"><a href="#解决方式" class="headerlink" title="解决方式"></a>解决方式</h2><p>这个时候，泛型就派上用场了。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">interface</span> <span class="title">Callback</span>&lt;<span class="title">E</span> <span class="keyword">extends</span> <span class="title">Exception</span>&gt; </span>&#123;</div><div class="line">    <span class="function">FileWriter <span class="title">getHTML</span><span class="params">()</span> <span class="keyword">throws</span> E</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//interface parser</span></div><div class="line"><span class="keyword">public</span> &lt;E extends Exception&gt; <span class="function"><span class="keyword">void</span> <span class="title">parse</span><span class="params">(String srcX, Callback&lt;E&gt; cb)</span> <span class="keyword">throws</span> E</span>;</div></pre></td></tr></table></figure></p>
+<p>通过这种方式，我们可以捕获具体的异常：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">try</span> &#123;</div><div class="line">    parser.parse(srcX, <span class="keyword">new</span> Callback&lt;MojoExecutionException&gt;() &#123;</div><div class="line">        <span class="meta">@Override</span></div><div class="line">        <span class="function"><span class="keyword">public</span> FileWriter <span class="title">getHTML</span><span class="params">()</span> <span class="keyword">throws</span> MojoExecutionException </span>&#123;</div><div class="line">            <span class="keyword">return</span> <span class="keyword">new</span> FileWriter(outputPath(suffix(srcX, <span class="string">"html"</span>)));</div><div class="line">        &#125;</div><div class="line">    &#125;);</div><div class="line">&#125; <span class="keyword">catch</span> (MojoExecutionException e) &#123;</div><div class="line">    getLog().error(<span class="string">"Failed to execute. &#123;&#125;"</span>, e);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>使用lambda表达式可以简化成下面的模样：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">try</span> &#123;</div><div class="line">    parser.parse(srcX, (Callback&lt;MojoExecutionException&gt;) () -&gt; <span class="keyword">new</span> FileWriter(outputPath(suffix(srcX, <span class="string">"html"</span>))));</div><div class="line">&#125; <span class="keyword">catch</span> (MojoExecutionException e) &#123;</div><div class="line">    getLog().error(<span class="string">"Failed to execute. &#123;&#125;"</span>, e);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>我们解决了<em>迫使用户去捕获一个较宽泛的异常</em>的问题，但是<em>无论如何都得抛出异常这个问题</em>还是没有得到解决。或许我们需要一个像是<em>throws Nothing</em>一样的语法，表示什么也没有抛出来。我们知道RuntimeException是非受检的异常(unchecked exception)，所以<em>throws RuntimeException</em>就表明这个异常跟没有抛出异常一样，不需要捕获。如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">parser.parse(srcX, <span class="keyword">new</span> Callback&lt;Nothing&gt;() &#123;</div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> FileWriter <span class="title">getHTML</span><span class="params">()</span> <span class="keyword">throws</span> Nothing </span>&#123;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">new</span> FileWriter(outputPath(suffix(srcX, <span class="string">"html"</span>)));</div><div class="line">    &#125;</div><div class="line">&#125;);</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Nothing</span> <span class="keyword">extends</span> <span class="title">RuntimeException</span> </span>&#123;&#125;</div></pre></td></tr></table></figure></p>
+<p>走到这一步，我们算是较为完全地解决了匿名内部类的异常处理问题。</p>
+<h2 id="异常透明化"><a href="#异常透明化" class="headerlink" title="异常透明化"></a>异常透明化</h2><blockquote>
+<p>With the throws type parameter on the Block interface, we can now accurately generify over the set of exceptions thrown by the Block; with the generic forEach method, we can mirror the exception behavior of the block in forEach(). This is called exception transparency because now the exception behavior of forEach can match the exception behavior of its block argument. Exception transparency simplifies the construction of library classes that implement idioms like internal iteration of data structures, because it is common that methods that accept function-valued arguments will invoke those functions, meaning that the library method will throw a superset of the exceptions thrown by its function-valued arguments.</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">interface</span> <span class="title">Block</span>&lt;<span class="title">T</span>, <span class="title">throws</span> <span class="title">E</span>&gt; </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">invoke</span><span class="params">(T element)</span> <span class="keyword">throws</span> E</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">interface</span> <span class="title">NewCollection</span>&lt;<span class="title">T</span>&gt; </span>&#123;</div><div class="line">    <span class="keyword">public</span>&lt;<span class="keyword">throws</span> E&gt; forEach(Block&lt;T, <span class="keyword">throws</span> E&gt; block) <span class="keyword">throws</span> E;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>异常透明化，简单来讲，就是调用者的签名中的异常完全由它的函数值(function-valued)的参数决定，所有这些调用者最终的异常都会是该函数值所注异常的超集。</p>
+<p>异常透明化就是用来解决我们常用的通过内部类模拟闭包调用时异常处理的手法了。</p>
+<hr>
+<p><strong>闭包的定义</strong><br>一个包含了自由变量的开发表达式，和该自由变量的约束环境组合之后，产生了一种封闭的状态。</p>
+<hr>
+<p>参考链接<br>[1] <a href="https://blogs.oracle.com/briangoetz/entry/exception_transparency_in_java" target="_blank" rel="external">Exception Transparency</a><br>[2] <a href="http://stackoverflow.com/questions/8101575/throwing-checked-exceptions-from-anonymous-inner-classes" target="_blank" rel="external">Throwing Checked Exceptions from Anonymous Inner Classes</a></p>
+
+        </div>
+        <footer class="article-footer">
+            
+
+
+
+    <a data-url="https://lameta.com/2016/04/26/Java-Inner-Class-Exception-Handler/" data-id="civhg12st0034ctm4ucjyu9bw" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
+<script>
+    (function ($) {
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+</script>
+
+        </footer>
+    </div>
+</article>
+
+    <section id="comments">
+    
+        
+    <div class="ds-thread" data-thread-key="2016/04/26/Java-Inner-Class-Exception-Handler/" data-title="内部类的异常处理" data-url="https://lameta.com/2016/04/26/Java-Inner-Class-Exception-Handler/"></div>
+    <style>
+        #ds-thread #ds-reset .ds-textarea-wrapper {
+            background: none;
+        }
+        #ds-reset .ds-avatar img {
+            box-shadow: none;
+        }
+        #ds-reset .ds-gradient-bg {
+            background: #f7f7f7;
+        }
+        #ds-thread #ds-reset li.ds-tab a {
+            border-radius: 3px;
+        }
+        #ds-thread #ds-reset .ds-post-button {
+            color: white;
+            border: none;
+            box-shadow: none;
+            background: #d32;
+            text-shadow: none;
+            font-weight: normal;
+            font-family: 'Microsoft Yahei';
+        }
+        #ds-thread #ds-reset .ds-post-button:hover {
+            color: white;
+            background: #DE594C;
+        }
+        #ds-thread #ds-reset .ds-post-button:active {
+            background: #d32;
+        }
+        #ds-smilies-tooltip ul.ds-smilies-tabs li a.ds-current {
+            color: white;
+            background: #d32;
+            box-shadow: none;
+            text-shadow: none;
+            font-weight: normal;
+        }
+    </style>
+
+    
+    </section>
+
+                        </div>
+                    </section>
+                    <aside id="sidebar">
+    <a class="sidebar-toggle" title="Expand Sidebar"><i class="toggle icon"></i></a>
+    <div class="sidebar-top">
+        <p>关注我 :</p>
+        <ul class="social-links">
+            
+                
+                <li>
+                    <a class="social-tooltip" title="twitter" href="https://twitter.com/lambetaX" target="_blank">
+                        <i class="icon fa fa-twitter"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="github" href="https://github.com/qianyan" target="_blank">
+                        <i class="icon fa fa-github"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="weibo" href="http://weibo.com/3672207020/" target="_blank">
+                        <i class="icon fa fa-weibo"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="rss" href="/atom.xml" target="_blank">
+                        <i class="icon fa fa-rss"></i>
+                    </a>
+                </li>
+                
+            
+        </ul>
+    </div>
+    
+        
+<nav id="article-nav">
+    
+        <a href="/2016/05/24/Using-Java1.8-to-Target-Older-JVMs/" id="article-nav-newer" class="article-nav-link-wrap">
+        <strong class="article-nav-caption">下一篇</strong>
+        <p class="article-nav-title">
+        
+            高编译低运行错误(ConcurrentHashMap.keySet)
+        
+        </p>
+        <i class="icon fa fa-chevron-right" id="icon-chevron-right"></i>
+    </a>
+    
+    
+        <a href="/2016/03/22/Node-js-On-Windows/" id="article-nav-older" class="article-nav-link-wrap">
+        <strong class="article-nav-caption">上一篇</strong>
+        <p class="article-nav-title">Node.js on Windows</p>
+        <i class="icon fa fa-chevron-left" id="icon-chevron-left"></i>
+        </a>
+    
+</nav>
+
+    
+    <div class="widgets-container">
+        
+            
+                
+    <div class="widget-wrap">
+        <h3 class="widget-title">最新文章</h3>
+        <div class="widget">
+            <ul id="recent-post" class="no-thumbnail">
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Clojure/">Clojure</a></p>
+                            <p class="item-title"><a href="/2016/11/04/Generative-Testing/" class="title">Generative Testing</a></p>
+                            <p class="item-date"><time datetime="2016-11-03T23:21:34.000Z" itemprop="datePublished">2016-11-04</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Clojure/">Clojure</a></p>
+                            <p class="item-title"><a href="/2016/09/12/Collection-Pipelines-By-TDD/" class="title">Clojure集合管道函数练习</a></p>
+                            <p class="item-date"><time datetime="2016-09-12T01:26:24.000Z" itemprop="datePublished">2016-09-12</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Clojure/">Clojure</a></p>
+                            <p class="item-title"><a href="/2016/09/04/Reading-and-Writing-Files/" class="title">Reading and Writing Files</a></p>
+                            <p class="item-date"><time datetime="2016-09-04T02:10:44.000Z" itemprop="datePublished">2016-09-04</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/技术/">技术</a></p>
+                            <p class="item-title"><a href="/2016/06/24/SonarQube-Plugin-Step-by-Step/" class="title">SonarQube Plugin Step by Step</a></p>
+                            <p class="item-date"><time datetime="2016-06-23T16:40:23.000Z" itemprop="datePublished">2016-06-24</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Clojure/">Clojure</a></p>
+                            <p class="item-title"><a href="/2016/05/30/Leiningen-Profile/" class="title">Leiningen Profile</a></p>
+                            <p class="item-date"><time datetime="2016-05-30T13:21:26.000Z" itemprop="datePublished">2016-05-30</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">分类</h3>
+        <div class="widget">
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Clojure/">Clojure</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/技术/">技术</a><span class="category-list-count">38</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/生活/">生活</a><span class="category-list-count">2</span></li></ul>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">归档</h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">九月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">五月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">四月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">十一月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">七月 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">三月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">二月 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">一月 2015</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/11/">十一月 2014</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/10/">十月 2014</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/09/">九月 2014</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/07/">七月 2014</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/05/">五月 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02/">二月 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/01/">一月 2014</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/12/">十二月 2013</a><span class="archive-list-count">5</span></li></ul>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-float">
+        <h3 class="widget-title">标签云</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/FP/" style="font-size: 12px;">FP</a> <a href="/tags/Mistakes-I-Hav-Made/" style="font-size: 14px;">Mistakes I Hav Made</a> <a href="/tags/OO/" style="font-size: 10px;">OO</a> <a href="/tags/angularJs/" style="font-size: 10px;">angularJs</a> <a href="/tags/concurrency/" style="font-size: 10px;">concurrency</a> <a href="/tags/file/" style="font-size: 10px;">file</a> <a href="/tags/geek/" style="font-size: 10px;">geek</a> <a href="/tags/gradle/" style="font-size: 10px;">gradle</a> <a href="/tags/java/" style="font-size: 16px;">java</a> <a href="/tags/javascript/" style="font-size: 20px;">javascript</a> <a href="/tags/kata/" style="font-size: 10px;">kata</a> <a href="/tags/language/" style="font-size: 14px;">language</a> <a href="/tags/leiningen/" style="font-size: 10px;">leiningen</a> <a href="/tags/maven/" style="font-size: 10px;">maven</a> <a href="/tags/mysql/" style="font-size: 12px;">mysql</a> <a href="/tags/node/" style="font-size: 12px;">node</a> <a href="/tags/promise/" style="font-size: 10px;">promise</a> <a href="/tags/q/" style="font-size: 10px;">q</a> <a href="/tags/rake/" style="font-size: 10px;">rake</a> <a href="/tags/shell/" style="font-size: 14px;">shell</a> <a href="/tags/sublime/" style="font-size: 10px;">sublime</a> <a href="/tags/test/" style="font-size: 10px;">test</a> <a href="/tags/testing/" style="font-size: 10px;">testing</a> <a href="/tags/thinking/" style="font-size: 18px;">thinking</a> <a href="/tags/transaction/" style="font-size: 10px;">transaction</a> <a href="/tags/vim/" style="font-size: 12px;">vim</a> <a href="/tags/yeoman/" style="font-size: 10px;">yeoman</a> <a href="/tags/zeal/" style="font-size: 10px;">zeal</a> <a href="/tags/散文/" style="font-size: 10px;">散文</a>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">链接</h3>
+        <div class="widget">
+            <ul>
+                
+                    <li>
+                        <a href="http://blog.jayfields.com/">Jay Fields</a>
+                    </li>
+                
+                    <li>
+                        <a href="https://aphyr.com">Aphyr</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://bucharestfp.ro">Bucharest FP</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://www.yinwang.org">Wangyin</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://blog.rlmflores.me/">Rodrigo Flores</a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+
+            
+        
+    </div>
+</aside>
+                </div>
+            </div>
+        </div>
+        <footer id="footer">
+    <div class="container">
+        <div class="container-inner">
+            <a id="back-to-top" href="javascript:;"><i class="icon fa fa-angle-up"></i></a>
+            <div class="credit">
+                <h1 class="logo-wrap">
+                    <a href="/" class="logo"></a>
+                </h1>
+                <p>&copy; 2016 lambeta</p>
+                <p>Powered by <a href="//hexo.io/" target="_blank">Hexo</a>. Theme by <a href="//github.com/ppoffice" target="_blank">PPOffice</a></p>
+            </div>
+        </div>
+    </div>
+</footer>
+        
+    
+    <script type="text/javascript">
+    var duoshuoQuery = {short_name:'lambeta'};
+    (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0]
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+    </script>
+
+
+
+    
+        <script src="/vendor/lightgallery/js/lightgallery.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-thumbnail.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-pager.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-autoplay.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-fullscreen.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-zoom.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-hash.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-share.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-video.min.js"></script>
+    
+
+
+<!-- Custom Scripts -->
+<script src="/js/main.js"></script>
+
+    </div>
+</body>
+</html>
