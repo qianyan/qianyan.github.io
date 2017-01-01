@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    
+    <title>Emacs configs for a clojurian | λ</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+        <meta name="keywords" content="emacs" />
+    
+    <meta name="description" content="我是一名热衷于函数式编程的Clojurian（Clojure粉），网络ID是lambeta（λβ），读作/‘læmeitə/，个人的博客网站是https://lambeta.com。俗话说，工欲善其事必先利其器，完善开发工具与我而言是一件愉快的事情，所以想把经验集结成文字，便有了这篇文章。这篇文章不会介绍太多花式或有深度的emacs配置，更多是摸索学习的过程，其中充满了乐趣。
+原因网络上的.ema">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Emacs configs for a clojurian">
+<meta property="og:url" content="https://lameta.com/2017/01/01/Emacs-configs-for-a-clojurian/index.html">
+<meta property="og:site_name" content="λ">
+<meta property="og:description" content="我是一名热衷于函数式编程的Clojurian（Clojure粉），网络ID是lambeta（λβ），读作/‘læmeitə/，个人的博客网站是https://lambeta.com。俗话说，工欲善其事必先利其器，完善开发工具与我而言是一件愉快的事情，所以想把经验集结成文字，便有了这篇文章。这篇文章不会介绍太多花式或有深度的emacs配置，更多是摸索学习的过程，其中充满了乐趣。
+原因网络上的.ema">
+<meta property="og:updated_time" content="2017-01-01T12:02:23.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Emacs configs for a clojurian">
+<meta name="twitter:description" content="我是一名热衷于函数式编程的Clojurian（Clojure粉），网络ID是lambeta（λβ），读作/‘læmeitə/，个人的博客网站是https://lambeta.com。俗话说，工欲善其事必先利其器，完善开发工具与我而言是一件愉快的事情，所以想把经验集结成文字，便有了这篇文章。这篇文章不会介绍太多花式或有深度的emacs配置，更多是摸索学习的过程，其中充满了乐趣。
+原因网络上的.ema">
+    
+
+    
+        <link rel="alternate" href="/atom.xml" title="λ" type="application/atom+xml" />
+    
+
+    
+        <link rel="icon" href="/favicon.ico# path to favicon" />
+    
+
+    <link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/libs/titillium-web/styles.css">
+    <link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <script src="/libs/jquery/2.0.3/jquery.min.js"></script>
+    
+    
+        <link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+    
+    
+        <script type="text/javascript">
+(function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-83870107-1# enter the tracking ID for your Google Analytics', 'auto');
+ga('send', 'pageview');
+
+</script>
+    
+    
+        <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?e6231610fe66acf322391d7546c28f21# enter Baidu Analytics hash key";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+    
+
+</head>
+
+<body>
+    <div id="wrap">
+        <header id="header">
+    <div id="header-outer" class="outer">
+        <div class="container">
+            <div class="container-inner">
+                <div id="header-title">
+                    <h1 class="logo-wrap">
+                        <a href="/" class="logo"></a>
+                    </h1>
+                    
+                        <h2 class="subtitle-wrap">
+                            <p class="subtitle">(conj clojurians me)</p>
+                        </h2>
+                    
+                </div>
+                <div id="header-inner" class="nav-container">
+                    <a id="main-nav-toggle" class="nav-icon fa fa-bars"></a>
+                    <div class="nav-container-inner">
+                        <ul id="main-nav">
+                            
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" href="/">主页</a>
+                                </li>
+                            
+                                        <ul class="main-nav-list"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Clojure/">Clojure</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/技术/">技术</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/生活/">生活</a></li></ul>
+                                    
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" href="/about/index.html">关于</a>
+                                </li>
+                            
+                        </ul>
+                        <nav id="sub-nav">
+                            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="想要查找什么..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+        <div class="container">
+            <div class="main-body container-inner">
+                <div class="main-body-inner">
+                    <section id="main">
+                        <div class="main-body-header">
+    <h1 class="header">
+    
+    <a class="page-title-link" href="/categories/Clojure/">Clojure</a>
+    </h1>
+</div>
+                        <div class="main-body-content">
+                            <article id="post-Emacs-configs-for-a-clojurian" class="article article-single article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+        Emacs configs for a clojurian
+        </h1>
+    
+
+            </header>
+        
+        
+            <div class="article-subtitle">
+                <a href="/2017/01/01/Emacs-configs-for-a-clojurian/" class="article-date">
+    <time datetime="2017-01-01T12:00:24.000Z" itemprop="datePublished">2017-01-01</time>
+</a>
+                
+    <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/emacs/">emacs</a></li></ul>
+
+            </div>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+            <p>我是一名热衷于函数式编程的Clojurian（Clojure粉），网络ID是lambeta（λβ），读作<em>/‘læmeitə/</em>，个人的博客网站是<a href="https://lambeta.com" target="_blank" rel="external">https://lambeta.com</a>。俗话说，工欲善其事必先利其器，完善开发工具与我而言是一件愉快的事情，所以想把经验集结成文字，便有了这篇文章。这篇文章不会介绍太多花式或有深度的emacs配置，更多是摸索学习的过程，其中充满了乐趣。</p>
+<h2 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h2><p>网络上的<em>.emacs.d/init.el</em>配置数不胜数，各路lisp大神的<em>dot file</em>都已经放在github上了，而且前有牛人撰文推荐学习emacs配置的详实方法，看似确实没有什么必要自己折腾一份配置。这个说法对，也不对。我在转向emacs之前，是一名忠实的vim党，从大学开始就不断折腾vim的配置，还花过一段时间专门学习了<em>vimscript</em>，曾经惊叹于<em>vimscript</em>的动态函数式风格的优美和强大。类似地，<em>.vimrc</em>配置文件在网络上也多如牛毛，华丽和酷炫的插件极大地提升了vim的操作性。尽管如此，我还是乐于一砖一瓦地打造自己的vim环境，竭力演化它变成我心目中的“编辑器之神”。这个过程一般会充满修改然后重启的重复性机械劳作，偶尔会遭遇无论怎么修改就是不生效、甚至遍寻google也一无所获的挫折，但是我就是无法厌倦它，人天生好奇，探索未知事物本身就充满了乐趣，而且一旦配置奏效，便能获得满满的成就感。新事物对程序员具有极大的吸引力，但是程序员不会止步于使用新事物，而且会在惊奇之余，渴望控制那股背后主导它的力量本身，行使“上帝之力”。</p>
+<p>话说回来，为什么我会从vim党摇身一变成为emacs党呢？这就不得不提起Clojure这门lisp方言，出于对lisp和函数式编程的痴迷，我选择了基于JVM的Clojure作为自己的偏好语言，而emacs天生为lisp而生。有了这个充足的理由，我开始收集emacs的cheatsheet并打印出来，天天放在手边翻阅，甚至买了一本英文版的<em>Learning GNU Emacs</em>书籍，只要有机会就打开emacs开始刷4clojure上的编程题。由于emacs对lisp的亲和性，我几乎没花多少时间就掌握住了常用的操作技巧。不过，emacs最负盛名的学习曲线确实让学习者绕过圈子，只要一段时间不用，就会忘记很多基本操作。另外，为了更好地在emacs中编写Clojure，还需要cider-mode和clojure-mode的支持，这时候就不得不编辑<em>init.el</em>文件，本着<em>KISS (keep it simple, stupid)</em>原则，我照着各种插件的说明文档中，把配置项复制粘贴到<em>init.el</em>文件当中，运行起来没有问题就好。随着自定义的内容变多，<em>init.el</em>文件也急剧膨胀起来。膨胀本来算不上问题，但我是个比较有操守的程序员，臃肿的代码是我极力避免的坏味道（bad smell）。所以胸臆之中涌动一股浩然之气，决心学起<em>emacs lisp</em>，把emacs的配置从头来过。</p>
+<h2 id="从『头』开始"><a href="#从『头』开始" class="headerlink" title="从『头』开始"></a>从『头』开始</h2><p><em>init.el</em>文件位于<em>~/.emacs.d</em>目录之下，如果没有，自行创建一份即可。<br>首先，我们需要用到emacs的包管理工具<em>package.el</em>，因为emacs 24及其以上的版本都已经内置，所以无需下载到本地，直接通过<code>require</code>加载到emacs的运行时。</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">(<span class="name">require</span> 'package)</div><div class="line">(<span class="name">setq</span> package-archives '((<span class="string">"melpa"</span> . <span class="string">"http://melpa.org/packages/"</span>)</div><div class="line">						 (<span class="string">"melpa-stable"</span> . <span class="string">"https://stable.melpa.org/packages/"</span>)</div><div class="line">						 (<span class="string">"marmalade"</span> . <span class="string">"http://marmalade-repo.org/packages/"</span>)</div><div class="line">						 (<span class="string">"elpy"</span> . <span class="string">"http://jorgenschaefer.github.io/packages/"</span>)</div><div class="line">						 (<span class="string">"gnu"</span> . <span class="string">"http://elpa.gnu.org/packages/"</span>))</div><div class="line">	  package-enable-at-startup <span class="literal">nil</span>)</div></pre></td></tr></table></figure>
+<p>上面的代码涉及到<code>setq</code>（变量赋值）的操作，<code>package-archives</code>，顾名思义，多个包的下载源，我给<code>package-archives</code>设置了5个包源，它们之间服从顺序的优先级，即先从第一个源中下载包，如果没有，到第二个原种寻找，以此类推。此外，这里<code>(&quot;melpa&quot; . &quot;http://melpa.org/packages/&quot;)</code>中的点号（dot）表示法也比较奇怪，其实这是lisp中的<em>Dotted pair</em>表示法，用法和普通的列表类似，但因为是<em>pair</em>的缘故，你可以使用<code>(car )</code>获取<code>&quot;melpa&quot;</code>，<code>(cdr )</code>获取到的却不再是一个列表，而是<code>&quot;http://melpa.org/packages/&quot;</code>这个值本身。</p>
+<p>对<em>emacs lisp</em>不熟悉不要紧，先找个教程练习一下它的用法，比如<a href="https://learnxinyminutes.com/docs/elisp/" target="_blank" rel="external">learnxinyminutes</a>就非常不错。完成这个教程，大体不会对<em>elisp</em>犯怵了。接下来，只需要使用<code>c-h v</code>和<code>c-h f</code>查看<em>elisp</em>中定义的变量函数就能很快上手自行配置。<br>来个实际的例子，在大牛的配置文件中，经常能看到如下成对的配置：<br><figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">(<span class="name">setq</span> package-enable-at-startup <span class="literal">nil</span>)</div><div class="line">(<span class="name">package-initialize</span>)</div></pre></td></tr></table></figure></p>
+<p>开始我觉得这是一对矛盾的配置，<code>package-enable-at-startup</code>设置为nil，暗示emacs启动时不会启用<code>package</code>，而<code>package-initialize</code>明显表明在做<code>package</code>的初始化工作。这种时候，我心中就蹦跶出一句话“世界上本没有矛盾，如果出现了，检查你都有哪些前提条件，就会发现其中一个是错的”。这种非异常的知识点很难通过搜索引擎找到满意的答案，而阅读文档恰恰是最合适的解决方式。emacs对<code>elisp</code>文档的支持非常全面，只需将鼠标移到<code>package-enable-at-startup</code>变量上，按下<code>c-h v</code> (control + h, v) 组合键，就能在其它窗口（window) 看到文档描述：</p>
+<blockquote>
+<p>Whether to activate installed packages when Emacs starts.<br>If non-nil, packages are activated after reading the init file<br>and before <code>after-init-hook&#39;.  Activation is not done if</code>user-init-file’ is nil (e.g. Emacs was started with “-q”).</p>
+</blockquote>
+<p>意思是在读入<em>init.el</em>之后，这个变量才会生效。换句话说，在读取<em>init.el</em>的过程中，该变量不论是nil或是non-nil都不会影响<code>package</code>的加载和初始化。所以，这两者之间并没有矛盾。当然，此时你可能会想把<code>package-enable-at-startup</code>设置为nil意欲何为？<a href="https://www.gnu.org/software/emacs/manual/html_node/emacs/Package-Installation.html" target="_blank" rel="external">官方文档</a>中有如下的解释：</p>
+<blockquote>
+<p>This will automatically set package-enable-at-startup to nil, to avoid loading the packages again after processing the init file.</p>
+</blockquote>
+<p>简单点说，就是防止在<code>package-initialize</code>之后重复加载包，因为可能会影响性能。</p>
+<h2 id="模块化"><a href="#模块化" class="headerlink" title="模块化"></a>模块化</h2><p>如果把什么东西都揉到<em>init.el</em>文件中，这个文件一定会很快变得臃肿不堪。为了解决这个问题，需要引入模块化的思想——把特定功能的配置放到独立的文件中，然后<code>require</code>进来。按照惯例，我在<em>~/.emacs.d</em>目录下建立一个<em>lisp</em>目录用于存放所有自定义的模块文件，随后在<em>init.el</em>中加入下面这句代码，意在把<em>lisp</em>目录加到emacs的加载路径列表里。<br><figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(<span class="name">add-to-list</span> 'load-path (<span class="name">expand-file-name</span> <span class="string">"lisp"</span> user-emacs-directory))</div></pre></td></tr></table></figure></p>
+<p>看似，接下来就可以在每个独立的模块文件中编写各种功能的配置。但是由于<code>package.el</code>功能的局限，我们很快就会遇到包重复安装和配置漂移（configuration drift）的麻烦。<code>package.el</code>提供了<code>package-install-p</code>（p是predicate的意思）和<code>package-install</code>两个配套使用的函数，也就是说一般得先判断包在不在，才决定安不安装。幸运的是，有人已经很好地解决了这部分问题，<a href="https://github.com/jwiegley/use-package" target="_blank" rel="external">use-package</a>就是非常好用的包，它将包的配置和包的定义聚合到了一块，并且保证包一定会安装在你的系统当中。<br>在使用<code>use-package</code>之前，我们需要先安装它，如下：<br><figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">(<span class="name">unless</span> (<span class="name">package-installed-p</span> 'use-package)</div><div class="line">  (<span class="name">package-refresh-contents</span>)</div><div class="line">  (<span class="name">package-install</span> 'use-package))</div><div class="line"></div><div class="line">(<span class="name">eval-when-compile</span></div><div class="line">  (<span class="name">require</span> 'use-package))</div></pre></td></tr></table></figure></p>
+<p>由于<code>use-package</code>本身就是一个包，所以可以使用<code>package-install</code>安装到本地，然后<code>require</code>到emacs的运行时，值得一提的是这个<code>eval-when-compile</code>函数，使用<code>c-h f</code>查看它的定义:</p>
+<blockquote>
+<p>Like ‘progn’, but evaluates the body at compile time if you’re compiling.<br>Thus, the result of the body appears to the compiler as a quoted constant.<br>In interpreted code, this is entirely equivalent to `progn’.</p>
+</blockquote>
+<p>初次看到<strong>compile time</strong>，心中难免会有疑问：lisp不是动态语言吗，怎么还需要编译？这种时候，我们就要求助于<em>elisp</em>的文档了。在emacs中按下<code>c-h i</code>获取主话题（topic）的菜单，然后点击<em>Elisp</em>进入它的操作指南。重点查看<em>Evaluation</em>和<em>Byte Compilation</em>两个章节。不难发现lisp的解析器可以读取解析两种类型的lisp代码，一种是适合人类阅读的代码，以<em>el</em>作为后缀；另一种是编译字节码，以<em>elc</em>作为后缀。编译字节码运行速度优于前一种代码，我们可以通过<code>byte-compile-file</code>把前一种代码的文件编译成字节码文件。有趣的是，如果我们使用<em>package</em>来安装包，对应包的目录下都存在配套的<em>el</em>和<em>elc</em>两类文件。<br>在<em>Byte Compilation</em>条目下，有<code>eval-when-compile</code>的完整描述：</p>
+<blockquote>
+<p>If you’re using another package, but only need macros from it (the byte compiler will expand those), then ‘eval-when-compile’ can be used to load it for compiling, but not executing. For example,<br><figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">(<span class="name">eval-when-compile</span></div><div class="line">   (<span class="name">require</span> 'my-macro-package))</div></pre></td></tr></table></figure></p>
+</blockquote>
+<p>这里头有三个关键字<strong>load</strong>、<strong>compiling</strong>和<strong>executing</strong>值得留意一下。为了弄懂它们的含义，我们需要了解lisp解析器基本的工作原理：<code>code text -[characters]-&gt; load -[lisp object]-&gt; evaluation/compiling -[bytecode]-&gt; lisp interpretor</code>。换句话说，除非你想编译包含上述代码的文件，否则它的作用和<code>progn</code>一模一样，顺序地求值包含其中的表达式。当你正在编译文件的时候，包中宏就会原地展开，然后被<code>eval-when-compile</code>宏加载进内存并被编译成字节码，供后续解析器执行。</p>
+<h2 id="Clojure相关"><a href="#Clojure相关" class="headerlink" title="Clojure相关"></a>Clojure相关</h2><p>载入<em>use-package</em>之后，我需要开始配置自己强大的Clojure开发环境了。首先，引入几个包：<br><figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">(<span class="name">use-package</span> rainbow-delimiters</div><div class="line">  <span class="symbol">:ensure</span> <span class="literal">t</span>)</div><div class="line">(<span class="name">use-package</span> clj-refactor</div><div class="line">  <span class="symbol">:ensure</span> <span class="literal">t</span>)</div><div class="line">(<span class="name">use-package</span> company</div><div class="line">  <span class="symbol">:ensure</span> <span class="literal">t</span></div><div class="line">  <span class="symbol">:defer</span> <span class="literal">t</span></div><div class="line">  <span class="symbol">:config</span> (<span class="name">global-company-mode</span>))</div></pre></td></tr></table></figure></p>
+<p><em>rainbow-delimiters</em>能够让括号变得如同彩虹一样绚丽（主要是易于区分forms），<em>clj-refactor</em>是重构Clojure程序的神器，<em>company</em>提供了强大的命令补全提示功能。</p>
+<h3 id="clojure-mode"><a href="#clojure-mode" class="headerlink" title="clojure mode"></a>clojure mode</h3><p>接下来，我们在<em>~/.emacs.d/lisp</em>目录下新建一个<em>init-clojure.el</em>文件，内容如下：<br><figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">(<span class="name">require</span> 'clj-refactor)</div><div class="line">(<span class="name">require</span> 'rainbow-delimiters)</div><div class="line"></div><div class="line">(<span class="name">use-package</span> midje-mode</div><div class="line">  <span class="symbol">:ensure</span> <span class="literal">t</span>)</div><div class="line"></div><div class="line">(<span class="name">defun</span> my-clj-refactor-mode-hook ()</div><div class="line">	(<span class="name">clj-refactor-mode</span> <span class="number">1</span>)</div><div class="line">	(<span class="name">yas-minor-mode</span> <span class="number">1</span>) <span class="comment">; for adding require/use/import</span></div><div class="line">	(<span class="name">cljr-add-keybindings-with-prefix</span> <span class="string">"C-c C-m"</span>))</div><div class="line"></div><div class="line">(<span class="name">use-package</span> clojure-mode</div><div class="line">			 <span class="symbol">:ensure</span> <span class="literal">t</span></div><div class="line">			 <span class="symbol">:config</span></div><div class="line">			 (<span class="name">add-hook</span> 'clojure-mode-hook #'rainbow-delimiters-mode)</div><div class="line">			 (<span class="name">add-hook</span> 'clojure-mode-hook #'subword-mode)</div><div class="line">			 (<span class="name">add-hook</span> 'clojure-mode-hook #'midje-mode)</div><div class="line">			 (<span class="name">add-hook</span> 'clojure-mode-hook #'my-clj-refactor-mode-hook)</div><div class="line">			 (<span class="name">add-hook</span> 'clojure-mode-hook #'enable-paredit-mode))</div><div class="line"></div><div class="line">(<span class="name">provide</span> 'init-clojure)</div></pre></td></tr></table></figure></p>
+<p>这里就能看出<em>use-package</em>的好处来了，针对<em>clojure-mode</em>的配置项都统一放到<code>:config</code>中管理起来。配置完毕后，使用<code>(provide &#39;init-clojure)</code>将模块以这样的名字暴露给其它客户端调用。</p>
+<h3 id="CIDER-mode"><a href="#CIDER-mode" class="headerlink" title="CIDER mode"></a>CIDER mode</h3><p>有了<em>clojure-mode</em>之后，我们还需要一个Clojure可交互式的开发工具，CIDER便是这么一款工具。同样地，我们在<em>lisp</em>目录下新建一个名为<em>init-clojure-cider.el</em>，内容如下：<br><figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">(<span class="name">require</span> 'init-clojure)</div><div class="line">(<span class="name">require</span> 'company)</div><div class="line"></div><div class="line">(<span class="name">use-package</span> cider</div><div class="line">			 <span class="symbol">:ensure</span> <span class="literal">t</span></div><div class="line">			 <span class="symbol">:config</span></div><div class="line">			 (<span class="name">setq</span> nrepl-popup-stacktraces <span class="literal">nil</span>)</div><div class="line">			 (<span class="name">add-hook</span> 'cider-mode-hook 'eldoc-mode)</div><div class="line">			 (<span class="name">add-hook</span> 'cider-mode-hook #'rainbow-delimiters-mode)</div><div class="line">			 <span class="comment">;; Replace return key with newline-and-indent when in cider mode.</span></div><div class="line">			 (<span class="name">add-hook</span> 'cider-mode-hook '(lambda () (local-set-key (kbd <span class="string">"RET"</span>) 'newline-and-indent)))</div><div class="line">			 (<span class="name">add-hook</span> 'cider-mode-hook #'company-mode)</div><div class="line">			 (<span class="name">add-hook</span> 'cider-repl-mode-hook 'subword-mode)</div><div class="line">			 (<span class="name">add-hook</span> 'cider-repl-mode-hook 'paredit-mode)</div><div class="line">			 (<span class="name">add-hook</span> 'cider-repl-mode-hook #'company-mode)</div><div class="line">			 (<span class="name">add-hook</span> 'cider-repl-mode-hook #'rainbow-delimiters-mode))</div><div class="line"></div><div class="line">(<span class="name">provide</span> 'init-clojure-cider)</div></pre></td></tr></table></figure></p>
+<p>配置的首部，我使用<code>(require &#39;init-clojure)</code>先加载<em>init-clojure</em>，然后对CIDER本身进行一系列的配置。配置的详细信息可以通过CIDER github主页获取到，这里我就不再赘述。</p>
+<p>最后，需要在<em>init.el</em>文件中添加入这么一句<code>(require &#39;init-clojure-cider)</code>，重新启动emacs，找到一个Clojure项目，按下<code>C-c M-j</code> (hack-jack-in)，就能获得一个Clojure的交互式开发环境。</p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>当然，我的emacs配置绝对不止这些，但是其余的过程大体类似。由于emacs速来有伪装成编辑器的操作系统的称号，所以我的探索是无止境的。如果大家对我的配置感兴趣，可以直接去我github上<a href="https://github.com/qianyan/dotfiles" target="_blank" rel="external">dotfiles</a>上查看。</p>
+<h2 id="—"><a href="#—" class="headerlink" title="—"></a>—</h2><p>参考链接<br>[1] <a href="[https://sriramkswamy.github.io/dotemacs/">sriramkswamy dotemacs</a><br>[2] <a href="https://github.com/purcell/emacs.d/" target="_blank" rel="external">purcell emacs.d</a></p>
+
+        </div>
+        <footer class="article-footer">
+            
+
+
+
+    <a data-url="https://lameta.com/2017/01/01/Emacs-configs-for-a-clojurian/" data-id="cixelxv2d003lpnm4dsymx017" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
+<script>
+    (function ($) {
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+</script>
+
+        </footer>
+    </div>
+</article>
+
+    <section id="comments">
+    
+        
+    <div class="ds-thread" data-thread-key="2017/01/01/Emacs-configs-for-a-clojurian/" data-title="Emacs configs for a clojurian" data-url="https://lameta.com/2017/01/01/Emacs-configs-for-a-clojurian/"></div>
+    <style>
+        #ds-thread #ds-reset .ds-textarea-wrapper {
+            background: none;
+        }
+        #ds-reset .ds-avatar img {
+            box-shadow: none;
+        }
+        #ds-reset .ds-gradient-bg {
+            background: #f7f7f7;
+        }
+        #ds-thread #ds-reset li.ds-tab a {
+            border-radius: 3px;
+        }
+        #ds-thread #ds-reset .ds-post-button {
+            color: white;
+            border: none;
+            box-shadow: none;
+            background: #d32;
+            text-shadow: none;
+            font-weight: normal;
+            font-family: 'Microsoft Yahei';
+        }
+        #ds-thread #ds-reset .ds-post-button:hover {
+            color: white;
+            background: #DE594C;
+        }
+        #ds-thread #ds-reset .ds-post-button:active {
+            background: #d32;
+        }
+        #ds-smilies-tooltip ul.ds-smilies-tabs li a.ds-current {
+            color: white;
+            background: #d32;
+            box-shadow: none;
+            text-shadow: none;
+            font-weight: normal;
+        }
+    </style>
+
+    
+    </section>
+
+                        </div>
+                    </section>
+                    <aside id="sidebar">
+    <a class="sidebar-toggle" title="Expand Sidebar"><i class="toggle icon"></i></a>
+    <div class="sidebar-top">
+        <p>关注我 :</p>
+        <ul class="social-links">
+            
+                
+                <li>
+                    <a class="social-tooltip" title="twitter" href="https://twitter.com/lambetaX" target="_blank">
+                        <i class="icon fa fa-twitter"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="github" href="https://github.com/qianyan" target="_blank">
+                        <i class="icon fa fa-github"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="weibo" href="http://weibo.com/3672207020/" target="_blank">
+                        <i class="icon fa fa-weibo"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="rss" href="/atom.xml" target="_blank">
+                        <i class="icon fa fa-rss"></i>
+                    </a>
+                </li>
+                
+            
+        </ul>
+    </div>
+    
+        
+<nav id="article-nav">
+    
+    
+        <a href="/2016/11/04/Generative-Testing/" id="article-nav-older" class="article-nav-link-wrap">
+        <strong class="article-nav-caption">上一篇</strong>
+        <p class="article-nav-title">Generative Testing</p>
+        <i class="icon fa fa-chevron-left" id="icon-chevron-left"></i>
+        </a>
+    
+</nav>
+
+    
+    <div class="widgets-container">
+        
+            
+                
+    <div class="widget-wrap">
+        <h3 class="widget-title">最新文章</h3>
+        <div class="widget">
+            <ul id="recent-post" class="no-thumbnail">
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Clojure/">Clojure</a></p>
+                            <p class="item-title"><a href="/2017/01/01/Emacs-configs-for-a-clojurian/" class="title">Emacs configs for a clojurian</a></p>
+                            <p class="item-date"><time datetime="2017-01-01T12:00:24.000Z" itemprop="datePublished">2017-01-01</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Clojure/">Clojure</a></p>
+                            <p class="item-title"><a href="/2016/11/04/Generative-Testing/" class="title">Generative Testing</a></p>
+                            <p class="item-date"><time datetime="2016-11-03T23:21:34.000Z" itemprop="datePublished">2016-11-04</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Clojure/">Clojure</a></p>
+                            <p class="item-title"><a href="/2016/09/12/Collection-Pipelines-By-TDD/" class="title">Clojure集合管道函数练习</a></p>
+                            <p class="item-date"><time datetime="2016-09-12T01:26:24.000Z" itemprop="datePublished">2016-09-12</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Clojure/">Clojure</a></p>
+                            <p class="item-title"><a href="/2016/09/04/Reading-and-Writing-Files/" class="title">Reading and Writing Files</a></p>
+                            <p class="item-date"><time datetime="2016-09-04T02:10:44.000Z" itemprop="datePublished">2016-09-04</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/技术/">技术</a></p>
+                            <p class="item-title"><a href="/2016/06/24/SonarQube-Plugin-Step-by-Step/" class="title">SonarQube Plugin Step by Step</a></p>
+                            <p class="item-date"><time datetime="2016-06-23T16:40:23.000Z" itemprop="datePublished">2016-06-24</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">分类</h3>
+        <div class="widget">
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Clojure/">Clojure</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/技术/">技术</a><span class="category-list-count">38</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/生活/">生活</a><span class="category-list-count">2</span></li></ul>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">归档</h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">九月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">五月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">四月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">十一月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">七月 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">三月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">二月 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">一月 2015</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/11/">十一月 2014</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/10/">十月 2014</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/09/">九月 2014</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/07/">七月 2014</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/05/">五月 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02/">二月 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/01/">一月 2014</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/12/">十二月 2013</a><span class="archive-list-count">5</span></li></ul>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-float">
+        <h3 class="widget-title">标签云</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/FP/" style="font-size: 12px;">FP</a> <a href="/tags/Mistakes-I-Hav-Made/" style="font-size: 14px;">Mistakes I Hav Made</a> <a href="/tags/OO/" style="font-size: 10px;">OO</a> <a href="/tags/angularJs/" style="font-size: 10px;">angularJs</a> <a href="/tags/concurrency/" style="font-size: 10px;">concurrency</a> <a href="/tags/emacs/" style="font-size: 10px;">emacs</a> <a href="/tags/file/" style="font-size: 10px;">file</a> <a href="/tags/geek/" style="font-size: 10px;">geek</a> <a href="/tags/gradle/" style="font-size: 10px;">gradle</a> <a href="/tags/java/" style="font-size: 16px;">java</a> <a href="/tags/javascript/" style="font-size: 20px;">javascript</a> <a href="/tags/kata/" style="font-size: 10px;">kata</a> <a href="/tags/language/" style="font-size: 14px;">language</a> <a href="/tags/leiningen/" style="font-size: 10px;">leiningen</a> <a href="/tags/maven/" style="font-size: 10px;">maven</a> <a href="/tags/mysql/" style="font-size: 12px;">mysql</a> <a href="/tags/node/" style="font-size: 12px;">node</a> <a href="/tags/promise/" style="font-size: 10px;">promise</a> <a href="/tags/q/" style="font-size: 10px;">q</a> <a href="/tags/rake/" style="font-size: 10px;">rake</a> <a href="/tags/shell/" style="font-size: 14px;">shell</a> <a href="/tags/sublime/" style="font-size: 10px;">sublime</a> <a href="/tags/test/" style="font-size: 10px;">test</a> <a href="/tags/testing/" style="font-size: 10px;">testing</a> <a href="/tags/thinking/" style="font-size: 18px;">thinking</a> <a href="/tags/transaction/" style="font-size: 10px;">transaction</a> <a href="/tags/vim/" style="font-size: 12px;">vim</a> <a href="/tags/yeoman/" style="font-size: 10px;">yeoman</a> <a href="/tags/zeal/" style="font-size: 10px;">zeal</a> <a href="/tags/散文/" style="font-size: 10px;">散文</a>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">链接</h3>
+        <div class="widget">
+            <ul>
+                
+                    <li>
+                        <a href="http://blog.jayfields.com/">Jay Fields</a>
+                    </li>
+                
+                    <li>
+                        <a href="https://aphyr.com">Aphyr</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://bucharestfp.ro">Bucharest FP</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://www.yinwang.org">Wangyin</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://blog.rlmflores.me/">Rodrigo Flores</a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+
+            
+        
+    </div>
+</aside>
+                </div>
+            </div>
+        </div>
+        <footer id="footer">
+    <div class="container">
+        <div class="container-inner">
+            <a id="back-to-top" href="javascript:;"><i class="icon fa fa-angle-up"></i></a>
+            <div class="credit">
+                <h1 class="logo-wrap">
+                    <a href="/" class="logo"></a>
+                </h1>
+                <p>&copy; 2017 lambeta</p>
+                <p>Powered by <a href="//hexo.io/" target="_blank">Hexo</a>. Theme by <a href="//github.com/ppoffice" target="_blank">PPOffice</a></p>
+            </div>
+        </div>
+    </div>
+</footer>
+        
+    
+    <script type="text/javascript">
+    var duoshuoQuery = {short_name:'lambeta'};
+    (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0]
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+    </script>
+
+
+
+    
+        <script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-share.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-video.min.js"></script>
+    
+
+
+<!-- Custom Scripts -->
+<script src="/js/main.js"></script>
+
+    </div>
+</body>
+</html>

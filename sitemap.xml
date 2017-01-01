@@ -2,6 +2,20 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://lameta.com/2017/01/01/Emacs-configs-for-a-clojurian/</loc>
+    
+    <lastmod>2017-01-01T12:02:23.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://lameta.com/2014/09/25/a-way-to-handle-angularjs-components-problem/</loc>
+    
+    <lastmod>2017-01-01T09:19:50.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://lameta.com/2016/11/04/Generative-Testing/</loc>
     
     <lastmod>2016-11-04T01:13:01.000Z</lastmod>
@@ -257,13 +271,6 @@
     <loc>https://lameta.com/2014/10/30/vim-in-practice/</loc>
     
     <lastmod>2016-09-06T14:39:12.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://lameta.com/2014/09/25/a-way-to-handle-angularjs-components-problem/</loc>
-    
-    <lastmod>2016-09-06T14:38:58.000Z</lastmod>
     
   </url>
   
