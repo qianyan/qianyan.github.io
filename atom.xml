@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://lameta.com/"/>
-  <updated>2017-01-01T12:02:23.000Z</updated>
+  <updated>2017-01-03T23:47:54.000Z</updated>
   <id>https://lameta.com/</id>
   
   <author>
@@ -20,9 +20,9 @@
     <link href="https://lameta.com/2017/01/01/Emacs-configs-for-a-clojurian/"/>
     <id>https://lameta.com/2017/01/01/Emacs-configs-for-a-clojurian/</id>
     <published>2017-01-01T12:00:24.000Z</published>
-    <updated>2017-01-01T12:02:23.000Z</updated>
+    <updated>2017-01-03T23:47:54.000Z</updated>
     
-    <content type="html"><![CDATA[<p>我是一名热衷于函数式编程的Clojurian（Clojure粉），网络ID是lambeta（λβ），读作<em>/‘læmeitə/</em>，个人的博客网站是<a href="https://lambeta.com" target="_blank" rel="external">https://lambeta.com</a>。俗话说，工欲善其事必先利其器，完善开发工具与我而言是一件愉快的事情，所以想把经验集结成文字，便有了这篇文章。这篇文章不会介绍太多花式或有深度的emacs配置，更多是摸索学习的过程，其中充满了乐趣。</p>
+    <content type="html"><![CDATA[<p>我是一名热衷于函数式编程的Clojurian（Clojure粉），网络ID是lambeta（λβ），读作<em>/‘læmeitə/</em>，个人的博客网站是<a href="https://lambeta.com" target="_blank" rel="external">www.lambeta.com</a>。俗话说，工欲善其事必先利其器，完善开发工具与我而言是一件愉快的事情，我又乐于分享经验，于是有了这篇文章。本文不会介绍太多花式或有深度的emacs配置，更多是摸索学习的过程，其中充满了乐趣。</p>
 <h2 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h2><p>网络上的<em>.emacs.d/init.el</em>配置数不胜数，各路lisp大神的<em>dot file</em>都已经放在github上了，而且前有牛人撰文推荐学习emacs配置的详实方法，看似确实没有什么必要自己折腾一份配置。这个说法对，也不对。我在转向emacs之前，是一名忠实的vim党，从大学开始就不断折腾vim的配置，还花过一段时间专门学习了<em>vimscript</em>，曾经惊叹于<em>vimscript</em>的动态函数式风格的优美和强大。类似地，<em>.vimrc</em>配置文件在网络上也多如牛毛，华丽和酷炫的插件极大地提升了vim的操作性。尽管如此，我还是乐于一砖一瓦地打造自己的vim环境，竭力演化它变成我心目中的“编辑器之神”。这个过程一般会充满修改然后重启的重复性机械劳作，偶尔会遭遇无论怎么修改就是不生效、甚至遍寻google也一无所获的挫折，但是我就是无法厌倦它，人天生好奇，探索未知事物本身就充满了乐趣，而且一旦配置奏效，便能获得满满的成就感。新事物对程序员具有极大的吸引力，但是程序员不会止步于使用新事物，而且会在惊奇之余，渴望控制那股背后主导它的力量本身，行使“上帝之力”。</p>
 <p>话说回来，为什么我会从vim党摇身一变成为emacs党呢？这就不得不提起Clojure这门lisp方言，出于对lisp和函数式编程的痴迷，我选择了基于JVM的Clojure作为自己的偏好语言，而emacs天生为lisp而生。有了这个充足的理由，我开始收集emacs的cheatsheet并打印出来，天天放在手边翻阅，甚至买了一本英文版的<em>Learning GNU Emacs</em>书籍，只要有机会就打开emacs开始刷4clojure上的编程题。由于emacs对lisp的亲和性，我几乎没花多少时间就掌握住了常用的操作技巧。不过，emacs最负盛名的学习曲线确实让学习者绕过圈子，只要一段时间不用，就会忘记很多基本操作。另外，为了更好地在emacs中编写Clojure，还需要cider-mode和clojure-mode的支持，这时候就不得不编辑<em>init.el</em>文件，本着<em>KISS (keep it simple, stupid)</em>原则，我照着各种插件的说明文档中，把配置项复制粘贴到<em>init.el</em>文件当中，运行起来没有问题就好。随着自定义的内容变多，<em>init.el</em>文件也急剧膨胀起来。膨胀本来算不上问题，但我是个比较有操守的程序员，臃肿的代码是我极力避免的坏味道（bad smell）。所以胸臆之中涌动一股浩然之气，决心学起<em>emacs lisp</em>，把emacs的配置从头来过。</p>
 <h2 id="从『头』开始"><a href="#从『头』开始" class="headerlink" title="从『头』开始"></a>从『头』开始</h2><p><em>init.el</em>文件位于<em>~/.emacs.d</em>目录之下，如果没有，自行创建一份即可。<br>首先，我们需要用到emacs的包管理工具<em>package.el</em>，因为emacs 24及其以上的版本都已经内置，所以无需下载到本地，直接通过<code>require</code>加载到emacs的运行时。</p>
