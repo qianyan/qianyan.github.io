@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://lameta.com/"/>
-  <updated>2017-01-17T06:14:36.000Z</updated>
+  <updated>2017-03-01T02:52:12.000Z</updated>
   <id>https://lameta.com/</id>
   
   <author>
@@ -14,6 +14,59 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Pipleline as Code</title>
+    <link href="https://lameta.com/2017/03/01/Pipleline-as-Code/"/>
+    <id>https://lameta.com/2017/03/01/Pipleline-as-Code/</id>
+    <published>2017-03-01T02:19:13.000Z</published>
+    <updated>2017-03-01T02:52:12.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>2016年11月份的技术雷达中给出了一个简明的定义：流水线即代码 (Pipeline as Code) 通过编码而非配置持续集成/持续交付 (CI/CD) 运行工具的方式定义部署流水线。<br>其实早在2015年11月份的技术雷达当中就已经有了类似的概念：</p>
+<blockquote>
+<p>The way to avoid programming in your CI/CD tool is to extract the complexities of the build process from the guts of the tool and into a simple script which can be invoked by a single command. This script can then be executed on any developer workstation and therefore eliminates the privileged/singular status of the build environment<br>大意是将复杂的构建流程纳入一个简单的脚本文件，然后用一条命令调用。这样，任意的开发者都能在自己的工作区中执行脚本重建一套一模一样的构建环境，从而消除 CI/CD 环境由于散乱配置腐化而成的特异性。这么做的原因很好理解，使用 CI/CD 工具是为了暴露产品代码中的问题的，如果它们自身已经复杂到不稳定的地步，我们还使用它就是自找麻烦。</p>
+</blockquote>
+<p>从某种程度上看，实施流水线即代码是不证自明的。在 CI/CD 的时间过程中，凡是可以被编码的东西都已经被代码化了，比如：构建、测试、数据库迁移、部署和基础设施/环境配置 (Infrastruture as Code) 等。说得烂俗点，流水线已经是 CI/CD 实践过程中的“最后一公里”，让流水线变成软件开发中的“一等公民”（即代码）是大势所趋、民心所向。不过，这种论断毕竟欠缺说服力，我们接着从实践的痛点出发总结当前流水线遇到的问题。</p>
+<h2 id="实践中的痛点"><a href="#实践中的痛点" class="headerlink" title="实践中的痛点"></a>实践中的痛点</h2><p>我给客户搭建和配置过不少 CI/CD 流水线（被同事戏谑地称为“CI/CD搭建兽”），最大的痛苦莫过于每次都得从头来过，即便大部分情况下所用的工具和配置都大同小异。其次是手工操作产生的配置漂移 (configuration drift) 。以 Jenkins 为例，先不谈 1.0 版本不支持流水线这一概念的问题，我们为了解决遇到的构建、测试和部署等问题，一般会在多个文本框中粘贴大量 shell/batch 脚本；甚至会通过这些文本框安装各种插件或者依赖包、设置环境变量等等。久而久之（实际上不需要多久），这台 Jenkins 服务器就变得不可替代（特异化）了，因为没人清楚到底对它做了哪些更改以及这些更改对承载它的系统产生哪些影响，这时 Jenkins 服务器俨然腐化成了老马所说的雪花服务器 (snowflake server)。雪花服务器有两点显著的特征：</p>
+<ol>
+<li>特别难以复现</li>
+<li>几乎无法理解</li>
+</ol>
+<p>第一点是由于以往所做的更改并没有被记录下来，所以做过的操作都是七零八落的，没有办法复现同样的操作，也无法复制一个同样的系统。<br>第二点则是由于绝大部分情况下散乱的配置是没有文档描述的，哪部分是重要的已经无从知晓，改动的风险很大。</p>
+<p>这些问题会在流水线的演化过程中恶化得越来越严重。一般来讲，除非不再使用，否则流水线不会保持一成不变。具体实施过程中，考虑到项目，尤其是遗留项目当前的特点和团队成员的“产能”，我们会先将构建和部署自动化；部署节奏稳定后，开始将单元测试和代码分析自动化；接着可以指导测试人员将验收测试自动化；然后尝试将发布自动化。在这之后，就要开始持续优化流水线，包括 CI 的速度和稳定性等。换句话说，流水线的演化其实是和项目的当前进展密切相关的，保证这样的对应关系有时是有必要的，比如：在版本控制下，多发布分支所需流水线和主干分支会存在不同。发布分支是主干分支某个时刻分出去的，它需要在那时的流水线上才能正常工作。由于前面所说雪花服务器的特征，重建这样一条流水线并不是一件容易的事情。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/217988-e8d3fcb49a100197.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="演进式的持续集成"></p>
+<h2 id="如何解决"><a href="#如何解决" class="headerlink" title="如何解决"></a>如何解决</h2><p>其实，流水线即代码本身已经回答这个问题了。当前实现了这一概念的工具大体遵循了两种模式：</p>
+<ol>
+<li>版本控制</li>
+<li>DSL（领域特定语言）</li>
+</ol>
+<p>对于特别难以复现、没有保证对应关系的痛点，我们就把流水线写成代码放到版本控制工具中管理起来。这样一来，每一次更改都能被记录下来，而且它会始终和此时的项目进展保持同步。</p>
+<p>对于几乎无法理解、没有文档支持的痛点，我们就选用领域特定语言描述整条流水线。举个 Jenkins 2.0 例子，它允许我们在项目的特定目录下放置一个 Jenkinsfile 的文件，内容大致如下：<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="title">node</span><span class="params">(<span class="string">'master'</span>)</span></span> &#123;</div><div class="line">	stage(<span class="string">'Checkout'</span>) &#123;…&#125;</div><div class="line">	stage(<span class="string">'Code Analysis'</span>) &#123;…&#125;</div><div class="line">	stage(<span class="string">'Unit Test'</span>) &#123;…&#125;</div><div class="line">	stage(<span class="string">'Packing'</span>) &#123;…&#125;</div><div class="line">	stage(<span class="string">'Archive'</span>) &#123;…&#125;</div><div class="line">	stage(<span class="string">'DEV'</span>) &#123;…&#125;</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="title">stage</span><span class="params">(<span class="string">'SIT'</span>)</span></span> &#123;</div><div class="line">	timeout(<span class="selector-tag">time</span>:<span class="number">4</span>, unit:<span class="string">'HOURS'</span>) &#123;</div><div class="line">		<span class="selector-tag">input</span> <span class="string">"Deploy to SIT?"</span></div><div class="line">	&#125;</div><div class="line">	node(<span class="string">'master'</span>) &#123;…&#125;</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="title">stage</span><span class="params">(<span class="string">'Acceptance Test'</span>)</span></span> &#123;</div><div class="line">	node(<span class="string">'slave'</span>) &#123;…&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>Jenkins 2.0 使用Groovy实现了一套描述流水线的DSL，即便不了解Groovy语言，只要对流水线稍微熟悉，就能按照<a href="https://github.com/jenkinsci/pipeline-plugin/blob/master/TUTORIAL.md" target="_blank" rel="external">例子和文档</a>编写出符合要求的代码。</p>
+<p>类似的工具还有Concourse.ci、λCD (LambdaCD) 等。<br>Concourse.ci 使用了 yaml 实现了DSL，独立抽象出Resource（外部依赖，如：git repo）、Job（函数， get 和 put Resource ）和 Task（纯函数，必须明确定义 Input 和 Output ）模型。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/217988-250bc1dc50e3bdd8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Concousre.ci"></p>
+<p>而 λCD 则使用 Clojure 语言实现了 DSL，抽象出 Pipeline 和 Step 模型，使用了Lisp特有的宏 (macro) 和普通函数，编写起来简单明了。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/217988-8b29a42d225edebf.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="λCD"></p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">(<span class="name"><span class="builtin-name">def</span></span> pipeline-def</div><div class="line">  `(</div><div class="line">    (<span class="name">either</span></div><div class="line">     manualtrigger/wait-for-manual-trigger</div><div class="line">     wait-for-repo)</div><div class="line"></div><div class="line">    (<span class="name">with-workspace</span></div><div class="line">      clone</div><div class="line">      (<span class="name">in-parallel</span></div><div class="line">       run-some-tests</div><div class="line">       run-smokeing-tests)</div><div class="line"></div><div class="line">      run-package</div><div class="line">      deploy)))</div></pre></td></tr></table></figure>
+<p>上述的pipeline-def就是这条流水线的定义，极为优雅得是，它的代码和UI事实上构成了一一映射的关系，简单到极致。</p>
+<p>值得一提的是，λCD 有别于其它同类型的工具，它本身就是一份用 Clojure 写就的微服务。换句话说，其它的工具可能需要借助基础设施即代码完成自身的安装，但λCD不用，它完全可以采用其它微服务的部署方式，比如用 λCD 部署它自己，类似于编译器的自举 (bootstraping)。这个时候，我们就需要两套 λCD 服务，一套用于部署自身，另一套部署开发中的工程。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/217988-85057d2c87c41ab1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="流水线自举"></p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>流水线即代码是个新概念，也就意味着我们还需要花时间去探索与之相关的实践，比如，调试和测试（既然是代码就需要测试）。一旦有了这些实践，我们就可以把流水线本身作为产品放到流水线上运作起来，那时将会看到一种很好玩的现象——旧的流水线会构建并部署新流水线，完成流水线的自举 (pipeline bootstrap) 。此外，当流水线成为代码，它在最终的交付物中必然占据一席之地，其潜在的价值还等待我们挖掘，至少从精益的角度，流水线能做的事情还有很多。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;2016年11月份的技术雷达中给出了一个简明的定义：流水线即代码 (Pipeline as Code) 通过编码而非配置持续集成/持续交付 (CI/CD) 运行工具的方式定义部署流水线。&lt;br&gt;其实早在2015年11月份的技术雷达当中就已经有了类似的概念：&lt;/p&gt;
+&lt;blo
+    
+    </summary>
+    
+      <category term="技术" scheme="https://lameta.com/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="thinking" scheme="https://lameta.com/tags/thinking/"/>
+    
+  </entry>
   
   <entry>
     <title>Emacs configs for a clojurian</title>
@@ -1648,51 +1701,6 @@
       <category term="javascript" scheme="https://lameta.com/tags/javascript/"/>
     
       <category term="test" scheme="https://lameta.com/tags/test/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Javascript Scope</title>
-    <link href="https://lameta.com/2015/01/30/Javascript-Scope/"/>
-    <id>https://lameta.com/2015/01/30/Javascript-Scope/</id>
-    <published>2015-01-30T09:08:44.000Z</published>
-    <updated>2016-09-06T14:58:19.000Z</updated>
-    
-    <content type="html"><![CDATA[<blockquote>
-<p>The extent of a scope refers to the lifetime of a variable (i.e., how long a variable holds a certain value)</p>
-</blockquote>
-<h3 id="Global-Scope"><a href="#Global-Scope" class="headerlink" title="Global Scope"></a>Global Scope</h3><p>Javascript中任意不使用var创建的变量具有全局作用域。</p>
-<figure class="highlight javascript"><figcaption><span>global</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">globalVariable = <span class="string">"global"</span>;</div><div class="line">(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="built_in">console</span>.log(globalVariable);</div><div class="line">&#125;)()</div><div class="line"></div><div class="line">-&gt; global</div><div class="line"></div><div class="line"><span class="keyword">delete</span> globalVariable;</div><div class="line"></div><div class="line">-&gt; <span class="literal">true</span></div></pre></td></tr></table></figure>
-<p>当然，任意定义在文件最顶层的变量，事实上，由于<a href="http://yanqian.me/2015/01/27/Javascript-Hoisting/" target="_blank" rel="external">Javascript Hositing</a>作用，所有定义在最外层的变量都会被提升至作用域首部，都具有全局作用域。</p>
-<p>值得注意的是使用var定义的变量是不能delete的，它不是全局变量的属性：</p>
-<figure class="highlight javascript"><figcaption><span>del_variable</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> globalVariable = <span class="string">'global'</span>;</div><div class="line"><span class="keyword">delete</span> globalVariable;</div><div class="line"></div><div class="line">-&gt; <span class="literal">false</span></div></pre></td></tr></table></figure>
-<p>除此之外，任意被暴露到最外层的变量，一旦被全局作用域捕获，其本身都会存在被随意修改的风险。</p>
-<h3 id="Lexical-Scope"><a href="#Lexical-Scope" class="headerlink" title="Lexical Scope"></a>Lexical Scope</h3><blockquote>
-<p>Lexical scope refers to the visibility of a variable and its value analogous to its textual representation.</p>
-</blockquote>
-<p>Javascript会从内向外寻找变量的绑定，所以变量的定义距离使用处最近，则该变量会被使用。</p>
-<figure class="highlight javascript"><figcaption><span>lexical_scope</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">lexicalScope</span>(<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="keyword">var</span> lexicalVariable = <span class="string">"outer"</span>;</div><div class="line">	<span class="keyword">if</span>(<span class="literal">true</span>) &#123;</div><div class="line">		<span class="keyword">var</span> lexicalVariable = <span class="string">"inner"</span>;</div><div class="line">		<span class="built_in">console</span>.log(lexicalVariable);</div><div class="line">		(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">			<span class="keyword">var</span> lexicalVariable = <span class="string">"innerMost"</span>;</div><div class="line">			<span class="built_in">console</span>.log(lexicalVariable);</div><div class="line">		&#125;)();</div><div class="line">		<span class="built_in">console</span>.log(lexicalVariable);</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">lexicalScope();</div><div class="line">-&gt; inner</div><div class="line">innerMost</div><div class="line">inner</div></pre></td></tr></table></figure>
-<h3 id="Dynamic-Scope"><a href="#Dynamic-Scope" class="headerlink" title="Dynamic Scope"></a>Dynamic Scope</h3><blockquote>
-<p>the value of any given binding cannot be known until the caller of any given function is known— which may be too late.</p>
-</blockquote>
-<figure class="highlight javascript"><figcaption><span>dynamic_scope</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">globalThis</span>(<span class="params"></span>) </span>&#123; <span class="keyword">return</span> <span class="keyword">this</span>; &#125;</div><div class="line">globalThis();</div><div class="line">-&gt; some global object, probably Window</div><div class="line">globalThis.call(<span class="string">'barnabas'</span>);</div><div class="line">-&gt; <span class="string">'barnabas'</span></div><div class="line">globalThis.apply(<span class="string">'orsulak'</span>, [])</div><div class="line">-&gt; <span class="string">'orsulak'</span></div></pre></td></tr></table></figure>
-<p>在Javascript中，<em>this</em>所处的作用域就是动态作用域。也就是说，<em>globalThis()</em>返回值完全由调用方决定，<em>this</em>变量的对照表是不断改变的。更多参考<a href="http://yanqian.me/2014/10/11/funcation-scope/" target="_blank" rel="external">这里</a></p>
-<h3 id="Function-Scope"><a href="#Function-Scope" class="headerlink" title="Function Scope"></a>Function Scope</h3><figure class="highlight livescript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">function</span> strangerIdentity(n) &#123;</div><div class="line">	<span class="keyword">for</span>(<span class="keyword">this</span>[<span class="string">'i'</span>] = <span class="number">0</span>; <span class="keyword">this</span>[<span class="string">'i'</span>] &lt; n; <span class="keyword">this</span>[<span class="string">'i'</span>]++);</div><div class="line">	<span class="keyword">return</span> <span class="keyword">this</span>[<span class="string">'i'</span>];</div><div class="line">&#125;</div><div class="line"></div><div class="line">--- <span class="keyword">case</span> <span class="number">1</span></div><div class="line">strangerIdentity(<span class="number">100</span>);<span class="function"></span></div><div class="line">-&gt; <span class="number">100</span></div><div class="line">i<span class="function"></span></div><div class="line">-&gt; <span class="number">100</span></div><div class="line"></div><div class="line">--- <span class="keyword">case</span> <span class="number">2</span></div><div class="line"><span class="keyword">var</span> id = <span class="keyword">new</span> strangerIdentity(<span class="number">100</span>);</div><div class="line"></div><div class="line">id<span class="function"></span></div><div class="line">-&gt; strangerIdentity &#123;i: <span class="number">100</span>&#125;</div><div class="line">id.i<span class="function"></span></div><div class="line">-&gt; <span class="number">100</span></div><div class="line">i<span class="function"></span></div><div class="line">-&gt;  Uncaught ReferenceError: i <span class="keyword">is</span> <span class="keyword">not</span> defined</div></pre></td></tr></table></figure>
-<p>在Javascript中，只有一个<strong>Function</strong>才会产生新的作用域。直接调用一个funcation，其内部的指针指向global对象。但当使用<em>new</em>后，其作用域绑定到一个<strong>Function Object</strong>上。</p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;blockquote&gt;
-&lt;p&gt;The extent of a scope refers to the lifetime of a variable (i.e., how long a variable holds a certain value)&lt;/p&gt;
-&lt;/blockquot
-    
-    </summary>
-    
-      <category term="技术" scheme="https://lameta.com/categories/%E6%8A%80%E6%9C%AF/"/>
-    
-    
-      <category term="javascript" scheme="https://lameta.com/tags/javascript/"/>
     
   </entry>
   
