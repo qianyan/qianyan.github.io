@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://lameta.com/about/index.html</loc>
+    
+    <lastmod>2017-04-17T04:20:48.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://lameta.com/2017/03/01/Pipleline-as-Code/</loc>
     
     <lastmod>2017-03-01T02:52:12.000Z</lastmod>
@@ -12,13 +19,6 @@
     <loc>https://lameta.com/2017/01/01/Emacs-configs-for-a-clojurian/</loc>
     
     <lastmod>2017-01-17T06:14:36.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://lameta.com/about/index.html</loc>
-    
-    <lastmod>2017-01-17T06:11:53.000Z</lastmod>
     
   </url>
   
