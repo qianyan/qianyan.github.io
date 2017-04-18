@@ -18,7 +18,7 @@
 <meta property="og:description" content="这是Clojure好书《Clojure for the Brave and True》作者 Daniel Higginbotham 写于2017年4月16日的博文。从作者的丰富的经验来看，本文非常具有指导意义。
 
 学习编程语言是一种技巧：做好了，你会感受到掌握新事物之后的快感（dopamine：多巴胺）；做不好，就会接二连三的沮丧，甚至放弃。下面这些学习编程语言的最佳技巧是我从多年的著书写作，演">
-<meta property="og:updated_time" content="2017-04-18T11:44:18.000Z">
+<meta property="og:updated_time" content="2017-04-18T13:44:20.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="如何高效地学习编程语言">
 <meta name="twitter:description" content="这是Clojure好书《Clojure for the Brave and True》作者 Daniel Higginbotham 写于2017年4月16日的博文。从作者的丰富的经验来看，本文非常具有指导意义。
@@ -230,12 +230,12 @@ var _hmt = _hmt || [];
 <p>这四项很容易搞混，不幸的结果是，当你遇到问题最终完全找错了地方。</p>
 <p>举个例子，某些完全的编程新手，可能准备开始构建iOS应用。他们可能会试着让自己的应用在朋友的手机上运行，只看得到有关需要开发人员证书或其他信息的消息。这是产出物生态圈的一部分，不过小白可能将此视为编写代码的问题。他们可能会浏览自己写的每行代码来尝试解决问题，尽管问题和代码没有半毛钱关系。</p>
 <p>如果我系统地处理这些方面，我会发现学习一种语言会更加容易。我将在其它的博客文章中罗列一些待回答的宽泛问题的列表，应该能帮助你学习任何语言。</p>
-<h2 id="明确目的，外部模型，内部型型"><a href="#明确目的，外部模型，内部型型" class="headerlink" title="明确目的，外部模型，内部型型"></a>明确目的，外部模型，内部型型</h2><p>任何时候你学习使用新工具，明确学习的目的，外部模型和内部模型都是十分有用的。</p>
-<p>当你了解了工具的目的时，你的大脑会加载有用的上下文细节，使你更容易吸收新知识。这就好比拼图：当你看到完整拼图之后，更容易把各部件拼到一起。这个道理适用于语言本身及及语言库。</p>
-<p>工具的外部模型就是它呈现出来的接口以及它想让你思考问题解决的方式。Clojure 的外部模型就是一个Lisp，它想让你把编程当做大部分以数据为中心，不可变的转换过程。Ansible 希望你把服务器的整备工作想成定义最终状态，而不是定义抵达那种状态所要采取的步骤。</p>
+<h2 id="明确目的，外部模型，内部模型"><a href="#明确目的，外部模型，内部模型" class="headerlink" title="明确目的，外部模型，内部模型"></a>明确目的，外部模型，内部模型</h2><p>任何时候你学习使用新工具，明确学习的目的，外部模型和内部模型都是十分有用的。</p>
+<p>当你了解了工具的目的时，你的大脑会加载有用的上下文细节，使你更容易吸收新知识。这就好比拼图：当你看到完整拼图之后，更容易把各部件拼到一起。这个道理适用于语言本身以及语言库。</p>
+<p>工具的外部模型就是它呈现出来的接口以及它想让你思考问题解决的方式。Clojure 的外部模型就是一个 Lisp，它想让你把编程当做大部分以数据为中心，不可变的转换过程。Ansible 希望你把服务器的整备工作想成定义最终状态，而不是定义抵达那种状态所要采取的步骤。</p>
 <p>工具的内部模型就是如何将输入到其接口转换成一些底层的抽象。Clojure 把 Lisp 转换成 JVM 的字节码。Ansible 把任务定义转换成了 shell 命令。在一个理想国中，你不需要理解工具的内部模型，但事实上，理解内部模型总是有用的，因为在某些看上去迷惑或者矛盾的部分，它可以让你有个统一视图。举个例子，当 DNA 双螺旋模型被发现的时候，它帮助科学家们了解更高层次的现象。从我的角度来讲，当然，这篇博文也是历来所有伟大科学成就之一。</p>
 <p>很多教程经常混淆工具的外部和内部模型，使学习者感到困惑。意识到这点可以帮你轻松辨别何时你会感到沮丧。</p>
-<h2 id="间隔重复帮助记忆"><a href="#间隔重复帮助记忆" class="headerlink" title="间隔重复帮助记忆"></a>间隔重复帮助记忆</h2><p>间隔重复被证明是长期记忆中新信息编码的最佳方法之一。 这个想法是以不断增加的时间间隔来测验自己，以使用最少重复次数最小化记忆衰减。 卫报写了一篇<a href="https://www.theguardian.com/education/2016/jan/23/spaced-repetition-a-hack-to-make-your-brain-store-information" target="_blank" rel="external">很好的介绍性文章</a>。</p>
+<h2 id="间隔重复帮助记忆"><a href="#间隔重复帮助记忆" class="headerlink" title="间隔重复帮助记忆"></a>间隔重复帮助记忆</h2><p>间隔重复被证明是长期记忆中新信息编码的最佳方法之一。 这个想法是以不断增加的时间间隔来测验自己，使用最少重复次数来最小化记忆衰减。 卫报写了一篇<a href="https://www.theguardian.com/education/2016/jan/23/spaced-repetition-a-hack-to-make-your-brain-store-information" target="_blank" rel="external">很好的介绍性文章</a>。</p>
 <h2 id="睡眠和练习"><a href="#睡眠和练习" class="headerlink" title="睡眠和练习"></a>睡眠和练习</h2><p>保重身体！身体可不仅仅是你脑袋的载体。如果你想保持专注和高效的学习，就要足够的睡眠和练习，而不是（原文：beats the pants off）狂饮咖啡因和能量饮料。</p>
 <h2 id="更多小贴士"><a href="#更多小贴士" class="headerlink" title="更多小贴士"></a>更多小贴士</h2><p>如果你还有其它有用的技巧，请不吝评论！如果你想知道更多关于学习编程的优质资源，敬请查看<a href="http://www.communitypicks.com/r/learnprogramming" target="_blank" rel="external">Community Picks: Learn Programming</a>，这是一个社区策划编程学习书籍的收集活动，内容广泛，包含入门编程，工艺以及关于软技能和面试方面的书籍。</p>
 <hr>
@@ -247,7 +247,7 @@ var _hmt = _hmt || [];
 
 
 
-    <a data-url="https://lameta.com/2017/04/18/Techniques-for-Efficiently-Learning-Programming-Languages/" data-id="cj1nhetx1003f5xm4udkaohne" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
+    <a data-url="https://lameta.com/2017/04/18/Techniques-for-Efficiently-Learning-Programming-Languages/" data-id="cj1nlrj5f003zs3m4do1h7wj0" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
 <script>
     (function ($) {
         $('body').on('click', function() {
