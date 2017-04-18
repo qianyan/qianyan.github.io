@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://lameta.com/"/>
-  <updated>2017-03-01T02:52:12.000Z</updated>
+  <updated>2017-04-18T07:34:15.000Z</updated>
   <id>https://lameta.com/</id>
   
   <author>
@@ -14,6 +14,78 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>如何高效地学习编程语言</title>
+    <link href="https://lameta.com/2017/04/18/Techniques-for-Efficiently-Learning-Programming-Languages/"/>
+    <id>https://lameta.com/2017/04/18/Techniques-for-Efficiently-Learning-Programming-Languages/</id>
+    <published>2017-04-18T07:15:09.000Z</published>
+    <updated>2017-04-18T07:34:15.000Z</updated>
+    
+    <content type="html"><![CDATA[<blockquote>
+<p>这是Clojure好书《Clojure for the Brave and True》作者 Daniel Higginbotham 写于2017年4月16日的博文。从作者的丰富的经验来看，本文非常具有指导意义。</p>
+</blockquote>
+<p>学习编程语言是一种技巧：做好了，你会感受到掌握新事物之后的快感（dopamine）；做不好，就会感觉到接二连三的沮丧，直至放弃。下面这些学习编程语言的最佳技巧是我从多年的<a href="http://www.braveclojure.com/" target="_blank" rel="external">著书</a><a href="http://www.flyingmachinestudios.com/programming/the-unofficial-guide-to-rich-hickeys-brain/" target="_blank" rel="external">写作</a>，<a href="https://www.youtube.com/watch?v=eRq5UBx6cbA" target="_blank" rel="external">演讲</a>和<a href="http://www.braveclojure.com/training/" target="_blank" rel="external">培训</a>中总结出来的。这里头很多技巧来源于对高效学习前沿研究做了解释的书籍。你可以在 <a href="http://www.communitypicks.com/r/learnprogramming" target="_blank" rel="external">Community Picks Learn Programming</a> 中找到那些书（还有其它牛x的编程书籍）。</p>
+<h2 id="持续测试自己以抵抗胜任力错觉"><a href="#持续测试自己以抵抗胜任力错觉" class="headerlink" title="持续测试自己以抵抗胜任力错觉"></a>持续测试自己以抵抗胜任力错觉</h2><p>最不济的学习方法中的一种就是重读或者重看材料。这种重复会给你一种感觉——似乎不用花什么气力，你就理解了话题所涵盖的内容。研究者们把这种现象称作胜任力错觉。</p>
+<p>更好的一种方式（你可以掌握的最佳技巧之一）则是持续地测试自己。不要重读一个函数、类或者一个对象是什么，而是让自己定义这些概念或者把它们用到短小的程序当中——强迫你用某种方式显示自己的理解。这一过程常常很不舒服的，但是对形成长期记忆非常有效。更进一步，你可以在阅读材料之前先去行测试，举个例子，尝试在阅读一个章节之前做做练习。值得一提的是，这也被证明有助于记忆的形成。</p>
+<p>测试对于学习的显著影响被称为<strong>测试效用</strong>，下面是一些具体方法可以利用：</p>
+<ul>
+<li>在阅读章节或者看视频之前，尝试猜测你将要学习的东西，并写下来。</li>
+<li>在阅读章节之前先做做这个章节的练习题。</li>
+<li>一直做练习，即使是最难的那些。暂时（永远）放弃一个练习也是可以的，不过至少要尝试一遍。（下个章节会详细谈到）</li>
+<li>阅读短小的程序并且尝试不看源码重新写一个。或者，再小一些，写个函数也行。</li>
+<li>在学习了对象、类、方法或者高阶函数等新概念之后，立即编码做示例。</li>
+<li>创建阐述这些概念的图示，以及这些概念之间的区别和联系。</li>
+<li>把你刚刚学到的概念写成博客。</li>
+<li>尝试把概念解释给非技术的朋友听。（在写《Clojure for Brave and True》的时候，我常常这么干。这样能够以外行的话阐述一个想法，进而迫使你深入理解想法本身。）</li>
+</ul>
+<p>这些技巧的大部分都要规约到编写代码上！说到编程，由于程序都是重文本和概念性的，所以很容易以为我们仅仅通过阅读（代码）就在学习。但同时它也是一门手艺，就像其它手艺一样你得操练才能娴熟。编码是露露你对程序作有错误假设的最佳方式。你越快地这么做，就会越快地纠正错误和提升技能。</p>
+<p>如果你想了解更多测试效应的事情，敬请查看<a href="http://www.communitypicks.com/r/learnprogramming/s/17592186047889-make-it-stick-the-science-of-successful-learning" target="_blank" rel="external">坚持：成功学习的科学（make it stick： The Science of Successful Learning）</a>。</p>
+<h2 id="花时间放空自己"><a href="#花时间放空自己" class="headerlink" title="花时间放空自己"></a>花时间放空自己</h2><p>如果你纠结在一个问题上，或者对刚才读到的东西不能理解，就去散散步甚或洗个澡 —— 只要能进入一种舒缓、放空的状态就行。解除障碍的最佳方式之一就是歇一会儿，这可能听上去有点反直觉，但确实如此。</p>
+<p>问题是，当全神贯注解决问题时，我们很容易陷入思维障碍（mental blinder）。我的意思是，这差不多就是“关注”（字面上）的意思。不过，全神贯注会导致我们只能一直探索解决方案空间的一小部分。一旦放空，我们的潜意识就可以探索并联结我们经验中的广泛领域。</p>
+<p>对我来说，这就像当你试图在纸质地图上找到一个目的地（是否还记得吗？）。你不用刻意就确信你想抵达的城市应该就在这里！在地图的左上角的区域，所以你看了一遍又一遍，都没有成功。然后你放下地图，做了深呼吸并让目光游离了一会儿。当你重新看地图时，确切的地点立马映入眼帘。</p>
+<p>我们曾经都有过这样的经验，在洗澡的时候突发灵感。现在你对于为什么这么做有了更好的了解，那么也就能刻意地使用这个技巧。个人来讲，如果纠结住某事，我真的会洗个澡，这个技巧的功效显著，而且我是多么干净（注：洗澡这件事）。</p>
+<p>如果你想多学一些关于思考的关注和分散模式，敬请查看<a href="http://www.communitypicks.com/r/learnprogramming/s/17592186047884-a-mind-for-numbers-how-to-excel-at" target="_blank" rel="external">A Mind for Numbers: How to Excel at Math and Science (Even If You FLunked Algebra)</a></p>
+<h2 id="别浪费时间沮丧"><a href="#别浪费时间沮丧" class="headerlink" title="别浪费时间沮丧"></a>别浪费时间沮丧</h2><p>和上一个章节相关：别浪费时间为代码沮丧了。沮丧会让我们做一些愚蠢的事情，比如重新编译或者重刷浏览器，期望这次会有所不同。</p>
+<p>把沮丧看作你的知识有差距的信号。一旦你意识到自己沮丧了，它可以帮你后退一步，清晰地识别问题。如果你写的代码不起作用，坦率地向自己或者别人说明你期望的结果。使用科学的方法，就非预期行为的根因提出一个假说。然后测试你的假说。再次试验后，如果依然解决不了，就把这个问题放到一边，待会儿回来。</p>
+<p>在一些似乎没法解决的问题上，我不知有多少次恼怒地扔掉了自己的笔记本电脑。隔天再看，一个显而易见的解决方案立马跳入脑海。甚至上周就发生过。</p>
+<h2 id="确认你正在处理语言的哪个方面"><a href="#确认你正在处理语言的哪个方面" class="headerlink" title="确认你正在处理语言的哪个方面"></a>确认你正在处理语言的哪个方面</h2><p>个人观点，我觉得记住这些是有用的——当学习一门编程语言的时候，你实际上正在学四件事情。</p>
+<ul>
+<li>怎么写代码：语法、语义以及资源管理</li>
+<li>语言的范式：面向对象，函数式，逻辑等</li>
+<li>产物的生态圈：如何构建、运行可执行文件以及如何使用库</li>
+<li>工具：编辑器，编译器，调试器，代码质量检测器（linter）</li>
+</ul>
+<p>这四项很容易搞混，不幸的结果是，当你遇到问题最终完全找错了地方。</p>
+<p>举个例子，某些完全的编程新手，可能准备开始构建iOS应用。他们可能会试着让自己的应用运行在朋友的手机上，只能看到有关需要开发人员证书或其他信息的消息。这是产物生态圈的一部分，不过小白可能将此视为编写代码的问题。他们可能会浏览自己写的每行代码来尝试解决问题，尽管问题和代码没有半毛钱关系。</p>
+<p>如果我系统地处理这些方面，我会发现学习一种语言会更加容易。我将在其它的博客文章中罗列一些待回答的宽泛问题的列表，应该能帮助你学习任何语言。</p>
+<h2 id="明确目的，外部模型，内部型型"><a href="#明确目的，外部模型，内部型型" class="headerlink" title="明确目的，外部模型，内部型型"></a>明确目的，外部模型，内部型型</h2><p>任何时候你学习使用新工具，明确学习的目的，外部模型和内部模型都是十分有用的。</p>
+<p>当你了解了工具的目的时，你的大脑会加载有用的上下文细节，使你更容易吸收新知识。这就好比拼图：当你看到完整拼图之后，更容易把各部件拼到一起。这个道理适用于语言本身及及语言库。</p>
+<p>工具的外部模型就是它呈现出来的接口以及它想让你思考问题解决的方式。Clojure 的外部模型就是一个Lisp，它想让你把编程当做大部分以数据为中心，不可变的转换过程。Ansible 希望你把服务器的整备工作想成定义最终状态，而不是定义抵达那种状态所要采取的步骤。</p>
+<p>工具的内部模型就是如何将输入到其接口转换成一些底层的抽象。Clojure 把 Lisp 转换成 JVM 的字节码。Ansible 把任务定义转换成了 shell 命令。在一个理想国中，你不需要理解工具的内部模型，但事实上，理解内部模型总是有用的，因为在某些看上去迷惑或者矛盾的部分它可以让你有个一致的视图。举个例子，当 DNA 双螺旋模型被发现的时候，它帮助科学家们了解更高级的现象。从我的角度来讲，当然，这篇博文也是历来所有伟大科学成就之一。</p>
+<p>很多教程经常混淆工具的外部和内部模型，使学习者感到困惑。意识到这点可以帮你轻松辨别何时你会感到沮丧。</p>
+<h2 id="间隔重复帮助记忆"><a href="#间隔重复帮助记忆" class="headerlink" title="间隔重复帮助记忆"></a>间隔重复帮助记忆</h2><p>间隔重复被证明是长期记忆中新信息编码的最佳方法之一。 这个想法是以不断增加的时间间隔来测验自己，以使用最少重复次数最小化记忆衰减。 卫报写了一篇<a href="https://www.theguardian.com/education/2016/jan/23/spaced-repetition-a-hack-to-make-your-brain-store-information" target="_blank" rel="external">很好的介绍性文章</a>。</p>
+<h2 id="睡眠和练习"><a href="#睡眠和练习" class="headerlink" title="睡眠和练习"></a>睡眠和练习</h2><p>保重身体！身体可不仅仅是你脑袋的载体。如果你想保持专注和高效的学习，就要足够的睡眠和练习，而不是（beats the pants off）狂饮咖啡因和能量饮料。</p>
+<h2 id="更多小贴士"><a href="#更多小贴士" class="headerlink" title="更多小贴士"></a>更多小贴士</h2><p>如果你还有其它有用的技巧，请不吝评论！如果你想知道更多关于学习编程的优质资源，敬请查看<a href="http://www.communitypicks.com/r/learnprogramming" target="_blank" rel="external">Community Picks: Learn Programming</a>，这是一个社区策划编程学习书籍的收集活动，内容广泛，包含入门编程，工艺以及关于软技能和面试方面的书籍。</p>
+<hr>
+<p>原文链接<br>[1] <a href="http://www.flyingmachinestudios.com/programming/learn-programming-languages-efficiently/" target="_blank" rel="external">Techniques for Efficiently Learning Programming Languages</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;blockquote&gt;
+&lt;p&gt;这是Clojure好书《Clojure for the Brave and True》作者 Daniel Higginbotham 写于2017年4月16日的博文。从作者的丰富的经验来看，本文非常具有指导意义。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+    
+    </summary>
+    
+      <category term="Clojure" scheme="https://lameta.com/categories/Clojure/"/>
+    
+    
+      <category term="thinking" scheme="https://lameta.com/tags/thinking/"/>
+    
+  </entry>
   
   <entry>
     <title>Pipleline as Code</title>
@@ -1658,49 +1730,6 @@
       <category term="javascript" scheme="https://lameta.com/tags/javascript/"/>
     
       <category term="promise" scheme="https://lameta.com/tags/promise/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Testable Javascript</title>
-    <link href="https://lameta.com/2015/02/01/Testable-Javascript/"/>
-    <id>https://lameta.com/2015/02/01/Testable-Javascript/</id>
-    <published>2015-02-01T07:56:47.000Z</published>
-    <updated>2016-09-06T14:58:22.000Z</updated>
-    
-    <content type="html"><![CDATA[<blockquote>
-<p>singletons suffer state pollution between tests</p>
-</blockquote>
-<figure class="highlight javascript"><figcaption><span>singletons.js</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">module</span>.exports = &#123;</div><div class="line">	<span class="attr">counter</span>: <span class="number">0</span>,</div><div class="line">	<span class="attr">inc</span>: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">		<span class="keyword">return</span> ++<span class="keyword">this</span>.counter;</div><div class="line">	&#125;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
-<figure class="highlight javascript"><figcaption><span>test.js</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> singleton = <span class="built_in">require</span>(<span class="string">'singletons'</span>);</div><div class="line"><span class="built_in">module</span>.exports = testCase(&#123;</div><div class="line">    <span class="string">"should equal one after calling inc"</span>: <span class="function"><span class="keyword">function</span> (<span class="params">test</span>) </span>&#123;</div><div class="line">        test.equal(<span class="number">1</span>, singleton.inc());</div><div class="line">        test.done();</div><div class="line">    &#125;,</div><div class="line">    <span class="string">"should get one after calling inc"</span>: <span class="function"><span class="keyword">function</span>(<span class="params">test</span>) </span>&#123;</div><div class="line">    	test.equal(<span class="number">1</span>, singleton.inc());</div><div class="line">    	test.done();</div><div class="line">    &#125;</div><div class="line"> &#125;);</div></pre></td></tr></table></figure>
-<p>结果第二个测试会失败，但是从测试本身是看不出为什么第一个可以通过，而第二个则相反。当然，我们可以通过<code>setUp</code>或<code>tearDown</code>方法来重置对象的状态，但是这无疑增加了维护测试的成本，你得记着重置对象这件事本身就是负担。</p>
-<p>下面就是解决方案</p>
-<figure class="highlight javascript"><figcaption><span>singletons_impr.js</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">module</span>.exports = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="keyword">return</span> &#123;</div><div class="line">		<span class="attr">counter</span>: <span class="number">0</span>,</div><div class="line">		<span class="attr">inc</span>: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">			<span class="keyword">return</span> ++<span class="keyword">this</span>.counter;</div><div class="line">		&#125;</div><div class="line">	&#125;;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
-<p>再看我们的测试</p>
-<figure class="highlight javascript"><figcaption><span>test.js</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> singleton = <span class="built_in">require</span>(<span class="string">'singletons_impr'</span>);</div><div class="line"><span class="built_in">module</span>.exports = testCase(&#123;</div><div class="line">    <span class="string">"should equal one after calling inc"</span>: <span class="function"><span class="keyword">function</span> (<span class="params">test</span>) </span>&#123;</div><div class="line">        test.equal(<span class="number">1</span>, singleton().inc());</div><div class="line">        test.done();</div><div class="line">    &#125;,</div><div class="line">    <span class="string">"should get one after calling inc"</span>: <span class="function"><span class="keyword">function</span>(<span class="params">test</span>) </span>&#123;</div><div class="line">    	test.equal(<span class="number">1</span>, singleton().inc());</div><div class="line">    	test.done();</div><div class="line">    &#125;</div><div class="line"> &#125;);</div></pre></td></tr></table></figure>
-<p>这样两次返回的对象都是全新的，测试通过。</p>
-<p>不过，似乎这样让测试变得更加麻烦了，好处不明显。但是结合这篇文章<a href="http://yanqian.me/2015/01/27/Javascript-Modularize-2nd/" target="_blank" rel="external">[Javascript Modularize 2nd]</a>，就会巧妙地解决多个模块依赖某一个模块，某个模块修改被传染至其他模块的问题。因为每个被引入的模块都将被重新执行生成一遍，成为独立的对象。</p>
-<h3 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h3><ul>
-<li><code>module.exports</code>最好使用<code>function</code>方式导出。</li>
-</ul>
-<p>参考链接<br>[1]  <a href="http://www.adequatelygood.com/Writing-Testable-JavaScript.html" target="_blank" rel="external">Writing Testable JavaScript</a></p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;blockquote&gt;
-&lt;p&gt;singletons suffer state pollution between tests&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;figure class=&quot;highlight javascript&quot;&gt;&lt;figcaption&gt;&lt;span&gt;sin
-    
-    </summary>
-    
-      <category term="技术" scheme="https://lameta.com/categories/%E6%8A%80%E6%9C%AF/"/>
-    
-    
-      <category term="javascript" scheme="https://lameta.com/tags/javascript/"/>
-    
-      <category term="test" scheme="https://lameta.com/tags/test/"/>
     
   </entry>
   

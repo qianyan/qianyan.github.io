@@ -37,6 +37,7 @@
         <link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
     
     
+    
         <script type="text/javascript">
 (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
 (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -171,10 +172,41 @@ var _hmt = _hmt || [];
     <div class="article-summary-inner">
         
         <div class="article-meta">
-            <p class="category">
+            <div class="category">
             <a class="article-category-link" href="/categories/技术/">技术</a>
-            </p>
-            <p class="date"><time datetime="2015-01-30T09:08:44.000Z" itemprop="datePublished">2015-01-30</time></p>
+            </div>
+            <div class="date"><time datetime="2015-02-01T07:56:47.000Z" itemprop="datePublished">2015-02-01</time></div>
+        </div>
+        
+    
+        <h1 class="article-title" itemprop="name">
+        <a href="/2015/02/01/Testable-Javascript/">Testable Javascript</a>
+        </h1>
+    
+
+        <p class="article-excerpt">
+            
+singletons suffer state pollution between tests
+
+singletons.js123456module.exports = &#123;	counter: 0,	inc: function() &#123;		return ++this.counter;	&#125;&#125;;
+test.js1234567891011var singleton 
+        </p>
+    </div>
+</article>
+    
+
+    
+    
+    
+    
+        <article class="article article-summary">
+    <div class="article-summary-inner">
+        
+        <div class="article-meta">
+            <div class="category">
+            <a class="article-category-link" href="/categories/技术/">技术</a>
+            </div>
+            <div class="date"><time datetime="2015-01-30T09:08:44.000Z" itemprop="datePublished">2015-01-30</time></div>
         </div>
         
     
@@ -193,19 +225,23 @@ global12345678910globalVariable = "global";(
     </div>
 </article>
     
+        </div>
+    
 
     
     
     
     
+        <div class="article-row">
+    
         <article class="article article-summary">
     <div class="article-summary-inner">
         
         <div class="article-meta">
-            <p class="category">
+            <div class="category">
             <a class="article-category-link" href="/categories/技术/">技术</a>
-            </p>
-            <p class="date"><time datetime="2015-01-28T15:23:14.000Z" itemprop="datePublished">2015-01-28</time></p>
+            </div>
+            <div class="date"><time datetime="2015-01-28T15:23:14.000Z" itemprop="datePublished">2015-01-28</time></div>
         </div>
         
     
@@ -217,6 +253,34 @@ global12345678910globalVariable = "global";(
         <p class="article-excerpt">
             Javascript的赋值操作就是引用修改，举个例子：
 reference.jsgrunt-properties12345678910111213function splitKeys(obj, splitter) &#123;      var keys, value, parent, result = &#123;&#125;;      for (var key in obj) &#123; 
+        </p>
+    </div>
+</article>
+    
+
+    
+    
+    
+    
+        <article class="article article-summary">
+    <div class="article-summary-inner">
+        
+        <div class="article-meta">
+            <div class="category">
+            <a class="article-category-link" href="/categories/技术/">技术</a>
+            </div>
+            <div class="date"><time datetime="2015-01-27T14:47:12.000Z" itemprop="datePublished">2015-01-27</time></div>
+        </div>
+        
+    
+        <h1 class="article-title" itemprop="name">
+        <a href="/2015/01/27/Javascript-Hoisting/">Javascript Hoisting</a>
+        </h1>
+    
+
+        <p class="article-excerpt">
+            编程过程中，别人谈到Javascript中的funcation是顺序执行的，所以书写的顺序要留心，不然会出未定义就执行的错误。当然，C语言出身的程序员不以为意，会认为理所当然，C语言就是这么干的。但Javascript并非如此！
+ints.js12345678910function ints(arrOfNumberStr) &#123;	return arrOfNumberStr.map(toIn
         </p>
     </div>
 </article>
@@ -234,38 +298,10 @@ reference.jsgrunt-properties12345678910111213function splitKeys(obj, splitter) &
     <div class="article-summary-inner">
         
         <div class="article-meta">
-            <p class="category">
+            <div class="category">
             <a class="article-category-link" href="/categories/技术/">技术</a>
-            </p>
-            <p class="date"><time datetime="2015-01-27T14:47:12.000Z" itemprop="datePublished">2015-01-27</time></p>
-        </div>
-        
-    
-        <h1 class="article-title" itemprop="name">
-        <a href="/2015/01/27/Javascript-Hoisting/">Javascript Hoisting</a>
-        </h1>
-    
-
-        <p class="article-excerpt">
-            编程过程中，别人谈到Javascript中的funcation是顺序执行的，所以书写的顺序要留心，不然会出未定义就执行的错误。当然，C语言出身的程序员不以为意，会认为理所当然，C语言就是这么干的。但Javascript并非如此！
-ints.js12345678910function ints(arrOfNumberStr) &#123;	return arrOfNumberStr.map(toIn
-        </p>
-    </div>
-</article>
-    
-
-    
-    
-    
-    
-        <article class="article article-summary">
-    <div class="article-summary-inner">
-        
-        <div class="article-meta">
-            <p class="category">
-            <a class="article-category-link" href="/categories/技术/">技术</a>
-            </p>
-            <p class="date"><time datetime="2015-01-26T16:01:26.000Z" itemprop="datePublished">2015-01-27</time></p>
+            </div>
+            <div class="date"><time datetime="2015-01-26T16:01:26.000Z" itemprop="datePublished">2015-01-27</time></div>
         </div>
         
     
@@ -283,23 +319,19 @@ ModuleA12var Foo = require('F
     </div>
 </article>
     
-        </div>
-    
 
     
     
     
     
-        <div class="article-row">
-    
         <article class="article article-summary">
     <div class="article-summary-inner">
         
         <div class="article-meta">
-            <p class="category">
+            <div class="category">
             <a class="article-category-link" href="/categories/技术/">技术</a>
-            </p>
-            <p class="date"><time datetime="2015-01-25T09:28:40.000Z" itemprop="datePublished">2015-01-25</time></p>
+            </div>
+            <div class="date"><time datetime="2015-01-25T09:28:40.000Z" itemprop="datePublished">2015-01-25</time></div>
         </div>
         
     
@@ -317,6 +349,8 @@ ModuleA12var Foo = require('F
         </p>
     </div>
 </article>
+    
+        </div>
     
 
     
@@ -339,10 +373,10 @@ ModuleA12var Foo = require('F
     <div class="article-summary-inner">
         
         <div class="article-meta">
-            <p class="category">
+            <div class="category">
             <a class="article-category-link" href="/categories/技术/">技术</a>
-            </p>
-            <p class="date"><time datetime="2014-11-19T14:20:49.000Z" itemprop="datePublished">2014-11-19</time></p>
+            </div>
+            <div class="date"><time datetime="2014-11-19T14:20:49.000Z" itemprop="datePublished">2014-11-19</time></div>
         </div>
         
     
@@ -373,10 +407,10 @@ validate - validate project is correct and all neccessary infomation is avaiab
     <div class="article-summary-inner">
         
         <div class="article-meta">
-            <p class="category">
+            <div class="category">
             <a class="article-category-link" href="/categories/技术/">技术</a>
-            </p>
-            <p class="date"><time datetime="2014-11-17T15:27:44.000Z" itemprop="datePublished">2014-11-17</time></p>
+            </div>
+            <div class="date"><time datetime="2014-11-17T15:27:44.000Z" itemprop="datePublished">2014-11-17</time></div>
         </div>
         
     
@@ -408,10 +442,10 @@ The s
     <div class="article-summary-inner">
         
         <div class="article-meta">
-            <p class="category">
+            <div class="category">
             <a class="article-category-link" href="/categories/技术/">技术</a>
-            </p>
-            <p class="date"><time datetime="2014-11-09T15:19:14.000Z" itemprop="datePublished">2014-11-09</time></p>
+            </div>
+            <div class="date"><time datetime="2014-11-09T15:19:14.000Z" itemprop="datePublished">2014-11-09</time></div>
         </div>
         
     
@@ -445,10 +479,10 @@ The s
     <div class="article-summary-inner">
         
         <div class="article-meta">
-            <p class="category">
+            <div class="category">
             <a class="article-category-link" href="/categories/技术/">技术</a>
-            </p>
-            <p class="date"><time datetime="2014-11-02T09:09:57.000Z" itemprop="datePublished">2014-11-02</time></p>
+            </div>
+            <div class="date"><time datetime="2014-11-02T09:09:57.000Z" itemprop="datePublished">2014-11-02</time></div>
         </div>
         
     
@@ -466,40 +500,6 @@ The s
 </article>
     
         </div>
-    
-
-    
-    
-    
-    
-        <div class="article-row">
-    
-        <article class="article article-summary">
-    <div class="article-summary-inner">
-        
-        <div class="article-meta">
-            <p class="category">
-            <a class="article-category-link" href="/categories/技术/">技术</a>
-            </p>
-            <p class="date"><time datetime="2014-10-30T15:08:38.000Z" itemprop="datePublished">2014-10-30</time></p>
-        </div>
-        
-    
-        <h1 class="article-title" itemprop="name">
-        <a href="/2014/10/30/vim-in-practice/">vim in practice (1)</a>
-        </h1>
-    
-
-        <p class="article-excerpt">
-            Vim Practice
-Vim have a extra key to activate mappings, and call this “prefix” key the “leader”.
-
-*Mapping keys is one of the places where Vim comments does’t work. 
-
-123let mapleader=','nnoremap &lt;
-        </p>
-    </div>
-</article>
     
 
 
@@ -567,6 +567,15 @@ Vim have a extra key to activate mappings, and call this “prefix” key the �
                     <li>
                         
                         <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Clojure/">Clojure</a></p>
+                            <p class="item-title"><a href="/2017/04/18/Techniques-for-Efficiently-Learning-Programming-Languages/" class="title">如何高效地学习编程语言</a></p>
+                            <p class="item-date"><time datetime="2017-04-18T07:15:09.000Z" itemprop="datePublished">2017-04-18</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
                             <p class="item-category"><a class="article-category-link" href="/categories/技术/">技术</a></p>
                             <p class="item-title"><a href="/2017/03/01/Pipleline-as-Code/" class="title">Pipleline as Code</a></p>
                             <p class="item-date"><time datetime="2017-03-01T02:19:13.000Z" itemprop="datePublished">2017-03-01</time></p>
@@ -600,15 +609,6 @@ Vim have a extra key to activate mappings, and call this “prefix” key the �
                         </div>
                     </li>
                 
-                    <li>
-                        
-                        <div class="item-inner">
-                            <p class="item-category"><a class="article-category-link" href="/categories/Clojure/">Clojure</a></p>
-                            <p class="item-title"><a href="/2016/09/04/Reading-and-Writing-Files/" class="title">Reading and Writing Files</a></p>
-                            <p class="item-date"><time datetime="2016-09-04T02:10:44.000Z" itemprop="datePublished">2016-09-04</time></p>
-                        </div>
-                    </li>
-                
             </ul>
         </div>
     </div>
@@ -618,7 +618,7 @@ Vim have a extra key to activate mappings, and call this “prefix” key the �
     <div class="widget-wrap widget-list">
         <h3 class="widget-title">分类</h3>
         <div class="widget">
-            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Clojure/">Clojure</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/技术/">技术</a><span class="category-list-count">39</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/生活/">生活</a><span class="category-list-count">2</span></li></ul>
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Clojure/">Clojure</a><span class="category-list-count">8</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/技术/">技术</a><span class="category-list-count">39</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/生活/">生活</a><span class="category-list-count">2</span></li></ul>
         </div>
     </div>
 
@@ -628,7 +628,7 @@ Vim have a extra key to activate mappings, and call this “prefix” key the �
     <div class="widget-wrap widget-list">
         <h3 class="widget-title">归档</h3>
         <div class="widget">
-            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">九月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">五月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">四月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">十一月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">七月 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">三月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">二月 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">一月 2015</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/11/">十一月 2014</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/10/">十月 2014</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/09/">九月 2014</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/07/">七月 2014</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/05/">五月 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02/">二月 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/01/">一月 2014</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/12/">十二月 2013</a><span class="archive-list-count">5</span></li></ul>
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">九月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">五月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">四月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">十一月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">七月 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">三月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">二月 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">一月 2015</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/11/">十一月 2014</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/10/">十月 2014</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/09/">九月 2014</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/07/">七月 2014</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/05/">五月 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02/">二月 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/01/">一月 2014</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/12/">十二月 2013</a><span class="archive-list-count">5</span></li></ul>
         </div>
     </div>
 
@@ -638,7 +638,7 @@ Vim have a extra key to activate mappings, and call this “prefix” key the �
     <div class="widget-wrap widget-float">
         <h3 class="widget-title">标签云</h3>
         <div class="widget tagcloud">
-            <a href="/tags/FP/" style="font-size: 12.5px;">FP</a> <a href="/tags/Mistakes-I-Hav-Made/" style="font-size: 15px;">Mistakes I Hav Made</a> <a href="/tags/OO/" style="font-size: 10px;">OO</a> <a href="/tags/angularJs/" style="font-size: 10px;">angularJs</a> <a href="/tags/concurrency/" style="font-size: 10px;">concurrency</a> <a href="/tags/emacs/" style="font-size: 10px;">emacs</a> <a href="/tags/file/" style="font-size: 10px;">file</a> <a href="/tags/geek/" style="font-size: 10px;">geek</a> <a href="/tags/gradle/" style="font-size: 10px;">gradle</a> <a href="/tags/java/" style="font-size: 17.5px;">java</a> <a href="/tags/javascript/" style="font-size: 20px;">javascript</a> <a href="/tags/kata/" style="font-size: 10px;">kata</a> <a href="/tags/language/" style="font-size: 15px;">language</a> <a href="/tags/leiningen/" style="font-size: 10px;">leiningen</a> <a href="/tags/maven/" style="font-size: 10px;">maven</a> <a href="/tags/mysql/" style="font-size: 12.5px;">mysql</a> <a href="/tags/node/" style="font-size: 12.5px;">node</a> <a href="/tags/promise/" style="font-size: 10px;">promise</a> <a href="/tags/q/" style="font-size: 10px;">q</a> <a href="/tags/rake/" style="font-size: 10px;">rake</a> <a href="/tags/shell/" style="font-size: 15px;">shell</a> <a href="/tags/sublime/" style="font-size: 10px;">sublime</a> <a href="/tags/test/" style="font-size: 10px;">test</a> <a href="/tags/testing/" style="font-size: 10px;">testing</a> <a href="/tags/thinking/" style="font-size: 20px;">thinking</a> <a href="/tags/transaction/" style="font-size: 10px;">transaction</a> <a href="/tags/vim/" style="font-size: 12.5px;">vim</a> <a href="/tags/yeoman/" style="font-size: 10px;">yeoman</a> <a href="/tags/zeal/" style="font-size: 10px;">zeal</a> <a href="/tags/散文/" style="font-size: 10px;">散文</a>
+            <a href="/tags/FP/" style="font-size: 12px;">FP</a> <a href="/tags/Mistakes-I-Hav-Made/" style="font-size: 14px;">Mistakes I Hav Made</a> <a href="/tags/OO/" style="font-size: 10px;">OO</a> <a href="/tags/angularJs/" style="font-size: 10px;">angularJs</a> <a href="/tags/concurrency/" style="font-size: 10px;">concurrency</a> <a href="/tags/emacs/" style="font-size: 10px;">emacs</a> <a href="/tags/file/" style="font-size: 10px;">file</a> <a href="/tags/geek/" style="font-size: 10px;">geek</a> <a href="/tags/gradle/" style="font-size: 10px;">gradle</a> <a href="/tags/java/" style="font-size: 16px;">java</a> <a href="/tags/javascript/" style="font-size: 18px;">javascript</a> <a href="/tags/kata/" style="font-size: 10px;">kata</a> <a href="/tags/language/" style="font-size: 14px;">language</a> <a href="/tags/leiningen/" style="font-size: 10px;">leiningen</a> <a href="/tags/maven/" style="font-size: 10px;">maven</a> <a href="/tags/mysql/" style="font-size: 12px;">mysql</a> <a href="/tags/node/" style="font-size: 12px;">node</a> <a href="/tags/promise/" style="font-size: 10px;">promise</a> <a href="/tags/q/" style="font-size: 10px;">q</a> <a href="/tags/rake/" style="font-size: 10px;">rake</a> <a href="/tags/shell/" style="font-size: 14px;">shell</a> <a href="/tags/sublime/" style="font-size: 10px;">sublime</a> <a href="/tags/test/" style="font-size: 10px;">test</a> <a href="/tags/testing/" style="font-size: 10px;">testing</a> <a href="/tags/thinking/" style="font-size: 20px;">thinking</a> <a href="/tags/transaction/" style="font-size: 10px;">transaction</a> <a href="/tags/vim/" style="font-size: 12px;">vim</a> <a href="/tags/yeoman/" style="font-size: 10px;">yeoman</a> <a href="/tags/zeal/" style="font-size: 10px;">zeal</a> <a href="/tags/散文/" style="font-size: 10px;">散文</a>
         </div>
     </div>
 
@@ -716,6 +716,7 @@ Vim have a extra key to activate mappings, and call this “prefix” key the �
 
 
 
+
     
         <script src="/libs/lightgallery/js/lightgallery.min.js"></script>
         <script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
@@ -726,6 +727,8 @@ Vim have a extra key to activate mappings, and call this “prefix” key the �
         <script src="/libs/lightgallery/js/lg-hash.min.js"></script>
         <script src="/libs/lightgallery/js/lg-share.min.js"></script>
         <script src="/libs/lightgallery/js/lg-video.min.js"></script>
+    
+    
     
 
 
