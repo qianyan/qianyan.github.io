@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    
+    <title>How to active different profiles in SpringBootTest | λ</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+        <meta name="keywords" content="java" />
+    
+    <meta name="description" content="实现步骤
+测试类标注@ActiveProfiles(resolver = ProfilesResolver.class)
+自定义类 ProfilesResolver 实现接口 ActiveProfilesResolver，并实现接口中唯一的方法resolve(Class&amp;lt;?&amp;gt; targetClass)
+maven-surefire-plugin 插件中配置123 &amp;lt;systemP">
+<meta property="og:type" content="article">
+<meta property="og:title" content="How to active different profiles in SpringBootTest">
+<meta property="og:url" content="https://lameta.com/2017/04/27/How-to-active-different-profiles-in-SpringBootTest/index.html">
+<meta property="og:site_name" content="λ">
+<meta property="og:description" content="实现步骤
+测试类标注@ActiveProfiles(resolver = ProfilesResolver.class)
+自定义类 ProfilesResolver 实现接口 ActiveProfilesResolver，并实现接口中唯一的方法resolve(Class&amp;lt;?&amp;gt; targetClass)
+maven-surefire-plugin 插件中配置123 &amp;lt;systemP">
+<meta property="og:updated_time" content="2017-04-27T00:41:15.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="How to active different profiles in SpringBootTest">
+<meta name="twitter:description" content="实现步骤
+测试类标注@ActiveProfiles(resolver = ProfilesResolver.class)
+自定义类 ProfilesResolver 实现接口 ActiveProfilesResolver，并实现接口中唯一的方法resolve(Class&amp;lt;?&amp;gt; targetClass)
+maven-surefire-plugin 插件中配置123 &amp;lt;systemP">
+    
+
+    
+        <link rel="alternate" href="/atom.xml" title="λ" type="application/atom+xml" />
+    
+
+    
+        <link rel="icon" href="/favicon.ico# path to favicon" />
+    
+
+    <link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/libs/titillium-web/styles.css">
+    <link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <script src="/libs/jquery/2.0.3/jquery.min.js"></script>
+    
+    
+        <link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+    
+    
+    
+        <script type="text/javascript">
+(function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-83870107-1# enter the tracking ID for your Google Analytics', 'auto');
+ga('send', 'pageview');
+
+</script>
+    
+    
+        <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?e6231610fe66acf322391d7546c28f21# enter Baidu Analytics hash key";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+    
+
+</head>
+
+<body>
+    <div id="wrap">
+        <header id="header">
+    <div id="header-outer" class="outer">
+        <div class="container">
+            <div class="container-inner">
+                <div id="header-title">
+                    <h1 class="logo-wrap">
+                        <a href="/" class="logo"></a>
+                    </h1>
+                    
+                        <h2 class="subtitle-wrap">
+                            <p class="subtitle">(conj clojurians me)</p>
+                        </h2>
+                    
+                </div>
+                <div id="header-inner" class="nav-container">
+                    <a id="main-nav-toggle" class="nav-icon fa fa-bars"></a>
+                    <div class="nav-container-inner">
+                        <ul id="main-nav">
+                            
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" href="/">主页</a>
+                                </li>
+                            
+                                        <ul class="main-nav-list"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Clojure/">Clojure</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/技术/">技术</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/生活/">生活</a></li></ul>
+                                    
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" href="/about/index.html">关于</a>
+                                </li>
+                            
+                        </ul>
+                        <nav id="sub-nav">
+                            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="想要查找什么..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+        <div class="container">
+            <div class="main-body container-inner">
+                <div class="main-body-inner">
+                    <section id="main">
+                        <div class="main-body-header">
+    <h1 class="header">
+    
+    <a class="page-title-link" href="/categories/技术/">技术</a>
+    </h1>
+</div>
+                        <div class="main-body-content">
+                            <article id="post-How-to-active-different-profiles-in-SpringBootTest" class="article article-single article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+        How to active different profiles in SpringBootTest
+        </h1>
+    
+
+            </header>
+        
+        
+            <div class="article-meta">
+                
+    <div class="article-date">
+        <a href="/2017/04/27/How-to-active-different-profiles-in-SpringBootTest/" class="article-date">
+            <time datetime="2017-04-27T00:39:56.000Z" itemprop="datePublished">2017-04-27</time>
+        </a>
+    </div>
+
+                
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/java/">java</a>
+    </div>
+
+            </div>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+            <h2 id="实现步骤"><a href="#实现步骤" class="headerlink" title="实现步骤"></a>实现步骤</h2><ul>
+<li>测试类标注@ActiveProfiles(resolver = ProfilesResolver.class)</li>
+<li>自定义类 ProfilesResolver 实现接口 ActiveProfilesResolver，并实现接口中唯一的方法<code>resolve(Class&lt;?&gt; targetClass)</code></li>
+<li>maven-surefire-plugin 插件中配置<figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"> &lt;systemPropertyVariables&gt;</div><div class="line">    &lt;spring<span class="selector-class">.profiles</span><span class="selector-class">.active</span>&gt;$&#123;spring<span class="selector-class">.profiles</span><span class="selector-class">.active</span>&#125;&lt;/spring<span class="selector-class">.profiles</span><span class="selector-class">.active</span>&gt;</div><div class="line">&lt;/systemPropertyVariables&gt;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>实现如下：</p>
+<h3 id="1-标注启用"><a href="#1-标注启用" class="headerlink" title="1. 标注启用"></a>1. 标注启用</h3><figure class="highlight less"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="variable">@RunWith</span>(SpringRunner.class)</div><div class="line"><span class="variable">@SpringBootTest</span>(classes = &#123;PetstoreApp.class&#125;, <span class="comment">// 我们的 application 名为 PetstoreApp</span></div><div class="line">    webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)</div><div class="line"><span class="variable">@ActiveProfiles</span>(resolver = ProfilesResolver.class)</div><div class="line">public abstract class BaseResourceTest &#123;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这个类存在的意义就是为了让其它类别的 ResourceTest 继承它，并在一次启动当中运行完所有的集成测试。避免每个 ResourceTest 都初始化启动 Application，造成运行速度变慢。</p>
+<p><strong>注意<code>abstract</code>关键字</strong><br>如果不使用<code>abstract</code>关键字，那么maven-surefire-plugin就会抛出如下错误：</p>
+<blockquote>
+<p>Tests in error:<br>  BaseResourceTest.initializationError »  No runnable methods</p>
+</blockquote>
+<h3 id="2-实现自定义类-ProfilesResolver，如下："><a href="#2-实现自定义类-ProfilesResolver，如下：" class="headerlink" title="2. 实现自定义类 ProfilesResolver，如下："></a>2. 实现自定义类 ProfilesResolver，如下：</h3><figure class="highlight dart"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> org.springframework.test.context.ActiveProfilesResolver;</div><div class="line"></div><div class="line">public <span class="class"><span class="keyword">class</span> <span class="title">ProfilesResolver</span> <span class="keyword">implements</span> <span class="title">ActiveProfilesResolver</span> </span>&#123;</div><div class="line">    <span class="meta">@Override</span></div><div class="line">    public <span class="built_in">String</span>[] resolve(Class&lt;?&gt; aClass) &#123;</div><div class="line">        <span class="built_in">String</span> activeProfiles = System.getProperty(<span class="string">"spring.profiles.active"</span>);</div><div class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">String</span>[] &#123;activeProfiles != <span class="keyword">null</span> ? activeProfiles : <span class="string">"local"</span>&#125;;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这里表示我们会从系统变量当中读取<em>spring.profiles.active</em>，但是这个变量从什么地方来呢？<br>我首先想到的是 maven 的 profiles 中设置 properties，如下：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">profile</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">id</span>&gt;</span>local<span class="tag">&lt;/<span class="name">id</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">properties</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">spring.profiles.active</span>&gt;</span>local<span class="tag">&lt;/<span class="name">spring.profiles.active</span>&gt;</span></div><div class="line">        <span class="tag">&lt;/<span class="name">properties</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">profile</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<p>如此，当我们在命令行中运行<code>mvn test -Plocal</code>的时候，就表明启用了 local 这个 profile。相应地，在 maven 的上下文当中，<em>spring.profiles.active</em>变量的值就是<em>local</em>。</p>
+<p>但是运行测试的时候，我们 ProfilesResolver 中的<code>System.getProperty(&quot;spring.profiles.active&quot;)</code>返回的始终是<code>null</code>。其实道理很简单，maven 中定义的 properties 全是给 maven 自己（包含各类插件）用的，它并不会<strong>传递</strong>给应用程序使用。</p>
+<p><strong>注意：</strong></p>
+<hr>
+<p>properties 中定义的 spring.profiles.active 其实主要是给插件 maven-resources-plugin 使用的，具体请参看备注。</p>
+<hr>
+<h3 id="3-定义systemPropertyVariables"><a href="#3-定义systemPropertyVariables" class="headerlink" title="3. 定义systemPropertyVariables"></a>3. 定义<code>systemPropertyVariables</code></h3><p>所以我们需要定义<code>systemPropertyVariables</code>，顾名思义，这是系统变量的定义，在应用程序中就可以使用<code>System.getProperty(&quot;spring.profiles.active&quot;)</code>获得。</p>
+<p>放在哪里合适呢？跑测试的插件中最合适！</p>
+<p>所以，我们有如下的配置：<br><figure class="highlight dust"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="xml"><span class="tag">&lt;<span class="name">plugin</span>&gt;</span></span></div><div class="line"><span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.maven.plugins<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>maven-surefire-plugin<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">configuration</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">runOrder</span>&gt;</span>alphabetical<span class="tag">&lt;/<span class="name">runOrder</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">systemPropertyVariables</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">spring.profiles.active</span>&gt;</span>$<span class="template-variable">&#123;spring.profiles.active&#125;</span><span class="xml"><span class="tag">&lt;/<span class="name">spring.profiles.active</span>&gt;</span></span></div><div class="line">    <span class="tag">&lt;/<span class="name">systemPropertyVariables</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">plugin</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<p>结合上面 properties 的配置，当我们再次运行<code>mvn test -Plocal</code>的时候，就会得到一个名为<em>spring.profiles.active</em>的系统变量，它的值由<code>${spring.profiles.active}</code>决定。此处，就是local。</p>
+<hr>
+<h2 id="备注"><a href="#备注" class="headerlink" title="备注"></a>备注</h2><p><strong>properties 中 spring.profiles.active 的另外用途</strong><br>只要 maven 的 properties 中定义了 <em>spring.profiles.active</em> ，运行<code>mvn spring-boot:run -Plocal</code>的时候，spring boot 就会启用<code>applicaiton-local.yml</code> profile 文件。</p>
+<p>为什么会这样的呢？按常理推断，应该是<em>spring-boot-maven-plugin</em>的配置项自动读取了我们设置的 properties <code>spring.profiles.active</code>，但是只要看一眼这个插件的<a href="http://docs.spring.io/spring-boot/docs/current/maven-plugin/run-mojo.html#profiles" target="_blank" rel="external">文档</a>就会发现，除非显式地在插件的<em>configuration</em>下配置了<em>profiles</em>参数或者手动传入<em>run.profiles</em>系统变量<a href="http://docs.spring.io/spring-boot/docs/current/maven-plugin/examples/run-profiles.html" target="_blank" rel="external">example</a>，否则插件本身（可以像我一样扫一眼插件的<a href="https://github.com/spring-projects/spring-boot/blob/master/spring-boot-tools/spring-boot-maven-plugin/src/main/java/org/springframework/boot/maven/AbstractRunMojo.java" target="_blank" rel="external">源码</a>）并无法感知到底启用 spring 的哪个 profile！所以这个假设不成立。</p>
+<p><strong>答案在<em>bootstrap.yml</em>当中！</strong><br>以下是<em>resources/config/bootstrap.yml</em>中的内容<br><figure class="highlight clean"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">spring:</div><div class="line">    application:</div><div class="line">        name: petstore</div><div class="line">    profiles:</div><div class="line">        # The commented value for `active` can be replaced <span class="keyword">with</span> valid Spring profiles to load.</div><div class="line">        # *注意底下这句话*</div><div class="line">        # Otherwise, it will be filled <span class="keyword">in</span> by maven when building the WAR file</div><div class="line">        # Either way, it can be overridden by `--spring.profiles.active` value passed <span class="keyword">in</span> the commandline or `-Dspring.profiles.active` set <span class="keyword">in</span> `JAVA_OPTS`</div><div class="line">        active: #spring.profiles.active#</div></pre></td></tr></table></figure></p>
+<p>这里的注释很有用，明确地告诉我们在构建 WAR 包的时候，maven 会帮我们把<code>#spring.profiles.active#</code>替换成真正的值。</p>
+<p>这又是怎么做到的呢？一切归功于<em>maven-resources-plugin</em>：<br><figure class="highlight dust"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div></pre></td><td class="code"><pre><div class="line"><span class="xml"><span class="tag">&lt;<span class="name">plugin</span>&gt;</span></span></div><div class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.maven.plugins<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>maven-resources-plugin<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>$<span class="template-variable">&#123;maven-resources-plugin.version&#125;</span><span class="xml"><span class="tag">&lt;/<span class="name">version</span>&gt;</span></span></div><div class="line">    <span class="tag">&lt;<span class="name">executions</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">execution</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">id</span>&gt;</span>default-resources<span class="tag">&lt;/<span class="name">id</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">phase</span>&gt;</span>validate<span class="tag">&lt;/<span class="name">phase</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">goals</span>&gt;</span></div><div class="line">                <span class="tag">&lt;<span class="name">goal</span>&gt;</span>copy-resources<span class="tag">&lt;/<span class="name">goal</span>&gt;</span></div><div class="line">            <span class="tag">&lt;/<span class="name">goals</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">configuration</span>&gt;</span></div><div class="line">                <span class="tag">&lt;<span class="name">outputDirectory</span>&gt;</span>target/classes<span class="tag">&lt;/<span class="name">outputDirectory</span>&gt;</span></div><div class="line">                <span class="tag">&lt;<span class="name">useDefaultDelimiters</span>&gt;</span>false<span class="tag">&lt;/<span class="name">useDefaultDelimiters</span>&gt;</span></div><div class="line">                <span class="tag">&lt;<span class="name">delimiters</span>&gt;</span></div><div class="line">                    <span class="tag">&lt;<span class="name">delimiter</span>&gt;</span>#<span class="tag">&lt;/<span class="name">delimiter</span>&gt;</span> <span class="comment">&lt;!-- 看这里 --&gt;</span></div><div class="line">                <span class="tag">&lt;/<span class="name">delimiters</span>&gt;</span></div><div class="line">                <span class="tag">&lt;<span class="name">resources</span>&gt;</span></div><div class="line">                    <span class="tag">&lt;<span class="name">resource</span>&gt;</span></div><div class="line">                        <span class="tag">&lt;<span class="name">directory</span>&gt;</span>src/main/resources/<span class="tag">&lt;/<span class="name">directory</span>&gt;</span></div><div class="line">                        <span class="tag">&lt;<span class="name">filtering</span>&gt;</span>true<span class="tag">&lt;/<span class="name">filtering</span>&gt;</span></div><div class="line">                        <span class="tag">&lt;<span class="name">includes</span>&gt;</span></div><div class="line">                            <span class="tag">&lt;<span class="name">include</span>&gt;</span>**/*.xml<span class="tag">&lt;/<span class="name">include</span>&gt;</span></div><div class="line">                            <span class="tag">&lt;<span class="name">include</span>&gt;</span>**/*.yml<span class="tag">&lt;/<span class="name">include</span>&gt;</span></div><div class="line">                        <span class="tag">&lt;/<span class="name">includes</span>&gt;</span></div><div class="line">                    <span class="tag">&lt;/<span class="name">resource</span>&gt;</span></div><div class="line">                    <span class="tag">&lt;<span class="name">resource</span>&gt;</span></div><div class="line">                        <span class="tag">&lt;<span class="name">directory</span>&gt;</span>src/main/resources/<span class="tag">&lt;/<span class="name">directory</span>&gt;</span></div><div class="line">                        <span class="tag">&lt;<span class="name">filtering</span>&gt;</span>false<span class="tag">&lt;/<span class="name">filtering</span>&gt;</span></div><div class="line">                        <span class="tag">&lt;<span class="name">excludes</span>&gt;</span></div><div class="line">                            <span class="tag">&lt;<span class="name">exclude</span>&gt;</span>**/*.xml<span class="tag">&lt;/<span class="name">exclude</span>&gt;</span></div><div class="line">                            <span class="tag">&lt;<span class="name">exclude</span>&gt;</span>**/*.yml<span class="tag">&lt;/<span class="name">exclude</span>&gt;</span></div><div class="line">                        <span class="tag">&lt;/<span class="name">excludes</span>&gt;</span></div><div class="line">                    <span class="tag">&lt;/<span class="name">resource</span>&gt;</span></div><div class="line">                <span class="tag">&lt;/<span class="name">resources</span>&gt;</span></div><div class="line">            <span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></div><div class="line">        <span class="tag">&lt;/<span class="name">execution</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">executions</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">plugin</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<p>这个插件除了简单的 copy 功能之外，还能进行 <em>Filtering</em> <a href="https://maven.apache.org/plugins/maven-resources-plugin/examples/filter.html" target="_blank" rel="external">操作</a>。</p>
+<blockquote>
+<p>Filtering<br>Variables can be included in your resources. These variables, denoted by the ${…} delimiters, can come from the system properties, your project properties, from your filter resources and from the command line.</p>
+</blockquote>
+<p>大意是说，你可以在 resources 文件定义自己的变量，这些变量可以来自系统属性、maven 工程属性，你过滤的 resources 文件和命令行。</p>
+<p>说白了，就是在 copy 资源文件的时候，同时帮你把文件中的变量（占位符）替换成真实的值。而这里就是通过<code>&lt;delimiter&gt;#&lt;/delimiter&gt;</code>来规定变量格式的！换句话说，在文件中只要是以<code>#</code>开头和结尾的字符串都会被替换掉（变量有定义的情况下；否则保持原样）。</p>
+<p>这里，由于绑定了生命周期——validate，可以直接运行<code>mvn validate -Plocal</code>这样的命令进行快速验证。得到的<em>bootstrap.yml</em>内容如下：</p>
+<figure class="highlight clean"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">spring:</div><div class="line">    application:</div><div class="line">        name: petstore</div><div class="line">    profiles:</div><div class="line">        # The commented value for `active` can be replaced <span class="keyword">with</span> valid Spring profiles to load.</div><div class="line">        # Otherwise, it will be filled <span class="keyword">in</span> by maven when building the WAR file</div><div class="line">        # Either way, it can be overridden by `--spring.profiles.active` value passed <span class="keyword">in</span> the commandline or `-Dspring.profiles.active` set <span class="keyword">in</span> `JAVA_OPTS`</div><div class="line">        active: dev # 替换成功</div></pre></td></tr></table></figure>
+<p>回到最开始的疑问，为什么只要 maven 的 properties 中定义了 <em>spring.profiles.active</em> ，运行<code>mvn spring-boot:run -Plocal</code>的时候，就可以spring boot 就会启用<code>applicaiton-local.yml</code> profile 文件呢？</p>
+<p>因为，maven 在运行命令之前已经做了 copy-resources 的操作，那时候就已经把<em>bootstrap.yml</em>中的<em>spring.profiles.active</em>替换成 local 了，所以启动 springboot application 的时候，它会启用<em>spring.profiles.active</em>代表的值，此处就是 local，那么启用的文件自然就是<em>application-local.yml</em>。</p>
+
+        </div>
+        <footer class="article-footer">
+            
+
+
+
+    <a data-url="https://lameta.com/2017/04/27/How-to-active-different-profiles-in-SpringBootTest/" data-id="cj1zoowi2003q2vm42xhhp5ho" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
+<script>
+    (function ($) {
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+</script>
+
+        </footer>
+    </div>
+</article>
+
+    <section id="comments">
+    
+        
+    <div class="ds-thread" data-thread-key="2017/04/27/How-to-active-different-profiles-in-SpringBootTest/" data-title="How to active different profiles in SpringBootTest" data-url="https://lameta.com/2017/04/27/How-to-active-different-profiles-in-SpringBootTest/"></div>
+    <style>
+        #ds-thread #ds-reset .ds-textarea-wrapper {
+            background: none;
+        }
+        #ds-reset .ds-avatar img {
+            box-shadow: none;
+        }
+        #ds-reset .ds-gradient-bg {
+            background: #f7f7f7;
+        }
+        #ds-thread #ds-reset li.ds-tab a {
+            border-radius: 3px;
+        }
+        #ds-thread #ds-reset .ds-post-button {
+            color: white;
+            border: none;
+            box-shadow: none;
+            background: #d32;
+            text-shadow: none;
+            font-weight: normal;
+            font-family: 'Microsoft Yahei';
+        }
+        #ds-thread #ds-reset .ds-post-button:hover {
+            color: white;
+            background: #DE594C;
+        }
+        #ds-thread #ds-reset .ds-post-button:active {
+            background: #d32;
+        }
+        #ds-smilies-tooltip ul.ds-smilies-tabs li a.ds-current {
+            color: white;
+            background: #d32;
+            box-shadow: none;
+            text-shadow: none;
+            font-weight: normal;
+        }
+    </style>
+
+    
+    </section>
+
+
+                        </div>
+                    </section>
+                    <aside id="sidebar">
+    <a class="sidebar-toggle" title="Expand Sidebar"><i class="toggle icon"></i></a>
+    <div class="sidebar-top">
+        <p>关注我 :</p>
+        <ul class="social-links">
+            
+                
+                <li>
+                    <a class="social-tooltip" title="twitter" href="https://twitter.com/lambetaX" target="_blank">
+                        <i class="icon fa fa-twitter"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="github" href="https://github.com/qianyan" target="_blank">
+                        <i class="icon fa fa-github"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="weibo" href="http://weibo.com/3672207020/" target="_blank">
+                        <i class="icon fa fa-weibo"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="rss" href="/atom.xml" target="_blank">
+                        <i class="icon fa fa-rss"></i>
+                    </a>
+                </li>
+                
+            
+        </ul>
+    </div>
+    
+        
+<nav id="article-nav">
+    
+    
+        <a href="/2017/04/18/Techniques-for-Efficiently-Learning-Programming-Languages/" id="article-nav-older" class="article-nav-link-wrap">
+        <strong class="article-nav-caption">上一篇</strong>
+        <p class="article-nav-title">如何高效地学习编程语言</p>
+        <i class="icon fa fa-chevron-left" id="icon-chevron-left"></i>
+        </a>
+    
+</nav>
+
+    
+    <div class="widgets-container">
+        
+            
+                
+    <div class="widget-wrap">
+        <h3 class="widget-title">最新文章</h3>
+        <div class="widget">
+            <ul id="recent-post" class="no-thumbnail">
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/技术/">技术</a></p>
+                            <p class="item-title"><a href="/2017/04/27/How-to-active-different-profiles-in-SpringBootTest/" class="title">How to active different profiles in SpringBootTest</a></p>
+                            <p class="item-date"><time datetime="2017-04-27T00:39:56.000Z" itemprop="datePublished">2017-04-27</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Clojure/">Clojure</a></p>
+                            <p class="item-title"><a href="/2017/04/18/Techniques-for-Efficiently-Learning-Programming-Languages/" class="title">如何高效地学习编程语言</a></p>
+                            <p class="item-date"><time datetime="2017-04-18T07:15:09.000Z" itemprop="datePublished">2017-04-18</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/技术/">技术</a></p>
+                            <p class="item-title"><a href="/2017/03/01/Pipleline-as-Code/" class="title">Pipleline as Code</a></p>
+                            <p class="item-date"><time datetime="2017-03-01T02:19:13.000Z" itemprop="datePublished">2017-03-01</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Clojure/">Clojure</a></p>
+                            <p class="item-title"><a href="/2017/01/01/Emacs-configs-for-a-clojurian/" class="title">Emacs configs for a clojurian</a></p>
+                            <p class="item-date"><time datetime="2017-01-01T12:00:24.000Z" itemprop="datePublished">2017-01-01</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Clojure/">Clojure</a></p>
+                            <p class="item-title"><a href="/2016/11/04/Generative-Testing/" class="title">Generative Testing</a></p>
+                            <p class="item-date"><time datetime="2016-11-03T23:21:34.000Z" itemprop="datePublished">2016-11-04</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">分类</h3>
+        <div class="widget">
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Clojure/">Clojure</a><span class="category-list-count">8</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/技术/">技术</a><span class="category-list-count">40</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/生活/">生活</a><span class="category-list-count">2</span></li></ul>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">归档</h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">九月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">五月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">四月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">十一月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">七月 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">三月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">二月 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">一月 2015</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/11/">十一月 2014</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/10/">十月 2014</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/09/">九月 2014</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/07/">七月 2014</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/05/">五月 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02/">二月 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/01/">一月 2014</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/12/">十二月 2013</a><span class="archive-list-count">5</span></li></ul>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-float">
+        <h3 class="widget-title">标签云</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/FP/" style="font-size: 12px;">FP</a> <a href="/tags/Mistakes-I-Hav-Made/" style="font-size: 14px;">Mistakes I Hav Made</a> <a href="/tags/OO/" style="font-size: 10px;">OO</a> <a href="/tags/angularJs/" style="font-size: 10px;">angularJs</a> <a href="/tags/concurrency/" style="font-size: 10px;">concurrency</a> <a href="/tags/emacs/" style="font-size: 10px;">emacs</a> <a href="/tags/file/" style="font-size: 10px;">file</a> <a href="/tags/geek/" style="font-size: 10px;">geek</a> <a href="/tags/gradle/" style="font-size: 10px;">gradle</a> <a href="/tags/java/" style="font-size: 16px;">java</a> <a href="/tags/javascript/" style="font-size: 18px;">javascript</a> <a href="/tags/kata/" style="font-size: 10px;">kata</a> <a href="/tags/language/" style="font-size: 14px;">language</a> <a href="/tags/leiningen/" style="font-size: 10px;">leiningen</a> <a href="/tags/maven/" style="font-size: 10px;">maven</a> <a href="/tags/mysql/" style="font-size: 12px;">mysql</a> <a href="/tags/node/" style="font-size: 12px;">node</a> <a href="/tags/promise/" style="font-size: 10px;">promise</a> <a href="/tags/q/" style="font-size: 10px;">q</a> <a href="/tags/rake/" style="font-size: 10px;">rake</a> <a href="/tags/shell/" style="font-size: 14px;">shell</a> <a href="/tags/sublime/" style="font-size: 10px;">sublime</a> <a href="/tags/test/" style="font-size: 10px;">test</a> <a href="/tags/testing/" style="font-size: 10px;">testing</a> <a href="/tags/thinking/" style="font-size: 20px;">thinking</a> <a href="/tags/transaction/" style="font-size: 10px;">transaction</a> <a href="/tags/vim/" style="font-size: 12px;">vim</a> <a href="/tags/yeoman/" style="font-size: 10px;">yeoman</a> <a href="/tags/zeal/" style="font-size: 10px;">zeal</a> <a href="/tags/散文/" style="font-size: 10px;">散文</a>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">链接</h3>
+        <div class="widget">
+            <ul>
+                
+                    <li>
+                        <a href="http://blog.jayfields.com/">Jay Fields</a>
+                    </li>
+                
+                    <li>
+                        <a href="https://aphyr.com">Aphyr</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://bucharestfp.ro">Bucharest FP</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://www.yinwang.org">Wangyin</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://blog.rlmflores.me/">Rodrigo Flores</a>
+                    </li>
+                
+                    <li>
+                        <a href="https://seancorfield.github.io/">Seancorfield</a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+
+            
+        
+    </div>
+</aside>
+                </div>
+            </div>
+        </div>
+        <footer id="footer">
+    <div class="container">
+        <div class="container-inner">
+            <a id="back-to-top" href="javascript:;"><i class="icon fa fa-angle-up"></i></a>
+            <div class="credit">
+                <h1 class="logo-wrap">
+                    <a href="/" class="logo"></a>
+                </h1>
+                <p>&copy; 2017 lambeta</p>
+                <p>Powered by <a href="//hexo.io/" target="_blank">Hexo</a>. Theme by <a href="//github.com/ppoffice" target="_blank">PPOffice</a></p>
+            </div>
+        </div>
+    </div>
+</footer>
+        
+    
+    <script type="text/javascript">
+    var duoshuoQuery = {short_name:'lambeta'};
+    (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0]
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+    </script>
+
+
+
+
+    
+        <script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-share.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-video.min.js"></script>
+    
+    
+    
+
+
+<!-- Custom Scripts -->
+<script src="/js/main.js"></script>
+
+    </div>
+</body>
+</html>
