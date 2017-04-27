@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://lameta.com/"/>
-  <updated>2017-04-27T00:41:15.000Z</updated>
+  <updated>2017-04-27T12:30:49.000Z</updated>
   <id>https://lameta.com/</id>
   
   <author>
@@ -16,11 +16,11 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>How to active different profiles in SpringBootTest</title>
+    <title>How to activate different profiles in SpringBootTest</title>
     <link href="https://lameta.com/2017/04/27/How-to-active-different-profiles-in-SpringBootTest/"/>
     <id>https://lameta.com/2017/04/27/How-to-active-different-profiles-in-SpringBootTest/</id>
     <published>2017-04-27T00:39:56.000Z</published>
-    <updated>2017-04-27T00:41:15.000Z</updated>
+    <updated>2017-04-27T12:30:49.000Z</updated>
     
     <content type="html"><![CDATA[<h2 id="实现步骤"><a href="#实现步骤" class="headerlink" title="实现步骤"></a>实现步骤</h2><ul>
 <li>测试类标注@ActiveProfiles(resolver = ProfilesResolver.class)</li>
