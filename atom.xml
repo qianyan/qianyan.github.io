@@ -209,7 +209,7 @@
     <link href="https://lameta.com/2017/01/01/Emacs-configs-for-a-clojurian/"/>
     <id>https://lameta.com/2017/01/01/Emacs-configs-for-a-clojurian/</id>
     <published>2017-01-01T12:00:24.000Z</published>
-    <updated>2017-01-17T06:14:36.000Z</updated>
+    <updated>2017-06-20T03:32:53.000Z</updated>
     
     <content type="html"><![CDATA[<p>俗话说，工欲善其事必先利其器，完善开发工具与我而言是一件快乐的事情，分享也是一件令人愉悦的事情，所以我想把学习过程中的点滴记录下，留作备忘。本文不会介绍太多花式或有深度的emacs配置，更多是摸索学习的过程，其中充满了乐趣。</p>
 <h2 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h2><p>网络上的<em>.emacs.d/init.el</em>配置数不胜数，各路lisp大神的<em>dot file</em>都已经放在github上了，而且前有牛人撰文推荐学习emacs配置的详实方法，看似确实没有什么必要自己折腾一份配置。这个说法对，也不对。我在转向emacs之前，是一名忠实的vim党，从大学开始就不断折腾vim的配置，还花过一段时间专门学习了<em>vimscript</em>，曾经惊叹于<em>vimscript</em>的动态函数式风格的优美和强大。类似地，<em>.vimrc</em>配置文件在网络上也多如牛毛，华丽和酷炫的插件极大地提升了vim的操作性。尽管如此，我还是乐于一砖一瓦地打造自己的vim环境，竭力演化它变成我心目中的“编辑器之神”。这个过程一般会充满修改然后重启的重复性机械劳作，偶尔会遭遇无论怎么修改就是不生效、甚至遍寻google也一无所获的挫折，但是我就是无法厌倦它，人天生好奇，探索未知事物本身就充满了乐趣，而且一旦配置奏效，便能获得满满的成就感。新事物对程序员具有极大的吸引力，但是程序员不会止步于使用新事物，而且会在惊奇之余，渴望控制那股背后主导它的力量本身，行使“上帝之力”。</p>
@@ -246,7 +246,7 @@
 <p>配置的首部，我使用<code>(require &#39;init-clojure)</code>先加载<em>init-clojure</em>，然后对CIDER本身进行一系列的配置。配置的详细信息可以通过CIDER github主页获取到，这里我就不再赘述。</p>
 <p>最后，需要在<em>init.el</em>文件中添加入这么一句<code>(require &#39;init-clojure-cider)</code>，重新启动emacs，找到一个Clojure项目，按下<code>C-c M-j</code> (hack-jack-in)，就能获得一个Clojure的交互式开发环境。</p>
 <h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>当然，我的emacs配置绝对不止这些，但是其余的过程大体类似。由于emacs速来有伪装成编辑器的操作系统的称号，所以我的探索是无止境的。如果大家对我的配置感兴趣，可以直接去我github上<a href="https://github.com/qianyan/dotfiles" target="_blank" rel="external">dotfiles</a>上查看。</p>
-<h2 id="—"><a href="#—" class="headerlink" title="—"></a>—</h2><p>参考链接<br>[1] <a href="[https://sriramkswamy.github.io/dotemacs/">sriramkswamy dotemacs</a><br>[2] <a href="https://github.com/purcell/emacs.d/" target="_blank" rel="external">purcell emacs.d</a></p>
+<h2 id="—"><a href="#—" class="headerlink" title="—"></a>—</h2><p>参考链接<br>[1] <a href="https://sriramkswamy.github.io/dotemacs/" target="_blank" rel="external">sriramkswamy dotemacs</a><br>[2] <a href="https://github.com/purcell/emacs.d/" target="_blank" rel="external">purcell emacs.d</a></p>
 ]]></content>
     
     <summary type="html">
