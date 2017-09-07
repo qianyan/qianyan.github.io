@@ -14,7 +14,7 @@
 <meta property="og:url" content="https://lameta.com/2017/09/06/Underscore-string-java/index.html">
 <meta property="og:site_name" content="λ">
 <meta property="og:description" content="起源写过Javascript代码的人，估计没有几个不知道underscore这个类库的，因为它太好（有）用了，尽管现如今由于实现上不够优雅的缘故，已经被lodash取代。而我想介绍的是underscore.string，github 上的 star 已经有3000+，它原本是underscore的扩展，不过现在已经演变成独立的类库。顾名思义，它的作用就是弥补Javascript本身对于字符串操作支">
-<meta property="og:updated_time" content="2017-09-06T16:02:18.000Z">
+<meta property="og:updated_time" content="2017-09-07T02:00:24.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="一个Java中操作字符串的类库">
 <meta name="twitter:description" content="起源写过Javascript代码的人，估计没有几个不知道underscore这个类库的，因为它太好（有）用了，尽管现如今由于实现上不够优雅的缘故，已经被lodash取代。而我想介绍的是underscore.string，github 上的 star 已经有3000+，它原本是underscore的扩展，不过现在已经演变成独立的类库。顾名思义，它的作用就是弥补Javascript本身对于字符串操作支">
@@ -188,7 +188,7 @@ var _hmt = _hmt || [];
         
         <div class="article-entry" itemprop="articleBody">
             <h2 id="起源"><a href="#起源" class="headerlink" title="起源"></a>起源</h2><p>写过Javascript代码的人，估计没有几个不知道<a href="http://underscorejs.org/" target="_blank" rel="external">underscore</a>这个类库的，因为它太好（有）用了，尽管现如今由于实现上不够优雅的缘故，已经被<a href="https://lodash.com/" target="_blank" rel="external">lodash</a>取代。而我想介绍的是<a href="https://github.com/epeli/underscore.string" target="_blank" rel="external">underscore.string</a>，github 上的 star 已经有3000+，它原本是underscore的扩展，不过现在已经演变成独立的类库。顾名思义，它的作用就是弥补Javascript本身对于字符串操作支持的匮乏。<br>举个例子：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> slugify = <span class="built_in">require</span>(<span class="string">"underscore.string/slugify"</span>);</div><div class="line">slugify(<span class="string">"Hello world!"</span>);</div><div class="line"></div><div class="line">-&gt; hello-world</div></pre></td></tr></table></figure></p>
-<p><code>slugify</code>是一种规整字符串的操作，常用于把url中的非法字符规整成<em>word-word</em>的模样。比如，我的这篇 blog 是通过 hexo 生成的 <code>hexo new &quot;Underscore.string.java&quot;</code>，它会自动帮我转换成 <em>2017-09-06-Underscore-string.java.md</em>这样的亲和url的格式。</p>
+<p><code>slugify</code>是一种规整字符串的操作，常用于把url中的非法字符规整成<em>word-word</em>的模样。比如，我的这篇 blog 是通过 hexo 生成的 <code>hexo new &quot;Underscore.string.java&quot;</code>，它会自动帮我转换成 <em>2017-09-06-Underscore-string-java.md</em>这样的亲和url的格式。</p>
 <h2 id="想法"><a href="#想法" class="headerlink" title="想法"></a>想法</h2><p>接触这个类库的时候，我正在使用 google <a href="https://github.com/google/guava" target="_blank" rel="external">guava</a>，惊讶于这里头的各类操作，包括 ImmutablList、CharMatcher、Strings 等等。一来准备针对 guava 练练手，二来确实想学习一下 underscore.string 的操作，所以就开始着手写起了 <a href="https://github.com/qianyan/underscore.string.java" target="_blank" rel="external">underscore.string.java</a> 这个项目。编写的过程中确实学到了不少平常不太可能接触到的特性和设计方法。</p>
 <h2 id="项目介绍"><a href="#项目介绍" class="headerlink" title="项目介绍"></a>项目介绍</h2><p>这个类库已经正式在 Maven Central Repository 发布了 0.0.1 版本。</p>
 <h2 id="前置条件"><a href="#前置条件" class="headerlink" title="前置条件"></a>前置条件</h2><ul>
@@ -248,7 +248,7 @@ var _hmt = _hmt || [];
 
 
 
-    <a data-url="https://lameta.com/2017/09/06/Underscore-string-java/" data-id="cj797pv2c0044aom407ouwf24" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
+    <a data-url="https://lameta.com/2017/09/06/Underscore-string-java/" data-id="cj79t34bw004fb4m47cflt4l3" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
 <script>
     (function ($) {
         $('body').on('click', function() {
