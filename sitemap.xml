@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://lameta.com/2017/09/15/release-jar-to-maven-central-repository/</loc>
+    
+    <lastmod>2017-09-15T14:30:47.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://lameta.com/2017/09/06/Underscore-string-java/</loc>
     
     <lastmod>2017-09-07T06:10:18.000Z</lastmod>

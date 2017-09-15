@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://lameta.com/"/>
-  <updated>2017-09-07T06:10:18.000Z</updated>
+  <updated>2017-09-15T14:30:47.000Z</updated>
   <id>https://lameta.com/</id>
   
   <author>
@@ -14,6 +14,89 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>release jar to maven central repository</title>
+    <link href="https://lameta.com/2017/09/15/release-jar-to-maven-central-repository/"/>
+    <id>https://lameta.com/2017/09/15/release-jar-to-maven-central-repository/</id>
+    <published>2017-09-15T14:29:07.000Z</published>
+    <updated>2017-09-15T14:30:47.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="太长不读篇"><a href="#太长不读篇" class="headerlink" title="太长不读篇"></a>太长不读篇</h2><ol>
+<li>在 <a href="https://issues.sonatype.org/secure/Signup!default.jspa" target="_blank" rel="external">issues tracker</a> 上注册</li>
+<li>创建 <a href="https://issues.sonatype.org/browse/OSSRH-33944" target="_blank" rel="external">issue</a></li>
+<li>配置 <a href="https://github.com/qianyan/underscore.string.java/blob/master/build.gradle" target="_blank" rel="external">build.gradle</a></li>
+<li>gpg 生成 key pair 以便签名</li>
+<li>上传 Release Archive</li>
+<li>关闭并验证 <a href="https://oss.sonatype.org/" target="_blank" rel="external">Staging 环境</a>的 Archive</li>
+<li>发布 Archive</li>
+<li>通知 issue 管理员开启同步</li>
+</ol>
+<h2 id="细读篇"><a href="#细读篇" class="headerlink" title="细读篇"></a>细读篇</h2><h3 id="注册"><a href="#注册" class="headerlink" title="注册"></a>注册</h3><p>Maven Central 网站并不提供注册的功能，你需要到 Sonatype 网站上进行注册。而事实上，Sonatype 网站也没有直接提供一个注册链接。真正的注册入口在 <a href="https://issues.sonatype.org/secure/Signup!default.jspa" target="_blank" rel="external">issues tracker</a> 上。一旦完成注册后，你需要创建包含待发布包信息的 issue。</p>
+<h3 id="创建-issue"><a href="#创建-issue" class="headerlink" title="创建 issue"></a>创建 issue</h3><p><img src="http://upload-images.jianshu.io/upload_images/217988-502c1f4fc580c120.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="创建 issues"></p>
+<p>在 Sonatype 的 <a href="https://issues.sonatype.org/secure/Dashboard.jspa" target="_blank" rel="external">dashboard</a> 上点击创建按钮，根据弹出框的提示，填写简介、描述、GroupId、Project URL、SCM url 以及你在 jira 上的用户名。创建完毕后，会被自动跳转到该 issue 的详情页并分配一个唯一的ID，如：OSSRH-33944。余下的时间只需要等待，一般在两个工作日之内，Sonatype 的工作人员就会着手处理，然后他会在该 issue 底下的评论区留言。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/217988-29e35a58393f39ce.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="创建成功的 issue"></p>
+<p>如果代码是托管在 github 上，按照惯例，GroupId 应该取 github 上的域名，比如：com.github.qianyan。不过，这里我预备上传的包的 GroupId 是 com.lambeta，这是我购买的域名。审核者对此有所顾虑，所以很贴心地留言如下：</p>
+<blockquote>
+<p>Do you own the domain lambeta.com? If not, please read:<br><a href="http://central.sonatype.org/pages/choosing-your-coordinates.html" target="_blank" rel="external">http://central.sonatype.org/pages/choosing-your-coordinates.html</a><br>You may also choose a groupId that reflects your project hosting, in this case, something like io.github.qianyan or com.github.qianyan</p>
+</blockquote>
+<p>在回复这个域名确实为我所有之后，工作人员就贴出不同环境的仓库地址。</p>
+<blockquote>
+<p>Configuration has been prepared, now you can:<br>Deploy snapshot artifacts into repository <a href="https://oss.sonatype.org/content/repositories/snapshots" target="_blank" rel="external">https://oss.sonatype.org/content/repositories/snapshots</a><br>Deploy release artifacts into the staging repository <a href="https://oss.sonatype.org/service/local/staging/deploy/maven2" target="_blank" rel="external">https://oss.sonatype.org/service/local/staging/deploy/maven2</a><br>Promote staged artifacts into repository ‘Releases’<br>Download snapshot and release artifacts from group <a href="https://oss.sonatype.org/content/groups/public" target="_blank" rel="external">https://oss.sonatype.org/content/groups/public</a><br>Download snapshot, release and staged artifacts from staging group <a href="https://oss.sonatype.org/content/groups/staging" target="_blank" rel="external">https://oss.sonatype.org/content/groups/staging</a><br><strong>please comment on this ticket when you promoted your first release, thanks</strong></p>
+</blockquote>
+<p><strong>最后一句很重要</strong>，说的是，当我第一次正式发布的时候，需要留言告知工作人员，以便他们开启中央仓库的同步，这样我的包才会在 Maven Central 仓库中可见。</p>
+<h3 id="配置项目的-build-gradle"><a href="#配置项目的-build-gradle" class="headerlink" title="配置项目的 build.gradle"></a>配置项目的 build.gradle</h3><p>拿到仓库地址，我们就需要在自己的项目中进行一些必要的配置，包含：jar、sourcesJar、javadocJar 以及对这些产物的 signing（签名）。</p>
+<h4 id="maven-插件"><a href="#maven-插件" class="headerlink" title="maven 插件"></a>maven 插件</h4><figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">apply <span class="string">plugin:</span> <span class="string">'maven'</span></div></pre></td></tr></table></figure>
+<p>maven 插件提供了 uploadArchives task，我们需要在这个 task 中配置仓库地址，以及 pom 的相关信息，因为上载到 maven 仓库的包必须要有 pom 文件，否则无法查找或被依赖。具体配置如下：<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div></pre></td><td class="code"><pre><div class="line">uploadArchives &#123;</div><div class="line">    repositories &#123;</div><div class="line">        mavenDeployer &#123;</div><div class="line">            beforeDeployment &#123; deployment -&gt; signing.signPom(deployment) &#125;</div><div class="line"></div><div class="line">            repository(<span class="string">url:</span> <span class="string">"https://oss.sonatype.org/service/local/staging/deploy/maven2/"</span>) &#123;</div><div class="line">                authentication(<span class="string">userName:</span> ossrhUsername, <span class="string">password:</span> ossrhPassword)</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            snapshotRepository(<span class="string">url:</span> <span class="string">"https://oss.sonatype.org/content/repositories/snapshots"</span>) &#123;</div><div class="line">                authentication(<span class="string">userName:</span> sonatypeUsername, <span class="string">password:</span> sonatypePassword)</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            pom.project &#123;</div><div class="line">                name project.name</div><div class="line">                packaging <span class="string">'jar'</span></div><div class="line">                description <span class="string">'underscore string in java'</span></div><div class="line">                url <span class="string">'https://github.com/qianyan/underscore.string.java'</span></div><div class="line"></div><div class="line">                scm &#123;</div><div class="line">                    url <span class="string">'https://github.com/qianyan/underscore.string.java'</span></div><div class="line">                    connection <span class="string">'https://github.com/qianyan/underscore.string.java.git'</span></div><div class="line">                    developerConnection <span class="string">'git@github.com:qianyan/underscore.string.java.git'</span></div><div class="line">                &#125;</div><div class="line"></div><div class="line">                licenses &#123;</div><div class="line">                    license &#123;</div><div class="line">                        name <span class="string">'MIT Licence'</span></div><div class="line">                        url <span class="string">'https://raw.githubusercontent.com/qianyan/underscore.string.java/master/LICENSE'</span></div><div class="line">                        distribution <span class="string">'repo'</span></div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line"></div><div class="line">                developers &#123;</div><div class="line">                    developer &#123;</div><div class="line">                        id <span class="string">'lambeta'</span></div><div class="line">                        name <span class="string">'Yan Qian'</span></div><div class="line">                        email <span class="string">'qianyan.lambeta@gmail.com'</span></div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>对应生成的 pom.xml 大致如下：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">name</span>&gt;</span>underscore.string.java<span class="tag">&lt;/<span class="name">name</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">description</span>&gt;</span>underscore string in java<span class="tag">&lt;/<span class="name">description</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">url</span>&gt;</span>https://github.com/qianyan/underscore.string.java<span class="tag">&lt;/<span class="name">url</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">licenses</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">license</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">name</span>&gt;</span>MIT Licence<span class="tag">&lt;/<span class="name">name</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">url</span>&gt;</span>https://raw.githubusercontent.com/qianyan/underscore.string.java/master/LICENSE<span class="tag">&lt;/<span class="name">url</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">distribution</span>&gt;</span>repo<span class="tag">&lt;/<span class="name">distribution</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">license</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">licenses</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">developers</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">developer</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">id</span>&gt;</span>lambeta<span class="tag">&lt;/<span class="name">id</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">name</span>&gt;</span>Yan Qian<span class="tag">&lt;/<span class="name">name</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">email</span>&gt;</span>qianyan.lambeta@gmail.com<span class="tag">&lt;/<span class="name">email</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">developer</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">developers</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">scm</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">connection</span>&gt;</span>https://github.com/qianyan/underscore.string.java.git<span class="tag">&lt;/<span class="name">connection</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">developerConnection</span>&gt;</span>git@github.com:qianyan/underscore.string.java.git<span class="tag">&lt;/<span class="name">developerConnection</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">url</span>&gt;</span>https://github.com/qianyan/underscore.string.java<span class="tag">&lt;/<span class="name">url</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">scm</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<p><strong>注意</strong> <code>authentication(userName: ossrhUsername, password: ossrhPassword)</code> 和 <code>authentication(userName: sonatypeUsername, password: sonatypePassword)</code>，这里的用户名和密码其实就是在 Sonatype 上注册的用户名和密码。为了让 gradle 脚本顺利执行，需要在当前工程下的 gradle.properties 文件中设置对应的变量，如下：<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">sonatypeUsername=</div><div class="line">sonatypePassword=</div><div class="line">ossrhUsername=</div><div class="line">ossrhPassword=</div></pre></td></tr></table></figure></p>
+<p>这份文件会作为源代码的一部分提交，所以聪明的我们不会傻傻地把自己的用户名和密码 push 到 github 上面。和大部分 *nix 系统上的工具类似，gradle 也有本地配置，我们可以新建一份 gradle.properties 文件到 <code>~/.gradle/gradle.properties</code>，然后把用户名和密码写入其中。这样，实际运行时，本地配置就会覆盖项目下对应的这些变量值。</p>
+<h4 id="设置-gpg-以签名-Archive"><a href="#设置-gpg-以签名-Archive" class="headerlink" title="设置 gpg 以签名 Archive"></a>设置 gpg 以签名 Archive</h4><p>gpg 生成的 key pair 主要是供签名使用的。假定本机已经安装 gpg，首先使用 gpg 生成 key pair。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ gpg --gen-key</div></pre></td></tr></table></figure></p>
+<p>然后，查找你的 keyId：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$ gpg --list-keys</div><div class="line"># -&gt;</div><div class="line">pub   2048R/XXXXXX 2017-09-14 [expires: 2018-05-14]</div><div class="line">uid       [ultimate] Yan Qian (lambeta) &lt;qianyan.lambeta@gmail.com&gt;</div></pre></td></tr></table></figure></p>
+<p>其中 XXXXXX 就是你的 keyId。接下来必须发布你的公钥：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ gpg --keyserver hkp://pgp.mit.edu --send-keys XXXXXX</div></pre></td></tr></table></figure></p>
+<p>验证公钥已经发布成功：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ gpg --keyserver hkp://pgp.mit.edu --search-keys qianyan.lambeta@gamil.com # user email address</div></pre></td></tr></table></figure></p>
+<h4 id="signing-插件"><a href="#signing-插件" class="headerlink" title="signing 插件"></a>signing 插件</h4><p>完成上述步骤之后，我们需要在 build.gradle 中添加 signing 插件及其配置，如下：<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">apply <span class="string">plugin:</span> <span class="string">'signing'</span></div><div class="line"></div><div class="line">signing &#123;</div><div class="line">    required &#123; gradle.taskGraph.hasTask(<span class="string">"uploadArchives"</span>) &#125;</div><div class="line">    sign configurations.archives</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>上面的配置明确了 gradle task 的 DAG 中必须含有 uploadArchives，之后针对 archives 进行签名。</p>
+<p>signing 插件如何同 gpg 生成 key pair 交互呢？这就需要在<code>~/.gradle/gradle.properties</code>再声明三个变量，如下：<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">signing.keyId=XXXXXX</div><div class="line">signing.password=your_key_pair_password</div><div class="line">signing.secretKeyRingFile=<span class="regexp">/Users/</span>your_name<span class="regexp">/.gnupg/</span>secring.gpg</div></pre></td></tr></table></figure></p>
+<p>还剩下最后的一步，归档 Jar，sourceJar（源代码）和javadocJar（API 文档），这些是需要签名的对象。</p>
+<h4 id="archive"><a href="#archive" class="headerlink" title="archive"></a>archive</h4><figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">apply <span class="string">plugin:</span> <span class="string">'java'</span></div><div class="line"></div><div class="line">task sourcesJar(<span class="string">type:</span> Jar) &#123;</div><div class="line">    classifier = <span class="string">'sources'</span></div><div class="line">    from sourceSets.main.allSource</div><div class="line">&#125;</div><div class="line"></div><div class="line">task javadocJar(<span class="string">type:</span> Jar, <span class="string">dependsOn:</span> javadoc) &#123;</div><div class="line">    classifier = <span class="string">'javadoc'</span></div><div class="line">    from <span class="string">'build/docs/javadoc'</span></div><div class="line">&#125;</div><div class="line"></div><div class="line">artifacts &#123;</div><div class="line">    archives jar</div><div class="line">    archives sourcesJar</div><div class="line">    archives javadocJar</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>归档产物最终都会被签名，生成以 .asc 为后缀的签名文件。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">build/libs</div><div class="line">├── underscore.string.java-0.0.1-javadoc.jar</div><div class="line">├── underscore.string.java-0.0.1-javadoc.jar.asc</div><div class="line">├── underscore.string.java-0.0.1-sources.jar</div><div class="line">├── underscore.string.java-0.0.1-sources.jar.asc</div><div class="line">├── underscore.string.java-0.0.1.jar</div><div class="line">└── underscore.string.java-0.0.1.jar.asc</div></pre></td></tr></table></figure></p>
+<p>这些产出物在最终发布的时候，需要经过验证，如果验证失败，比如：缺少 javadoc 或者某个 *.asc 文件，则不被允许发布。</p>
+<h3 id="上传-Release-Archives"><a href="#上传-Release-Archives" class="headerlink" title="上传 Release Archives"></a>上传 Release Archives</h3><p>根据的 maven 的标准，日常开发我们会使用 snapshot 版本，如：0.0.1-SNAPSHOT；发布时，去掉后缀-SNAPSHOT，即：0.0.1。而 maven 会根据这个特点，机智地辨识是上传到 snapshotRepository 还是 releaseRepository 的。因为我们得发布包，所以修改版本为 0.0.1 之后，我们只需要简单地执行如下命令：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ gradle uploadArchives # or `gradle uA` this is a shortcut.</div></pre></td></tr></table></figure></p>
+<h3 id="关闭并验证-Staging-环境上的-Archive"><a href="#关闭并验证-Staging-环境上的-Archive" class="headerlink" title="关闭并验证 Staging 环境上的 Archive"></a>关闭并验证 Staging 环境上的 Archive</h3><p><img src="http://upload-images.jianshu.io/upload_images/217988-c6a888ec20e93530.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="staging Repo"></p>
+<p>登录 Sonatype 的 <a href="https://oss.sonatype.org/" target="_blank" rel="external">Nexus Repository Manager</a>，然后点击左边侧边栏的 Staging Repositories，搜索<code>comlambeta</code> (GroupId 去掉中间的’.’)。接下来查看 Content tab，重点检查 pom 或者签名文件是否遗漏！当确认无误后，即可关闭 (Close) 这个 Repo。关闭过程中，Nexus 会逐项检查产物是否合规，如果出现验证错误，则在 Activity tab 中显示具体失败的步骤及原因。</p>
+<h3 id="发布-Archive"><a href="#发布-Archive" class="headerlink" title="发布 Archive"></a>发布 Archive</h3><p>如果上面的验证通过，上面本来不可用的 Release 按钮会变为可用。点击 Release 按钮，直接发布包。</p>
+<h3 id="通知-issue-管理员开启同步"><a href="#通知-issue-管理员开启同步" class="headerlink" title="通知 issue 管理员开启同步"></a>通知 issue 管理员开启同步</h3><p>发布包之后，就可以通知管理员开启同步。我在原来的 issue 的评论区留言：</p>
+<blockquote>
+<p>I have a first release version 0.0.1 for this library.</p>
+</blockquote>
+<p>很快地，管理员就回复同步已经开启：</p>
+<blockquote>
+<p>Central sync is activated for com.lambeta. After you successfully release, your component will be published to Central, typically within 10 minutes, though updates to search.maven.org can take up to two hours.</p>
+</blockquote>
+<p>不过，由于当时所用 gradle2.1 的版本，导致了上传时 pom 文件被遗漏，在 search.maven.org 中搜索不到。管理员很热心地解释了这个现象：</p>
+<blockquote>
+<p>search.maven.org needs a valid POM file to be a part of your uploaded artifacts. Browsing Maven Central directly:<br><a href="http://repo1.maven.org/maven2/com/lambeta/underscore.string.java/0.0.1/" target="_blank" rel="external">http://repo1.maven.org/maven2/com/lambeta/underscore.string.java/0.0.1/</a><br>it appears that a POM file is missing.</p>
+</blockquote>
+<p>遂升级到 3.1 版本，重新上传之后就能在 <a href="http://search.maven.org/#search%7Cga%7C1%7Ccom.lambeta" target="_blank" rel="external">search.maven.org</a> 中看到。</p>
+<h3 id="检查同步成功"><a href="#检查同步成功" class="headerlink" title="检查同步成功"></a>检查同步成功</h3><p>除了通过 <a href="http://search.maven.org/#search%7Cga%7C1%7Ccom.lambeta" target="_blank" rel="external">search.maven.org</a> 检查同步是否成功之外，查询<a href="http://mvnrepository.com/search?q=com.lambeta" target="_blank" rel="external">mvnrepository</a>也是常用的搜索方式。不过，值得一提的是，mvnrepository 相较于 search.maven.org 同步会更慢点，原因是 mvnrepository 引用了 central.maven.org 仓库。而 <code>central.maven.org == repo1.maven.org</code>，两个域名对应的 IP 是一样的，而这个 repo1.maven.org 就是默认的 Maven central repository。<br>所以，你可以在以下两个仓库看到发布包：<br><a href="http://central.maven.org/maven2/com/lambeta/underscore.string.java/" target="_blank" rel="external">http://central.maven.org/maven2/com/lambeta/underscore.string.java/</a><br><a href="http://repo1.maven.org/maven2/com/lambeta/underscore.string.java/" target="_blank" rel="external">http://repo1.maven.org/maven2/com/lambeta/underscore.string.java/</a></p>
+<hr>
+<p>参考链接<br>[1] <a href="http://zserge.com/blog/gradle-maven-publish.html" target="_blank" rel="external">simple library publishing with gradle</a><br>[2] <a href="http://central.sonatype.org/pages/releasing-the-deployment.html" target="_blank" rel="external">release deployment</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;太长不读篇&quot;&gt;&lt;a href=&quot;#太长不读篇&quot; class=&quot;headerlink&quot; title=&quot;太长不读篇&quot;&gt;&lt;/a&gt;太长不读篇&lt;/h2&gt;&lt;ol&gt;
+&lt;li&gt;在 &lt;a href=&quot;https://issues.sonatype.org/secure/Signup
+    
+    </summary>
+    
+      <category term="技术" scheme="https://lameta.com/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="java" scheme="https://lameta.com/tags/java/"/>
+    
+  </entry>
   
   <entry>
     <title>一个Java中操作字符串的类库</title>
@@ -1675,88 +1758,6 @@
     
     
       <category term="transaction" scheme="https://lameta.com/tags/transaction/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Concurrency in action</title>
-    <link href="https://lameta.com/2015/07/16/concurrency-in-action/"/>
-    <id>https://lameta.com/2015/07/16/concurrency-in-action/</id>
-    <published>2015-07-16T00:25:58.000Z</published>
-    <updated>2016-09-06T14:58:32.000Z</updated>
-    
-    <content type="html"><![CDATA[<h3 id="什么是竞态条件？"><a href="#什么是竞态条件？" class="headerlink" title="什么是竞态条件？"></a>什么是竞态条件？</h3><hr>
-<blockquote>
-<p><strong>tips</strong>: The situation where two threads compete for the same resource, where the sequence in which the resource is accessed is significant, is called race conditions. A code section that leads to race conditions is called a critical section. In the below example the method add() is a critical section, leading to race conditions. Race conditions can be avoided by proper thread synchronization in critical sections.<br>两个线程竞争同一个资源，而该资源的访问顺序十分重要的情况就被称为竞态条件。导致竞态条件的代码区就被称为临界区。下面的例子中的add()方法就是一个导致竞态条件的临界区。临界区上合适的线程同步能避免竞态条件。<br>Race conditions arise in software when an application depends on the sequence or timing of processes or threads for it to operate properly.<br>race conditions often happen when the processes or threads depend on some shared state.<br>软件里的竞态条件发生在一个应用程序依赖进程或者线程的执行顺序和时间以确保该程序执行正确的时候。竞态条件总是发生在进程或线程依赖某些共享资源的时候。</p>
-</blockquote>
-<h4 id="一个临界区的例子："><a href="#一个临界区的例子：" class="headerlink" title="一个临界区的例子："></a>一个临界区的例子：</h4><figure class="highlight axapta"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Counter</span> </span>&#123;</div><div class="line">    <span class="keyword">protected</span> <span class="keyword">long</span> <span class="keyword">count</span> = <span class="number">0</span>;</div><div class="line"></div><div class="line">    <span class="keyword">public</span> <span class="keyword">void</span> add(<span class="keyword">long</span> value)&#123;</div><div class="line">        <span class="keyword">this</span>.<span class="keyword">count</span> = <span class="keyword">this</span>.<span class="keyword">count</span> + value;</div><div class="line">    &#125;</div><div class="line"> &#125;</div></pre></td></tr></table></figure>
-<h3 id="什么是线程安全？"><a href="#什么是线程安全？" class="headerlink" title="什么是线程安全？"></a>什么是线程安全？</h3><hr>
-<blockquote>
-<p><strong>tips</strong>: Code that is safe to call by multiple threads simultanously is called thread safe. If a piece of code is thread safe, then it contains no race conditions.<br>能被多个线程同时安全地调用的代码就是线程安全。如果一段代码是安全的，那么它就不存在竞态条件。</p>
-<ul>
-<li>Thread safe: Implementation is guaranteed to be free of race conditions when accessed by multiple threads simultaneously.</li>
-<li>Conditionally safe: Different threads can access different objects simultaneously, and access to shared data is protected from race conditions.</li>
-<li><p>Not thread safe: Code should not be accessed simultaneously by different threads.</p>
-</li>
-<li><p>线程安全：实现以保证多个线程同时访问不存在竞态条件</p>
-</li>
-<li>条件安全：不同的线程可以同时访问不同的对象，且在访问共享资源时保护以免于竞态条件</li>
-<li>非线程安全：代码不能被多个线程同时访问</li>
-</ul>
-</blockquote>
-<h3 id="可见性和竞态条件的关系？"><a href="#可见性和竞态条件的关系？" class="headerlink" title="可见性和竞态条件的关系？"></a>可见性和竞态条件的关系？</h3><hr>
-<blockquote>
-<p>如果存在竞态条件，那么就必须保证变量的可见性</p>
-</blockquote>
-<h3 id="可见性和线程安全的关系？"><a href="#可见性和线程安全的关系？" class="headerlink" title="可见性和线程安全的关系？"></a>可见性和线程安全的关系？</h3><hr>
-<blockquote>
-<p>严格意义上，线程安全其实是相对于非线程安全的，即包含了线程安全和条件安全两部分。</p>
-<p>Below we discuss two approaches for avoiding race conditions to achieve thread safety.</p>
-<p>The first class of approaches focuses on avoiding shared state, and includes:<br>也就是纯粹的线程安全。</p>
-<ul>
-<li>Re-entrancy<br>  Writing code in such a way that it can be partially executed by a thread, reexecuted by the same thread or simultaneously executed by another thread and still correctly complete the original execution. This requires the saving of state information in variables local to each execution, usually on a stack, instead of in static or global variables or other non-local state. All non-local state must be accessed through atomic operations and the data-structures must also be reentrant.</li>
-<li>Thread-local storage<br>  Variables are localized so that each thread has its own private copy. These variables retain their values across subroutine and other code boundaries, and are thread-safe since they are local to each thread, even though the code which accesses them might be executed simultaneously by another thread.</li>
-</ul>
-<p>The second class of approaches are synchronization-related, and are used in situations where shared state cannot be avoided:<br>也就是条件安全部分。</p>
-<ul>
-<li>Mutual exclusion<br>  Access to shared data is serialized using mechanisms that ensure only one thread reads or writes to the shared data at any time. Incorporation of mutual exclusion needs to be well thought out, since improper usage can lead to side-effects like deadlocks, livelocks and resource starvation.</li>
-<li>Atomic operations<br>  Shared data are accessed by using atomic operations which cannot be interrupted by other threads. This usually requires using special machine language instructions, which might be available in a runtime library. Since the operations are atomic, the shared data are always kept in a valid state, no matter how other threads access it. Atomic operations form the basis of many thread locking mechanisms, and are used to implement mutual exclusion primitives.</li>
-<li>Immutable objects<br>  The state of an object cannot be changed after construction. This implies both that only read-only data is shared and that inherent thread safety is attained. Mutable (non-const) operations can then be implemented in such a way that they create new objects instead of modifying existing ones. This approach is used by the string implementations in Java, C# and Python.<br>所以可见性只是针对于条件安全部分而言的。</li>
-</ul>
-</blockquote>
-<h3 id="竞态条件和线程安全的关系？"><a href="#竞态条件和线程安全的关系？" class="headerlink" title="竞态条件和线程安全的关系？"></a>竞态条件和线程安全的关系？</h3><hr>
-<blockquote>
-<p>避免竞态条件以获得线程安全。换句话说，避免竞态条件是线程安全的充要条件。</p>
-</blockquote>
-<h3 id="为什么说跨越内存栅栏（可见性）和避免竞态条件是同步相关的两大主要问题？"><a href="#为什么说跨越内存栅栏（可见性）和避免竞态条件是同步相关的两大主要问题？" class="headerlink" title="为什么说跨越内存栅栏（可见性）和避免竞态条件是同步相关的两大主要问题？"></a>为什么说跨越内存栅栏（可见性）和避免竞态条件是同步相关的两大主要问题？</h3><hr>
-<blockquote>
-<p>跨越内存栅栏（可见性）是应对竞态条件的一种方式，出现竞态条件必须确保可见性。举个例子：一个写线程写完之后，要保证所做更改对其它线程可见，否则会让其它线程读到脏数据。<br>避免竞态条件的方式有很多种，包括上述的线程安全的各种手段。</p>
-</blockquote>
-<h3 id="相关术语"><a href="#相关术语" class="headerlink" title="相关术语"></a>相关术语</h3><hr>
-<blockquote>
-<ol>
-<li>livelock（活锁）：请求一个锁的时候不断失败。</li>
-<li>starvation（饿死）：无法定期访问共享资源来执行，发生在某个线程长期霸占共享资源的时候。</li>
-</ol>
-<ul>
-<li>Starvation<br>Starvation describes a situation where a thread is unable to gain regular access to shared resources and is unable to make progress. This happens when shared resources are made unavailable for long periods by “greedy” threads. For example, suppose an object provides a synchronized method that often takes a long time to return. If one thread invokes this method frequently, other threads that also need frequent synchronized access to the same object will often be blocked.</li>
-<li>Livelock<br>A thread often acts in response to the action of another thread. If the other thread’s action is also a response to the action of another thread, then livelock may result. As with deadlock, livelocked threads are unable to make further progress. However, the threads are not blocked — they are simply too busy responding to each other to resume work. This is comparable to two people attempting to pass each other in a corridor: Alphonse moves to his left to let Gaston pass, while Gaston moves to his right to let Alphonse pass. Seeing that they are still blocking each other, Alphone moves to his right, while Gaston moves to his left. They’re still blocking each other, so…</li>
-</ul>
-</blockquote>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;h3 id=&quot;什么是竞态条件？&quot;&gt;&lt;a href=&quot;#什么是竞态条件？&quot; class=&quot;headerlink&quot; title=&quot;什么是竞态条件？&quot;&gt;&lt;/a&gt;什么是竞态条件？&lt;/h3&gt;&lt;hr&gt;
-&lt;blockquote&gt;
-&lt;p&gt;&lt;strong&gt;tips&lt;/strong&gt;: The s
-    
-    </summary>
-    
-      <category term="技术" scheme="https://lameta.com/categories/%E6%8A%80%E6%9C%AF/"/>
-    
-    
-      <category term="concurrency" scheme="https://lameta.com/tags/concurrency/"/>
     
   </entry>
   

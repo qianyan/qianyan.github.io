@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    
+    <title>release jar to maven central repository | λ</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+        <meta name="keywords" content="java" />
+    
+    <meta name="description" content="太长不读篇
+在 issues tracker 上注册
+创建 issue
+配置 build.gradle
+gpg 生成 key pair 以便签名
+上传 Release Archive
+关闭并验证 Staging 环境的 Archive
+发布 Archive
+通知 issue 管理员开启同步
+
+细读篇注册Maven Central 网站并不提供注册的功能，你需要到 Sonatype 网站上进行注册。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="release jar to maven central repository">
+<meta property="og:url" content="https://lameta.com/2017/09/15/release-jar-to-maven-central-repository/index.html">
+<meta property="og:site_name" content="λ">
+<meta property="og:description" content="太长不读篇
+在 issues tracker 上注册
+创建 issue
+配置 build.gradle
+gpg 生成 key pair 以便签名
+上传 Release Archive
+关闭并验证 Staging 环境的 Archive
+发布 Archive
+通知 issue 管理员开启同步
+
+细读篇注册Maven Central 网站并不提供注册的功能，你需要到 Sonatype 网站上进行注册。">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/217988-502c1f4fc580c120.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2017-09-15T14:30:47.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="release jar to maven central repository">
+<meta name="twitter:description" content="太长不读篇
+在 issues tracker 上注册
+创建 issue
+配置 build.gradle
+gpg 生成 key pair 以便签名
+上传 Release Archive
+关闭并验证 Staging 环境的 Archive
+发布 Archive
+通知 issue 管理员开启同步
+
+细读篇注册Maven Central 网站并不提供注册的功能，你需要到 Sonatype 网站上进行注册。">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/217988-502c1f4fc580c120.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+    
+
+    
+        <link rel="alternate" href="/atom.xml" title="λ" type="application/atom+xml" />
+    
+
+    
+        <link rel="icon" href="/favicon.ico# path to favicon" />
+    
+
+    <link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/libs/titillium-web/styles.css">
+    <link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <script src="/libs/jquery/2.0.3/jquery.min.js"></script>
+    
+    
+        <link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+    
+    
+    
+        <script type="text/javascript">
+(function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-83870107-1# enter the tracking ID for your Google Analytics', 'auto');
+ga('send', 'pageview');
+
+</script>
+    
+    
+        <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?e6231610fe66acf322391d7546c28f21# enter Baidu Analytics hash key";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+    
+
+</head>
+
+<body>
+    <div id="wrap">
+        <header id="header">
+    <div id="header-outer" class="outer">
+        <div class="container">
+            <div class="container-inner">
+                <div id="header-title">
+                    <h1 class="logo-wrap">
+                        <a href="/" class="logo"></a>
+                    </h1>
+                    
+                        <h2 class="subtitle-wrap">
+                            <p class="subtitle">(conj clojurians me)</p>
+                        </h2>
+                    
+                </div>
+                <div id="header-inner" class="nav-container">
+                    <a id="main-nav-toggle" class="nav-icon fa fa-bars"></a>
+                    <div class="nav-container-inner">
+                        <ul id="main-nav">
+                            
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" href="/">主页</a>
+                                </li>
+                            
+                                        <ul class="main-nav-list"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Clojure/">Clojure</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/技术/">技术</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/生活/">生活</a></li></ul>
+                                    
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" href="/about/index.html">关于</a>
+                                </li>
+                            
+                        </ul>
+                        <nav id="sub-nav">
+                            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="想要查找什么..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+        <div class="container">
+            <div class="main-body container-inner">
+                <div class="main-body-inner">
+                    <section id="main">
+                        <div class="main-body-header">
+    <h1 class="header">
+    
+    <a class="page-title-link" href="/categories/技术/">技术</a>
+    </h1>
+</div>
+                        <div class="main-body-content">
+                            <article id="post-release-jar-to-maven-central-repository" class="article article-single article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+        release jar to maven central repository
+        </h1>
+    
+
+            </header>
+        
+        
+            <div class="article-meta">
+                
+    <div class="article-date">
+        <a href="/2017/09/15/release-jar-to-maven-central-repository/" class="article-date">
+            <time datetime="2017-09-15T14:29:07.000Z" itemprop="datePublished">2017-09-15</time>
+        </a>
+    </div>
+
+                
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/java/">java</a>
+    </div>
+
+            </div>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+            <h2 id="太长不读篇"><a href="#太长不读篇" class="headerlink" title="太长不读篇"></a>太长不读篇</h2><ol>
+<li>在 <a href="https://issues.sonatype.org/secure/Signup!default.jspa" target="_blank" rel="external">issues tracker</a> 上注册</li>
+<li>创建 <a href="https://issues.sonatype.org/browse/OSSRH-33944" target="_blank" rel="external">issue</a></li>
+<li>配置 <a href="https://github.com/qianyan/underscore.string.java/blob/master/build.gradle" target="_blank" rel="external">build.gradle</a></li>
+<li>gpg 生成 key pair 以便签名</li>
+<li>上传 Release Archive</li>
+<li>关闭并验证 <a href="https://oss.sonatype.org/" target="_blank" rel="external">Staging 环境</a>的 Archive</li>
+<li>发布 Archive</li>
+<li>通知 issue 管理员开启同步</li>
+</ol>
+<h2 id="细读篇"><a href="#细读篇" class="headerlink" title="细读篇"></a>细读篇</h2><h3 id="注册"><a href="#注册" class="headerlink" title="注册"></a>注册</h3><p>Maven Central 网站并不提供注册的功能，你需要到 Sonatype 网站上进行注册。而事实上，Sonatype 网站也没有直接提供一个注册链接。真正的注册入口在 <a href="https://issues.sonatype.org/secure/Signup!default.jspa" target="_blank" rel="external">issues tracker</a> 上。一旦完成注册后，你需要创建包含待发布包信息的 issue。</p>
+<h3 id="创建-issue"><a href="#创建-issue" class="headerlink" title="创建 issue"></a>创建 issue</h3><p><img src="http://upload-images.jianshu.io/upload_images/217988-502c1f4fc580c120.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="创建 issues"></p>
+<p>在 Sonatype 的 <a href="https://issues.sonatype.org/secure/Dashboard.jspa" target="_blank" rel="external">dashboard</a> 上点击创建按钮，根据弹出框的提示，填写简介、描述、GroupId、Project URL、SCM url 以及你在 jira 上的用户名。创建完毕后，会被自动跳转到该 issue 的详情页并分配一个唯一的ID，如：OSSRH-33944。余下的时间只需要等待，一般在两个工作日之内，Sonatype 的工作人员就会着手处理，然后他会在该 issue 底下的评论区留言。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/217988-29e35a58393f39ce.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="创建成功的 issue"></p>
+<p>如果代码是托管在 github 上，按照惯例，GroupId 应该取 github 上的域名，比如：com.github.qianyan。不过，这里我预备上传的包的 GroupId 是 com.lambeta，这是我购买的域名。审核者对此有所顾虑，所以很贴心地留言如下：</p>
+<blockquote>
+<p>Do you own the domain lambeta.com? If not, please read:<br><a href="http://central.sonatype.org/pages/choosing-your-coordinates.html" target="_blank" rel="external">http://central.sonatype.org/pages/choosing-your-coordinates.html</a><br>You may also choose a groupId that reflects your project hosting, in this case, something like io.github.qianyan or com.github.qianyan</p>
+</blockquote>
+<p>在回复这个域名确实为我所有之后，工作人员就贴出不同环境的仓库地址。</p>
+<blockquote>
+<p>Configuration has been prepared, now you can:<br>Deploy snapshot artifacts into repository <a href="https://oss.sonatype.org/content/repositories/snapshots" target="_blank" rel="external">https://oss.sonatype.org/content/repositories/snapshots</a><br>Deploy release artifacts into the staging repository <a href="https://oss.sonatype.org/service/local/staging/deploy/maven2" target="_blank" rel="external">https://oss.sonatype.org/service/local/staging/deploy/maven2</a><br>Promote staged artifacts into repository ‘Releases’<br>Download snapshot and release artifacts from group <a href="https://oss.sonatype.org/content/groups/public" target="_blank" rel="external">https://oss.sonatype.org/content/groups/public</a><br>Download snapshot, release and staged artifacts from staging group <a href="https://oss.sonatype.org/content/groups/staging" target="_blank" rel="external">https://oss.sonatype.org/content/groups/staging</a><br><strong>please comment on this ticket when you promoted your first release, thanks</strong></p>
+</blockquote>
+<p><strong>最后一句很重要</strong>，说的是，当我第一次正式发布的时候，需要留言告知工作人员，以便他们开启中央仓库的同步，这样我的包才会在 Maven Central 仓库中可见。</p>
+<h3 id="配置项目的-build-gradle"><a href="#配置项目的-build-gradle" class="headerlink" title="配置项目的 build.gradle"></a>配置项目的 build.gradle</h3><p>拿到仓库地址，我们就需要在自己的项目中进行一些必要的配置，包含：jar、sourcesJar、javadocJar 以及对这些产物的 signing（签名）。</p>
+<h4 id="maven-插件"><a href="#maven-插件" class="headerlink" title="maven 插件"></a>maven 插件</h4><figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">apply <span class="string">plugin:</span> <span class="string">'maven'</span></div></pre></td></tr></table></figure>
+<p>maven 插件提供了 uploadArchives task，我们需要在这个 task 中配置仓库地址，以及 pom 的相关信息，因为上载到 maven 仓库的包必须要有 pom 文件，否则无法查找或被依赖。具体配置如下：<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div></pre></td><td class="code"><pre><div class="line">uploadArchives &#123;</div><div class="line">    repositories &#123;</div><div class="line">        mavenDeployer &#123;</div><div class="line">            beforeDeployment &#123; deployment -&gt; signing.signPom(deployment) &#125;</div><div class="line"></div><div class="line">            repository(<span class="string">url:</span> <span class="string">"https://oss.sonatype.org/service/local/staging/deploy/maven2/"</span>) &#123;</div><div class="line">                authentication(<span class="string">userName:</span> ossrhUsername, <span class="string">password:</span> ossrhPassword)</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            snapshotRepository(<span class="string">url:</span> <span class="string">"https://oss.sonatype.org/content/repositories/snapshots"</span>) &#123;</div><div class="line">                authentication(<span class="string">userName:</span> sonatypeUsername, <span class="string">password:</span> sonatypePassword)</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            pom.project &#123;</div><div class="line">                name project.name</div><div class="line">                packaging <span class="string">'jar'</span></div><div class="line">                description <span class="string">'underscore string in java'</span></div><div class="line">                url <span class="string">'https://github.com/qianyan/underscore.string.java'</span></div><div class="line"></div><div class="line">                scm &#123;</div><div class="line">                    url <span class="string">'https://github.com/qianyan/underscore.string.java'</span></div><div class="line">                    connection <span class="string">'https://github.com/qianyan/underscore.string.java.git'</span></div><div class="line">                    developerConnection <span class="string">'git@github.com:qianyan/underscore.string.java.git'</span></div><div class="line">                &#125;</div><div class="line"></div><div class="line">                licenses &#123;</div><div class="line">                    license &#123;</div><div class="line">                        name <span class="string">'MIT Licence'</span></div><div class="line">                        url <span class="string">'https://raw.githubusercontent.com/qianyan/underscore.string.java/master/LICENSE'</span></div><div class="line">                        distribution <span class="string">'repo'</span></div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line"></div><div class="line">                developers &#123;</div><div class="line">                    developer &#123;</div><div class="line">                        id <span class="string">'lambeta'</span></div><div class="line">                        name <span class="string">'Yan Qian'</span></div><div class="line">                        email <span class="string">'qianyan.lambeta@gmail.com'</span></div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>对应生成的 pom.xml 大致如下：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">name</span>&gt;</span>underscore.string.java<span class="tag">&lt;/<span class="name">name</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">description</span>&gt;</span>underscore string in java<span class="tag">&lt;/<span class="name">description</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">url</span>&gt;</span>https://github.com/qianyan/underscore.string.java<span class="tag">&lt;/<span class="name">url</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">licenses</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">license</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">name</span>&gt;</span>MIT Licence<span class="tag">&lt;/<span class="name">name</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">url</span>&gt;</span>https://raw.githubusercontent.com/qianyan/underscore.string.java/master/LICENSE<span class="tag">&lt;/<span class="name">url</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">distribution</span>&gt;</span>repo<span class="tag">&lt;/<span class="name">distribution</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">license</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">licenses</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">developers</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">developer</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">id</span>&gt;</span>lambeta<span class="tag">&lt;/<span class="name">id</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">name</span>&gt;</span>Yan Qian<span class="tag">&lt;/<span class="name">name</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">email</span>&gt;</span>qianyan.lambeta@gmail.com<span class="tag">&lt;/<span class="name">email</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">developer</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">developers</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">scm</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">connection</span>&gt;</span>https://github.com/qianyan/underscore.string.java.git<span class="tag">&lt;/<span class="name">connection</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">developerConnection</span>&gt;</span>git@github.com:qianyan/underscore.string.java.git<span class="tag">&lt;/<span class="name">developerConnection</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">url</span>&gt;</span>https://github.com/qianyan/underscore.string.java<span class="tag">&lt;/<span class="name">url</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">scm</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<p><strong>注意</strong> <code>authentication(userName: ossrhUsername, password: ossrhPassword)</code> 和 <code>authentication(userName: sonatypeUsername, password: sonatypePassword)</code>，这里的用户名和密码其实就是在 Sonatype 上注册的用户名和密码。为了让 gradle 脚本顺利执行，需要在当前工程下的 gradle.properties 文件中设置对应的变量，如下：<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">sonatypeUsername=</div><div class="line">sonatypePassword=</div><div class="line">ossrhUsername=</div><div class="line">ossrhPassword=</div></pre></td></tr></table></figure></p>
+<p>这份文件会作为源代码的一部分提交，所以聪明的我们不会傻傻地把自己的用户名和密码 push 到 github 上面。和大部分 *nix 系统上的工具类似，gradle 也有本地配置，我们可以新建一份 gradle.properties 文件到 <code>~/.gradle/gradle.properties</code>，然后把用户名和密码写入其中。这样，实际运行时，本地配置就会覆盖项目下对应的这些变量值。</p>
+<h4 id="设置-gpg-以签名-Archive"><a href="#设置-gpg-以签名-Archive" class="headerlink" title="设置 gpg 以签名 Archive"></a>设置 gpg 以签名 Archive</h4><p>gpg 生成的 key pair 主要是供签名使用的。假定本机已经安装 gpg，首先使用 gpg 生成 key pair。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ gpg --gen-key</div></pre></td></tr></table></figure></p>
+<p>然后，查找你的 keyId：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$ gpg --list-keys</div><div class="line"># -&gt;</div><div class="line">pub   2048R/XXXXXX 2017-09-14 [expires: 2018-05-14]</div><div class="line">uid       [ultimate] Yan Qian (lambeta) &lt;qianyan.lambeta@gmail.com&gt;</div></pre></td></tr></table></figure></p>
+<p>其中 XXXXXX 就是你的 keyId。接下来必须发布你的公钥：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ gpg --keyserver hkp://pgp.mit.edu --send-keys XXXXXX</div></pre></td></tr></table></figure></p>
+<p>验证公钥已经发布成功：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ gpg --keyserver hkp://pgp.mit.edu --search-keys qianyan.lambeta@gamil.com # user email address</div></pre></td></tr></table></figure></p>
+<h4 id="signing-插件"><a href="#signing-插件" class="headerlink" title="signing 插件"></a>signing 插件</h4><p>完成上述步骤之后，我们需要在 build.gradle 中添加 signing 插件及其配置，如下：<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">apply <span class="string">plugin:</span> <span class="string">'signing'</span></div><div class="line"></div><div class="line">signing &#123;</div><div class="line">    required &#123; gradle.taskGraph.hasTask(<span class="string">"uploadArchives"</span>) &#125;</div><div class="line">    sign configurations.archives</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>上面的配置明确了 gradle task 的 DAG 中必须含有 uploadArchives，之后针对 archives 进行签名。</p>
+<p>signing 插件如何同 gpg 生成 key pair 交互呢？这就需要在<code>~/.gradle/gradle.properties</code>再声明三个变量，如下：<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">signing.keyId=XXXXXX</div><div class="line">signing.password=your_key_pair_password</div><div class="line">signing.secretKeyRingFile=<span class="regexp">/Users/</span>your_name<span class="regexp">/.gnupg/</span>secring.gpg</div></pre></td></tr></table></figure></p>
+<p>还剩下最后的一步，归档 Jar，sourceJar（源代码）和javadocJar（API 文档），这些是需要签名的对象。</p>
+<h4 id="archive"><a href="#archive" class="headerlink" title="archive"></a>archive</h4><figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">apply <span class="string">plugin:</span> <span class="string">'java'</span></div><div class="line"></div><div class="line">task sourcesJar(<span class="string">type:</span> Jar) &#123;</div><div class="line">    classifier = <span class="string">'sources'</span></div><div class="line">    from sourceSets.main.allSource</div><div class="line">&#125;</div><div class="line"></div><div class="line">task javadocJar(<span class="string">type:</span> Jar, <span class="string">dependsOn:</span> javadoc) &#123;</div><div class="line">    classifier = <span class="string">'javadoc'</span></div><div class="line">    from <span class="string">'build/docs/javadoc'</span></div><div class="line">&#125;</div><div class="line"></div><div class="line">artifacts &#123;</div><div class="line">    archives jar</div><div class="line">    archives sourcesJar</div><div class="line">    archives javadocJar</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>归档产物最终都会被签名，生成以 .asc 为后缀的签名文件。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">build/libs</div><div class="line">├── underscore.string.java-0.0.1-javadoc.jar</div><div class="line">├── underscore.string.java-0.0.1-javadoc.jar.asc</div><div class="line">├── underscore.string.java-0.0.1-sources.jar</div><div class="line">├── underscore.string.java-0.0.1-sources.jar.asc</div><div class="line">├── underscore.string.java-0.0.1.jar</div><div class="line">└── underscore.string.java-0.0.1.jar.asc</div></pre></td></tr></table></figure></p>
+<p>这些产出物在最终发布的时候，需要经过验证，如果验证失败，比如：缺少 javadoc 或者某个 *.asc 文件，则不被允许发布。</p>
+<h3 id="上传-Release-Archives"><a href="#上传-Release-Archives" class="headerlink" title="上传 Release Archives"></a>上传 Release Archives</h3><p>根据的 maven 的标准，日常开发我们会使用 snapshot 版本，如：0.0.1-SNAPSHOT；发布时，去掉后缀-SNAPSHOT，即：0.0.1。而 maven 会根据这个特点，机智地辨识是上传到 snapshotRepository 还是 releaseRepository 的。因为我们得发布包，所以修改版本为 0.0.1 之后，我们只需要简单地执行如下命令：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ gradle uploadArchives # or `gradle uA` this is a shortcut.</div></pre></td></tr></table></figure></p>
+<h3 id="关闭并验证-Staging-环境上的-Archive"><a href="#关闭并验证-Staging-环境上的-Archive" class="headerlink" title="关闭并验证 Staging 环境上的 Archive"></a>关闭并验证 Staging 环境上的 Archive</h3><p><img src="http://upload-images.jianshu.io/upload_images/217988-c6a888ec20e93530.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="staging Repo"></p>
+<p>登录 Sonatype 的 <a href="https://oss.sonatype.org/" target="_blank" rel="external">Nexus Repository Manager</a>，然后点击左边侧边栏的 Staging Repositories，搜索<code>comlambeta</code> (GroupId 去掉中间的’.’)。接下来查看 Content tab，重点检查 pom 或者签名文件是否遗漏！当确认无误后，即可关闭 (Close) 这个 Repo。关闭过程中，Nexus 会逐项检查产物是否合规，如果出现验证错误，则在 Activity tab 中显示具体失败的步骤及原因。</p>
+<h3 id="发布-Archive"><a href="#发布-Archive" class="headerlink" title="发布 Archive"></a>发布 Archive</h3><p>如果上面的验证通过，上面本来不可用的 Release 按钮会变为可用。点击 Release 按钮，直接发布包。</p>
+<h3 id="通知-issue-管理员开启同步"><a href="#通知-issue-管理员开启同步" class="headerlink" title="通知 issue 管理员开启同步"></a>通知 issue 管理员开启同步</h3><p>发布包之后，就可以通知管理员开启同步。我在原来的 issue 的评论区留言：</p>
+<blockquote>
+<p>I have a first release version 0.0.1 for this library.</p>
+</blockquote>
+<p>很快地，管理员就回复同步已经开启：</p>
+<blockquote>
+<p>Central sync is activated for com.lambeta. After you successfully release, your component will be published to Central, typically within 10 minutes, though updates to search.maven.org can take up to two hours.</p>
+</blockquote>
+<p>不过，由于当时所用 gradle2.1 的版本，导致了上传时 pom 文件被遗漏，在 search.maven.org 中搜索不到。管理员很热心地解释了这个现象：</p>
+<blockquote>
+<p>search.maven.org needs a valid POM file to be a part of your uploaded artifacts. Browsing Maven Central directly:<br><a href="http://repo1.maven.org/maven2/com/lambeta/underscore.string.java/0.0.1/" target="_blank" rel="external">http://repo1.maven.org/maven2/com/lambeta/underscore.string.java/0.0.1/</a><br>it appears that a POM file is missing.</p>
+</blockquote>
+<p>遂升级到 3.1 版本，重新上传之后就能在 <a href="http://search.maven.org/#search%7Cga%7C1%7Ccom.lambeta" target="_blank" rel="external">search.maven.org</a> 中看到。</p>
+<h3 id="检查同步成功"><a href="#检查同步成功" class="headerlink" title="检查同步成功"></a>检查同步成功</h3><p>除了通过 <a href="http://search.maven.org/#search%7Cga%7C1%7Ccom.lambeta" target="_blank" rel="external">search.maven.org</a> 检查同步是否成功之外，查询<a href="http://mvnrepository.com/search?q=com.lambeta" target="_blank" rel="external">mvnrepository</a>也是常用的搜索方式。不过，值得一提的是，mvnrepository 相较于 search.maven.org 同步会更慢点，原因是 mvnrepository 引用了 central.maven.org 仓库。而 <code>central.maven.org == repo1.maven.org</code>，两个域名对应的 IP 是一样的，而这个 repo1.maven.org 就是默认的 Maven central repository。<br>所以，你可以在以下两个仓库看到发布包：<br><a href="http://central.maven.org/maven2/com/lambeta/underscore.string.java/" target="_blank" rel="external">http://central.maven.org/maven2/com/lambeta/underscore.string.java/</a><br><a href="http://repo1.maven.org/maven2/com/lambeta/underscore.string.java/" target="_blank" rel="external">http://repo1.maven.org/maven2/com/lambeta/underscore.string.java/</a></p>
+<hr>
+<p>参考链接<br>[1] <a href="http://zserge.com/blog/gradle-maven-publish.html" target="_blank" rel="external">simple library publishing with gradle</a><br>[2] <a href="http://central.sonatype.org/pages/releasing-the-deployment.html" target="_blank" rel="external">release deployment</a></p>
+
+        </div>
+        <footer class="article-footer">
+            
+
+
+
+    <a data-url="https://lameta.com/2017/09/15/release-jar-to-maven-central-repository/" data-id="cj7lzeobl0041obm406rnc9a2" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
+<script>
+    (function ($) {
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+</script>
+
+        </footer>
+    </div>
+</article>
+
+    <section id="comments">
+    
+        
+    <div class="ds-thread" data-thread-key="2017/09/15/release-jar-to-maven-central-repository/" data-title="release jar to maven central repository" data-url="https://lameta.com/2017/09/15/release-jar-to-maven-central-repository/"></div>
+    <style>
+        #ds-thread #ds-reset .ds-textarea-wrapper {
+            background: none;
+        }
+        #ds-reset .ds-avatar img {
+            box-shadow: none;
+        }
+        #ds-reset .ds-gradient-bg {
+            background: #f7f7f7;
+        }
+        #ds-thread #ds-reset li.ds-tab a {
+            border-radius: 3px;
+        }
+        #ds-thread #ds-reset .ds-post-button {
+            color: white;
+            border: none;
+            box-shadow: none;
+            background: #d32;
+            text-shadow: none;
+            font-weight: normal;
+            font-family: 'Microsoft Yahei';
+        }
+        #ds-thread #ds-reset .ds-post-button:hover {
+            color: white;
+            background: #DE594C;
+        }
+        #ds-thread #ds-reset .ds-post-button:active {
+            background: #d32;
+        }
+        #ds-smilies-tooltip ul.ds-smilies-tabs li a.ds-current {
+            color: white;
+            background: #d32;
+            box-shadow: none;
+            text-shadow: none;
+            font-weight: normal;
+        }
+    </style>
+
+    
+    </section>
+
+
+                        </div>
+                    </section>
+                    <aside id="sidebar">
+    <a class="sidebar-toggle" title="Expand Sidebar"><i class="toggle icon"></i></a>
+    <div class="sidebar-top">
+        <p>关注我 :</p>
+        <ul class="social-links">
+            
+                
+                <li>
+                    <a class="social-tooltip" title="twitter" href="https://twitter.com/lambetaX" target="_blank">
+                        <i class="icon fa fa-twitter"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="github" href="https://github.com/qianyan" target="_blank">
+                        <i class="icon fa fa-github"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="weibo" href="http://weibo.com/3672207020/" target="_blank">
+                        <i class="icon fa fa-weibo"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="rss" href="/atom.xml" target="_blank">
+                        <i class="icon fa fa-rss"></i>
+                    </a>
+                </li>
+                
+            
+        </ul>
+    </div>
+    
+        
+<nav id="article-nav">
+    
+    
+        <a href="/2017/09/06/Underscore-string-java/" id="article-nav-older" class="article-nav-link-wrap">
+        <strong class="article-nav-caption">上一篇</strong>
+        <p class="article-nav-title">一个Java中操作字符串的类库</p>
+        <i class="icon fa fa-chevron-left" id="icon-chevron-left"></i>
+        </a>
+    
+</nav>
+
+    
+    <div class="widgets-container">
+        
+            
+                
+    <div class="widget-wrap">
+        <h3 class="widget-title">最新文章</h3>
+        <div class="widget">
+            <ul id="recent-post" class="no-thumbnail">
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/技术/">技术</a></p>
+                            <p class="item-title"><a href="/2017/09/15/release-jar-to-maven-central-repository/" class="title">release jar to maven central repository</a></p>
+                            <p class="item-date"><time datetime="2017-09-15T14:29:07.000Z" itemprop="datePublished">2017-09-15</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"></p>
+                            <p class="item-title"><a href="/2017/09/06/Underscore-string-java/" class="title">一个Java中操作字符串的类库</a></p>
+                            <p class="item-date"><time datetime="2017-09-06T15:02:28.000Z" itemprop="datePublished">2017-09-06</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/技术/">技术</a></p>
+                            <p class="item-title"><a href="/2017/04/27/How-to-active-different-profiles-in-SpringBootTest/" class="title">How to activate different profiles in SpringBootTest</a></p>
+                            <p class="item-date"><time datetime="2017-04-27T00:39:56.000Z" itemprop="datePublished">2017-04-27</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Clojure/">Clojure</a></p>
+                            <p class="item-title"><a href="/2017/04/18/Techniques-for-Efficiently-Learning-Programming-Languages/" class="title">如何高效地学习编程语言</a></p>
+                            <p class="item-date"><time datetime="2017-04-18T07:15:09.000Z" itemprop="datePublished">2017-04-18</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/技术/">技术</a></p>
+                            <p class="item-title"><a href="/2017/03/01/Pipleline-as-Code/" class="title">Pipleline as Code</a></p>
+                            <p class="item-date"><time datetime="2017-03-01T02:19:13.000Z" itemprop="datePublished">2017-03-01</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">分类</h3>
+        <div class="widget">
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Clojure/">Clojure</a><span class="category-list-count">8</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/技术/">技术</a><span class="category-list-count">41</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/生活/">生活</a><span class="category-list-count">2</span></li></ul>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">归档</h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">九月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">五月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">四月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">十一月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">七月 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">三月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">二月 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">一月 2015</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/11/">十一月 2014</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/10/">十月 2014</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/09/">九月 2014</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/07/">七月 2014</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/05/">五月 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02/">二月 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/01/">一月 2014</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/12/">十二月 2013</a><span class="archive-list-count">5</span></li></ul>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-float">
+        <h3 class="widget-title">标签云</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/FP/" style="font-size: 12.5px;">FP</a> <a href="/tags/Mistakes-I-Hav-Made/" style="font-size: 15px;">Mistakes I Hav Made</a> <a href="/tags/OO/" style="font-size: 10px;">OO</a> <a href="/tags/angularJs/" style="font-size: 10px;">angularJs</a> <a href="/tags/concurrency/" style="font-size: 10px;">concurrency</a> <a href="/tags/emacs/" style="font-size: 10px;">emacs</a> <a href="/tags/file/" style="font-size: 10px;">file</a> <a href="/tags/geek/" style="font-size: 10px;">geek</a> <a href="/tags/gradle/" style="font-size: 10px;">gradle</a> <a href="/tags/java/" style="font-size: 20px;">java</a> <a href="/tags/javascript/" style="font-size: 17.5px;">javascript</a> <a href="/tags/kata/" style="font-size: 10px;">kata</a> <a href="/tags/language/" style="font-size: 15px;">language</a> <a href="/tags/leiningen/" style="font-size: 10px;">leiningen</a> <a href="/tags/maven/" style="font-size: 10px;">maven</a> <a href="/tags/mysql/" style="font-size: 12.5px;">mysql</a> <a href="/tags/node/" style="font-size: 12.5px;">node</a> <a href="/tags/promise/" style="font-size: 10px;">promise</a> <a href="/tags/q/" style="font-size: 10px;">q</a> <a href="/tags/rake/" style="font-size: 10px;">rake</a> <a href="/tags/shell/" style="font-size: 15px;">shell</a> <a href="/tags/sublime/" style="font-size: 10px;">sublime</a> <a href="/tags/test/" style="font-size: 10px;">test</a> <a href="/tags/testing/" style="font-size: 10px;">testing</a> <a href="/tags/thinking/" style="font-size: 20px;">thinking</a> <a href="/tags/transaction/" style="font-size: 10px;">transaction</a> <a href="/tags/vim/" style="font-size: 12.5px;">vim</a> <a href="/tags/yeoman/" style="font-size: 10px;">yeoman</a> <a href="/tags/zeal/" style="font-size: 10px;">zeal</a> <a href="/tags/散文/" style="font-size: 10px;">散文</a>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">链接</h3>
+        <div class="widget">
+            <ul>
+                
+                    <li>
+                        <a href="http://blog.jayfields.com/">Jay Fields</a>
+                    </li>
+                
+                    <li>
+                        <a href="https://aphyr.com">Aphyr</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://bucharestfp.ro">Bucharest FP</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://www.yinwang.org">Wangyin</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://blog.rlmflores.me/">Rodrigo Flores</a>
+                    </li>
+                
+                    <li>
+                        <a href="https://seancorfield.github.io/">Seancorfield</a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+
+            
+        
+    </div>
+</aside>
+                </div>
+            </div>
+        </div>
+        <footer id="footer">
+    <div class="container">
+        <div class="container-inner">
+            <a id="back-to-top" href="javascript:;"><i class="icon fa fa-angle-up"></i></a>
+            <div class="credit">
+                <h1 class="logo-wrap">
+                    <a href="/" class="logo"></a>
+                </h1>
+                <p>&copy; 2017 lambeta</p>
+                <p>Powered by <a href="//hexo.io/" target="_blank">Hexo</a>. Theme by <a href="//github.com/ppoffice" target="_blank">PPOffice</a></p>
+            </div>
+        </div>
+    </div>
+</footer>
+        
+    
+    <script type="text/javascript">
+    var duoshuoQuery = {short_name:'lambeta'};
+    (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0]
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+    </script>
+
+
+
+
+    
+        <script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-share.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-video.min.js"></script>
+    
+    
+    
+
+
+<!-- Custom Scripts -->
+<script src="/js/main.js"></script>
+
+    </div>
+</body>
+</html>
