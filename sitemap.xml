@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://lameta.com/2017/09/17/release-jar-to-clojars/</loc>
+    
+    <lastmod>2017-09-17T13:43:16.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://lameta.com/2017/09/15/release-jar-to-maven-central-repository/</loc>
     
     <lastmod>2017-09-16T01:24:19.000Z</lastmod>

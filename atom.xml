@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://lameta.com/"/>
-  <updated>2017-09-16T01:24:19.000Z</updated>
+  <updated>2017-09-17T13:43:16.000Z</updated>
   <id>https://lameta.com/</id>
   
   <author>
@@ -14,6 +14,58 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>如何发布jar到clojars</title>
+    <link href="https://lameta.com/2017/09/17/release-jar-to-clojars/"/>
+    <id>https://lameta.com/2017/09/17/release-jar-to-clojars/</id>
+    <published>2017-09-17T13:39:40.000Z</published>
+    <updated>2017-09-17T13:43:16.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="Clojars-介绍"><a href="#Clojars-介绍" class="headerlink" title="Clojars 介绍"></a>Clojars 介绍</h2><p>Clojars 是一个为开源 Clojure 类库打造的仓库，截止2017年9月17日，大概有19831个项目发布在上面。整个网站也是用 Clojure 编写的。</p>
+<h2 id="发布-Clojure-library"><a href="#发布-Clojure-library" class="headerlink" title="发布 Clojure library"></a>发布 Clojure library</h2><h3 id="1-注册-clojars"><a href="#1-注册-clojars" class="headerlink" title="1. 注册 clojars"></a>1. 注册 clojars</h3><p>前往 <a href="https://clojars.org/register" target="_blank" rel="external">clojars</a> 注册</p>
+<h3 id="2-lein-部署"><a href="#2-lein-部署" class="headerlink" title="2. lein 部署"></a>2. lein 部署</h3><figure class="highlight delphi"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ lein deploy clojars # lein deploy [repository <span class="keyword">name</span>], here the repo <span class="keyword">name</span> <span class="keyword">is</span> clojars.</div></pre></td></tr></table></figure>
+<p>如果不想加上 <code>clojars</code> 参数，则需要在当前项目下的 <em>project.clj</em> 添加如下内容<br><figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">&#123;:deploy-repositories [[<span class="string">"releases"</span> :clojars]</div><div class="line">                       [<span class="string">"snapshots"</span> :clojars]]&#125;</div></pre></td></tr></table></figure></p>
+<p><strong>这里注意一点：</strong><br>这里使用 <code>:deploy-repositories</code> 而非 <code>:repositories</code>，原因是 <code>:repositories</code> 除了用于部署还会作为依赖源被项目使用。所以，如若必要，还是职责单一点好。这样，也可以加入 <em>:user profile (~/.lein/profiles.clj)</em> 供所有本地项目发布使用。</p>
+<p>这个时候可以执行<br><figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">$ lein deploy</div><div class="line">No credentials found for snapshots(did you mean `lein deploy clojars`?) // 这里应该是 leiningen 的 bug，提示信息 `lein deploy clojars` 显得很奇怪，可以忽略之。</div><div class="line">See `lein help deploying` for how to configure credentials to avoid prompts.</div><div class="line"><span class="symbol">Username:</span> username</div><div class="line"><span class="symbol">Password:</span> password</div></pre></td></tr></table></figure></p>
+<p>如上，这时会弹出用户名和密码输入框。为了节省时间，避免每次输入，最好把用户凭证 (credentials) 以文件的形式存放到用户范围的目录下，即<em>~/.lein/credentials.clj</em>，并做加密处理。</p>
+<h3 id="3-设置全局的-credentials-map"><a href="#3-设置全局的-credentials-map" class="headerlink" title="3. 设置全局的 credentials map"></a>3. 设置全局的 credentials map</h3><p>首先，把如下的 credentials map 写入 <em>~/.lein/credentials.clj</em><br><figure class="highlight clojure"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&#123;#<span class="string">"https://clojars.org/repo"</span> &#123;<span class="symbol">:username</span> <span class="string">"username_on_clojars"</span> <span class="symbol">:password</span> <span class="string">"password_on_clojars"</span>&#125;&#125;</div></pre></td></tr></table></figure></p>
+<p>其次，使用 gpg 加密该文件<br><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ gpg --default-recipient-self -e \</div><div class="line">    ~/.lein/credentials.clj &gt; ~/.lein/credentials.clj.gpg</div></pre></td></tr></table></figure></p>
+<p>加密后，即可删除原文件 <em>~/.lein/credentials.clj</em>。然后在<code>:deploy-repositories</code> map 中指定 <code>:creds :gpg</code><br><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&#123;:deploy-repositories [["releases" :clojars</div><div class="line">                        :creds :gpg]]</div><div class="line">                       ["snapshots" :clojars</div><div class="line">                        :creds :gpg]]&#125;</div></pre></td></tr></table></figure></p>
+<p>完成上述，<code>lein deploy</code> 的时候即可解密 <code>~/.lein/credentials.clj.gpg</code>，从中获取对应仓库的<code>username</code>和<code>password</code>（<strong>注：</strong>为了便于索引查找，credentials 使用正则表达式 #”<a href="https://clojars.org/repo" target="_blank" rel="external">https://clojars.org/repo</a>“ 作为 key）</p>
+<h2 id="Error-gpg-agent-timeout"><a href="#Error-gpg-agent-timeout" class="headerlink" title="Error: gpg agent timeout"></a>Error: gpg agent timeout</h2><p>有时候，deploy 时会出现链接 agent 超时的错误<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$ lein deploy</div><div class="line"><span class="string">gpg:</span> problem with the <span class="string">agent:</span> Timeout</div><div class="line"><span class="string">gpg:</span> decryption <span class="string">failed:</span> No secret key</div><div class="line">Could not decrypt credentials from <span class="regexp">/Users/</span>qianyan<span class="regexp">/.lein/</span>credentials.clj.gpg</div><div class="line">nil</div><div class="line">See `lein help gpg` <span class="keyword">for</span> how to install gpg.</div></pre></td></tr></table></figure></p>
+<p>仔细搜索<a href="">文档</a>会发现下面这句很重要的话</p>
+<blockquote>
+<p>Due to a bug in gpg you currently need to use gpg-agent and have already unlocked your key before Leiningen launches, but with gpg-agent you only have to enter your passphrase periodically; it will keep it cached for a given period.</p>
+</blockquote>
+<p>大意是，leiningen 需要用到 gpg-agent，而且在 <code>lein deploy</code> 之前，就应该解锁密钥。</p>
+<p>不实际操作的话，还是很难弄懂这句话具体的指代。我们不妨思考一下。</p>
+<h3 id="1-看看后台是否有个进程叫做-gpg-agent？"><a href="#1-看看后台是否有个进程叫做-gpg-agent？" class="headerlink" title="1. 看看后台是否有个进程叫做 gpg-agent？"></a>1. 看看后台是否有个进程叫做 gpg-agent？</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ ps -ef |grep gpg</div><div class="line">  501 87095     1   0  8:27PM ??         0:00.00 gpg-agent --daemon</div></pre></td></tr></table></figure>
+<p>嗯，还真有！</p>
+<h3 id="2-gpg-直接解密-credentials-clj-gpg"><a href="#2-gpg-直接解密-credentials-clj-gpg" class="headerlink" title="2. gpg 直接解密 credentials.clj.gpg"></a>2. gpg 直接解密 credentials.clj.gpg</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$ gpg --decrypt ~/.lein/credentials.clj.gpg</div><div class="line"></div><div class="line">You need a passphrase to unlock the secret key for</div><div class="line">user: &quot;Yan Qian (lambeta) &lt;qianyan.lambda@gmail.com&gt;&quot;</div><div class="line">2048-bit RSA key, ID E13DFD8A, created 2016-05-14 (main key ID 3C5030FF)</div><div class="line"># 接下来，漫无止境的等待中...</div></pre></td></tr></table></figure>
+<p>这奇怪的等待让我不安，所以我使出了杀手锏 <code>kill -9</code>，直接把 gpg-agent 干掉。</p>
+<h3 id="3-重新-gpg-–decrypt"><a href="#3-重新-gpg-–decrypt" class="headerlink" title="3. 重新 gpg –decrypt"></a>3. 重新 gpg –decrypt</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">$ gpg --decrypt ~/.lein/credentials.clj.gpg</div><div class="line"></div><div class="line">You need a passphrase to unlock the secret key for</div><div class="line">user: &quot;Yan Qian (lambeta) &lt;qianyan.lambda@gmail.com&gt;&quot;</div><div class="line">2048-bit RSA key, ID E13DFD8A, created 2016-05-14 (main key ID 3C5030FF)</div><div class="line"># 这里要输入 passphrase</div><div class="line">gpg: encrypted with 2048-bit RSA key, ID E13DFD8A, created 2016-05-14</div><div class="line">      &quot;Yan Qian (lambeta) &lt;qianyan.lambda@gmail.com&gt;&quot;</div><div class="line">&#123; #&quot;https://clojars.org/repo&quot; &#123;:username &quot;username_on_clojars&quot; :password &quot;password_on_clojars&quot;&#125;&#125;</div></pre></td></tr></table></figure>
+<p>终于可以输入 passphrase 了，解密完成。这大概就是上面引文所说的 unlock your key before Leiningen launches.</p>
+<h3 id="4-重新部署"><a href="#4-重新部署" class="headerlink" title="4. 重新部署"></a>4. 重新部署</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">$ lein deploy</div><div class="line">Created /Users/qianyan/Projects/clojure-pr/clj-moco/target/clj-moco-0.1.0-SNAPSHOT.jar</div><div class="line">Wrote /Users/qianyan/Projects/clojure-pr/clj-moco/pom.xml</div><div class="line">Retrieving clj-moco/clj-moco/0.1.0-SNAPSHOT/maven-metadata.xml</div><div class="line">    from https://clojars.org/repo/</div><div class="line">Sending clj-moco/clj-moco/0.1.0-SNAPSHOT/clj-moco-0.1.0-20170917.122837-4.jar (10k)</div><div class="line">    to https://clojars.org/repo/</div><div class="line">Sending clj-moco/clj-moco/0.1.0-SNAPSHOT/clj-moco-0.1.0-20170917.122837-4.pom (3k)</div><div class="line">    to https://clojars.org/repo/</div><div class="line">Retrieving clj-moco/clj-moco/maven-metadata.xml</div><div class="line">    from https://clojars.org/repo/</div><div class="line">Sending clj-moco/clj-moco/0.1.0-SNAPSHOT/maven-metadata.xml (1k)</div><div class="line">    to https://clojars.org/repo/</div><div class="line">Sending clj-moco/clj-moco/maven-metadata.xml (1k)</div><div class="line">    to https://clojars.org/repo/</div></pre></td></tr></table></figure>
+<p>没有出现 gpg-agent timeout 的错误，部署完成。</p>
+<hr>
+<p><strong>提示</strong><br><figure class="highlight vbnet"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">--<span class="keyword">default</span>-recipient-self</div><div class="line">    Use the <span class="keyword">default</span> <span class="keyword">key</span> <span class="keyword">as</span> <span class="keyword">default</span> recipient <span class="keyword">if</span> <span class="keyword">option</span> --recipient <span class="keyword">is</span> <span class="keyword">not</span> used <span class="keyword">and</span> don’t ask <span class="keyword">if</span> this <span class="keyword">is</span> a valid one.</div><div class="line">    The <span class="keyword">default</span> <span class="keyword">key</span> <span class="keyword">is</span> the first one <span class="keyword">from</span> the secret keyring <span class="keyword">or</span> the one <span class="keyword">set</span> <span class="keyword">with</span> --<span class="keyword">default</span>-<span class="keyword">key</span>.</div></pre></td></tr></table></figure></p>
+<hr>
+<p>参考链接<br>[1] <a href="https://github.com/technomancy/leiningen/blob/master/doc/DEPLOY.md" target="_blank" rel="external">Leiningen Deployment</a><br>[2] <a href="https://www.gnupg.org/documentation/manuals/gnupg-devel/GPG-Configuration-Options.html#GPG-Configuration-Options" target="_blank" rel="external">GPG: How to change the configuration</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;Clojars-介绍&quot;&gt;&lt;a href=&quot;#Clojars-介绍&quot; class=&quot;headerlink&quot; title=&quot;Clojars 介绍&quot;&gt;&lt;/a&gt;Clojars 介绍&lt;/h2&gt;&lt;p&gt;Clojars 是一个为开源 Clojure 类库打造的仓库，截止2017年
+    
+    </summary>
+    
+      <category term="Clojure" scheme="https://lameta.com/categories/Clojure/"/>
+    
+    
+      <category term="leiningen" scheme="https://lameta.com/tags/leiningen/"/>
+    
+  </entry>
   
   <entry>
     <title>release jar to maven central repository</title>
@@ -1703,61 +1755,6 @@
     
     
       <category term="thinking" scheme="https://lameta.com/tags/thinking/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Transaction</title>
-    <link href="https://lameta.com/2015/07/18/transaction/"/>
-    <id>https://lameta.com/2015/07/18/transaction/</id>
-    <published>2015-07-18T11:33:38.000Z</published>
-    <updated>2016-09-06T14:40:57.000Z</updated>
-    
-    <content type="html"><![CDATA[<h3 id="什么是事务"><a href="#什么是事务" class="headerlink" title="什么是事务"></a>什么是事务</h3><hr>
-<p>事务是一组不可分割的SQL query语句，或者说是<strong>一个最小的工作单元</strong>。</p>
-<h3 id="事务与锁的关系"><a href="#事务与锁的关系" class="headerlink" title="事务与锁的关系"></a>事务与锁的关系</h3><hr>
-<h4 id="为什么提出这个问题"><a href="#为什么提出这个问题" class="headerlink" title="为什么提出这个问题"></a>为什么提出这个问题</h4><p>在阅读《Java虚拟机并发编程》(Programming Concurrency on the JVM - Materning Synchronization, STM and Actors)中STM(Software Transaction Memory)时，我看到transaction特征在concurrency中的神奇应用场景：</p>
-<ul>
-<li>原子性：涉及一组操作，这组操作具有原子特征，比如存款和取款的组合操作。这组操作内部的所有更改要么全部成功，要么全部失败。</li>
-<li>一致性：所有并行的事务所造成的变更，从外部来看，都是一个接一个发生的。比如：存款，取款这两个独立事务。如果存款的过程中间，取款操作接入，那么取款读取的数据是旧的。待存款恢复并执行完毕，取款想要写回的数据必然无效。取款事务需要重做！所以外观来看这是存款到取款的序列，反之亦然。其实本质上，就是可见性的问题。</li>
-<li>不需要显式地运用锁，不论是读锁还是写锁。这样就为程序员提供了比较好的抽象屏障(abstract barrier)。</li>
-<li>隔离性：事务在未提交之前，所做的任何更改都不能被其他事务看到。</li>
-</ul>
-<p>我看到了很多STM的好处，但是看到处理写偏斜异常(Handling Write Skew Anomaly)（可以简单理解为两个事务修改的变量不是同一个，但是两个变量之间又有约束关系）一章时，作者使用<code>ensure</code>函数给约束变量加了读锁。加读锁的意义在于本事务之外，其他事务无法获得该变量的写锁，自然无法修改它的值。但是这里显式地使用了锁，所以可以明确事务不是锁无关的，而且这让我联想到了数据库事务隔离级别中的可重复读(REPEATABLE_READ)。可重复读也是使用在特定记录行上使用读锁，来防止外部事务修改了该条记录行。</p>
-<h4 id="微妙的关系"><a href="#微妙的关系" class="headerlink" title="微妙的关系"></a>微妙的关系</h4><p>有趣的事情来了，事务原子性能确保数据的完整性，而事务的一致性和隔离性则侧重于数据的可见性。可见性的保证在并发当中绝对和锁相关。我刚说了，事务给锁提供了抽象屏障，而且事务的隔离级别依旧仰仗锁的粒度，所以不要将事务看做银弹，以为有了事务，锁就不值一提。</p>
-<h3 id="数据库事务的隔离级别"><a href="#数据库事务的隔离级别" class="headerlink" title="数据库事务的隔离级别"></a>数据库事务的隔离级别</h3><hr>
-<h4 id="为什么提出这个问题-1"><a href="#为什么提出这个问题-1" class="headerlink" title="为什么提出这个问题"></a>为什么提出这个问题</h4><p>一直被《高性能MySQL》里的解释弄得稀里糊涂，纠结于脏读、不可重复读和幻读之间的关系。而且某些解释看似合理，但完全没有指导价值。比如：阐述隔离级别，却没法从中得出我们如何结合应用场景选择合适的隔离级别。</p>
-<h4 id="隔离级别"><a href="#隔离级别" class="headerlink" title="隔离级别"></a>隔离级别</h4><ul>
-<li>Uncommited Read<br>一个事务未提交，另一个事务却能读到该事务所做的更改。因为有可能读到未提交到数据库里的脏数据，这一级别会导致脏读。适用于只读场景下。</li>
-<li>Commited Read<br>未提交之前，事务之间是不可见的，所以可以阻止脏读。<br>但是会导致不可重复读问题，也就是在本事务内，读取一条记录，另一个事务修改了此条记录并提交，本事务再读取同一条记录时，发现得到记录和前一条不一致的场景。这一级别也被称为不可重复读级别。<br><strong>但上述场景没有半点指导意义！</strong><br>如果你的应用场景是这样的——你想查询的变量是通过本事务里只读但是对于外部事务可写的变量作为条件查询出来的，那么这个只读变量很可能不可重复读，导致这个事务会失效。举个例子：如果你的查询语句是这样的<code>SELECT USER.age into age FROM USERS name=&#39;YOU&#39;;</code><br>这时候外部事务修改了名字<code>UPDATE SET name=&#39;ME&#39; WHERE name=&#39;YOU&#39;;</code>并提交。那么这时候，<code>age</code>是无效的状态，你再拿来用就有问题了。这一级别适合于读多写少且写偏斜不存在的场景。</li>
-<li>Repeatable Read （MySQL的默认隔离级别）<br>可重复读，可以理解给只读的记录行加了读锁。这样，外部事务无法获得写锁，本事务内部这条记录始终有效，待事务结束即可解锁。反之，外部事务先得写锁，那么本事务无法获取记录行的读锁，导致重试发生。显然，如果你的应用场景里，读多写少且读写操作同一条记录的可能性很大的时候适合。</li>
-<li><p>幻读<br>可重复读级别无法防止幻读。幻读是这样一种场景，本事务读取一个<strong>范围内，范围内，范围内（重要的事情写三遍）</strong>的数据集，但是另一事务又向这个范围内插入一条记录，导致数据集发生变化了，像是出现了幻觉，所以称为幻读（我很痛恨一些奇葩的科学家起的不合理的名字，这就是其一。按着这种逻辑，不可重复读不也可以说是出现幻觉吗？）。那么为什么会出现这种情况，原因是新插入的记录以前不存在于数据库中，所以你没法为它加锁。而且可重复读只是为每行记录加锁，没有用到Range Lock，这一幻影插入操作总能成功。<br>不过MySQL中InnoDB存储引擎提供了MVCC（多版本并发控制）技术，为每条记录设置一个递增的事务编号，大于本次事务编号的记录，不准插入记录。<br>可重复读+MVCC即可解决并发中的大部分问题。</p>
-</li>
-<li><p>Serializable Read<br>顾名思义，串行读，事务之间是串行的，同步的。换言之，并发性剧减。</p>
-</li>
-</ul>
-<h3 id="STM的隔离级别"><a href="#STM的隔离级别" class="headerlink" title="STM的隔离级别"></a>STM的隔离级别</h3><hr>
-<ul>
-<li>隔离级别处于提交读。</li>
-</ul>
-<h3 id="事务的级别"><a href="#事务的级别" class="headerlink" title="事务的级别"></a>事务的级别</h3><hr>
-<p>描述的是事务本身的属性</p>
-<ul>
-<li>ReadOnly：所有的操作都是读取操作，不涉及任何产生副作用的操作。</li>
-</ul>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;h3 id=&quot;什么是事务&quot;&gt;&lt;a href=&quot;#什么是事务&quot; class=&quot;headerlink&quot; title=&quot;什么是事务&quot;&gt;&lt;/a&gt;什么是事务&lt;/h3&gt;&lt;hr&gt;
-&lt;p&gt;事务是一组不可分割的SQL query语句，或者说是&lt;strong&gt;一个最小的工作单元&lt;/strong&gt;。
-    
-    </summary>
-    
-      <category term="技术" scheme="https://lameta.com/categories/%E6%8A%80%E6%9C%AF/"/>
-    
-    
-      <category term="transaction" scheme="https://lameta.com/tags/transaction/"/>
     
   </entry>
   

@@ -3,24 +3,27 @@
 <head>
     <meta charset="utf-8">
     
-    <title>Rake version conflicts | λ</title>
+    <title>如何发布jar到clojars | λ</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
-        <meta name="keywords" content="rake" />
+        <meta name="keywords" content="leiningen" />
     
-    <meta name="description" content="Rake Version Conflicts1bundle exec rake CMD.
-Invalid byte sequence in US-ASCII12345678*Excpetion*bundle exec rake generate(in /Users/qianyan/Dropbox/octopress)Generating Site with Jekyllidentical sour">
+    <meta name="description" content="Clojars 介绍Clojars 是一个为开源 Clojure 类库打造的仓库，截止2017年9月17日，大概有19831个项目发布在上面。整个网站也是用 Clojure 编写的。
+发布 Clojure library1. 注册 clojars前往 clojars 注册
+2. lein 部署1$ lein deploy clojars # lein deploy [repository name">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Rake version conflicts">
-<meta property="og:url" content="https://lameta.com/2014/07/05/rake-version-conflicts-and-chiness-support-for-generating-octopress/index.html">
+<meta property="og:title" content="如何发布jar到clojars">
+<meta property="og:url" content="https://lameta.com/2017/09/17/release-jar-to-clojars/index.html">
 <meta property="og:site_name" content="λ">
-<meta property="og:description" content="Rake Version Conflicts1bundle exec rake CMD.
-Invalid byte sequence in US-ASCII12345678*Excpetion*bundle exec rake generate(in /Users/qianyan/Dropbox/octopress)Generating Site with Jekyllidentical sour">
-<meta property="og:updated_time" content="2016-09-06T14:38:14.000Z">
+<meta property="og:description" content="Clojars 介绍Clojars 是一个为开源 Clojure 类库打造的仓库，截止2017年9月17日，大概有19831个项目发布在上面。整个网站也是用 Clojure 编写的。
+发布 Clojure library1. 注册 clojars前往 clojars 注册
+2. lein 部署1$ lein deploy clojars # lein deploy [repository name">
+<meta property="og:updated_time" content="2017-09-17T13:43:16.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Rake version conflicts">
-<meta name="twitter:description" content="Rake Version Conflicts1bundle exec rake CMD.
-Invalid byte sequence in US-ASCII12345678*Excpetion*bundle exec rake generate(in /Users/qianyan/Dropbox/octopress)Generating Site with Jekyllidentical sour">
+<meta name="twitter:title" content="如何发布jar到clojars">
+<meta name="twitter:description" content="Clojars 介绍Clojars 是一个为开源 Clojure 类库打造的仓库，截止2017年9月17日，大概有19831个项目发布在上面。整个网站也是用 Clojure 编写的。
+发布 Clojure library1. 注册 clojars前往 clojars 注册
+2. lein 部署1$ lein deploy clojars # lein deploy [repository name">
     
 
     
@@ -154,18 +157,18 @@ var _hmt = _hmt || [];
                         <div class="main-body-header">
     <h1 class="header">
     
-    <a class="page-title-link" href="/categories/技术/">技术</a>
+    <a class="page-title-link" href="/categories/Clojure/">Clojure</a>
     </h1>
 </div>
                         <div class="main-body-content">
-                            <article id="post-rake-version-conflicts-and-chiness-support-for-generating-octopress" class="article article-single article-type-post" itemscope itemprop="blogPost">
+                            <article id="post-release-jar-to-clojars" class="article article-single article-type-post" itemscope itemprop="blogPost">
     <div class="article-inner">
         
             <header class="article-header">
                 
     
         <h1 class="article-title" itemprop="name">
-        Rake version conflicts
+        如何发布jar到clojars
         </h1>
     
 
@@ -175,24 +178,51 @@ var _hmt = _hmt || [];
             <div class="article-meta">
                 
     <div class="article-date">
-        <a href="/2014/07/05/rake-version-conflicts-and-chiness-support-for-generating-octopress/" class="article-date">
-            <time datetime="2014-07-05T02:50:37.000Z" itemprop="datePublished">2014-07-05</time>
+        <a href="/2017/09/17/release-jar-to-clojars/" class="article-date">
+            <time datetime="2017-09-17T13:39:40.000Z" itemprop="datePublished">2017-09-17</time>
         </a>
     </div>
 
                 
     <div class="article-tag">
         <i class="fa fa-tag"></i>
-        <a class="tag-link" href="/tags/rake/">rake</a>
+        <a class="tag-link" href="/tags/leiningen/">leiningen</a>
     </div>
 
             </div>
         
         
         <div class="article-entry" itemprop="articleBody">
-            <h3 id="Rake-Version-Conflicts"><a href="#Rake-Version-Conflicts" class="headerlink" title="Rake Version Conflicts"></a>Rake Version Conflicts</h3><figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">bundle exec rake <span class="keyword">CMD</span>.<span class="bash"></span></div></pre></td></tr></table></figure>
-<h3 id="Invalid-byte-sequence-in-US-ASCII"><a href="#Invalid-byte-sequence-in-US-ASCII" class="headerlink" title="Invalid byte sequence in US-ASCII"></a>Invalid byte sequence in US-ASCII</h3><figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">*Excpetion*</div><div class="line">bundle exec rake generate</div><div class="line">(<span class="keyword">in</span> <span class="regexp">/Users/</span>qianyan<span class="regexp">/Dropbox/</span>octopress)</div><div class="line">Generating Site with Jekyll</div><div class="line">identical source<span class="regexp">/stylesheets/</span>screen.css</div><div class="line">Configuration from <span class="regexp">/Users/</span>qianyan<span class="regexp">/Dropbox/</span>octopress/_config.yml</div><div class="line">Building <span class="string">site:</span> source -&gt; <span class="keyword">public</span></div><div class="line">YAML Exception reading <span class="number">2013</span><span class="number">-12</span><span class="number">-10</span>-hello-world.<span class="string">markdown:</span> invalid <span class="keyword">byte</span> sequence <span class="keyword">in</span> US-ASCII</div></pre></td></tr></table></figure>
-<h3 id="Resolve-this-problem"><a href="#Resolve-this-problem" class="headerlink" title="Resolve this problem"></a>Resolve this problem</h3><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&gt; vim ~/<span class="selector-class">.zshrc</span></div><div class="line">export LC_ALL=en_US<span class="selector-class">.UTF-8</span></div><div class="line">export LANG=en_US<span class="selector-class">.UTF-8</span></div><div class="line">&gt; source ~/.zshrc</div></pre></td></tr></table></figure>
+            <h2 id="Clojars-介绍"><a href="#Clojars-介绍" class="headerlink" title="Clojars 介绍"></a>Clojars 介绍</h2><p>Clojars 是一个为开源 Clojure 类库打造的仓库，截止2017年9月17日，大概有19831个项目发布在上面。整个网站也是用 Clojure 编写的。</p>
+<h2 id="发布-Clojure-library"><a href="#发布-Clojure-library" class="headerlink" title="发布 Clojure library"></a>发布 Clojure library</h2><h3 id="1-注册-clojars"><a href="#1-注册-clojars" class="headerlink" title="1. 注册 clojars"></a>1. 注册 clojars</h3><p>前往 <a href="https://clojars.org/register" target="_blank" rel="external">clojars</a> 注册</p>
+<h3 id="2-lein-部署"><a href="#2-lein-部署" class="headerlink" title="2. lein 部署"></a>2. lein 部署</h3><figure class="highlight delphi"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ lein deploy clojars # lein deploy [repository <span class="keyword">name</span>], here the repo <span class="keyword">name</span> <span class="keyword">is</span> clojars.</div></pre></td></tr></table></figure>
+<p>如果不想加上 <code>clojars</code> 参数，则需要在当前项目下的 <em>project.clj</em> 添加如下内容<br><figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">&#123;:deploy-repositories [[<span class="string">"releases"</span> :clojars]</div><div class="line">                       [<span class="string">"snapshots"</span> :clojars]]&#125;</div></pre></td></tr></table></figure></p>
+<p><strong>这里注意一点：</strong><br>这里使用 <code>:deploy-repositories</code> 而非 <code>:repositories</code>，原因是 <code>:repositories</code> 除了用于部署还会作为依赖源被项目使用。所以，如若必要，还是职责单一点好。这样，也可以加入 <em>:user profile (~/.lein/profiles.clj)</em> 供所有本地项目发布使用。</p>
+<p>这个时候可以执行<br><figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">$ lein deploy</div><div class="line">No credentials found for snapshots(did you mean `lein deploy clojars`?) // 这里应该是 leiningen 的 bug，提示信息 `lein deploy clojars` 显得很奇怪，可以忽略之。</div><div class="line">See `lein help deploying` for how to configure credentials to avoid prompts.</div><div class="line"><span class="symbol">Username:</span> username</div><div class="line"><span class="symbol">Password:</span> password</div></pre></td></tr></table></figure></p>
+<p>如上，这时会弹出用户名和密码输入框。为了节省时间，避免每次输入，最好把用户凭证 (credentials) 以文件的形式存放到用户范围的目录下，即<em>~/.lein/credentials.clj</em>，并做加密处理。</p>
+<h3 id="3-设置全局的-credentials-map"><a href="#3-设置全局的-credentials-map" class="headerlink" title="3. 设置全局的 credentials map"></a>3. 设置全局的 credentials map</h3><p>首先，把如下的 credentials map 写入 <em>~/.lein/credentials.clj</em><br><figure class="highlight clojure"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&#123;#<span class="string">"https://clojars.org/repo"</span> &#123;<span class="symbol">:username</span> <span class="string">"username_on_clojars"</span> <span class="symbol">:password</span> <span class="string">"password_on_clojars"</span>&#125;&#125;</div></pre></td></tr></table></figure></p>
+<p>其次，使用 gpg 加密该文件<br><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ gpg --default-recipient-self -e \</div><div class="line">    ~/.lein/credentials.clj &gt; ~/.lein/credentials.clj.gpg</div></pre></td></tr></table></figure></p>
+<p>加密后，即可删除原文件 <em>~/.lein/credentials.clj</em>。然后在<code>:deploy-repositories</code> map 中指定 <code>:creds :gpg</code><br><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&#123;:deploy-repositories [["releases" :clojars</div><div class="line">                        :creds :gpg]]</div><div class="line">                       ["snapshots" :clojars</div><div class="line">                        :creds :gpg]]&#125;</div></pre></td></tr></table></figure></p>
+<p>完成上述，<code>lein deploy</code> 的时候即可解密 <code>~/.lein/credentials.clj.gpg</code>，从中获取对应仓库的<code>username</code>和<code>password</code>（<strong>注：</strong>为了便于索引查找，credentials 使用正则表达式 #”<a href="https://clojars.org/repo" target="_blank" rel="external">https://clojars.org/repo</a>“ 作为 key）</p>
+<h2 id="Error-gpg-agent-timeout"><a href="#Error-gpg-agent-timeout" class="headerlink" title="Error: gpg agent timeout"></a>Error: gpg agent timeout</h2><p>有时候，deploy 时会出现链接 agent 超时的错误<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$ lein deploy</div><div class="line"><span class="string">gpg:</span> problem with the <span class="string">agent:</span> Timeout</div><div class="line"><span class="string">gpg:</span> decryption <span class="string">failed:</span> No secret key</div><div class="line">Could not decrypt credentials from <span class="regexp">/Users/</span>qianyan<span class="regexp">/.lein/</span>credentials.clj.gpg</div><div class="line">nil</div><div class="line">See `lein help gpg` <span class="keyword">for</span> how to install gpg.</div></pre></td></tr></table></figure></p>
+<p>仔细搜索<a href="">文档</a>会发现下面这句很重要的话</p>
+<blockquote>
+<p>Due to a bug in gpg you currently need to use gpg-agent and have already unlocked your key before Leiningen launches, but with gpg-agent you only have to enter your passphrase periodically; it will keep it cached for a given period.</p>
+</blockquote>
+<p>大意是，leiningen 需要用到 gpg-agent，而且在 <code>lein deploy</code> 之前，就应该解锁密钥。</p>
+<p>不实际操作的话，还是很难弄懂这句话具体的指代。我们不妨思考一下。</p>
+<h3 id="1-看看后台是否有个进程叫做-gpg-agent？"><a href="#1-看看后台是否有个进程叫做-gpg-agent？" class="headerlink" title="1. 看看后台是否有个进程叫做 gpg-agent？"></a>1. 看看后台是否有个进程叫做 gpg-agent？</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ ps -ef |grep gpg</div><div class="line">  501 87095     1   0  8:27PM ??         0:00.00 gpg-agent --daemon</div></pre></td></tr></table></figure>
+<p>嗯，还真有！</p>
+<h3 id="2-gpg-直接解密-credentials-clj-gpg"><a href="#2-gpg-直接解密-credentials-clj-gpg" class="headerlink" title="2. gpg 直接解密 credentials.clj.gpg"></a>2. gpg 直接解密 credentials.clj.gpg</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$ gpg --decrypt ~/.lein/credentials.clj.gpg</div><div class="line"></div><div class="line">You need a passphrase to unlock the secret key for</div><div class="line">user: &quot;Yan Qian (lambeta) &lt;qianyan.lambda@gmail.com&gt;&quot;</div><div class="line">2048-bit RSA key, ID E13DFD8A, created 2016-05-14 (main key ID 3C5030FF)</div><div class="line"># 接下来，漫无止境的等待中...</div></pre></td></tr></table></figure>
+<p>这奇怪的等待让我不安，所以我使出了杀手锏 <code>kill -9</code>，直接把 gpg-agent 干掉。</p>
+<h3 id="3-重新-gpg-–decrypt"><a href="#3-重新-gpg-–decrypt" class="headerlink" title="3. 重新 gpg –decrypt"></a>3. 重新 gpg –decrypt</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">$ gpg --decrypt ~/.lein/credentials.clj.gpg</div><div class="line"></div><div class="line">You need a passphrase to unlock the secret key for</div><div class="line">user: &quot;Yan Qian (lambeta) &lt;qianyan.lambda@gmail.com&gt;&quot;</div><div class="line">2048-bit RSA key, ID E13DFD8A, created 2016-05-14 (main key ID 3C5030FF)</div><div class="line"># 这里要输入 passphrase</div><div class="line">gpg: encrypted with 2048-bit RSA key, ID E13DFD8A, created 2016-05-14</div><div class="line">      &quot;Yan Qian (lambeta) &lt;qianyan.lambda@gmail.com&gt;&quot;</div><div class="line">&#123; #&quot;https://clojars.org/repo&quot; &#123;:username &quot;username_on_clojars&quot; :password &quot;password_on_clojars&quot;&#125;&#125;</div></pre></td></tr></table></figure>
+<p>终于可以输入 passphrase 了，解密完成。这大概就是上面引文所说的 unlock your key before Leiningen launches.</p>
+<h3 id="4-重新部署"><a href="#4-重新部署" class="headerlink" title="4. 重新部署"></a>4. 重新部署</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">$ lein deploy</div><div class="line">Created /Users/qianyan/Projects/clojure-pr/clj-moco/target/clj-moco-0.1.0-SNAPSHOT.jar</div><div class="line">Wrote /Users/qianyan/Projects/clojure-pr/clj-moco/pom.xml</div><div class="line">Retrieving clj-moco/clj-moco/0.1.0-SNAPSHOT/maven-metadata.xml</div><div class="line">    from https://clojars.org/repo/</div><div class="line">Sending clj-moco/clj-moco/0.1.0-SNAPSHOT/clj-moco-0.1.0-20170917.122837-4.jar (10k)</div><div class="line">    to https://clojars.org/repo/</div><div class="line">Sending clj-moco/clj-moco/0.1.0-SNAPSHOT/clj-moco-0.1.0-20170917.122837-4.pom (3k)</div><div class="line">    to https://clojars.org/repo/</div><div class="line">Retrieving clj-moco/clj-moco/maven-metadata.xml</div><div class="line">    from https://clojars.org/repo/</div><div class="line">Sending clj-moco/clj-moco/0.1.0-SNAPSHOT/maven-metadata.xml (1k)</div><div class="line">    to https://clojars.org/repo/</div><div class="line">Sending clj-moco/clj-moco/maven-metadata.xml (1k)</div><div class="line">    to https://clojars.org/repo/</div></pre></td></tr></table></figure>
+<p>没有出现 gpg-agent timeout 的错误，部署完成。</p>
+<hr>
+<p><strong>提示</strong><br><figure class="highlight vbnet"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">--<span class="keyword">default</span>-recipient-self</div><div class="line">    Use the <span class="keyword">default</span> <span class="keyword">key</span> <span class="keyword">as</span> <span class="keyword">default</span> recipient <span class="keyword">if</span> <span class="keyword">option</span> --recipient <span class="keyword">is</span> <span class="keyword">not</span> used <span class="keyword">and</span> don’t ask <span class="keyword">if</span> this <span class="keyword">is</span> a valid one.</div><div class="line">    The <span class="keyword">default</span> <span class="keyword">key</span> <span class="keyword">is</span> the first one <span class="keyword">from</span> the secret keyring <span class="keyword">or</span> the one <span class="keyword">set</span> <span class="keyword">with</span> --<span class="keyword">default</span>-<span class="keyword">key</span>.</div></pre></td></tr></table></figure></p>
+<hr>
+<p>参考链接<br>[1] <a href="https://github.com/technomancy/leiningen/blob/master/doc/DEPLOY.md" target="_blank" rel="external">Leiningen Deployment</a><br>[2] <a href="https://www.gnupg.org/documentation/manuals/gnupg-devel/GPG-Configuration-Options.html#GPG-Configuration-Options" target="_blank" rel="external">GPG: How to change the configuration</a></p>
 
         </div>
         <footer class="article-footer">
@@ -200,7 +230,7 @@ var _hmt = _hmt || [];
 
 
 
-    <a data-url="https://lameta.com/2014/07/05/rake-version-conflicts-and-chiness-support-for-generating-octopress/" data-id="cj7osjcrg0015zem4ho6tpoj6" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
+    <a data-url="https://lameta.com/2017/09/17/release-jar-to-clojars/" data-id="cj7osjct7003nzem4pn8625d2" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
 <script>
     (function ($) {
         $('body').on('click', function() {
@@ -267,7 +297,7 @@ var _hmt = _hmt || [];
     <section id="comments">
     
         
-    <div class="ds-thread" data-thread-key="2014/07/05/rake-version-conflicts-and-chiness-support-for-generating-octopress/" data-title="Rake version conflicts" data-url="https://lameta.com/2014/07/05/rake-version-conflicts-and-chiness-support-for-generating-octopress/"></div>
+    <div class="ds-thread" data-thread-key="2017/09/17/release-jar-to-clojars/" data-title="如何发布jar到clojars" data-url="https://lameta.com/2017/09/17/release-jar-to-clojars/"></div>
     <style>
         #ds-thread #ds-reset .ds-textarea-wrapper {
             background: none;
@@ -356,20 +386,10 @@ var _hmt = _hmt || [];
         
 <nav id="article-nav">
     
-        <a href="/2014/07/06/sublime-plugins-install/" id="article-nav-newer" class="article-nav-link-wrap">
-        <strong class="article-nav-caption">下一篇</strong>
-        <p class="article-nav-title">
-        
-            Powerful sublime text3 plugins
-        
-        </p>
-        <i class="icon fa fa-chevron-right" id="icon-chevron-right"></i>
-    </a>
     
-    
-        <a href="/2014/07/05/custom-oh-my-zsh-theme-to-support-svn/" id="article-nav-older" class="article-nav-link-wrap">
+        <a href="/2017/09/15/release-jar-to-maven-central-repository/" id="article-nav-older" class="article-nav-link-wrap">
         <strong class="article-nav-caption">上一篇</strong>
-        <p class="article-nav-title">Custom Oh-my-zsh theme to support svn</p>
+        <p class="article-nav-title">release jar to maven central repository</p>
         <i class="icon fa fa-chevron-left" id="icon-chevron-left"></i>
         </a>
     
