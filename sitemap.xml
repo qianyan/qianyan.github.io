@@ -2,399 +2,406 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://lameta.com/2017/09/15/release-jar-to-maven-central-repository/</loc>
+    <loc>https://lambeta.com/2017/09/19/agile-team-workflow/</loc>
+    
+    <lastmod>2017-09-19T15:17:19.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://lambeta.com/2017/09/15/release-jar-to-maven-central-repository/</loc>
     
     <lastmod>2017-09-18T13:40:57.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://lameta.com/2017/09/06/Underscore-string-java/</loc>
+    <loc>https://lambeta.com/2017/09/06/Underscore-string-java/</loc>
     
     <lastmod>2017-09-18T13:34:32.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://lameta.com/2017/09/17/release-jar-to-clojars/</loc>
+    <loc>https://lambeta.com/2017/09/17/release-jar-to-clojars/</loc>
     
     <lastmod>2017-09-17T13:43:16.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://lameta.com/2017/01/01/Emacs-configs-for-a-clojurian/</loc>
+    <loc>https://lambeta.com/2017/01/01/Emacs-configs-for-a-clojurian/</loc>
     
     <lastmod>2017-06-20T03:32:53.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://lameta.com/2017/04/27/How-to-active-different-profiles-in-SpringBootTest/</loc>
+    <loc>https://lambeta.com/2017/04/27/How-to-active-different-profiles-in-SpringBootTest/</loc>
     
     <lastmod>2017-04-27T12:30:49.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://lameta.com/2017/04/18/Techniques-for-Efficiently-Learning-Programming-Languages/</loc>
+    <loc>https://lambeta.com/2017/04/18/Techniques-for-Efficiently-Learning-Programming-Languages/</loc>
     
     <lastmod>2017-04-18T13:44:20.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://lameta.com/about/index.html</loc>
+    <loc>https://lambeta.com/about/index.html</loc>
     
     <lastmod>2017-04-17T04:20:48.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://lameta.com/2017/03/01/Pipleline-as-Code/</loc>
+    <loc>https://lambeta.com/2017/03/01/Pipleline-as-Code/</loc>
     
     <lastmod>2017-03-01T02:52:12.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://lameta.com/2014/09/25/a-way-to-handle-angularjs-components-problem/</loc>
+    <loc>https://lambeta.com/2014/09/25/a-way-to-handle-angularjs-components-problem/</loc>
     
     <lastmod>2017-01-01T09:19:50.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://lameta.com/2016/11/04/Generative-Testing/</loc>
+    <loc>https://lambeta.com/2016/11/04/Generative-Testing/</loc>
     
     <lastmod>2016-11-04T01:13:01.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://lameta.com/2016/09/12/Collection-Pipelines-By-TDD/</loc>
+    <loc>https://lambeta.com/2016/09/12/Collection-Pipelines-By-TDD/</loc>
     
     <lastmod>2016-10-06T02:30:45.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://lameta.com/2014/10/11/briefing-of-programming-language/</loc>
+    <loc>https://lambeta.com/2014/10/11/briefing-of-programming-language/</loc>
     
     <lastmod>2016-09-12T13:53:54.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://lameta.com/2016/09/04/Reading-and-Writing-Files/</loc>
+    <loc>https://lambeta.com/2016/09/04/Reading-and-Writing-Files/</loc>
     
     <lastmod>2016-09-07T08:49:21.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://lameta.com/2013/12/15/My-City/</loc>
+    <loc>https://lambeta.com/2013/12/15/My-City/</loc>
     
     <lastmod>2016-09-07T08:41:45.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://lameta.com/2016/05/24/Using-Java1.8-to-Target-Older-JVMs/</loc>
+    <loc>https://lambeta.com/2016/05/24/Using-Java1.8-to-Target-Older-JVMs/</loc>
     
     <lastmod>2016-09-07T08:01:19.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://lameta.com/2013/12/20/hibernate-many-to-one-with-secondary-tables/</loc>
+    <loc>https://lambeta.com/2013/12/20/hibernate-many-to-one-with-secondary-tables/</loc>
     
     <lastmod>2016-09-07T07:43:58.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://lameta.com/2015/07/18/ThoughtWorks-training/</loc>
+    <loc>https://lambeta.com/2015/07/18/ThoughtWorks-training/</loc>
     
     <lastmod>2016-09-06T22:42:46.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://lameta.com/2016/05/30/Leiningen-Profile/</loc>
+    <loc>https://lambeta.com/2016/05/30/Leiningen-Profile/</loc>
     
     <lastmod>2016-09-06T22:42:23.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://lameta.com/2016/06/24/SonarQube-Plugin-Step-by-Step/</loc>
+    <loc>https://lambeta.com/2016/06/24/SonarQube-Plugin-Step-by-Step/</loc>
     
     <lastmod>2016-09-06T14:59:18.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://lameta.com/2015/07/26/aggregation-composition-IoC/</loc>
+    <loc>https://lambeta.com/2015/07/26/aggregation-composition-IoC/</loc>
     
     <lastmod>2016-09-06T14:58:50.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://lameta.com/2015/07/16/concurrency-in-action/</loc>
+    <loc>https://lambeta.com/2015/07/16/concurrency-in-action/</loc>
     
     <lastmod>2016-09-06T14:58:32.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://lameta.com/2015/03/11/pit-and-trap-in-Java/</loc>
+    <loc>https://lambeta.com/2015/03/11/pit-and-trap-in-Java/</loc>
     
     <lastmod>2016-09-06T14:58:29.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://lameta.com/2015/02/03/Javascript-Promise/</loc>
+    <loc>https://lambeta.com/2015/02/03/Javascript-Promise/</loc>
     
     <lastmod>2016-09-06T14:58:25.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://lameta.com/2015/02/01/Testable-Javascript/</loc>
+    <loc>https://lambeta.com/2015/02/01/Testable-Javascript/</loc>
     
     <lastmod>2016-09-06T14:58:22.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://lameta.com/2015/01/30/Javascript-Scope/</loc>
+    <loc>https://lambeta.com/2015/01/30/Javascript-Scope/</loc>
     
     <lastmod>2016-09-06T14:58:19.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://lameta.com/2015/01/28/Javascript-Reference/</loc>
+    <loc>https://lambeta.com/2015/01/28/Javascript-Reference/</loc>
     
     <lastmod>2016-09-06T14:58:16.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://lameta.com/2015/01/27/Javascript-Hoisting/</loc>
+    <loc>https://lambeta.com/2015/01/27/Javascript-Hoisting/</loc>
     
     <lastmod>2016-09-06T14:58:09.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://lameta.com/2014/01/15/login-and-interactive-shell/</loc>
+    <loc>https://lambeta.com/2014/01/15/login-and-interactive-shell/</loc>
     
     <lastmod>2016-09-06T14:57:37.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://lameta.com/2014/01/04/clojure-basic-kownladge/</loc>
+    <loc>https://lambeta.com/2014/01/04/clojure-basic-kownladge/</loc>
     
     <lastmod>2016-09-06T14:57:30.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://lameta.com/2014/01/01/zeal-api-searing-tool-on-linux/</loc>
+    <loc>https://lambeta.com/2014/01/01/zeal-api-searing-tool-on-linux/</loc>
     
     <lastmod>2016-09-06T14:57:16.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://lameta.com/2016/03/22/Node-js-On-Windows/</loc>
+    <loc>https://lambeta.com/2016/03/22/Node-js-On-Windows/</loc>
     
     <lastmod>2016-09-06T14:56:31.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://lameta.com/2015/11/26/Why-are-we-learning-Clojure/</loc>
+    <loc>https://lambeta.com/2015/11/26/Why-are-we-learning-Clojure/</loc>
     
     <lastmod>2016-09-06T14:56:24.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://lameta.com/2015/08/04/Monad/</loc>
+    <loc>https://lambeta.com/2015/08/04/Monad/</loc>
     
     <lastmod>2016-09-06T14:56:16.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://lameta.com/2015/01/25/Javascript-Modularize/</loc>
+    <loc>https://lambeta.com/2015/01/25/Javascript-Modularize/</loc>
     
     <lastmod>2016-09-06T14:55:53.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://lameta.com/2013/12/17/yeoman/</loc>
+    <loc>https://lambeta.com/2013/12/17/yeoman/</loc>
     
     <lastmod>2016-09-06T14:55:01.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://lameta.com/2013/12/13/geeker/</loc>
+    <loc>https://lambeta.com/2013/12/13/geeker/</loc>
     
     <lastmod>2016-09-06T14:44:43.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://lameta.com/2016/04/26/Java-Inner-Class-Exception-Handler/</loc>
+    <loc>https://lambeta.com/2016/04/26/Java-Inner-Class-Exception-Handler/</loc>
     
     <lastmod>2016-09-06T14:41:53.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://lameta.com/2015/12/21/Character-set-and-encoding/</loc>
+    <loc>https://lambeta.com/2015/12/21/Character-set-and-encoding/</loc>
     
     <lastmod>2016-09-06T14:41:36.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://lameta.com/2015/07/18/transaction/</loc>
+    <loc>https://lambeta.com/2015/07/18/transaction/</loc>
     
     <lastmod>2016-09-06T14:40:57.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://lameta.com/2015/01/27/Javascript-Modularize-2nd/</loc>
+    <loc>https://lambeta.com/2015/01/27/Javascript-Modularize-2nd/</loc>
     
     <lastmod>2016-09-06T14:39:55.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://lameta.com/2014/11/19/maven-in-action/</loc>
+    <loc>https://lambeta.com/2014/11/19/maven-in-action/</loc>
     
     <lastmod>2016-09-06T14:39:30.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://lameta.com/2014/11/17/funny-q/</loc>
+    <loc>https://lambeta.com/2014/11/17/funny-q/</loc>
     
     <lastmod>2016-09-06T14:39:24.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://lameta.com/2014/11/09/thinking-about-microservice/</loc>
+    <loc>https://lambeta.com/2014/11/09/thinking-about-microservice/</loc>
     
     <lastmod>2016-09-06T14:39:18.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://lameta.com/2014/11/02/thinking-in-ioc/</loc>
+    <loc>https://lambeta.com/2014/11/02/thinking-in-ioc/</loc>
     
     <lastmod>2016-09-06T14:39:15.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://lameta.com/2014/10/30/vim-in-practice/</loc>
+    <loc>https://lambeta.com/2014/10/30/vim-in-practice/</loc>
     
     <lastmod>2016-09-06T14:39:12.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://lameta.com/2014/09/22/cong-oodao-aopzai-dao-fp/</loc>
+    <loc>https://lambeta.com/2014/09/22/cong-oodao-aopzai-dao-fp/</loc>
     
     <lastmod>2016-09-06T14:38:46.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://lameta.com/2014/09/21/mysql-mess-encoding/</loc>
+    <loc>https://lambeta.com/2014/09/21/mysql-mess-encoding/</loc>
     
     <lastmod>2016-09-06T14:38:25.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://lameta.com/2014/07/06/sublime-plugins-install/</loc>
+    <loc>https://lambeta.com/2014/07/06/sublime-plugins-install/</loc>
     
     <lastmod>2016-09-06T14:38:21.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://lameta.com/2014/07/05/rake-version-conflicts-and-chiness-support-for-generating-octopress/</loc>
+    <loc>https://lambeta.com/2014/07/05/rake-version-conflicts-and-chiness-support-for-generating-octopress/</loc>
     
     <lastmod>2016-09-06T14:38:14.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://lameta.com/2014/07/05/custom-oh-my-zsh-theme-to-support-svn/</loc>
+    <loc>https://lambeta.com/2014/07/05/custom-oh-my-zsh-theme-to-support-svn/</loc>
     
     <lastmod>2016-09-06T14:38:00.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://lameta.com/2014/05/16/vagrant-mysql/</loc>
+    <loc>https://lambeta.com/2014/05/16/vagrant-mysql/</loc>
     
     <lastmod>2016-09-06T14:37:55.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://lameta.com/2014/02/06/usable-shell-knowledge/</loc>
+    <loc>https://lambeta.com/2014/02/06/usable-shell-knowledge/</loc>
     
     <lastmod>2016-09-06T14:37:46.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://lameta.com/2014/01/02/gradle-gen-project/</loc>
+    <loc>https://lambeta.com/2014/01/02/gradle-gen-project/</loc>
     
     <lastmod>2016-09-06T14:37:29.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://lameta.com/2013/12/10/vim-tips/</loc>
+    <loc>https://lambeta.com/2013/12/10/vim-tips/</loc>
     
     <lastmod>2016-09-06T14:36:37.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://lameta.com/404.html</loc>
+    <loc>https://lambeta.com/404.html</loc>
     
     <lastmod>2015-08-08T07:39:00.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://lameta.com/categories/index.html</loc>
+    <loc>https://lambeta.com/categories/index.html</loc>
     
     <lastmod>2015-07-19T03:42:18.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://lameta.com/tags/index.html</loc>
+    <loc>https://lambeta.com/tags/index.html</loc>
     
     <lastmod>2015-07-04T03:33:51.000Z</lastmod>
     
