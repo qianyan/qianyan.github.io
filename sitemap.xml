@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://lambeta.com/2017/09/06/Underscore-string-java/</loc>
+    
+    <lastmod>2017-10-07T14:30:39.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://lambeta.com/2017/04/27/How-to-active-different-profiles-in-SpringBootTest/</loc>
     
     <lastmod>2017-09-25T08:35:28.000Z</lastmod>
@@ -33,13 +40,6 @@
     <loc>https://lambeta.com/2017/09/15/release-jar-to-maven-central-repository/</loc>
     
     <lastmod>2017-09-18T13:40:57.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://lambeta.com/2017/09/06/Underscore-string-java/</loc>
-    
-    <lastmod>2017-09-18T13:34:32.000Z</lastmod>
     
   </url>
   

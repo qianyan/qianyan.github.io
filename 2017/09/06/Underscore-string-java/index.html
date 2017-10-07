@@ -14,7 +14,7 @@
 <meta property="og:url" content="https://lambeta.com/2017/09/06/Underscore-string-java/index.html">
 <meta property="og:site_name" content="λ">
 <meta property="og:description" content="起源写过Javascript代码的人，估计没有几个不知道underscore这个类库的，因为它太好（有）用了，尽管现如今由于实现上不够优雅的缘故，已经被lodash取代。而我想介绍的是 github 上 star 3000+的 underscore.string，它原本是underscore的扩展，不过现在已经演变成独立的库。顾名思义，它的作用就是弥补 Javascript 本身对于字符串操作支持">
-<meta property="og:updated_time" content="2017-09-18T13:34:32.000Z">
+<meta property="og:updated_time" content="2017-10-07T14:30:39.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="一个Java中操作字符串的类库">
 <meta name="twitter:description" content="起源写过Javascript代码的人，估计没有几个不知道underscore这个类库的，因为它太好（有）用了，尽管现如今由于实现上不够优雅的缘故，已经被lodash取代。而我想介绍的是 github 上 star 3000+的 underscore.string，它原本是underscore的扩展，不过现在已经演变成独立的库。顾名思义，它的作用就是弥补 Javascript 本身对于字符串操作支持">
@@ -241,6 +241,27 @@ var _hmt = _hmt || [];
 <li>naturalCmp</li>
 <li>dedent</li>
 </ul>
+<h2 id="新特性-0-2-0-SNAPSHOT"><a href="#新特性-0-2-0-SNAPSHOT" class="headerlink" title="新特性 0.2.0-SNAPSHOT"></a>新特性 0.2.0-SNAPSHOT</h2><h3 id="gradle-1"><a href="#gradle-1" class="headerlink" title="gradle"></a>gradle</h3><figure class="highlight gradle"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">repositories</span> &#123;</div><div class="line">    maven &#123;</div><div class="line">        url <span class="string">'https://oss.sonatype.org/content/groups/public'</span></div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">dependencies</span> &#123;</div><div class="line">    <span class="keyword">compile</span> (<span class="string">"com.lambeta:underscore.string.java:0.2.0-SNAPSHOT"</span>)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="maven-1"><a href="#maven-1" class="headerlink" title="maven"></a>maven</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">repositories</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">repository</span>&gt;</span></div><div class="line">      <span class="tag">&lt;<span class="name">id</span>&gt;</span>my-repo<span class="tag">&lt;/<span class="name">id</span>&gt;</span></div><div class="line">      <span class="tag">&lt;<span class="name">name</span>&gt;</span>sonatype<span class="tag">&lt;/<span class="name">name</span>&gt;</span></div><div class="line">      <span class="tag">&lt;<span class="name">url</span>&gt;</span>https://oss.sonatype.org/content/groups/public<span class="tag">&lt;/<span class="name">url</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">repository</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">repositories</span>&gt;</span></div><div class="line"></div><div class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.lambeta<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>underscore.string.java<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>0.2.0-SNAPSHOT<span class="tag">&lt;/<span class="name">version</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></div></pre></td></tr></table></figure>
+<ul>
+<li>commonPrefix</li>
+<li>commonSuffix</li>
+<li>chopPrefix</li>
+<li>chopSuffix</li>
+<li>screamingUnderscored</li>
+<li>stripAccents</li>
+<li>pascalize</li>
+<li>translate</li>
+<li>mixedCase</li>
+<li>collapseWhitespaces</li>
+<li>ascii</li>
+<li>chomp</li>
+<li>startsWith</li>
+<li>endsWith</li>
+<li>levenshtein</li>
+<li>hamming</li>
+<li>longestCommonSubstring</li>
+</ul>
 
         </div>
         <footer class="article-footer">
@@ -248,7 +269,7 @@ var _hmt = _hmt || [];
 
 
 
-    <a data-url="https://lambeta.com/2017/09/06/Underscore-string-java/" data-id="cj7zx2cfs003uexm4vcin1cl7" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
+    <a data-url="https://lambeta.com/2017/09/06/Underscore-string-java/" data-id="cj8hf3bn4003u38m4u3kxpdmq" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
 <script>
     (function ($) {
         $('body').on('click', function() {
