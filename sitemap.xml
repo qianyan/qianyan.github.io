@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://lambeta.com/about/index.html</loc>
+    
+    <lastmod>2017-10-11T02:35:27.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://lambeta.com/2017/09/06/Underscore-string-java/</loc>
     
     <lastmod>2017-10-07T14:30:39.000Z</lastmod>
@@ -54,13 +61,6 @@
     <loc>https://lambeta.com/2017/04/18/Techniques-for-Efficiently-Learning-Programming-Languages/</loc>
     
     <lastmod>2017-04-18T13:44:20.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://lambeta.com/about/index.html</loc>
-    
-    <lastmod>2017-04-17T04:20:48.000Z</lastmod>
     
   </url>
   
