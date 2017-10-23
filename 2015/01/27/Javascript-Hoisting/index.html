@@ -16,7 +16,7 @@ ints.js12345678910function ints(arrOfNumberStr) &amp;#123;	return arrOfNumberStr
 <meta property="og:site_name" content="λ">
 <meta property="og:description" content="编程过程中，别人谈到Javascript中的funcation是顺序执行的，所以书写的顺序要留心，不然会出未定义就执行的错误。当然，C语言出身的程序员不以为意，会认为理所当然，C语言就是这么干的。但Javascript并非如此！
 ints.js12345678910function ints(arrOfNumberStr) &amp;#123;	return arrOfNumberStr.map(toIn">
-<meta property="og:updated_time" content="2016-09-06T14:58:09.000Z">
+<meta property="og:updated_time" content="2017-10-23T10:25:20.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Javascript Hoisting">
 <meta name="twitter:description" content="编程过程中，别人谈到Javascript中的funcation是顺序执行的，所以书写的顺序要留心，不然会出未定义就执行的错误。当然，C语言出身的程序员不以为意，会认为理所当然，C语言就是这么干的。但Javascript并非如此！
@@ -204,11 +204,13 @@ var _hmt = _hmt || [];
 <figure class="highlight javascript"><figcaption><span>variables_hoisting.js</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">loop</span>(<span class="params">n</span>) </span>&#123;</div><div class="line">	<span class="keyword">var</span> i;</div><div class="line">	<span class="keyword">for</span>(i=<span class="number">0</span>; i&lt;n; i++);</div><div class="line"></div><div class="line">	<span class="keyword">return</span> i;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>这和原来的写法是等价的，所以<code>i</code>的作用域在整个<code>function</code>中都是有效的。依次类推，<em>init_fail.js</em>中的<code>var toInt</code>这样的函数声明也会被提升到作用域的最上方，但是只是声明被提升了，真正赋值还是在后面，所以此时调用该函数，它还是<code>undefined</code>。</p>
 <p>但是对于<em>init.js</em>而言，它的声明方式会将整个函数都提升，所以它是先于调用方赋值初始化的，所以能工作。</p>
-<h2 id="’use-strict’可以防止-only-reference-hoisting"><a href="#’use-strict’可以防止-only-reference-hoisting" class="headerlink" title="###’use strict’可以防止 only reference hoisting?"></a>###’use strict’可以防止 only reference hoisting?</h2><p>如果变量未声明，<strong>use strict</strong>模式下赋值会报错。</p>
+<h3 id="‘use-strict’-可以防止-only-reference-hoisting"><a href="#‘use-strict’-可以防止-only-reference-hoisting" class="headerlink" title="‘use strict’ 可以防止 only reference hoisting?"></a>‘use strict’ 可以防止 only reference hoisting?</h3><hr>
+<p>如果变量未声明，<strong>use strict</strong>模式下赋值会报错。</p>
 <figure class="highlight javascript"><figcaption><span>use_strict.js</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line"><span class="meta">    'use strict'</span>;</div><div class="line">    <span class="keyword">var</span> foo = <span class="number">123</span>;<span class="comment">//works fine</span></div><div class="line">    bar = <span class="number">345</span>;<span class="comment">//ReferenceError: bar is not defined</span></div><div class="line">&#125;());</div></pre></td></tr></table></figure>
 <p>如果在以前例子中使用<strong>use strict</strong>，并不能提前报出<code>toInt</code>未赋值的错误。直到运行期间，才会发现<code>toInt</code>依然<code>undefined</code>。</p>
 <figure class="highlight javascript"><figcaption><span>use_strict_for_hoisting.js</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">(<span class="function"><span class="keyword">function</span> <span class="title">ints</span>(<span class="params">arrOfNumberStr</span>) </span>&#123;</div><div class="line"><span class="meta">	'use strict'</span>;</div><div class="line">	<span class="keyword">return</span> arrOfNumberStr.map(toInt);</div><div class="line">	<span class="keyword">var</span> toInt = <span class="function"><span class="keyword">function</span>(<span class="params">str</span>) </span>&#123;</div><div class="line">		<span class="keyword">return</span> <span class="built_in">parseInt</span>(str, <span class="number">10</span>);</div><div class="line">	&#125;</div><div class="line">&#125;)([<span class="string">'11'</span>, <span class="string">'11'</span>]);</div><div class="line">-&gt; Uncaught <span class="built_in">TypeError</span>: <span class="literal">undefined</span> is not a <span class="function"><span class="keyword">function</span>(<span class="params">…</span>)</span></div></pre></td></tr></table></figure>
-<h2 id="优先使用function-declaration"><a href="#优先使用function-declaration" class="headerlink" title="###优先使用function declaration"></a>###优先使用function declaration</h2><blockquote>
+<h3 id="优先使用function-declaration"><a href="#优先使用function-declaration" class="headerlink" title="优先使用function declaration"></a>优先使用function declaration</h3><hr>
+<blockquote>
 <p>Why? Function declarations are named, so they’re easier to identify in call stacks. Also, the whole body of a function declaration is hoisted, whereas only the reference of a function expression is hoisted. This rule makes it possible to always use Arrow Functions in place of function expressions. – from <a href="https://github.com/airbnb/javascript#functions" target="_blank" rel="external">javascript style guide</a></p>
 </blockquote>
 <p>下篇会记录Javascript的作用域，<code>Global Scope, Lexical Scope, Dynamic Scope, Function Scope</code></p>
@@ -219,7 +221,7 @@ var _hmt = _hmt || [];
 
 
 
-    <a data-url="https://lambeta.com/2015/01/27/Javascript-Hoisting/" data-id="cj8u0ksim001hkfm4igc7a9ou" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
+    <a data-url="https://lambeta.com/2015/01/27/Javascript-Hoisting/" data-id="cj941e3cb001uhcm4sdqzkgln" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
 <script>
     (function ($) {
         $('body').on('click', function() {

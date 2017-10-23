@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://lambeta.com/2015/01/27/Javascript-Hoisting/</loc>
+    
+    <lastmod>2017-10-23T10:25:20.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://lambeta.com/about/index.html</loc>
     
     <lastmod>2017-10-16T10:05:23.000Z</lastmod>
@@ -194,13 +201,6 @@
     <loc>https://lambeta.com/2015/01/28/Javascript-Reference/</loc>
     
     <lastmod>2016-09-06T14:58:16.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://lambeta.com/2015/01/27/Javascript-Hoisting/</loc>
-    
-    <lastmod>2016-09-06T14:58:09.000Z</lastmod>
     
   </url>
   
