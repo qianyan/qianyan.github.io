@@ -2,6 +2,20 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://lambeta.com/2018/02/17/The-Simple-Summary-of-FP/</loc>
+    
+    <lastmod>2018-02-17T14:45:56.369Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://lambeta.com/2014/11/19/maven-in-action/</loc>
+    
+    <lastmod>2018-02-02T02:59:16.375Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://lambeta.com/2015/01/27/Javascript-Hoisting/</loc>
     
     <lastmod>2017-10-23T11:35:24.000Z</lastmod>
@@ -292,13 +306,6 @@
     <loc>https://lambeta.com/2015/01/27/Javascript-Modularize-2nd/</loc>
     
     <lastmod>2016-09-06T14:39:55.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://lambeta.com/2014/11/19/maven-in-action/</loc>
-    
-    <lastmod>2016-09-06T14:39:30.000Z</lastmod>
     
   </url>
   
