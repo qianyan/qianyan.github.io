@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://lambeta.com/"/>
-  <updated>2018-05-13T07:45:28.700Z</updated>
+  <updated>2018-05-14T15:26:02.006Z</updated>
   <id>https://lambeta.com/</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="https://lambeta.com/2018/05/13/learn-idris/"/>
     <id>https://lambeta.com/2018/05/13/learn-idris/</id>
     <published>2018-05-13T07:38:28.000Z</published>
-    <updated>2018-05-13T07:45:28.700Z</updated>
+    <updated>2018-05-14T15:26:02.006Z</updated>
     
     <content type="html"><![CDATA[<h2 id="关于环境和数据类型"><a href="#关于环境和数据类型" class="headerlink" title="关于环境和数据类型"></a>关于环境和数据类型</h2><h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><ol>
 <li>Emacs集成 Idris 开发环境</li>
@@ -50,7 +50,7 @@
     
     </summary>
     
-      <category term="编程" scheme="https://lambeta.com/categories/%E7%BC%96%E7%A8%8B/"/>
+      <category term="技术" scheme="https://lambeta.com/categories/%E6%8A%80%E6%9C%AF/"/>
     
     
       <category term="idris" scheme="https://lambeta.com/tags/idris/"/>
