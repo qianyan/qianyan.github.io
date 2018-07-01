@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://lambeta.com/2015/12/21/Character-set-and-encoding/</loc>
+    
+    <lastmod>2018-07-01T06:40:36.208Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://lambeta.com/about/index.html</loc>
     
     <lastmod>2018-05-17T00:37:17.197Z</lastmod>
@@ -341,13 +348,6 @@
     <loc>https://lambeta.com/2016/04/26/Java-Inner-Class-Exception-Handler/</loc>
     
     <lastmod>2016-09-06T14:41:53.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://lambeta.com/2015/12/21/Character-set-and-encoding/</loc>
-    
-    <lastmod>2016-09-06T14:41:36.000Z</lastmod>
     
   </url>
   
