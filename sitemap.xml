@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://lambeta.com/2013/12/13/geeker/</loc>
+    
+    <lastmod>2018-09-10T00:41:39.723Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://lambeta.com/2018/07/18/the-joy-of-learning-new-programming-language/</loc>
     
     <lastmod>2018-07-18T05:10:54.743Z</lastmod>
@@ -348,13 +355,6 @@
     <loc>https://lambeta.com/2013/12/17/yeoman/</loc>
     
     <lastmod>2016-09-06T14:55:01.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://lambeta.com/2013/12/13/geeker/</loc>
-    
-    <lastmod>2016-09-06T14:44:43.000Z</lastmod>
     
   </url>
   
