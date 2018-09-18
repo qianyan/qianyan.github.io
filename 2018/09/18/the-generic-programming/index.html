@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    
+    <title>泛型编程 | λ</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+        <meta name="keywords" content="thinking" />
+    
+    <meta name="description" content="起源泛型编程是一种编程风格，其中算法以尽可能抽象的方式编写，而不依赖于将在其上执行这些算法的数据形式。
+
+泛型这个词并不是通用的，在不同的语言实现中，具有不同的命名。在Java/Kotlin/C#中称为泛型（Generics），在ML/Scala/Haskell中称为Parametric Polymorphism，而在C++中被叫做模板（Template），比如最负盛名的C++中的STL。任何编程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="泛型编程">
+<meta property="og:url" content="https://lambeta.com/2018/09/18/the-generic-programming/index.html">
+<meta property="og:site_name" content="λ">
+<meta property="og:description" content="起源泛型编程是一种编程风格，其中算法以尽可能抽象的方式编写，而不依赖于将在其上执行这些算法的数据形式。
+
+泛型这个词并不是通用的，在不同的语言实现中，具有不同的命名。在Java/Kotlin/C#中称为泛型（Generics），在ML/Scala/Haskell中称为Parametric Polymorphism，而在C++中被叫做模板（Template），比如最负盛名的C++中的STL。任何编程">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/217988-2bfc87e93ae5b6c6.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2018-09-18T08:34:46.914Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="泛型编程">
+<meta name="twitter:description" content="起源泛型编程是一种编程风格，其中算法以尽可能抽象的方式编写，而不依赖于将在其上执行这些算法的数据形式。
+
+泛型这个词并不是通用的，在不同的语言实现中，具有不同的命名。在Java/Kotlin/C#中称为泛型（Generics），在ML/Scala/Haskell中称为Parametric Polymorphism，而在C++中被叫做模板（Template），比如最负盛名的C++中的STL。任何编程">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/217988-2bfc87e93ae5b6c6.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+    
+
+    
+        <link rel="alternate" href="/atom.xml" title="λ" type="application/atom+xml" />
+    
+
+    
+        <link rel="icon" href="/favicon.ico# path to favicon" />
+    
+
+    <link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/libs/titillium-web/styles.css">
+    <link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <script src="/libs/jquery/2.0.3/jquery.min.js"></script>
+    
+    
+        <link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+    
+    
+    
+        <script type="text/javascript">
+(function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-83870107-1# enter the tracking ID for your Google Analytics', 'auto');
+ga('send', 'pageview');
+
+</script>
+    
+    
+        <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?e6231610fe66acf322391d7546c28f21# enter Baidu Analytics hash key";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+    
+
+</head>
+
+<body>
+    <div id="wrap">
+        <header id="header">
+    <div id="header-outer" class="outer">
+        <div class="container">
+            <div class="container-inner">
+                <div id="header-title">
+                    <h1 class="logo-wrap">
+                        <a href="/" class="logo"></a>
+                    </h1>
+                    
+                        <h2 class="subtitle-wrap">
+                            <p class="subtitle">(conj clojurians me)</p>
+                        </h2>
+                    
+                </div>
+                <div id="header-inner" class="nav-container">
+                    <a id="main-nav-toggle" class="nav-icon fa fa-bars"></a>
+                    <div class="nav-container-inner">
+                        <ul id="main-nav">
+                            
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" href="/">主页</a>
+                                </li>
+                            
+                                        <ul class="main-nav-list"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Clojure/">Clojure</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/技术/">技术</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/生活/">生活</a></li></ul>
+                                    
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" href="/about/index.html">关于</a>
+                                </li>
+                            
+                        </ul>
+                        <nav id="sub-nav">
+                            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="想要查找什么..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+        <div class="container">
+            <div class="main-body container-inner">
+                <div class="main-body-inner">
+                    <section id="main">
+                        <div class="main-body-header">
+    <h1 class="header">
+    
+    <a class="page-title-link" href="/categories/技术/">技术</a>
+    </h1>
+</div>
+                        <div class="main-body-content">
+                            <article id="post-the-generic-programming" class="article article-single article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+        泛型编程
+        </h1>
+    
+
+            </header>
+        
+        
+            <div class="article-meta">
+                
+    <div class="article-date">
+        <a href="/2018/09/18/the-generic-programming/" class="article-date">
+            <time datetime="2018-09-18T08:31:58.000Z" itemprop="datePublished">2018-09-18</time>
+        </a>
+    </div>
+
+                
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/thinking/">thinking</a>
+    </div>
+
+            </div>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+            <h2 id="起源"><a href="#起源" class="headerlink" title="起源"></a>起源</h2><p>泛型编程是一种编程风格，其中算法以尽可能抽象的方式编写，而不依赖于将在其上执行这些算法的数据形式。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/217988-2bfc87e93ae5b6c6.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="泛型编程的提出者"></p>
+<p>泛型这个词并不是通用的，在不同的语言实现中，具有不同的命名。在Java/Kotlin/C#中称为泛型（Generics），在ML/Scala/Haskell中称为Parametric Polymorphism，而在C++中被叫做模板（Template），比如最负盛名的C++中的STL。任何编程方法的发展一定是有其目的，泛型也不例外。泛型的主要目的是加强类型安全和减少强制转换的次数。</p>
+<h2 id="Java中的泛型编程"><a href="#Java中的泛型编程" class="headerlink" title="Java中的泛型编程"></a>Java中的泛型编程</h2><p>在Java中有泛型类和泛型方法之分，这些都是表现形式的改变，实质还是将算法尽可能地抽象化，不依赖具体的类型。</p>
+<blockquote>
+<p>generics add a way to specify concrete types to general purposes classes and methods that operated on Object before</p>
+</blockquote>
+<p>通用的类和方法，具有代表性的就是集合类。在Java1.5之前，Java中的泛型都是通过单根继承的方式实现的。比如：<br><figure class="highlight processing"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> class ArrayList <span class="comment">// before  Java SE 5.0</span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">public</span> <span class="keyword">Object</span> <span class="built_in">get</span>(<span class="built_in">int</span> i)</div><div class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="built_in">add</span>(<span class="keyword">Object</span> o)</div><div class="line">    <span class="keyword">public</span> <span class="built_in">boolean</span> contains(<span class="keyword">Object</span> o);</div><div class="line">    <span class="keyword">private</span> <span class="keyword">Object</span>[] elementData;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>虽然算法足够通用了，但是这样会带来两个问题。一个是类型不安全，还有一个是每次使用时都得强制转化。减少类型转换次数比较容易理解，在没有泛型（参数化类型）的时候，装进容器的数据，其类型信息丢失了，所以取出来的时候需要进行类型转换。<br>例如：<br><figure class="highlight lasso"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">List</span> <span class="built_in">list</span> = <span class="literal">new</span> ArrayList();</div><div class="line"><span class="built_in">list</span>.add(<span class="number">1</span>);</div><div class="line"></div><div class="line">assertThat(<span class="built_in">list</span>.get(<span class="number">0</span>), instanceOf(<span class="built_in">Integer</span>.<span class="keyword">TYPE</span>));</div><div class="line">assertThat((<span class="built_in">Integer</span>)<span class="built_in">list</span>.get(<span class="number">0</span>), is(<span class="number">1</span>)); <span class="comment">//存在强制转换</span></div></pre></td></tr></table></figure></p>
+<p>因为这个类里只有Object的声明，所以任意类型的对象都可以加入到这个集合当中，在使用过程中就会存在强制到具体的类型失败的问题，这将丧失编译器检查的好处。<br><figure class="highlight lasso"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">List</span> <span class="built_in">list</span> = <span class="literal">new</span> ArrayList();</div><div class="line"><span class="built_in">list</span>.add(<span class="number">1</span>);</div><div class="line"><span class="built_in">list</span>.add(<span class="string">"any type"</span>);</div><div class="line"></div><div class="line">assertThat(<span class="built_in">list</span>.get(<span class="number">1</span>), instanceOf(<span class="built_in">String</span>.class));</div><div class="line">assertThat((<span class="built_in">Integer</span>) <span class="built_in">list</span>.get(<span class="number">1</span>), is(<span class="number">1</span>));<span class="comment">//-&gt; java.lang.ClassCastException: java.lang.String cannot be cast to java.lang.Integer</span></div></pre></td></tr></table></figure></p>
+<p>2005 Java SE 5引入了泛型，不仅有效地提高了算法的通用程度，同时也保留强类型语言在编译期检查的好处。</p>
+<blockquote>
+<p>Generics This long-awaited enhancement to the type system allows a type or method to operate on objects of various types while providing compile-time type safety. It adds compile-time type safety to the Collections Framework and eliminates the drudgery of casting.</p>
+</blockquote>
+<p>所以上述的程序会写成这样：<br><figure class="highlight lasso"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">List</span>&lt;<span class="built_in">Integer</span>&gt; <span class="built_in">list</span> = <span class="literal">new</span> ArrayList&lt;<span class="built_in">Integer</span>&gt;();</div><div class="line"><span class="built_in">list</span>.add(<span class="number">1</span>);</div><div class="line"><span class="comment">// list.add("no way"); 编译出错</span></div><div class="line">assertThat(<span class="built_in">list</span>.get(<span class="number">0</span>), instanceOf(<span class="built_in">Integer</span>.<span class="keyword">TYPE</span>));</div><div class="line">assertThat(<span class="built_in">list</span>.get(<span class="number">0</span>), is(<span class="number">1</span>)); <span class="comment">// 不需要强制转换</span></div></pre></td></tr></table></figure></p>
+<h2 id="类型安全"><a href="#类型安全" class="headerlink" title="类型安全"></a>类型安全</h2><p>在静态强类型语言中，编译期间的检查非常重要，因为它可以有效地避免低级错误。这些低级错误就是类型安全解决的问题。类型安全包含了赋值安全和调用安全。其底层实质上就是在某块内存中，始终存在被同种类型的指针指向。</p>
+<ol>
+<li>类型赋值检查<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">long</span> l_num = <span class="number">1L</span>;</div><div class="line"><span class="keyword">int</span> i_num = l_num; <span class="comment">// 编译错误</span></div></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>在强类型的语言当中，类型不一致是无法互相赋值的。</p>
+<p>2. 类型调用检查<br> Clojure就是一门强类型语言，而且还是一门函数式语言，所以重新赋值不被允许，它的类型安全表现在针对类型的调用安全。<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">user=&gt; (+ <span class="string">""</span> <span class="number">1</span>)</div><div class="line">...</div><div class="line">java<span class="selector-class">.lang</span><span class="selector-class">.ClassCastException</span>: java<span class="selector-class">.lang</span><span class="selector-class">.String</span> cannot be cast to java<span class="selector-class">.lang</span><span class="selector-class">.Number</span></div></pre></td></tr></table></figure></p>
+<p>这里存在一个隐式类型转化的过程，但是由于String无法转化成Number，所以方法调用失败。由于Clojure是动态语言，所以只有在运行时才会抛出错误。</p>
+<p>另一个简单的例子，如果一个类型不存在某个方法，那就没法去调用它。在动态强类型语言中，运行时一定会报错。其实质是类型是内存堆上的一块区域，如果该区域之上没有想要调用的方法，那么调用在编译期或者运行期间一定会出错。<br><figure class="highlight pony"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">new</span> <span class="title">Object</span>().<span class="title">sayNothing</span>() <span class="comment">// 编译出错</span></span></div></pre></td></tr></table></figure></p>
+<p>为什么说类型安全对于开发人员友好，这个特性对于编程语言很重要？其实这可以追溯到三次编程范式解决的根本问题上。Clean Architecture（架构整洁之道）一书中，对结构化，面向对象和函数式编程语言做了很透彻的分析。</p>
+<p>首先我们得明确一点，这些范式从来没有扩展编程语言的能力，而是在不同方面对编程语言的能力进行了约束。</p>
+<ol>
+<li>结构化编程<br>对程序的直接控制进行约束和规范，goto considered harmful.</li>
+<li>面向对象编程<br>对程序的间接控制进行约束和规范，pointer considered harmful.</li>
+<li>函数式编程<br>对程序的赋值进行约束和规范，mutability considered harmful.</li>
+</ol>
+<p>按照这样的思路，泛型编程无非是对既有的范式做了进一步的约束。泛型编程旨在对程序的间接控制进一步进行约束和规范。它把类型安全放在第一位，而将类型转化限制在编译期间。</p>
+<p>我们甚至可以遵循前面的定义方式，说：<br>2.1 泛型编程<br>对程序的间接控制<strong>进一步</strong>进行约束和规范，type casting considered harmful.</p>
+<h2 id="Kotlin中的泛型编程"><a href="#Kotlin中的泛型编程" class="headerlink" title="Kotlin中的泛型编程"></a>Kotlin中的泛型编程</h2><p><img src="https://upload-images.jianshu.io/upload_images/217988-6d226cf160f832ba.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="variance - 变化"><br>和Java泛型中的泛型方法和泛型类概念类似，Kotlin将对应的概念称为参数化函数和参数化类型。</p>
+<h3 id="parameterized-function-参数化函数"><a href="#parameterized-function-参数化函数" class="headerlink" title="parameterized function 参数化函数"></a>parameterized function 参数化函数</h3><p>假设我们要返回三个对象中任一一个对象，同时保证类型一致。参数化函数是很恰当的选择。<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">fun</span> <span class="type">&lt;T&gt;</span> <span class="title">random</span><span class="params">(one: <span class="type">T</span>, two: <span class="type">T</span>, three: <span class="type">T</span>)</span></span>: T</div></pre></td></tr></table></figure></p>
+<h3 id="parameterized-type-参数化类型"><a href="#parameterized-type-参数化类型" class="headerlink" title="parameterized type 参数化类型"></a>parameterized type 参数化类型</h3><p>除了参数化函数，类型本身也可以定义自己的参数化类型。比如：<br><figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Dictionary</span>&lt;K, <span class="title">V</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<h3 id="bounded-polymorphism-限定参数化类型"><a href="#bounded-polymorphism-限定参数化类型" class="headerlink" title="bounded polymorphism 限定参数化类型"></a>bounded polymorphism 限定参数化类型</h3><p>大部分情况下，参数化类型不会是无限抽象的，无限抽象往往不利于语言的表达性。所以限定的参数化类型应运而生。<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">fun</span> <span class="type">&lt;T : Comparable&lt;T&gt;</span>&gt; <span class="title">min</span><span class="params">(first: <span class="type">T</span>, second: <span class="type">T</span>)</span></span>: T &#123;</div><div class="line">    <span class="keyword">val</span> k = first.compareTo(second)</div><div class="line">    <span class="keyword">return</span> <span class="keyword">if</span> (k &lt;= <span class="number">0</span>) first <span class="keyword">else</span> second</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>如果需要用多个边界来限定类型，则需要用到<code>where</code>语句，表达<code>T</code>被多个边界类或者接口限制。<br><figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">MultipleBoundedClass</span>&lt;T&gt; <span class="title">where</span> <span class="title">T</span> : <span class="title">Comparable</span>&lt;T&gt;, <span class="title">T</span> : <span class="title">Serializable</span></span></div></pre></td></tr></table></figure></p>
+<h3 id="invariance-不变"><a href="#invariance-不变" class="headerlink" title="invariance 不变"></a>invariance 不变</h3><p><img src="https://upload-images.jianshu.io/upload_images/217988-df2dfb855f6f9755.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="invariance 不变"></p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">open</span> <span class="class"><span class="keyword">class</span> <span class="title">Animal</span></span></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Dog</span> : <span class="type">Animal</span></span>()</div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Cat</span> : <span class="type">Animal</span></span>()</div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Box</span>&lt;<span class="type">T</span>&gt;</span>(<span class="keyword">val</span> elements: MutableList&lt;T&gt;) &#123;</div><div class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">add</span><span class="params">(t: <span class="type">T</span>)</span></span> = elements.add(t)</div><div class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">last</span><span class="params">()</span></span>: T = elements.last()</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">fun</span> <span class="title">foo</span><span class="params">(box: <span class="type">Box</span>&lt;<span class="type">Animal</span>&gt;)</span></span>&#123;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">val</span> box = Box(mutableListOf(Dog()))</div><div class="line"><span class="comment">// -&gt; val box: Box&lt;Dog&gt; = Box(mutableListOf(Dog()))</span></div><div class="line">box.add(Dog()) <span class="comment">// ok</span></div><div class="line">box.add(Cat()) <span class="comment">// 编译错误</span></div></pre></td></tr></table></figure>
+<p>这里出现的编译错误，原因是box的真实类型是<code>Box&lt;Dog&gt;</code>，所以尝试向<code>Box&lt;Dog&gt;</code>中添加<code>Cat</code>对象是不会成功的。这样总能保证类型安全。</p>
+<p><code>Dog</code>是<code>Animal</code>的子类型，那么编译器是否承认<code>Box&lt;Dog&gt;</code>是<code>Box&lt;Animal&gt;</code>的子类型，在使用时进行隐式转换呢？<br><figure class="highlight gauss"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">val <span class="built_in">box</span>: <span class="built_in">Box</span>&lt;Animal&gt; = <span class="built_in">Box</span>(mutableListOf(Dog())) <span class="comment">// type inference failed. Expected type mismatch.</span></div></pre></td></tr></table></figure></p>
+<p>编译器是不会允许这样行为发生。原因就是这样做会导致类型不安全。<br>我们试想一下，假如这种转换是允许的，那么我们就可以继续添加其它继承了<code>Animal</code>的子类对象，比如：<br><figure class="highlight aspectj"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">val box: Box&lt;Animal&gt; = Box(mutableListOf(Dog())</div><div class="line">box.add(Cat())</div></pre></td></tr></table></figure></p>
+<p>这样就导致<code>Box&lt;Animal&gt;</code>里面同时保存了<code>Dog</code>和<code>Cat</code>的对象，正如前面提到的，在运行时，调用可能就会抛出<code>ClassCastException</code>，所以这是非类型安全的。<br><figure class="highlight armasm"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="symbol">val</span> <span class="keyword">box </span>= <span class="keyword">Box(mutableListOf(Dog()))</span></div><div class="line">// val <span class="keyword">box: </span><span class="keyword">Box&lt;Dog&gt; </span>= <span class="keyword">Box(mutableListOf(Dog()))</span></div><div class="line"><span class="symbol">val</span> animalBox: <span class="keyword">Box&lt;Animal&gt; </span>= <span class="keyword">box </span>// 编译错误</div></pre></td></tr></table></figure></p>
+<h3 id="covariance-协变"><a href="#covariance-协变" class="headerlink" title="covariance 协变"></a>covariance 协变</h3><p><img src="https://upload-images.jianshu.io/upload_images/217988-87c0b29318f7589d.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="covariance 协变"></p>
+<p>但是这种限制太过于严苛了，如果我们只需要从这个box读取元素，而不需要往里面添加，那么这种转换就是类型安全的。具体原因稍后再说。</p>
+<p>当<code>Dog</code>是<code>Animal</code>的子类型，那么<code>Box&lt;Dog&gt;</code>也是<code>Box&lt;Animal&gt;</code>的子类型，这种继承关系就是协变。在Kotlin中，我们需要使用<code>out</code>关键字表示这种关系。<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">CovarianceBox</span>&lt;<span class="type">out T : Animal</span>&gt;</span>(<span class="keyword">val</span> elements: MutableList&lt;<span class="keyword">out</span> T&gt;) &#123;</div><div class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">add</span><span class="params">(t: <span class="type">T</span>)</span></span> = elements.add(t) <span class="comment">//编译错误</span></div><div class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">last</span><span class="params">()</span></span>: T = elements.last()</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>基于这种协变关系，我们可以这样调用<br><figure class="highlight aspectj"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">val dogs: CovarianceBox&lt;Dog&gt; = CovarianceBox(mutableListOf(Dog(), Dog()))</div><div class="line">val animals: CovarianceBox&lt;Animal&gt; = dogs</div><div class="line">print(animals.last())</div></pre></td></tr></table></figure></p>
+<p>我们注意上面的<code>CovarianceBox</code>的<code>add</code>方法出现了编译错误，原因就是在协变关系中，泛型参数只能作为输出参数，而不能作为输入参数。因为在拒绝了输入泛型参数的前提下，协变发生的时候，才不会出现强制转化的错误。举个例子：<br><figure class="highlight aspectj"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">val dogs: CovarianceBox&lt;Dog&gt; = CovarianceBox(mutableListOf(Dog(), Dog()))</div><div class="line">val animals: CovarianceBox&lt;Animal&gt; = dogs</div><div class="line">dogs.add(Cat()) // add在这里禁止了</div></pre></td></tr></table></figure></p>
+<p>如果<code>CovarianceBox</code>允许<code>add</code>方法，那么box里面就会同时存在多个子类型的实例，这样就会导致类型不安全，所以<code>out</code>修饰的参数化类型，只能在函数的返回值上出现。</p>
+<p>不过，这种解决方式也不是万能的，属于杀敌一千，自损八百的战术。因为对于<code>Collection</code>而言，不可能做到任何泛型参数都不会出现在入参的位置上。<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Collection</span>&lt;<span class="type">out E</span>&gt; : <span class="type">Iterable</span>&lt;<span class="type">E</span>&gt; </span>&#123;</div><div class="line">    <span class="keyword">public</span> <span class="keyword">operator</span> <span class="function"><span class="keyword">fun</span> <span class="title">contains</span><span class="params">(element: @<span class="type">UnsafeVariance</span> <span class="type">E</span>)</span></span>: <span class="built_in">Boolean</span></div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">fun</span> <span class="title">containsAll</span><span class="params">(elements: <span class="type">Collection</span>&lt;@<span class="type">UnsafeVariance</span> <span class="type">E</span>&gt;)</span></span>: <span class="built_in">Boolean</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>所以，针对这种情况，我们知道某些方法其实并不会有添加的操作，可以在入参的位置上加上<code>@UnsafeVariance</code>，以此消除掉编译器的错误。</p>
+<h3 id="contravariance-逆变"><a href="#contravariance-逆变" class="headerlink" title="contravariance 逆变"></a>contravariance 逆变</h3><p><img src="https://upload-images.jianshu.io/upload_images/217988-837beeffe65375fc.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="contravariance 逆变"></p>
+<p>当<code>Dog</code>是<code>Animal</code>的子类型，那么<code>Box&lt;Animal&gt;</code>也是<code>Box&lt;Dog&gt;</code>的子类型，这种继承关系就是逆变。在Kotlin中，我们需要使用<code>in</code>关键字表示这种关系。<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">ContravarianceBox</span>&lt;<span class="type">in T</span>&gt;</span>(<span class="keyword">val</span> elements: MutableList&lt;<span class="keyword">in</span> T&gt;) &#123;</div><div class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">add</span><span class="params">(t: <span class="type">T</span>)</span></span> = elements.add(t)</div><div class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">first</span><span class="params">()</span></span>: T = elements.first() <span class="comment">// 编译错误</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>基于这种逆变关系，我们可以这样调用<br><figure class="highlight vim"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">val animals = ContravarianceBox(mutableListOf(Animal()))</div><div class="line">val dog<span class="variable">s:</span> ContravarianceBox<span class="symbol">&lt;Dog&gt;</span> = animals</div><div class="line">dogs.<span class="built_in">add</span>(Dog())</div></pre></td></tr></table></figure></p>
+<p>这个时候，类型始终是安全的。但是我们也注意到<code>ContravarianceBox</code>的<code>first</code>方法出现了编译错误，原因就是在逆变关系中，泛型参数只能作为输入参数，而不能作为输出参数。在拒绝了输出参数的前提下，逆变发生的时候，才不会出现强制转换的错误。<br><figure class="highlight vim"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">val animals = ContravarianceBox(mutableListOf(Animal()))</div><div class="line">val dog<span class="variable">s:</span> ContravarianceBox<span class="symbol">&lt;Dog&gt;</span> = animals</div><div class="line">dogs.<span class="built_in">add</span>(Dog())</div><div class="line">val <span class="keyword">do</span><span class="variable">g:</span> Dog = dogs.<span class="keyword">first</span>() // 编译错误</div></pre></td></tr></table></figure></p>
+<h3 id="reification-变现"><a href="#reification-变现" class="headerlink" title="reification 变现"></a>reification 变现</h3><figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">reify is To <span class="built_in">convert</span> mentally <span class="keyword">into</span> <span class="keyword">a</span> thing; <span class="built_in">to</span> materialize.</div></pre></td></tr></table></figure>
+<p>Kotlin中的Reification的实现使用的是inline模式，就是在编译期间将类型进行原地替换。<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 定义</span></div><div class="line"><span class="keyword">inline</span> <span class="function"><span class="keyword">fun</span> <span class="type">&lt;<span class="keyword">reified</span> T : Any&gt;</span> <span class="title">loggerFor</span><span class="params">()</span></span>: Logger = LoggerFactory.getLogger(T::<span class="class"><span class="keyword">class</span>.<span class="title">java</span>)</span></div><div class="line"><span class="comment">// 使用</span></div><div class="line"><span class="keyword">private</span> <span class="keyword">val</span> logger = loggerFor&lt;AgreementFactory&gt;()</div></pre></td></tr></table></figure></p>
+<p>因此，所以原来调用处的代码会在编译期间展开成如下：<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">private</span> <span class="keyword">val</span> logger = LoggerFactory.getLogger(AgreementFactory::<span class="class"><span class="keyword">class</span>.<span class="title">java</span>)</span></div></pre></td></tr></table></figure></p>
+<p>使用<code>reification</code>操作，可以精简掉很多模板代码。</p>
+<h3 id="type-projection-类型投影"><a href="#type-projection-类型投影" class="headerlink" title="type projection 类型投影"></a>type projection 类型投影</h3><p><img src="https://upload-images.jianshu.io/upload_images/217988-ee46241507e001e0.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="type projection 类型投影"></p>
+<p>上述过程中，我们看到协变和逆变都是针对可以编辑的类。但是如果遇到已经存在的类，这件事就得运用类型投影技术。拿<code>Class</code>这个类举例：<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">val</span> dog = Dog::<span class="class"><span class="keyword">class</span>.<span class="title">java</span></span></div><div class="line"><span class="keyword">val</span> animal: Class&lt;Animal&gt; = dog <span class="comment">//编译不通过</span></div></pre></td></tr></table></figure></p>
+<p>Kotlin中的type projection就是为了解决这个问题的。<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">val</span> dog = Dog::<span class="class"><span class="keyword">class</span>.<span class="title">java</span></span></div><div class="line"><span class="keyword">val</span> animal: Class&lt;<span class="keyword">out</span> Animal&gt; = dog</div></pre></td></tr></table></figure></p>
+<p>同理，<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">val</span> animal = Animal::<span class="class"><span class="keyword">class</span>.<span class="title">java</span></span></div><div class="line"><span class="keyword">val</span> dog: Class&lt;<span class="keyword">in</span> Dog&gt; = animal</div></pre></td></tr></table></figure></p>
+<p>我们来看一个真实的场景<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">val</span> agreementClass: Class&lt;RentalAgreement&gt; = RentalAgreement::<span class="class"><span class="keyword">class</span>.<span class="title">java</span></span></div><div class="line"></div><div class="line"><span class="keyword">private</span> <span class="keyword">val</span> virtualTable = mapOf(RentalPayload.type to RentalAgreement::<span class="class"><span class="keyword">class</span>.<span class="title">java</span>)</span></div><div class="line"><span class="keyword">private</span> <span class="function"><span class="keyword">fun</span> <span class="title">dispatch</span><span class="params">(type: <span class="type">String</span>)</span></span>: Class&lt;<span class="keyword">out</span> Agreement&lt;Payload&gt;&gt; &#123;</div><div class="line">    <span class="keyword">return</span> virtualTable[type]</div><div class="line">            ?: <span class="keyword">throw</span> RuntimeException(<span class="string">"No suitable Agreement of this type found, please check your type: <span class="subst">$type</span>"</span>)</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>只有这样，我们才能将具体的<code>Class&lt;RentalAgreement&gt;</code>投射到<code>Class&lt;out Agreement&lt;Payload&gt;&gt;</code>父类型之上，后续通过某种方式，实例化出<code>RentalAgreement</code>的实例，其继承自<code>Agreement&lt;Payload&gt;</code>。</p>
+<h2 id="泛型编程的思考"><a href="#泛型编程的思考" class="headerlink" title="泛型编程的思考"></a>泛型编程的思考</h2><p><img src="https://upload-images.jianshu.io/upload_images/217988-2ae56647d7c62079.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="过程式代码 vs. 面向对象"><br>Bob 大叔的 Clean Code 一书的第六章《对象和数据结构》中提到了一个很有意思的现象：数据、对象的反对称性。在这里，数据结构暴露数据，没有提供有意义的函数；对象把数据隐藏起来，暴露操作数据的函数。</p>
+<p>过程式代码会基于数据结构进行操作。例如：首先会定义好数据结构<code>Square</code>, <code>Circle</code>和<code>Triangle</code>，然后统一在<code>area(shape: Any)</code>的函数中求shape数据的面积，如：<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">fun</span> <span class="title">area</span><span class="params">(shape: <span class="type">Any</span>)</span></span>: <span class="built_in">Double</span> &#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">when</span>(shape) &#123;</div><div class="line">      <span class="keyword">is</span> Square -&gt; <span class="keyword">return</span> shape.side * shape.side</div><div class="line">      <span class="keyword">else</span> -&gt; <span class="number">0.0</span></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>而面向对象拥趸一定会嗤之以鼻——显然应该抽象出一个shape类包含<code>area</code>方法，让其它的形状类继承。如：<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">interface</span> <span class="title">Shape</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">area</span><span class="params">()</span></span>: <span class="built_in">Double</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Square</span></span>(<span class="keyword">val</span> side: <span class="built_in">Double</span>) : Shape &#123;</div><div class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">area</span><span class="params">()</span></span>: <span class="built_in">Double</span> &#123;</div><div class="line">        <span class="keyword">return</span> side * side</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>在添加新的形状的要求下，面向对象的代码是优于过程式的，因为面向对象对类型的扩展开放了。而过程式代码却不得不修改原来<code>area</code>方法的实现。</p>
+<p>但是，如果此时需要添加一个求周长<code>primeter</code>的函数。相对于面向对象代码，过程式代码由于无需修改原来的实现，反而更加容易扩展。反观面向对象的代码，在接口<code>Shape</code>中添加一个<code>primeter</code>会导致所有的子类都得发生修改。</p>
+<p>这就是数据和类型的反对称性。在变化方向不同的时候，它们面临的阻力也是不一样的。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/217988-cd7abfea6d757a50.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="隔离阻抗"><br>我们既想要过程式对方法扩展的优点，又执着面向对象自然的类型扩展的好处，该怎么办呢？可以考虑结合起来使用。</p>
+<p>这样的结合不是说原有的双向阻力消失了，而是在不同的层次上应用各自的优点。也就是说，<code>Shape</code>需要求面积、周长，同时也要支持类型扩展，这种要求之下，基本不可能调解出一种符合开闭原则的方案。不过，如果对于所有<code>Shape</code>类，都需要统一进行某些操作，例如：集合的排序，过滤等等。那么合并两者的好处就变得可行了。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/217988-1baedd1173c5c2ad.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="泛型补充"><br>基于最先分析的通过继承的方式进行泛型编程的缺点：</p>
+<ol>
+<li>太多强制转换</li>
+<li>非类型安全。<br>恰当地引入了泛型<code>T</code>，以期编译期的占位和运行时的替换。</li>
+</ol>
+<p><img src="https://upload-images.jianshu.io/upload_images/217988-2a674d8478f7884d.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="泛型限定"><br>不过没有限定的泛型大部分情况下是没有用处的，因为无限的抽象没有意义，所以需要更加精准的泛型限定。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/217988-9bc98f8e10201115.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="依赖倒置"><br>在我们做完这一切以后，会惊喜地发现依赖倒置（DIP）原则贯穿始终。不论是继承体系，还是改善之后的泛型继承体系。它们秉持的原则就是在编译期，始终朝着稳定、抽象的方向移动，而且不断在易变、具体的方向延迟决策，直到运行时方能确定。</p>
+<h2 id="书籍推荐"><a href="#书籍推荐" class="headerlink" title="书籍推荐"></a>书籍推荐</h2><p><img src="https://upload-images.jianshu.io/upload_images/217988-613c079cce8d4fa5.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="书籍推荐"></p>
+<h2 id="脑图"><a href="#脑图" class="headerlink" title="脑图"></a>脑图</h2><p><img src="https://upload-images.jianshu.io/upload_images/217988-8f2ce836e7ea45a1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="知识梳理"></p>
+<hr>
+<p>参考链接<br><a href="https://www.jianshu.com/p/64b2d11decbc" target="_blank" rel="external">泛型 一个会写诗的程序员</a></p>
+
+        </div>
+        <footer class="article-footer">
+            
+
+
+
+    <a data-url="https://lambeta.com/2018/09/18/the-generic-programming/" data-id="cjm7gpanl0058dzm4m1wm03r8" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
+<script>
+    (function ($) {
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+</script>
+
+        </footer>
+    </div>
+</article>
+
+    <section id="comments">
+    
+        
+    <div class="ds-thread" data-thread-key="2018/09/18/the-generic-programming/" data-title="泛型编程" data-url="https://lambeta.com/2018/09/18/the-generic-programming/"></div>
+    <style>
+        #ds-thread #ds-reset .ds-textarea-wrapper {
+            background: none;
+        }
+        #ds-reset .ds-avatar img {
+            box-shadow: none;
+        }
+        #ds-reset .ds-gradient-bg {
+            background: #f7f7f7;
+        }
+        #ds-thread #ds-reset li.ds-tab a {
+            border-radius: 3px;
+        }
+        #ds-thread #ds-reset .ds-post-button {
+            color: white;
+            border: none;
+            box-shadow: none;
+            background: #d32;
+            text-shadow: none;
+            font-weight: normal;
+            font-family: 'Microsoft Yahei';
+        }
+        #ds-thread #ds-reset .ds-post-button:hover {
+            color: white;
+            background: #DE594C;
+        }
+        #ds-thread #ds-reset .ds-post-button:active {
+            background: #d32;
+        }
+        #ds-smilies-tooltip ul.ds-smilies-tabs li a.ds-current {
+            color: white;
+            background: #d32;
+            box-shadow: none;
+            text-shadow: none;
+            font-weight: normal;
+        }
+    </style>
+
+    
+    </section>
+
+
+                        </div>
+                    </section>
+                    <aside id="sidebar">
+    <a class="sidebar-toggle" title="Expand Sidebar"><i class="toggle icon"></i></a>
+    <div class="sidebar-top">
+        <p>关注我 :</p>
+        <ul class="social-links">
+            
+                
+                <li>
+                    <a class="social-tooltip" title="twitter" href="https://twitter.com/lambetaX" target="_blank">
+                        <i class="icon fa fa-twitter"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="github" href="https://github.com/qianyan" target="_blank">
+                        <i class="icon fa fa-github"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="weibo" href="http://weibo.com/3672207020/" target="_blank">
+                        <i class="icon fa fa-weibo"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="jianshu" href="https://www.jianshu.com/u/0775189eef67" target="_blank">
+                        <i class="icon fa fa-jianshu"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="rss" href="/atom.xml" target="_blank">
+                        <i class="icon fa fa-rss"></i>
+                    </a>
+                </li>
+                
+            
+        </ul>
+    </div>
+    
+        
+<nav id="article-nav">
+    
+    
+        <a href="/2018/07/18/the-joy-of-learning-new-programming-language/" id="article-nav-older" class="article-nav-link-wrap">
+        <strong class="article-nav-caption">上一篇</strong>
+        <p class="article-nav-title">我是怎样学习新编程语言的</p>
+        <i class="icon fa fa-chevron-left" id="icon-chevron-left"></i>
+        </a>
+    
+</nav>
+
+    
+    <div class="widgets-container">
+        
+            
+                
+    <div class="widget-wrap">
+        <h3 class="widget-title">最新文章</h3>
+        <div class="widget">
+            <ul id="recent-post" class="no-thumbnail">
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/技术/">技术</a></p>
+                            <p class="item-title"><a href="/2018/09/18/the-generic-programming/" class="title">泛型编程</a></p>
+                            <p class="item-date"><time datetime="2018-09-18T08:31:58.000Z" itemprop="datePublished">2018-09-18</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/技术/">技术</a></p>
+                            <p class="item-title"><a href="/2018/07/18/the-joy-of-learning-new-programming-language/" class="title">我是怎样学习新编程语言的</a></p>
+                            <p class="item-date"><time datetime="2018-07-18T05:09:26.000Z" itemprop="datePublished">2018-07-18</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/技术/">技术</a></p>
+                            <p class="item-title"><a href="/2018/07/18/the-way-to-python/" class="title">怎样才算学会Python</a></p>
+                            <p class="item-date"><time datetime="2018-07-18T05:03:10.000Z" itemprop="datePublished">2018-07-18</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/技术/">技术</a></p>
+                            <p class="item-title"><a href="/2018/05/13/learn-idris/" class="title">代数定义- idris</a></p>
+                            <p class="item-date"><time datetime="2018-05-13T07:38:28.000Z" itemprop="datePublished">2018-05-13</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/生活/">生活</a></p>
+                            <p class="item-title"><a href="/2018/05/01/ruling-the-waves/" class="title">技术简史</a></p>
+                            <p class="item-date"><time datetime="2018-05-01T09:48:40.000Z" itemprop="datePublished">2018-05-01</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">分类</h3>
+        <div class="widget">
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Clojure/">Clojure</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/技术/">技术</a><span class="category-list-count">49</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/生活/">生活</a><span class="category-list-count">8</span></li></ul>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">归档</h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">九月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">七月 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">五月 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">四月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">十一月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">九月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">五月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">四月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">一月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">十一月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">七月 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">六月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">三月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">二月 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">一月 2015</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/11/">十一月 2014</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/10/">十月 2014</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/09/">九月 2014</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/07/">七月 2014</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/05/">五月 2014</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02/">二月 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/01/">一月 2014</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/12/">十二月 2013</a><span class="archive-list-count">5</span></li></ul>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-float">
+        <h3 class="widget-title">标签云</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/FP/" style="font-size: 13.33px;">FP</a> <a href="/tags/Mistakes-I-Hav-Made/" style="font-size: 13.33px;">Mistakes I Hav Made</a> <a href="/tags/OO/" style="font-size: 10px;">OO</a> <a href="/tags/agile/" style="font-size: 11.67px;">agile</a> <a href="/tags/angularJs/" style="font-size: 10px;">angularJs</a> <a href="/tags/code/" style="font-size: 10px;">code</a> <a href="/tags/concurrency/" style="font-size: 10px;">concurrency</a> <a href="/tags/elixir/" style="font-size: 10px;">elixir</a> <a href="/tags/emacs/" style="font-size: 10px;">emacs</a> <a href="/tags/file/" style="font-size: 10px;">file</a> <a href="/tags/geek/" style="font-size: 10px;">geek</a> <a href="/tags/gradle/" style="font-size: 10px;">gradle</a> <a href="/tags/idris/" style="font-size: 10px;">idris</a> <a href="/tags/java/" style="font-size: 18.33px;">java</a> <a href="/tags/javascript/" style="font-size: 16.67px;">javascript</a> <a href="/tags/kata/" style="font-size: 10px;">kata</a> <a href="/tags/language/" style="font-size: 13.33px;">language</a> <a href="/tags/leiningen/" style="font-size: 11.67px;">leiningen</a> <a href="/tags/maven/" style="font-size: 10px;">maven</a> <a href="/tags/mysql/" style="font-size: 11.67px;">mysql</a> <a href="/tags/node/" style="font-size: 11.67px;">node</a> <a href="/tags/poetry/" style="font-size: 11.67px;">poetry</a> <a href="/tags/promise/" style="font-size: 10px;">promise</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/q/" style="font-size: 10px;">q</a> <a href="/tags/rake/" style="font-size: 10px;">rake</a> <a href="/tags/reading/" style="font-size: 15px;">reading</a> <a href="/tags/shell/" style="font-size: 13.33px;">shell</a> <a href="/tags/sublime/" style="font-size: 10px;">sublime</a> <a href="/tags/test/" style="font-size: 10px;">test</a> <a href="/tags/testing/" style="font-size: 10px;">testing</a> <a href="/tags/thinking/" style="font-size: 20px;">thinking</a> <a href="/tags/transaction/" style="font-size: 10px;">transaction</a> <a href="/tags/vim/" style="font-size: 11.67px;">vim</a> <a href="/tags/yeoman/" style="font-size: 10px;">yeoman</a> <a href="/tags/zeal/" style="font-size: 10px;">zeal</a> <a href="/tags/散文/" style="font-size: 10px;">散文</a>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">链接</h3>
+        <div class="widget">
+            <ul>
+                
+                    <li>
+                        <a href="http://blog.jayfields.com/">Jay Fields</a>
+                    </li>
+                
+                    <li>
+                        <a href="https://aphyr.com">Aphyr</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://bucharestfp.ro">Bucharest FP</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://www.yinwang.org">Wangyin</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://blog.rlmflores.me/">Rodrigo Flores</a>
+                    </li>
+                
+                    <li>
+                        <a href="https://seancorfield.github.io/">Seancorfield</a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+
+            
+        
+    </div>
+</aside>
+                </div>
+            </div>
+        </div>
+        <footer id="footer">
+    <div class="container">
+        <div class="container-inner">
+            <a id="back-to-top" href="javascript:;"><i class="icon fa fa-angle-up"></i></a>
+            <div class="credit">
+                <h1 class="logo-wrap">
+                    <a href="/" class="logo"></a>
+                </h1>
+                <p>&copy; 2018 lambeta</p>
+                <p>Powered by <a href="//hexo.io/" target="_blank">Hexo</a>. Theme by <a href="//github.com/ppoffice" target="_blank">PPOffice</a></p>
+            </div>
+        </div>
+    </div>
+</footer>
+        
+    
+    <script type="text/javascript">
+    var duoshuoQuery = {short_name:'lambeta'};
+    (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0]
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+    </script>
+
+
+
+
+    
+        <script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-share.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-video.min.js"></script>
+    
+    
+    
+
+
+<!-- Custom Scripts -->
+<script src="/js/main.js"></script>
+
+    </div>
+</body>
+</html>
