@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://lambeta.com/2017/09/19/agile-team-workflow/</loc>
+    
+    <lastmod>2018-09-24T13:04:54.690Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://lambeta.com/2018/09/18/the-generic-programming/</loc>
     
     <lastmod>2018-09-18T08:34:46.914Z</lastmod>
@@ -145,13 +152,6 @@
     <loc>https://lambeta.com/2017/09/17/release-jar-to-clojars/</loc>
     
     <lastmod>2017-09-19T23:28:25.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://lambeta.com/2017/09/19/agile-team-workflow/</loc>
-    
-    <lastmod>2017-09-19T15:17:19.000Z</lastmod>
     
   </url>
   

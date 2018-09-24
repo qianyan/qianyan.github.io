@@ -781,7 +781,7 @@
     <link href="https://lambeta.com/2017/09/19/agile-team-workflow/"/>
     <id>https://lambeta.com/2017/09/19/agile-team-workflow/</id>
     <published>2017-09-19T15:07:17.000Z</published>
-    <updated>2017-09-19T15:17:19.000Z</updated>
+    <updated>2018-09-24T13:04:54.690Z</updated>
     
     <content type="html"><![CDATA[<h2 id="站会"><a href="#站会" class="headerlink" title="站会"></a>站会</h2><p>站会中的内容是每天工作的开始，也是对昨天工作的回顾。一般会由团队的某位成员主持，这位主持人有责任让电子系统上的story卡片和看板上的保持一致。站会上，大家依看板从右至左依次更新自己负责story的状态，如果遇到阻碍，应该在站会上及时提出，团队之中的成员如果能提供帮助，应该在站会之后，组织解决方案的讨论。</p>
 <h3 id="站会反模式"><a href="#站会反模式" class="headerlink" title="站会反模式"></a>站会反模式</h3><ol>
@@ -857,10 +857,10 @@
 <li>开发团队</li>
 <li>其他干系人</li>
 </ol>
-<p><a href="http://insights.thoughtworkers.org/7-step-agenda-effective-retrospective/" target="_blank" rel="external">高效回顾会议的七步议程</a></p>
+<p><a href="https://insights.thoughtworks.cn/7-step-agenda-effective-retrospective/" target="_blank" rel="external">高效回顾会议的七步议程</a></p>
 <h2 id="迭代review会议-Showcase"><a href="#迭代review会议-Showcase" class="headerlink" title="迭代review会议 (Showcase)"></a>迭代review会议 (Showcase)</h2><p>Showcase 就是开发团队把开发好的功能给客户的 Product Owner（以下简称PO）等业务相关人员演示，以获取他们对所开发系统的反馈，是敏捷开发流程中的一个实践，一般的频率是一个迭代一次，也可以根据项目具体情况做调整。</p>
 <p>内容包含：</p>
-<p><a href="http://insights.thoughtworkers.org/agile-showcase-se7en/" target="_blank" rel="external">敏捷实践Showcase的七宗罪</a><br><a href="http://www.funretrospectives.com/category/energizer/" target="_blank" rel="external">Retro 破冰游戏</a></p>
+<p><a href="https://insights.thoughtworks.cn/agile-showcase-se7en/" target="_blank" rel="external">敏捷实践Showcase的七宗罪</a><br><a href="http://www.funretrospectives.com/category/energizer/" target="_blank" rel="external">Retro 破冰游戏</a></p>
 <h2 id="用户故事"><a href="#用户故事" class="headerlink" title="用户故事"></a>用户故事</h2><h2 id="故事基础"><a href="#故事基础" class="headerlink" title="故事基础"></a>故事基础</h2><p>用户故事是指在软件开发和项目管理中用日常语言或商务用语写成的句子。这个句子反映一个用户在其工作职责的范围内要达到的某个目的, 以及此目的所需要的功能。</p>
 <h3 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h3><blockquote>
 <p>为了避免遗漏附件延误工作<br>作为邮件发送者<br>我希望邮件系统能够在我忘记带附件的时候提醒我</p>
