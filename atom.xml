@@ -781,7 +781,7 @@
     <link href="https://lambeta.com/2017/09/19/agile-team-workflow/"/>
     <id>https://lambeta.com/2017/09/19/agile-team-workflow/</id>
     <published>2017-09-19T15:07:17.000Z</published>
-    <updated>2018-09-24T13:04:54.690Z</updated>
+    <updated>2018-09-24T13:13:05.729Z</updated>
     
     <content type="html"><![CDATA[<h2 id="站会"><a href="#站会" class="headerlink" title="站会"></a>站会</h2><p>站会中的内容是每天工作的开始，也是对昨天工作的回顾。一般会由团队的某位成员主持，这位主持人有责任让电子系统上的story卡片和看板上的保持一致。站会上，大家依看板从右至左依次更新自己负责story的状态，如果遇到阻碍，应该在站会上及时提出，团队之中的成员如果能提供帮助，应该在站会之后，组织解决方案的讨论。</p>
 <h3 id="站会反模式"><a href="#站会反模式" class="headerlink" title="站会反模式"></a>站会反模式</h3><ol>
@@ -983,6 +983,10 @@
 <li>不注释掉或删除失败的测试</li>
 </ul>
 <p>这也就意味着开发人员需要密切关注CI的状态。CI持续反馈着软件的可工作状态，所以团队应该把CI的健康状况列为项目的最高优先级，甚至高于开发新特性。</p>
+<hr>
+<h2 id="友情链接"><a href="#友情链接" class="headerlink" title="友情链接"></a>友情链接</h2><ol>
+<li><a href="https://insights.thoughtworks.cn/thoughtworks-agile/" target="_blank" rel="external">ThoughtWorks的敏捷开发-XR</a>)</li>
+</ol>
 ]]></content>
     
     <summary type="html">
