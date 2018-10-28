@@ -2,6 +2,20 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://lambeta.com/2018/10/28/Guide-to-Clean-Architecture-1/</loc>
+    
+    <lastmod>2018-10-28T07:40:36.337Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://lambeta.com/2018/07/18/the-joy-of-learning-new-programming-language/</loc>
+    
+    <lastmod>2018-10-12T05:07:35.996Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://lambeta.com/2017/09/19/agile-team-workflow/</loc>
     
     <lastmod>2018-09-24T13:13:05.729Z</lastmod>
@@ -19,13 +33,6 @@
     <loc>https://lambeta.com/2013/12/13/geeker/</loc>
     
     <lastmod>2018-09-10T00:41:39.723Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://lambeta.com/2018/07/18/the-joy-of-learning-new-programming-language/</loc>
-    
-    <lastmod>2018-07-18T05:10:54.743Z</lastmod>
     
   </url>
   
