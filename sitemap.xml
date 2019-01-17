@@ -2,16 +2,30 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://lambeta.com/about/index.html</loc>
+    <loc>https://lambeta.com/2019/01/17/Guide-to-Clean-Architecture-2-more/</loc>
     
-    <lastmod>2019-01-17T07:06:30.801Z</lastmod>
+    <lastmod>2019-01-17T07:23:15.486Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://lambeta.com/2019/01/17/Guide-to-Clean-Architecture-2/</loc>
+    
+    <lastmod>2019-01-17T07:22:08.971Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://lambeta.com/2018/10/28/Guide-to-Clean-Architecture-1/</loc>
     
-    <lastmod>2018-10-28T07:40:36.337Z</lastmod>
+    <lastmod>2019-01-17T07:14:49.169Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://lambeta.com/about/index.html</loc>
+    
+    <lastmod>2019-01-17T07:06:30.801Z</lastmod>
     
   </url>
   

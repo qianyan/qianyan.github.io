@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    
+    <meta name="baidu-site-verification" content="dwwExeQWOx" />
+    <title>架构整洁之道导读（二）续 组件聚合张力图 | λ</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+        <meta name="keywords" content="thinking" />
+    
+    <meta name="description" content="关于组件聚合张力图的讨论周三的午休时间，我在ThoughtWorks北京办公室分享了一场《架构整洁之道导读》。当谈到分享组件聚合原则的时候，很多同事表示难以理解。究其缘由，是我们无法将组件违反原则的后果对应到真实项目的问题上，这就导致原则和实践之间的不一致。讨论的过程异常激烈，但是很遗憾地最终并没有得到一个服众的结论。所以为了进一步澄清这些争议点，我决定专门组织一场针对组件聚合原则张力图的讨论会。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="架构整洁之道导读（二）续 组件聚合张力图">
+<meta property="og:url" content="https://lambeta.com/2019/01/17/Guide-to-Clean-Architecture-2-more/index.html">
+<meta property="og:site_name" content="λ">
+<meta property="og:description" content="关于组件聚合张力图的讨论周三的午休时间，我在ThoughtWorks北京办公室分享了一场《架构整洁之道导读》。当谈到分享组件聚合原则的时候，很多同事表示难以理解。究其缘由，是我们无法将组件违反原则的后果对应到真实项目的问题上，这就导致原则和实践之间的不一致。讨论的过程异常激烈，但是很遗憾地最终并没有得到一个服众的结论。所以为了进一步澄清这些争议点，我决定专门组织一场针对组件聚合原则张力图的讨论会。">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/217988-97f1eb1dfe9e1314.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2019-01-17T07:23:15.486Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="架构整洁之道导读（二）续 组件聚合张力图">
+<meta name="twitter:description" content="关于组件聚合张力图的讨论周三的午休时间，我在ThoughtWorks北京办公室分享了一场《架构整洁之道导读》。当谈到分享组件聚合原则的时候，很多同事表示难以理解。究其缘由，是我们无法将组件违反原则的后果对应到真实项目的问题上，这就导致原则和实践之间的不一致。讨论的过程异常激烈，但是很遗憾地最终并没有得到一个服众的结论。所以为了进一步澄清这些争议点，我决定专门组织一场针对组件聚合原则张力图的讨论会。">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/217988-97f1eb1dfe9e1314.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+    
+
+    
+        <link rel="alternate" href="/atom.xml" title="λ" type="application/atom+xml" />
+    
+
+    
+        <link rel="icon" href="/favicon.ico# path to favicon" />
+    
+
+    <link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/libs/titillium-web/styles.css">
+    <link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <script src="/libs/jquery/2.0.3/jquery.min.js"></script>
+    
+    
+        <link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+    
+    
+    
+        <script type="text/javascript">
+(function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-83870107-1# enter the tracking ID for your Google Analytics', 'auto');
+ga('send', 'pageview');
+
+</script>
+    
+    
+        <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?e6231610fe66acf322391d7546c28f21# enter Baidu Analytics hash key";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+    
+
+</head>
+
+<body>
+    <div id="wrap">
+        <header id="header">
+    <div id="header-outer" class="outer">
+        <div class="container">
+            <div class="container-inner">
+                <div id="header-title">
+                    <h1 class="logo-wrap">
+                        <a href="/" class="logo"></a>
+                    </h1>
+                    
+                        <h2 class="subtitle-wrap">
+                            <p class="subtitle">(conj clojurians me)</p>
+                        </h2>
+                    
+                </div>
+                <div id="header-inner" class="nav-container">
+                    <a id="main-nav-toggle" class="nav-icon fa fa-bars"></a>
+                    <div class="nav-container-inner">
+                        <ul id="main-nav">
+                            
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" href="/">主页</a>
+                                </li>
+                            
+                                        <ul class="main-nav-list"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Clojure/">Clojure</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/技术/">技术</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/生活/">生活</a></li></ul>
+                                    
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" href="/about/index.html">关于</a>
+                                </li>
+                            
+                        </ul>
+                        <nav id="sub-nav">
+                            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="想要查找什么..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+        <div class="container">
+            <div class="main-body container-inner">
+                <div class="main-body-inner">
+                    <section id="main">
+                        <div class="main-body-header">
+    <h1 class="header">
+    
+    <a class="page-title-link" href="/categories/技术/">技术</a>
+    </h1>
+</div>
+                        <div class="main-body-content">
+                            <article id="post-Guide-to-Clean-Architecture-2-more" class="article article-single article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+        架构整洁之道导读（二）续 组件聚合张力图
+        </h1>
+    
+
+            </header>
+        
+        
+            <div class="article-meta">
+                
+    <div class="article-date">
+        <a href="/2019/01/17/Guide-to-Clean-Architecture-2-more/" class="article-date">
+            <time datetime="2019-01-17T07:16:04.000Z" itemprop="datePublished">2019-01-17</time>
+        </a>
+    </div>
+
+                
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/thinking/">thinking</a>
+    </div>
+
+            </div>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+            <h2 id="关于组件聚合张力图的讨论"><a href="#关于组件聚合张力图的讨论" class="headerlink" title="关于组件聚合张力图的讨论"></a>关于组件聚合张力图的讨论</h2><p>周三的午休时间，我在ThoughtWorks北京办公室分享了一场《架构整洁之道导读》。当谈到分享组件聚合原则的时候，很多同事表示难以理解。究其缘由，是我们无法将组件违反原则的后果对应到真实项目的问题上，这就导致原则和实践之间的不一致。讨论的过程异常激烈，但是很遗憾地最终并没有得到一个服众的结论。所以为了进一步澄清这些争议点，我决定专门组织一场针对组件聚合原则张力图的讨论会。在<a href="https://www.jianshu.com/u/49ddfba9ae88" target="_blank" rel="external">吴大师</a>的鼓动下，时间定在下周四晚上的8点半，与会人员大多是咨询团队的技术教练，也有我们项目上的客户。</p>
+<p>在这场长达两个半小时的讨论会上，没想到首先出现争议的点居然是组件的定义。</p>
+<blockquote>
+<p>组件是软件部署的最小单元，是整个软件系统在部署过程中可以独立完成部署的最小实体。</p>
+</blockquote>
+<p>对于这样的定义，<a href="https://www.zhihu.com/people/nuo-tie" target="_blank" rel="external">大魔头</a>提出了质疑：library（库）并不能独立部署。但凡出现明显的逻辑漏洞的时候，我们最好的方式是抛开译文回去看原文。</p>
+<blockquote>
+<p>Components are the units of deployment. They are the smallest entities that can be deployed as part of a system.</p>
+</blockquote>
+<p>阅读原文之后，我们发现“组件是软件部署的最小单元。”这句话翻译得并没有太大问题，但是第二句就有损原意了，原意是说<strong>可以作为系统的一部分被部署的最小实体</strong>，而没有强调部署过程这种动态的概念，否则就和前一句是同义反复。所以这个定义里面并没有说组件可以独立部署。后面提到组件可以被链接到一个独立可执行文件或者归档文件，又或者，可以被打包成.jar、.dll或者.exe文件，并以动态加载的插件形式实现<strong>独立部署</strong>。</p>
+<h3 id="解读组件的定义"><a href="#解读组件的定义" class="headerlink" title="解读组件的定义"></a>解读组件的定义</h3><p>来自原文：</p>
+<blockquote>
+<p>Components can be linked together into a single executable. Or they can be aggregated together into a single archive, such as a .war file. Or they can be independently deployed as separate dynamically loaded plugins, such as.jar or .dll or .exe files.</p>
+</blockquote>
+<p>来自讨论：</p>
+<blockquote>
+<p>20:56:56     From tianjie : These dynamically linked files, which can be plugged together at runtime, are the software components of our architectures.</p>
+</blockquote>
+<p>联系上下文理解之后，我们知道：组件可以被设计成独立部署的，但是并不是所有的组件都是可以独立部署的。这是要澄清的，不然讨论聚合原则的时候容易出现偏差。</p>
+<p>吴大师接着解释说，组件应该是个逻辑单元，而不是物理单元。强制某个代码模块就是一个物理的部署单元是不合适的。另外，鲍勃大叔在介绍架构边界时，也表明了一样的观点：架构的边界并不是服务的边界。</p>
+<h3 id="解读REP原则"><a href="#解读REP原则" class="headerlink" title="解读REP原则"></a>解读REP原则</h3><p>我按照自己的思路解释过REP、CCP和CRP原则[^1]之后，讨论的焦点很快聚集到REP原则的解读和实践意义上。</p>
+<p><a href="https://www.zhihu.com/people/wu-xue-feng/" target="_blank" rel="external">吴大师</a>认为REP原则如果简单解读成没有发布过程就不能复用，它就和CCP、CRP原则的排斥力量不均衡，无法形成稳定的三角关系，那么这个张力图就显得有点鸡肋。</p>
+<p><a href="https://www.thoughtworks.com/cn/profiles/liu-shangqi" target="_blank" rel="external">尚奇</a>受到CAP（分布式系统基本原理，一致性，可用性和分区容错性）原则的启发提出了另一个解读方向。他说，CAP原则在分布式系统的实践里，都会先站住P原则，然后在C和A中权衡。那么在REP、CCP和CRP三角关系里，REP原则就相当于这里的P原则，必须先满足然后再去取舍CCP和CRP。</p>
+<p>大魔头理解REP的意思是可复用性就是组件是独立可复用的。假如回到没有Maven这些工具，没有依赖管理的年代，如果我们所依赖的包还依赖其它第三方包，那么这个包就不能叫做独立可复用。</p>
+<blockquote>
+<p>21:13:04     From YangYun : 我倒是理解REP的意思是你发布出来的一个可重用的包就是独立可重用的，你不能让我必须带着别的jar包才能用它。<br>21:14:04     From YangYun : The granule of reuse is the granule of release</p>
+</blockquote>
+<p>他接着说，假如有两个提供同样功能的包，其中一个没有第三方的依赖，而另一个有，那我当然选择前者。</p>
+<p>技术教练Sara举出了一个相对复杂但是很有启发性的例子。</p>
+<blockquote>
+<p>21:46:35     From Qian Ping : 假设项目包含sub module ABC</p>
+<ul>
+<li>如果ABC单纯sub module没有打成jar，又互相直接复用了，就是违反了REP</li>
+<li>如果每个sub module，打成jar，互相复用的时候是通过对方特定版本的jar（如snapshot版本），就是符合REP</li>
+<li>如果符合REP了，而所有sub module是跟随整个项目一起升级版本，就是符合CCP因为他们是一体一起发布的</li>
+<li>这时假如A依赖B和C，我这次单纯想改C，他们一起升版本了。但其实B的Jar完全没有变化，这个对B来说就是一个不必要的发布，B又貌似应该分离出去，但如果它分离出去了，就又离REP和CCP远了</li>
+</ul>
+</blockquote>
+<p>对于最后一句的表述，她澄清道：</p>
+<blockquote>
+<p>之前有遇到一个情况，比如组件A，然后它里面需要用到一个common library, lib里面其实包含了比如3个sub module（1/2/3），全部都是A需要复用的, 这时候如果要改1/2/3里面任意的东西，都会一起升级lib，然后在A里面对应升级版本。</p>
+<p>后来，有一些新组件B，它只需要用到common lib里面的3，不需要1/2，于是3一直被改和打包版本。 此时1/2会跟着升版本号，但其实1/2内容本身是完全没有变化的，只是版本号升了。</p>
+</blockquote>
+<p>这个场景中引入了两个组件A和B分别依赖common library的某些模块。在我们讨论一个组件依赖时，面临的约束要简单很多，但是复用的初衷就是给多个组件去依赖，所以这个假设是很有价值。</p>
+<p>Sara分析的思路如下：</p>
+<blockquote>
+<p>如果分离出去，等于我有两个common lib（1/2 和 3）, 对于B来说，B只需要3这么一个lib是比较完美的，反正改了3再改B就好了。</p>
+<p>但对于A来说，它就需要同时升级1/2的lib和3的lib，等于要3个发布，而它原来只需要2个发布（1/2/3 + A），所以离CRP远了，同时它也要分别维护两个lib分别的版本升级，所以CCP也比原来差了。</p>
+</blockquote>
+<p>在她的分析下，我们发现CRP和CCP不单是互相排斥的，还有可能两者都无法满足。造成这种结果的原因在于1/2/3模块形成的这个common library对于A组件而言都符合CCP和CRP原则，但是对于B组件而言，是不满足REP和CRP原则的，因为每次想要依赖3模块，就得全部依赖1/2/3整个common library（复用困难）。反之，如果我们将3从1/2/3中拆出来成为独立的组件，那就几乎宣告对于A组件而言势必违反CCP和CRP原则，但是B组件却获得了符合REP和CRP原则的好处。</p>
+<p>她接着补充道：</p>
+<blockquote>
+<p>其实后来说起对应微服务的时候有另外一个想法，就是比如说我系统里面多个组件需要用计提（Mark to market[^2]）这么一个功能，说白了就是一条公式，那通常可以有几个做法</p>
+<ul>
+<li>直接把这个公式复制到要用的组件，code level的复用，没有版本 -&gt; REP bad, CCP bad, but CRP not bad (因为要更改时候发布次数还是一样的）</li>
+<li>把公式写到一个common lib里面再进行复用 -&gt; REP good, CCP good, CRP bad(多发布一次）</li>
+<li>把公式放在一个独立service -&gt; REP good, CCP bad(因为要维护多一个服务）, CRP good</li>
+</ul>
+</blockquote>
+<p>这个观点就上升到不同层次的复用性上，可以算是对组件聚合原则的普适性的探索。</p>
+<p>当话题再次被聚焦到复用性时，技术教练<a href="https://litongxin.github.io/" target="_blank" rel="external">MoMo</a>提出一个观点：我们现在讨论就是可复用组件应该遵循的原则，而REP是对复用粒度的定义。至于那些那些常年采用SNAPSHOT（Java项目里Maven常用的开发版本号），没有发布概念的组件，就不该纳入复用的考虑范围内，那些也就不是REP的反模式。</p>
+<p>与此同时，<a href="https://mp.weixin.qq.com/s/YkKz4lknR2fqbSgv4JL9Lw" target="_blank" rel="external">阎王</a>指出了一个翻译上的失误。组件粘合张力图中REP原则的简短描述是“为复用性而组合”，而原文其实是”Group for reusers”，翻译过来应该是为了复用者而组合，复用性的英文是 Reusability。所以为了复用者发布，考虑的就是对外部的承诺。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/217988-97f1eb1dfe9e1314.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="tension diagram"></p>
+<h3 id="外部资料"><a href="#外部资料" class="headerlink" title="外部资料"></a>外部资料</h3><p>大魔头在加班写方案和讨论的间隙，快速查阅了一些资料，比如wiki上对于REP原则的定义：</p>
+<blockquote>
+<p>21:45:05 From YangYun : Reuse-release Equivalence Principle (REP)<br>REP essentially means that the package must be created with reusable classes – “Either all of the classes inside the package are reusable, or none of them are”. The classes must also be of the same family. Classes that are unrelated to the purpose of the package should not be included. A package constructed as a family of reusable classes tends to be most useful and reusable. - wiki百科里</p>
+</blockquote>
+<p>在wiki的定义里，可以看到REP原则包含CRP和CCP原则的成分，如此看来，这三大原则并不符合<a href="https://en.wikipedia.org/wiki/MECE_principle" target="_blank" rel="external">MCME</a>分类原则，就连鲍勃大叔在书中也是模棱两可的态度——REP维护共同的大主题，组件中的类和模块也必须紧密相关，这基本是CCP和CRP的简版描述。</p>
+<p>然后大魔头查找到“粒度”这个词在软件设计中详细定义，这是对REP原则定义（软件复用的最小粒度等同于其发布的最小粒度）的分解和再认知。</p>
+<blockquote>
+<p>21:57:03     From YangYun : <a href="http://condor.depaul.edu/dmumaugh/OOT/Design-Principles/granularity.pdf" target="_blank" rel="external">http://condor.depaul.edu/dmumaugh/OOT/Design-Principles/granularity.pdf</a></p>
+</blockquote>
+<p><img src="https://upload-images.jianshu.io/upload_images/217988-31f16cf3b2bb8922.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="granularity"></p>
+<blockquote>
+<p>21:58:29     From YangYun : <a href="https://fi.ort.edu.uy/innovaportal/file/2032/1/design_principles.pdf" target="_blank" rel="external">https://fi.ort.edu.uy/innovaportal/file/2032/1/design_principles.pdf</a></p>
+</blockquote>
+<p><img src="https://upload-images.jianshu.io/upload_images/217988-c3db0f42dde964ae.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="design principles"></p>
+<p>这些观点和学术建议很有代表性，值得大家反复揣摩和思考。</p>
+<h3 id="反模式"><a href="#反模式" class="headerlink" title="反模式"></a>反模式</h3><p>软件工程师一般有个“正难则反”的习惯。原则较抽象，但是模式很具体，反模式更能指导实践。接下来，大家开始讨论哪些是违反了REP原则的反模式。</p>
+<p>首当其冲的就是<code>git submodule</code>，在某些项目中，这种通过源代码划分模块并共享的方式还是挺常见的。因为共享的是代码，所以每次共享代码更新，势必要让依赖方重新编译，发布和部署。这种做法对于复用是痛苦的。</p>
+<p>其次是常年使用SNAPSHOT版本的某些项目。这些项目的特点一般都是某个产品团队底下，内部团队之间有复用的要求。缺点其实也很明显，常年SNAPSHOT等于没有版本和发布的流程。使用者并不知道SNAPSHOT中哪些是稳定的，哪些是修改的，拿到的版本到底是最新的还是遗留的，我需要的功能在这个功能有包含，还是你包含了太多我不需要的升级。这种也是复用痛苦的。</p>
+<h3 id="REP原则小结"><a href="#REP原则小结" class="headerlink" title="REP原则小结"></a>REP原则小结</h3><p>综合以上两个例子以及其它讨论，我们得出了一个好玩的结论：软件工程发展到现在，REP原则已经是基本的要求，它的存在有可能是鲍勃大叔年代感<del>老了</del>的体现。</p>
+<p>[^1]: <a href="https://www.jianshu.com/p/96e2d580374f" target="_blank" rel="external">架构整洁之道导读（二）组件聚合</a> <a href="https://www.jianshu.com/p/d651c9fb1755#fnref1" target="_blank" rel="external"></a><br>[^2]: <a href="https://www.investopedia.com/terms/m/marktomarket.asp" target="_blank" rel="external">Mark to market 按市值计价</a></p>
+<p>[1] <a href="/2018/10/28/Guide-to-Clean-Architecture-1/">架构整洁之道导读（一）编程范式</a><br>[2] <a href="/2019/01/17/Guide-to-Clean-Architecture-2/">架构整洁之道导读（二）组件聚合</a><br>于 2018-11-12</p>
+
+        </div>
+        <footer class="article-footer">
+            
+
+
+
+    <a data-url="https://lambeta.com/2019/01/17/Guide-to-Clean-Architecture-2-more/" data-id="cjr0a8on6005g4em43qarl12y" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
+<script>
+    (function ($) {
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+</script>
+
+        </footer>
+    </div>
+</article>
+
+    <section id="comments">
+    
+        
+    <div class="ds-thread" data-thread-key="2019/01/17/Guide-to-Clean-Architecture-2-more/" data-title="架构整洁之道导读（二）续 组件聚合张力图" data-url="https://lambeta.com/2019/01/17/Guide-to-Clean-Architecture-2-more/"></div>
+    <style>
+        #ds-thread #ds-reset .ds-textarea-wrapper {
+            background: none;
+        }
+        #ds-reset .ds-avatar img {
+            box-shadow: none;
+        }
+        #ds-reset .ds-gradient-bg {
+            background: #f7f7f7;
+        }
+        #ds-thread #ds-reset li.ds-tab a {
+            border-radius: 3px;
+        }
+        #ds-thread #ds-reset .ds-post-button {
+            color: white;
+            border: none;
+            box-shadow: none;
+            background: #d32;
+            text-shadow: none;
+            font-weight: normal;
+            font-family: 'Microsoft Yahei';
+        }
+        #ds-thread #ds-reset .ds-post-button:hover {
+            color: white;
+            background: #DE594C;
+        }
+        #ds-thread #ds-reset .ds-post-button:active {
+            background: #d32;
+        }
+        #ds-smilies-tooltip ul.ds-smilies-tabs li a.ds-current {
+            color: white;
+            background: #d32;
+            box-shadow: none;
+            text-shadow: none;
+            font-weight: normal;
+        }
+    </style>
+
+    
+    </section>
+
+
+                        </div>
+                    </section>
+                    <aside id="sidebar">
+    <a class="sidebar-toggle" title="Expand Sidebar"><i class="toggle icon"></i></a>
+    <div class="sidebar-top">
+        <p>关注我 :</p>
+        <ul class="social-links">
+            
+                
+                <li>
+                    <a class="social-tooltip" title="twitter" href="https://twitter.com/lambetaX" target="_blank">
+                        <i class="icon fa fa-twitter"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="github" href="https://github.com/qianyan" target="_blank">
+                        <i class="icon fa fa-github"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="weibo" href="http://weibo.com/3672207020/" target="_blank">
+                        <i class="icon fa fa-weibo"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="jianshu" href="https://www.jianshu.com/u/0775189eef67" target="_blank">
+                        <i class="icon fa fa-jianshu"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="rss" href="/atom.xml" target="_blank">
+                        <i class="icon fa fa-rss"></i>
+                    </a>
+                </li>
+                
+            
+        </ul>
+    </div>
+    
+        
+<nav id="article-nav">
+    
+    
+        <a href="/2019/01/17/Guide-to-Clean-Architecture-2/" id="article-nav-older" class="article-nav-link-wrap">
+        <strong class="article-nav-caption">上一篇</strong>
+        <p class="article-nav-title">架构整洁之道导读（二）组件聚合</p>
+        <i class="icon fa fa-chevron-left" id="icon-chevron-left"></i>
+        </a>
+    
+</nav>
+
+    
+    <div class="widgets-container">
+        
+            
+                
+    <div class="widget-wrap">
+        <h3 class="widget-title">最新文章</h3>
+        <div class="widget">
+            <ul id="recent-post" class="no-thumbnail">
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/技术/">技术</a></p>
+                            <p class="item-title"><a href="/2019/01/17/Guide-to-Clean-Architecture-2-more/" class="title">架构整洁之道导读（二）续 组件聚合张力图</a></p>
+                            <p class="item-date"><time datetime="2019-01-17T07:16:04.000Z" itemprop="datePublished">2019-01-17</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/技术/">技术</a></p>
+                            <p class="item-title"><a href="/2019/01/17/Guide-to-Clean-Architecture-2/" class="title">架构整洁之道导读（二）组件聚合</a></p>
+                            <p class="item-date"><time datetime="2019-01-17T07:12:38.000Z" itemprop="datePublished">2019-01-17</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/技术/">技术</a></p>
+                            <p class="item-title"><a href="/2018/10/28/Guide-to-Clean-Architecture-1/" class="title">架构整洁之道导读（一）编程范式</a></p>
+                            <p class="item-date"><time datetime="2018-10-28T07:36:54.000Z" itemprop="datePublished">2018-10-28</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/技术/">技术</a></p>
+                            <p class="item-title"><a href="/2018/09/18/the-generic-programming/" class="title">泛型编程</a></p>
+                            <p class="item-date"><time datetime="2018-09-18T08:31:58.000Z" itemprop="datePublished">2018-09-18</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/技术/">技术</a></p>
+                            <p class="item-title"><a href="/2018/07/18/the-joy-of-learning-new-programming-language/" class="title">我是怎样学习新编程语言的</a></p>
+                            <p class="item-date"><time datetime="2018-07-18T05:09:26.000Z" itemprop="datePublished">2018-07-18</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">分类</h3>
+        <div class="widget">
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Clojure/">Clojure</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/技术/">技术</a><span class="category-list-count">52</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/生活/">生活</a><span class="category-list-count">8</span></li></ul>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">归档</h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">一月 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">十月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">九月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">七月 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">五月 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">四月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">十一月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">九月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">五月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">四月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">一月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">十一月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">七月 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">六月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">三月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">二月 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">一月 2015</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/11/">十一月 2014</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/10/">十月 2014</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/09/">九月 2014</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/07/">七月 2014</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/05/">五月 2014</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02/">二月 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/01/">一月 2014</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/12/">十二月 2013</a><span class="archive-list-count">5</span></li></ul>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-float">
+        <h3 class="widget-title">标签云</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/FP/" style="font-size: 13.33px;">FP</a> <a href="/tags/Mistakes-I-Hav-Made/" style="font-size: 13.33px;">Mistakes I Hav Made</a> <a href="/tags/OO/" style="font-size: 10px;">OO</a> <a href="/tags/agile/" style="font-size: 11.67px;">agile</a> <a href="/tags/angularJs/" style="font-size: 10px;">angularJs</a> <a href="/tags/code/" style="font-size: 10px;">code</a> <a href="/tags/concurrency/" style="font-size: 10px;">concurrency</a> <a href="/tags/elixir/" style="font-size: 10px;">elixir</a> <a href="/tags/emacs/" style="font-size: 10px;">emacs</a> <a href="/tags/file/" style="font-size: 10px;">file</a> <a href="/tags/geek/" style="font-size: 10px;">geek</a> <a href="/tags/gradle/" style="font-size: 10px;">gradle</a> <a href="/tags/idris/" style="font-size: 10px;">idris</a> <a href="/tags/java/" style="font-size: 18.33px;">java</a> <a href="/tags/javascript/" style="font-size: 16.67px;">javascript</a> <a href="/tags/kata/" style="font-size: 10px;">kata</a> <a href="/tags/language/" style="font-size: 13.33px;">language</a> <a href="/tags/leiningen/" style="font-size: 11.67px;">leiningen</a> <a href="/tags/maven/" style="font-size: 10px;">maven</a> <a href="/tags/mysql/" style="font-size: 11.67px;">mysql</a> <a href="/tags/node/" style="font-size: 11.67px;">node</a> <a href="/tags/poetry/" style="font-size: 11.67px;">poetry</a> <a href="/tags/promise/" style="font-size: 10px;">promise</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/q/" style="font-size: 10px;">q</a> <a href="/tags/rake/" style="font-size: 10px;">rake</a> <a href="/tags/reading/" style="font-size: 15px;">reading</a> <a href="/tags/shell/" style="font-size: 13.33px;">shell</a> <a href="/tags/sublime/" style="font-size: 10px;">sublime</a> <a href="/tags/test/" style="font-size: 10px;">test</a> <a href="/tags/testing/" style="font-size: 10px;">testing</a> <a href="/tags/thinking/" style="font-size: 20px;">thinking</a> <a href="/tags/transaction/" style="font-size: 10px;">transaction</a> <a href="/tags/vim/" style="font-size: 11.67px;">vim</a> <a href="/tags/yeoman/" style="font-size: 10px;">yeoman</a> <a href="/tags/zeal/" style="font-size: 10px;">zeal</a> <a href="/tags/散文/" style="font-size: 10px;">散文</a>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">链接</h3>
+        <div class="widget">
+            <ul>
+                
+                    <li>
+                        <a href="http://blog.jayfields.com/">Jay Fields</a>
+                    </li>
+                
+                    <li>
+                        <a href="https://aphyr.com">Aphyr</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://bucharestfp.ro">Bucharest FP</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://www.yinwang.org">Wangyin</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://blog.rlmflores.me/">Rodrigo Flores</a>
+                    </li>
+                
+                    <li>
+                        <a href="https://seancorfield.github.io/">Seancorfield</a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+
+            
+        
+    </div>
+</aside>
+                </div>
+            </div>
+        </div>
+        <footer id="footer">
+    <div class="container">
+        <div class="container-inner">
+            <a id="back-to-top" href="javascript:;"><i class="icon fa fa-angle-up"></i></a>
+            <div class="credit">
+                <h1 class="logo-wrap">
+                    <a href="/" class="logo"></a>
+                </h1>
+                <p>&copy; 2019 lambeta</p>
+                <p>Powered by <a href="//hexo.io/" target="_blank">Hexo</a>. Theme by <a href="//github.com/ppoffice" target="_blank">PPOffice</a></p>
+            </div>
+        </div>
+    </div>
+</footer>
+        
+    
+    <script type="text/javascript">
+    var duoshuoQuery = {short_name:'lambeta'};
+    (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0]
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+    </script>
+
+
+
+
+    
+        <script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-share.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-video.min.js"></script>
+    
+    
+    
+
+
+<!-- Custom Scripts -->
+<script src="/js/main.js"></script>
+
+    </div>
+</body>
+</html>

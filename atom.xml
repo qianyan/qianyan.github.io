@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://lambeta.com/"/>
-  <updated>2018-10-28T07:40:36.337Z</updated>
+  <updated>2019-01-17T07:23:15.486Z</updated>
   <id>https://lambeta.com/</id>
   
   <author>
@@ -16,11 +16,162 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>架构整洁之道导读（一）</title>
+    <title>架构整洁之道导读（二）续 组件聚合张力图</title>
+    <link href="https://lambeta.com/2019/01/17/Guide-to-Clean-Architecture-2-more/"/>
+    <id>https://lambeta.com/2019/01/17/Guide-to-Clean-Architecture-2-more/</id>
+    <published>2019-01-17T07:16:04.000Z</published>
+    <updated>2019-01-17T07:23:15.486Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="关于组件聚合张力图的讨论"><a href="#关于组件聚合张力图的讨论" class="headerlink" title="关于组件聚合张力图的讨论"></a>关于组件聚合张力图的讨论</h2><p>周三的午休时间，我在ThoughtWorks北京办公室分享了一场《架构整洁之道导读》。当谈到分享组件聚合原则的时候，很多同事表示难以理解。究其缘由，是我们无法将组件违反原则的后果对应到真实项目的问题上，这就导致原则和实践之间的不一致。讨论的过程异常激烈，但是很遗憾地最终并没有得到一个服众的结论。所以为了进一步澄清这些争议点，我决定专门组织一场针对组件聚合原则张力图的讨论会。在<a href="https://www.jianshu.com/u/49ddfba9ae88" target="_blank" rel="external">吴大师</a>的鼓动下，时间定在下周四晚上的8点半，与会人员大多是咨询团队的技术教练，也有我们项目上的客户。</p>
+<p>在这场长达两个半小时的讨论会上，没想到首先出现争议的点居然是组件的定义。</p>
+<blockquote>
+<p>组件是软件部署的最小单元，是整个软件系统在部署过程中可以独立完成部署的最小实体。</p>
+</blockquote>
+<p>对于这样的定义，<a href="https://www.zhihu.com/people/nuo-tie" target="_blank" rel="external">大魔头</a>提出了质疑：library（库）并不能独立部署。但凡出现明显的逻辑漏洞的时候，我们最好的方式是抛开译文回去看原文。</p>
+<blockquote>
+<p>Components are the units of deployment. They are the smallest entities that can be deployed as part of a system.</p>
+</blockquote>
+<p>阅读原文之后，我们发现“组件是软件部署的最小单元。”这句话翻译得并没有太大问题，但是第二句就有损原意了，原意是说<strong>可以作为系统的一部分被部署的最小实体</strong>，而没有强调部署过程这种动态的概念，否则就和前一句是同义反复。所以这个定义里面并没有说组件可以独立部署。后面提到组件可以被链接到一个独立可执行文件或者归档文件，又或者，可以被打包成.jar、.dll或者.exe文件，并以动态加载的插件形式实现<strong>独立部署</strong>。</p>
+<h3 id="解读组件的定义"><a href="#解读组件的定义" class="headerlink" title="解读组件的定义"></a>解读组件的定义</h3><p>来自原文：</p>
+<blockquote>
+<p>Components can be linked together into a single executable. Or they can be aggregated together into a single archive, such as a .war file. Or they can be independently deployed as separate dynamically loaded plugins, such as.jar or .dll or .exe files.</p>
+</blockquote>
+<p>来自讨论：</p>
+<blockquote>
+<p>20:56:56     From tianjie : These dynamically linked files, which can be plugged together at runtime, are the software components of our architectures.</p>
+</blockquote>
+<p>联系上下文理解之后，我们知道：组件可以被设计成独立部署的，但是并不是所有的组件都是可以独立部署的。这是要澄清的，不然讨论聚合原则的时候容易出现偏差。</p>
+<p>吴大师接着解释说，组件应该是个逻辑单元，而不是物理单元。强制某个代码模块就是一个物理的部署单元是不合适的。另外，鲍勃大叔在介绍架构边界时，也表明了一样的观点：架构的边界并不是服务的边界。</p>
+<h3 id="解读REP原则"><a href="#解读REP原则" class="headerlink" title="解读REP原则"></a>解读REP原则</h3><p>我按照自己的思路解释过REP、CCP和CRP原则[^1]之后，讨论的焦点很快聚集到REP原则的解读和实践意义上。</p>
+<p><a href="https://www.zhihu.com/people/wu-xue-feng/" target="_blank" rel="external">吴大师</a>认为REP原则如果简单解读成没有发布过程就不能复用，它就和CCP、CRP原则的排斥力量不均衡，无法形成稳定的三角关系，那么这个张力图就显得有点鸡肋。</p>
+<p><a href="https://www.thoughtworks.com/cn/profiles/liu-shangqi" target="_blank" rel="external">尚奇</a>受到CAP（分布式系统基本原理，一致性，可用性和分区容错性）原则的启发提出了另一个解读方向。他说，CAP原则在分布式系统的实践里，都会先站住P原则，然后在C和A中权衡。那么在REP、CCP和CRP三角关系里，REP原则就相当于这里的P原则，必须先满足然后再去取舍CCP和CRP。</p>
+<p>大魔头理解REP的意思是可复用性就是组件是独立可复用的。假如回到没有Maven这些工具，没有依赖管理的年代，如果我们所依赖的包还依赖其它第三方包，那么这个包就不能叫做独立可复用。</p>
+<blockquote>
+<p>21:13:04     From YangYun : 我倒是理解REP的意思是你发布出来的一个可重用的包就是独立可重用的，你不能让我必须带着别的jar包才能用它。<br>21:14:04     From YangYun : The granule of reuse is the granule of release</p>
+</blockquote>
+<p>他接着说，假如有两个提供同样功能的包，其中一个没有第三方的依赖，而另一个有，那我当然选择前者。</p>
+<p>技术教练Sara举出了一个相对复杂但是很有启发性的例子。</p>
+<blockquote>
+<p>21:46:35     From Qian Ping : 假设项目包含sub module ABC</p>
+<ul>
+<li>如果ABC单纯sub module没有打成jar，又互相直接复用了，就是违反了REP</li>
+<li>如果每个sub module，打成jar，互相复用的时候是通过对方特定版本的jar（如snapshot版本），就是符合REP</li>
+<li>如果符合REP了，而所有sub module是跟随整个项目一起升级版本，就是符合CCP因为他们是一体一起发布的</li>
+<li>这时假如A依赖B和C，我这次单纯想改C，他们一起升版本了。但其实B的Jar完全没有变化，这个对B来说就是一个不必要的发布，B又貌似应该分离出去，但如果它分离出去了，就又离REP和CCP远了</li>
+</ul>
+</blockquote>
+<p>对于最后一句的表述，她澄清道：</p>
+<blockquote>
+<p>之前有遇到一个情况，比如组件A，然后它里面需要用到一个common library, lib里面其实包含了比如3个sub module（1/2/3），全部都是A需要复用的, 这时候如果要改1/2/3里面任意的东西，都会一起升级lib，然后在A里面对应升级版本。</p>
+<p>后来，有一些新组件B，它只需要用到common lib里面的3，不需要1/2，于是3一直被改和打包版本。 此时1/2会跟着升版本号，但其实1/2内容本身是完全没有变化的，只是版本号升了。</p>
+</blockquote>
+<p>这个场景中引入了两个组件A和B分别依赖common library的某些模块。在我们讨论一个组件依赖时，面临的约束要简单很多，但是复用的初衷就是给多个组件去依赖，所以这个假设是很有价值。</p>
+<p>Sara分析的思路如下：</p>
+<blockquote>
+<p>如果分离出去，等于我有两个common lib（1/2 和 3）, 对于B来说，B只需要3这么一个lib是比较完美的，反正改了3再改B就好了。</p>
+<p>但对于A来说，它就需要同时升级1/2的lib和3的lib，等于要3个发布，而它原来只需要2个发布（1/2/3 + A），所以离CRP远了，同时它也要分别维护两个lib分别的版本升级，所以CCP也比原来差了。</p>
+</blockquote>
+<p>在她的分析下，我们发现CRP和CCP不单是互相排斥的，还有可能两者都无法满足。造成这种结果的原因在于1/2/3模块形成的这个common library对于A组件而言都符合CCP和CRP原则，但是对于B组件而言，是不满足REP和CRP原则的，因为每次想要依赖3模块，就得全部依赖1/2/3整个common library（复用困难）。反之，如果我们将3从1/2/3中拆出来成为独立的组件，那就几乎宣告对于A组件而言势必违反CCP和CRP原则，但是B组件却获得了符合REP和CRP原则的好处。</p>
+<p>她接着补充道：</p>
+<blockquote>
+<p>其实后来说起对应微服务的时候有另外一个想法，就是比如说我系统里面多个组件需要用计提（Mark to market[^2]）这么一个功能，说白了就是一条公式，那通常可以有几个做法</p>
+<ul>
+<li>直接把这个公式复制到要用的组件，code level的复用，没有版本 -&gt; REP bad, CCP bad, but CRP not bad (因为要更改时候发布次数还是一样的）</li>
+<li>把公式写到一个common lib里面再进行复用 -&gt; REP good, CCP good, CRP bad(多发布一次）</li>
+<li>把公式放在一个独立service -&gt; REP good, CCP bad(因为要维护多一个服务）, CRP good</li>
+</ul>
+</blockquote>
+<p>这个观点就上升到不同层次的复用性上，可以算是对组件聚合原则的普适性的探索。</p>
+<p>当话题再次被聚焦到复用性时，技术教练<a href="https://litongxin.github.io/" target="_blank" rel="external">MoMo</a>提出一个观点：我们现在讨论就是可复用组件应该遵循的原则，而REP是对复用粒度的定义。至于那些那些常年采用SNAPSHOT（Java项目里Maven常用的开发版本号），没有发布概念的组件，就不该纳入复用的考虑范围内，那些也就不是REP的反模式。</p>
+<p>与此同时，<a href="https://mp.weixin.qq.com/s/YkKz4lknR2fqbSgv4JL9Lw" target="_blank" rel="external">阎王</a>指出了一个翻译上的失误。组件粘合张力图中REP原则的简短描述是“为复用性而组合”，而原文其实是”Group for reusers”，翻译过来应该是为了复用者而组合，复用性的英文是 Reusability。所以为了复用者发布，考虑的就是对外部的承诺。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/217988-97f1eb1dfe9e1314.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="tension diagram"></p>
+<h3 id="外部资料"><a href="#外部资料" class="headerlink" title="外部资料"></a>外部资料</h3><p>大魔头在加班写方案和讨论的间隙，快速查阅了一些资料，比如wiki上对于REP原则的定义：</p>
+<blockquote>
+<p>21:45:05 From YangYun : Reuse-release Equivalence Principle (REP)<br>REP essentially means that the package must be created with reusable classes – “Either all of the classes inside the package are reusable, or none of them are”. The classes must also be of the same family. Classes that are unrelated to the purpose of the package should not be included. A package constructed as a family of reusable classes tends to be most useful and reusable. - wiki百科里</p>
+</blockquote>
+<p>在wiki的定义里，可以看到REP原则包含CRP和CCP原则的成分，如此看来，这三大原则并不符合<a href="https://en.wikipedia.org/wiki/MECE_principle" target="_blank" rel="external">MCME</a>分类原则，就连鲍勃大叔在书中也是模棱两可的态度——REP维护共同的大主题，组件中的类和模块也必须紧密相关，这基本是CCP和CRP的简版描述。</p>
+<p>然后大魔头查找到“粒度”这个词在软件设计中详细定义，这是对REP原则定义（软件复用的最小粒度等同于其发布的最小粒度）的分解和再认知。</p>
+<blockquote>
+<p>21:57:03     From YangYun : <a href="http://condor.depaul.edu/dmumaugh/OOT/Design-Principles/granularity.pdf" target="_blank" rel="external">http://condor.depaul.edu/dmumaugh/OOT/Design-Principles/granularity.pdf</a></p>
+</blockquote>
+<p><img src="https://upload-images.jianshu.io/upload_images/217988-31f16cf3b2bb8922.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="granularity"></p>
+<blockquote>
+<p>21:58:29     From YangYun : <a href="https://fi.ort.edu.uy/innovaportal/file/2032/1/design_principles.pdf" target="_blank" rel="external">https://fi.ort.edu.uy/innovaportal/file/2032/1/design_principles.pdf</a></p>
+</blockquote>
+<p><img src="https://upload-images.jianshu.io/upload_images/217988-c3db0f42dde964ae.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="design principles"></p>
+<p>这些观点和学术建议很有代表性，值得大家反复揣摩和思考。</p>
+<h3 id="反模式"><a href="#反模式" class="headerlink" title="反模式"></a>反模式</h3><p>软件工程师一般有个“正难则反”的习惯。原则较抽象，但是模式很具体，反模式更能指导实践。接下来，大家开始讨论哪些是违反了REP原则的反模式。</p>
+<p>首当其冲的就是<code>git submodule</code>，在某些项目中，这种通过源代码划分模块并共享的方式还是挺常见的。因为共享的是代码，所以每次共享代码更新，势必要让依赖方重新编译，发布和部署。这种做法对于复用是痛苦的。</p>
+<p>其次是常年使用SNAPSHOT版本的某些项目。这些项目的特点一般都是某个产品团队底下，内部团队之间有复用的要求。缺点其实也很明显，常年SNAPSHOT等于没有版本和发布的流程。使用者并不知道SNAPSHOT中哪些是稳定的，哪些是修改的，拿到的版本到底是最新的还是遗留的，我需要的功能在这个功能有包含，还是你包含了太多我不需要的升级。这种也是复用痛苦的。</p>
+<h3 id="REP原则小结"><a href="#REP原则小结" class="headerlink" title="REP原则小结"></a>REP原则小结</h3><p>综合以上两个例子以及其它讨论，我们得出了一个好玩的结论：软件工程发展到现在，REP原则已经是基本的要求，它的存在有可能是鲍勃大叔年代感<del>老了</del>的体现。</p>
+<p>[^1]: <a href="https://www.jianshu.com/p/96e2d580374f" target="_blank" rel="external">架构整洁之道导读（二）组件聚合</a> <a href="https://www.jianshu.com/p/d651c9fb1755#fnref1" target="_blank" rel="external"></a><br>[^2]: <a href="https://www.investopedia.com/terms/m/marktomarket.asp" target="_blank" rel="external">Mark to market 按市值计价</a></p>
+<p>[1] <a href="/2018/10/28/Guide-to-Clean-Architecture-1/">架构整洁之道导读（一）编程范式</a><br>[2] <a href="/2019/01/17/Guide-to-Clean-Architecture-2/">架构整洁之道导读（二）组件聚合</a><br>于 2018-11-12</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;关于组件聚合张力图的讨论&quot;&gt;&lt;a href=&quot;#关于组件聚合张力图的讨论&quot; class=&quot;headerlink&quot; title=&quot;关于组件聚合张力图的讨论&quot;&gt;&lt;/a&gt;关于组件聚合张力图的讨论&lt;/h2&gt;&lt;p&gt;周三的午休时间，我在ThoughtWorks北京办公室分享了
+    
+    </summary>
+    
+      <category term="技术" scheme="https://lambeta.com/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="thinking" scheme="https://lambeta.com/tags/thinking/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>架构整洁之道导读（二）组件聚合</title>
+    <link href="https://lambeta.com/2019/01/17/Guide-to-Clean-Architecture-2/"/>
+    <id>https://lambeta.com/2019/01/17/Guide-to-Clean-Architecture-2/</id>
+    <published>2019-01-17T07:12:38.000Z</published>
+    <updated>2019-01-17T07:22:08.971Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="组件聚合"><a href="#组件聚合" class="headerlink" title="组件聚合"></a>组件聚合</h2><h3 id="组件的定义"><a href="#组件的定义" class="headerlink" title="组件的定义"></a>组件的定义</h3><p>组件是软件部署的最小单元，是整个软件系统在部署过程中可以独立完成部署的最小实体。比如，对于Java应用程序而言，Jar包就是组件；Ruby中的组件则是Gem文件；Python中的Egg或Wheel文件以及.Net下的DLL文件。</p>
+<p>上回我们说到，编程范式的本质是约束。子过程、类或函数是我们编程过程中的基本元素，所以说编程范式是程序的基础构件。如果将这些基本构件比作建筑里的泥沙石，那么程序中的组件就可以类比成砖头。砖头的工艺注重材料配比，组件也是如此，恰如其分的基础构件配比是组件稳定的基础。组件的内容配比较难定量，但是在实践上，仍然受到指导原则的约束。</p>
+<h3 id="软件工程中的约束三角"><a href="#软件工程中的约束三角" class="headerlink" title="软件工程中的约束三角"></a>软件工程中的约束三角</h3><p>在软件工程中，我们会看到很多约束条件都能由三角形的方式体现出来。这是因为三角形除了具有稳定的特性以外，还能体现出一种张力。<br><img src="https://upload-images.jianshu.io/upload_images/217988-c19cb030d6c0b04c.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="软件开发中的各种三角"></p>
+<p>比如在敏捷项目管理中，我们常会听到时间，资源和成本的约束三角；在分布式计算中，著名的CAP（一致性，可用性和分区容错性）原理也是如此；还有区块链中的不可能三角（性能，安全和去中心化）。这些三角都在反映一种现实中的约束——因为不能全部同时满足，所以需要权衡。</p>
+<h3 id="组件聚合张力图"><a href="#组件聚合张力图" class="headerlink" title="组件聚合张力图"></a>组件聚合张力图</h3><p>组件的内容配比，最终反映在组件的实践上就是基本构件的拆与合。鲍勃大叔给出了三个拆合的指导原则：REP（复用/发布等同原则），CCP（共同闭包原则）和CRP（共同复用原则）。<br><img src="https://upload-images.jianshu.io/upload_images/217988-e21240f0dc564114.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="组件聚合张力图"></p>
+<ol>
+<li>REP（复用/发布等同原则）：软件复用的最小粒度应该等同于其发布的最小粒度（注：只有那些通过版本追踪系统发布的组件才能被高效地复用）</li>
+<li>CCP（共同闭包原则）：将同时修改，目的相同的类放到同一个组件；不会同时修改，目的不同的类放到不同的组件</li>
+<li>CRP（共同复用原则）：不要强迫一个组件的用户依赖他们不需要的东西</li>
+</ol>
+<p>这些原则乍看上去是全新的理念，细细品来又好像“新瓶装旧酒”的老把戏。CCP不就是SRP（单一职能原则）？CRP不就是ISP（接口隔离原则）？REP，等等，这个原则不言自明地像个公理呀！难怪有些架构师朋友说，鲍勃大叔老了，又拿着SOLID那一套概念出来忽悠<del>骗钱</del>。</p>
+<p>其实，不妨换个思路想想，通常当谈论SOLID、高内聚低耦合、稳定依赖、稳定抽象系列原则的时候，我们是处于软件系统生命周期的哪一环？不出意外，大家都是从编写源代码，即开发（Development）的角度出发的。但是，我们又清晰地了解，软件系统的生命周期其实还包含除开发之外的部署、发布，运行和维护环节。那么问题来了，在这些环节里，哪些指导原则是适用的呢？</p>
+<p>在跳脱了开发的思维桎梏之后，我们通过两种手段分析下这三条原则。</p>
+<h4 id="分开看"><a href="#分开看" class="headerlink" title="分开看"></a>分开看</h4><p>REP原则阐述了一个简单的道理：软件复用是基本要求。在追求软件复用的过程中，逐步形成了标准的发布流程，如：版本号（<a href="https://semver.org/lang/zh-CN/" target="_blank" rel="external">语义化版本</a>），发布时间，变更内容等。这要求组件中所包含的模块和类都必须同时可发布，而可发布的深层含义既是对用户的承诺，也是对作者的约束。组件是否向后兼容？是否包含破坏性的变更？升级的注意事项？</p>
+<p>CCP原则是指尽量把变更频率相同的模块和类放到同一个组件当中。这样做的好处是，当相关功能更新时，我们可以把源代码的变更局限在某一个组件当中，而不需要横跨多个组件，从而减少了部署，验证和发布的次数。概括来说，这是<strong>局部化影响</strong>的优势。CCP和OCP（开闭原则）中强调的“闭包”也有关联，所谓<strong>封装可变因素</strong>就是形成闭包的过程，CCP要求将同一时间变更的点聚合起来，达到闭包的效果。</p>
+<p>CRP原则是说组件和组件之间的依赖应该达成一种默契——如果不需要完全使用某个组件中所有的模块和类，那么就不要依赖它。这看上去不太可能，但是有一点意义，它指导我们：不是紧密相连的模块和类不应该被放到同一个组件里。因为我们知道一旦某个组件变更升级之后，依赖它的组件往往也会被动的变更升级，即便是和自己那些无关的变更也是如此。而每次变更都意味着重新编译，部署验证和发布。</p>
+<h4 id="合起看"><a href="#合起看" class="headerlink" title="合起看"></a>合起看</h4><p>REP原则说明软件复用是基础，复用是通过发布流程规范的。在复用和发布的上下文中，CCP原则为了便于后期维护，需要尽可能地将变更频率相同的模块和类放到相同的复用单元——组件中；CRP原则为了避免频繁发布，应该将每个组件分割的足够小，减少无关变更导致依赖链条的连锁发布反应。</p>
+<p>如果我们只兼顾REP和CCP原则，那么就可能由于连锁发布反应，出现很多不必要的发布；如果只兼顾REP和CRP原则，那么就可能因为实现一个功能需要横跨多个组件修改，造成过多的组件变更；如果只兼顾CCP和CRP，那我们可能就忘记了复用这档子事儿，这在先前我们批判鲍勃大叔的时候已经体现出来了。</p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>软件系统的生命周期里处处充斥着约束条件，每多一个环节往往就会多一种矛盾，进而衍生出多个方向的约束。组件聚合张力图反映的是发布和开发之间的矛盾，需要尽量遵循REP，CCP和CRP原则，满足其约束，才能减少变更成本。</p>
+<p>组件构建过程中，除了聚合原则，还有耦合原则——描述的是组件的依赖关系。聚合原则告诉我们的是软件系统中的最小元素，耦合原则说的是元素之间的关系，当这两者和系统的功能结合到一起，就构成一个运行着的系统<a href="[系统之美](https://www.jianshu.com/p/da088142eef2)">^1</a>。系统是逐渐演化出来，即便我们熟知REP，CCP和CRP原则，也没有办法说，在系统构建之初，遵循这些原则就能画出完美的组件结构图。这便是“自顶而下”的设计不靠谱的基本解释。</p>
+<p>“自顶而下”的设计不靠谱还有更深层次的原因。本书的第14章“组件耦合”会有答案，且听下回分解。</p>
+<hr>
+<p>[1] <a href="/2018/10/28/Guide-to-Clean-Architecture-1/">架构整洁之道导读（一）编程范式</a><br>[2] <a href="/2019/01/17/Guide-to-Clean-Architecture-2-more/">架构整洁之道导读（二）续 组件聚合张力图</a><br>于2018-10-28</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;组件聚合&quot;&gt;&lt;a href=&quot;#组件聚合&quot; class=&quot;headerlink&quot; title=&quot;组件聚合&quot;&gt;&lt;/a&gt;组件聚合&lt;/h2&gt;&lt;h3 id=&quot;组件的定义&quot;&gt;&lt;a href=&quot;#组件的定义&quot; class=&quot;headerlink&quot; title=&quot;组件的定义&quot;&gt;
+    
+    </summary>
+    
+      <category term="技术" scheme="https://lambeta.com/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="thinking" scheme="https://lambeta.com/tags/thinking/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>架构整洁之道导读（一）编程范式</title>
     <link href="https://lambeta.com/2018/10/28/Guide-to-Clean-Architecture-1/"/>
     <id>https://lambeta.com/2018/10/28/Guide-to-Clean-Architecture-1/</id>
     <published>2018-10-28T07:36:54.000Z</published>
-    <updated>2018-10-28T07:40:36.337Z</updated>
+    <updated>2019-01-17T07:14:49.169Z</updated>
     
     <content type="html"><![CDATA[<p>我是《架构整洁之道》(<em>Clean Architecture</em>) 中文版的技术审校者，在审校的过程当中略有感悟，所以希望通过撰写导读的方式分享给大家。</p>
 <h2 id="书名的由来"><a href="#书名的由来" class="headerlink" title="书名的由来"></a>书名的由来</h2><p>《架构整洁之道》是<em>Clean Architecture</em>的中文译名。看似简单地延续了《代码整洁之道》(<em>Clean Code</em>)的翻译传统，但事实上，对于取中文名字这件事，我们还是花了不少气力的。拿到译文初稿时，编辑提供了几个备选的译名：《架构简洁之道》，《架构至洁》和《Clean Architecture》，这些名字各有各的考量，在没有了解这本书的核心思想之前，我也没有办法给出恰当的判断。所以在通读了原作和译作之后，我在ThoughtWorks咨询群里发起提案，讨论的过程很精彩，最终在骨灰级架构师新哥的建议下，结果大致趋向了整洁架构。</p>
@@ -1478,140 +1629,6 @@
     
     
       <category term="thinking" scheme="https://lambeta.com/tags/thinking/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Emacs configs for a clojurian</title>
-    <link href="https://lambeta.com/2017/01/01/Emacs-configs-for-a-clojurian/"/>
-    <id>https://lambeta.com/2017/01/01/Emacs-configs-for-a-clojurian/</id>
-    <published>2017-01-01T12:00:24.000Z</published>
-    <updated>2017-06-20T03:32:53.000Z</updated>
-    
-    <content type="html"><![CDATA[<p>俗话说，工欲善其事必先利其器，完善开发工具与我而言是一件快乐的事情，分享也是一件令人愉悦的事情，所以我想把学习过程中的点滴记录下，留作备忘。本文不会介绍太多花式或有深度的emacs配置，更多是摸索学习的过程，其中充满了乐趣。</p>
-<h2 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h2><p>网络上的<em>.emacs.d/init.el</em>配置数不胜数，各路lisp大神的<em>dot file</em>都已经放在github上了，而且前有牛人撰文推荐学习emacs配置的详实方法，看似确实没有什么必要自己折腾一份配置。这个说法对，也不对。我在转向emacs之前，是一名忠实的vim党，从大学开始就不断折腾vim的配置，还花过一段时间专门学习了<em>vimscript</em>，曾经惊叹于<em>vimscript</em>的动态函数式风格的优美和强大。类似地，<em>.vimrc</em>配置文件在网络上也多如牛毛，华丽和酷炫的插件极大地提升了vim的操作性。尽管如此，我还是乐于一砖一瓦地打造自己的vim环境，竭力演化它变成我心目中的“编辑器之神”。这个过程一般会充满修改然后重启的重复性机械劳作，偶尔会遭遇无论怎么修改就是不生效、甚至遍寻google也一无所获的挫折，但是我就是无法厌倦它，人天生好奇，探索未知事物本身就充满了乐趣，而且一旦配置奏效，便能获得满满的成就感。新事物对程序员具有极大的吸引力，但是程序员不会止步于使用新事物，而且会在惊奇之余，渴望控制那股背后主导它的力量本身，行使“上帝之力”。</p>
-<p>话说回来，为什么我会从vim党摇身一变成为emacs党呢？这就不得不提起Clojure这门lisp方言，出于对lisp和函数式编程的痴迷，我选择了基于JVM的Clojure作为自己的偏好语言，而emacs天生为lisp而生。有了这个充足的理由，我开始收集emacs的cheatsheet并打印出来，天天放在手边翻阅，甚至买了一本英文版的<em>Learning GNU Emacs</em>书籍，只要有机会就打开emacs开始刷4clojure上的编程题。由于emacs对lisp的亲和性，我几乎没花多少时间就掌握住了常用的操作技巧。不过，emacs最负盛名的学习曲线确实让学习者绕过圈子，只要一段时间不用，就会忘记很多基本操作。另外，为了更好地在emacs中编写Clojure，还需要cider-mode和clojure-mode的支持，这时候就不得不编辑<em>init.el</em>文件，本着<em>KISS (keep it simple, stupid)</em>原则，我照着各种插件的说明文档中，把配置项复制粘贴到<em>init.el</em>文件当中，运行起来没有问题就好。随着自定义的内容变多，<em>init.el</em>文件也急剧膨胀起来。膨胀本来算不上问题，但我是个比较有操守的程序员，臃肿的代码是我极力避免的坏味道（bad smell）。所以胸臆之中涌动一股浩然之气，决心学起<em>emacs lisp</em>，把emacs的配置从头来过。</p>
-<h2 id="从『头』开始"><a href="#从『头』开始" class="headerlink" title="从『头』开始"></a>从『头』开始</h2><p><em>init.el</em>文件位于<em>~/.emacs.d</em>目录之下，如果没有，自行创建一份即可。<br>首先，我们需要用到emacs的包管理工具<em>package.el</em>，因为emacs 24及其以上的版本都已经内置，所以无需下载到本地，直接通过<code>require</code>加载到emacs的运行时。</p>
-<figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">(<span class="name">require</span> 'package)</div><div class="line">(<span class="name">setq</span> package-archives '((<span class="string">"melpa"</span> . <span class="string">"http://melpa.org/packages/"</span>)</div><div class="line">						 (<span class="string">"melpa-stable"</span> . <span class="string">"https://stable.melpa.org/packages/"</span>)</div><div class="line">						 (<span class="string">"marmalade"</span> . <span class="string">"http://marmalade-repo.org/packages/"</span>)</div><div class="line">						 (<span class="string">"elpy"</span> . <span class="string">"http://jorgenschaefer.github.io/packages/"</span>)</div><div class="line">						 (<span class="string">"gnu"</span> . <span class="string">"http://elpa.gnu.org/packages/"</span>))</div><div class="line">	  package-enable-at-startup <span class="literal">nil</span>)</div></pre></td></tr></table></figure>
-<p>上面的代码涉及到<code>setq</code>（变量赋值）的操作，<code>package-archives</code>，顾名思义，多个包的下载源，我给<code>package-archives</code>设置了5个包源，它们之间服从顺序的优先级，即先从第一个源中下载包，如果没有，到第二个原种寻找，以此类推。此外，这里<code>(&quot;melpa&quot; . &quot;http://melpa.org/packages/&quot;)</code>中的点号（dot）表示法也比较奇怪，其实这是lisp中的<em>Dotted pair</em>表示法，用法和普通的列表类似，但因为是<em>pair</em>的缘故，你可以使用<code>(car )</code>获取<code>&quot;melpa&quot;</code>，<code>(cdr )</code>获取到的却不再是一个列表，而是<code>&quot;http://melpa.org/packages/&quot;</code>这个值本身。</p>
-<p>对<em>emacs lisp</em>不熟悉不要紧，先找个教程练习一下它的用法，比如<a href="https://learnxinyminutes.com/docs/elisp/" target="_blank" rel="external">learnxinyminutes</a>就非常不错。完成这个教程，大体不会对<em>elisp</em>犯怵了。接下来，只需要使用<code>c-h v</code>和<code>c-h f</code>查看<em>elisp</em>中定义的变量函数就能很快上手自行配置。<br>来个实际的例子，在大牛的配置文件中，经常能看到如下成对的配置：<br><figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">(<span class="name">setq</span> package-enable-at-startup <span class="literal">nil</span>)</div><div class="line">(<span class="name">package-initialize</span>)</div></pre></td></tr></table></figure></p>
-<p>开始我觉得这是一对矛盾的配置，<code>package-enable-at-startup</code>设置为nil，暗示emacs启动时不会启用<code>package</code>，而<code>package-initialize</code>明显表明在做<code>package</code>的初始化工作。这种时候，我心中就蹦跶出一句话“世界上本没有矛盾，如果出现了，检查你都有哪些前提条件，就会发现其中一个是错的”。这种非异常的知识点很难通过搜索引擎找到满意的答案，而阅读文档恰恰是最合适的解决方式。emacs对<code>elisp</code>文档的支持非常全面，只需将鼠标移到<code>package-enable-at-startup</code>变量上，按下<code>c-h v</code> (control + h, v) 组合键，就能在其它窗口（window) 看到文档描述：</p>
-<blockquote>
-<p>Whether to activate installed packages when Emacs starts.<br>If non-nil, packages are activated after reading the init file<br>and before <code>after-init-hook&#39;.  Activation is not done if</code>user-init-file’ is nil (e.g. Emacs was started with “-q”).</p>
-</blockquote>
-<p>意思是在读入<em>init.el</em>之后，这个变量才会生效。换句话说，在读取<em>init.el</em>的过程中，该变量不论是nil或是non-nil都不会影响<code>package</code>的加载和初始化。所以，这两者之间并没有矛盾。当然，此时你可能会想把<code>package-enable-at-startup</code>设置为nil意欲何为？<a href="https://www.gnu.org/software/emacs/manual/html_node/emacs/Package-Installation.html" target="_blank" rel="external">官方文档</a>中有如下的解释：</p>
-<blockquote>
-<p>This will automatically set package-enable-at-startup to nil, to avoid loading the packages again after processing the init file.</p>
-</blockquote>
-<p>简单点说，就是防止在<code>package-initialize</code>之后重复加载包，因为可能会影响性能。</p>
-<h2 id="模块化"><a href="#模块化" class="headerlink" title="模块化"></a>模块化</h2><p>如果把什么东西都揉到<em>init.el</em>文件中，这个文件一定会很快变得臃肿不堪。为了解决这个问题，需要引入模块化的思想——把特定功能的配置放到独立的文件中，然后<code>require</code>进来。按照惯例，我在<em>~/.emacs.d</em>目录下建立一个<em>lisp</em>目录用于存放所有自定义的模块文件，随后在<em>init.el</em>中加入下面这句代码，意在把<em>lisp</em>目录加到emacs的加载路径列表里。<br><figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(<span class="name">add-to-list</span> 'load-path (<span class="name">expand-file-name</span> <span class="string">"lisp"</span> user-emacs-directory))</div></pre></td></tr></table></figure></p>
-<p>看似，接下来就可以在每个独立的模块文件中编写各种功能的配置。但是由于<code>package.el</code>功能的局限，我们很快就会遇到包重复安装和配置漂移（configuration drift）的麻烦。<code>package.el</code>提供了<code>package-install-p</code>（p是predicate的意思）和<code>package-install</code>两个配套使用的函数，也就是说一般得先判断包在不在，才决定安不安装。幸运的是，有人已经很好地解决了这部分问题，<a href="https://github.com/jwiegley/use-package" target="_blank" rel="external">use-package</a>就是非常好用的包，它将包的配置和包的定义聚合到了一块，并且保证包一定会安装在你的系统当中。<br>在使用<code>use-package</code>之前，我们需要先安装它，如下：<br><figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">(<span class="name">unless</span> (<span class="name">package-installed-p</span> 'use-package)</div><div class="line">  (<span class="name">package-refresh-contents</span>)</div><div class="line">  (<span class="name">package-install</span> 'use-package))</div><div class="line"></div><div class="line">(<span class="name">eval-when-compile</span></div><div class="line">  (<span class="name">require</span> 'use-package))</div></pre></td></tr></table></figure></p>
-<p>由于<code>use-package</code>本身就是一个包，所以可以使用<code>package-install</code>安装到本地，然后<code>require</code>到emacs的运行时，值得一提的是这个<code>eval-when-compile</code>函数，使用<code>c-h f</code>查看它的定义:</p>
-<blockquote>
-<p>Like ‘progn’, but evaluates the body at compile time if you’re compiling.<br>Thus, the result of the body appears to the compiler as a quoted constant.<br>In interpreted code, this is entirely equivalent to `progn’.</p>
-</blockquote>
-<p>初次看到<strong>compile time</strong>，心中难免会有疑问：lisp不是动态语言吗，怎么还需要编译？这种时候，我们就要求助于<em>elisp</em>的文档了。在emacs中按下<code>c-h i</code>获取主话题（topic）的菜单，然后点击<em>Elisp</em>进入它的操作指南。重点查看<em>Evaluation</em>和<em>Byte Compilation</em>两个章节。不难发现lisp的解析器可以读取解析两种类型的lisp代码，一种是适合人类阅读的代码，以<em>el</em>作为后缀；另一种是编译字节码，以<em>elc</em>作为后缀。编译字节码运行速度优于前一种代码，我们可以通过<code>byte-compile-file</code>把前一种代码的文件编译成字节码文件。有趣的是，如果我们使用<em>package</em>来安装包，对应包的目录下都存在配套的<em>el</em>和<em>elc</em>两类文件。<br>在<em>Byte Compilation</em>条目下，有<code>eval-when-compile</code>的完整描述：</p>
-<blockquote>
-<p>If you’re using another package, but only need macros from it (the byte compiler will expand those), then ‘eval-when-compile’ can be used to load it for compiling, but not executing. For example,<br><figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">(<span class="name">eval-when-compile</span></div><div class="line">   (<span class="name">require</span> 'my-macro-package))</div></pre></td></tr></table></figure></p>
-</blockquote>
-<p>这里头有三个关键字<strong>load</strong>、<strong>compiling</strong>和<strong>executing</strong>值得留意一下。为了弄懂它们的含义，我们需要了解lisp解析器基本的工作原理：<code>code text -[characters]-&gt; load -[lisp object]-&gt; evaluation/compiling -[bytecode]-&gt; lisp interpretor</code>。换句话说，除非你想编译包含上述代码的文件，否则它的作用和<code>progn</code>一模一样，顺序地求值包含其中的表达式。当你正在编译文件的时候，包中宏就会原地展开，然后被<code>eval-when-compile</code>宏加载进内存并被编译成字节码，供后续解析器执行。</p>
-<h2 id="Clojure相关"><a href="#Clojure相关" class="headerlink" title="Clojure相关"></a>Clojure相关</h2><p>载入<em>use-package</em>之后，我需要开始配置自己强大的Clojure开发环境了。首先，引入几个包：<br><figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">(<span class="name">use-package</span> rainbow-delimiters</div><div class="line">  <span class="symbol">:ensure</span> <span class="literal">t</span>)</div><div class="line">(<span class="name">use-package</span> clj-refactor</div><div class="line">  <span class="symbol">:ensure</span> <span class="literal">t</span>)</div><div class="line">(<span class="name">use-package</span> company</div><div class="line">  <span class="symbol">:ensure</span> <span class="literal">t</span></div><div class="line">  <span class="symbol">:defer</span> <span class="literal">t</span></div><div class="line">  <span class="symbol">:config</span> (<span class="name">global-company-mode</span>))</div></pre></td></tr></table></figure></p>
-<p><em>rainbow-delimiters</em>能够让括号变得如同彩虹一样绚丽（主要是易于区分forms），<em>clj-refactor</em>是重构Clojure程序的神器，<em>company</em>提供了强大的命令补全提示功能。</p>
-<h3 id="clojure-mode"><a href="#clojure-mode" class="headerlink" title="clojure mode"></a>clojure mode</h3><p>接下来，我们在<em>~/.emacs.d/lisp</em>目录下新建一个<em>init-clojure.el</em>文件，内容如下：<br><figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">(<span class="name">require</span> 'clj-refactor)</div><div class="line">(<span class="name">require</span> 'rainbow-delimiters)</div><div class="line"></div><div class="line">(<span class="name">use-package</span> midje-mode</div><div class="line">  <span class="symbol">:ensure</span> <span class="literal">t</span>)</div><div class="line"></div><div class="line">(<span class="name">defun</span> my-clj-refactor-mode-hook ()</div><div class="line">	(<span class="name">clj-refactor-mode</span> <span class="number">1</span>)</div><div class="line">	(<span class="name">yas-minor-mode</span> <span class="number">1</span>) <span class="comment">; for adding require/use/import</span></div><div class="line">	(<span class="name">cljr-add-keybindings-with-prefix</span> <span class="string">"C-c C-m"</span>))</div><div class="line"></div><div class="line">(<span class="name">use-package</span> clojure-mode</div><div class="line">			 <span class="symbol">:ensure</span> <span class="literal">t</span></div><div class="line">			 <span class="symbol">:config</span></div><div class="line">			 (<span class="name">add-hook</span> 'clojure-mode-hook #'rainbow-delimiters-mode)</div><div class="line">			 (<span class="name">add-hook</span> 'clojure-mode-hook #'subword-mode)</div><div class="line">			 (<span class="name">add-hook</span> 'clojure-mode-hook #'midje-mode)</div><div class="line">			 (<span class="name">add-hook</span> 'clojure-mode-hook #'my-clj-refactor-mode-hook)</div><div class="line">			 (<span class="name">add-hook</span> 'clojure-mode-hook #'enable-paredit-mode))</div><div class="line"></div><div class="line">(<span class="name">provide</span> 'init-clojure)</div></pre></td></tr></table></figure></p>
-<p>这里就能看出<em>use-package</em>的好处来了，针对<em>clojure-mode</em>的配置项都统一放到<code>:config</code>中管理起来。配置完毕后，使用<code>(provide &#39;init-clojure)</code>将模块以这样的名字暴露给其它客户端调用。</p>
-<h3 id="CIDER-mode"><a href="#CIDER-mode" class="headerlink" title="CIDER mode"></a>CIDER mode</h3><p>有了<em>clojure-mode</em>之后，我们还需要一个Clojure可交互式的开发工具，CIDER便是这么一款工具。同样地，我们在<em>lisp</em>目录下新建一个名为<em>init-clojure-cider.el</em>，内容如下：<br><figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">(<span class="name">require</span> 'init-clojure)</div><div class="line">(<span class="name">require</span> 'company)</div><div class="line"></div><div class="line">(<span class="name">use-package</span> cider</div><div class="line">			 <span class="symbol">:ensure</span> <span class="literal">t</span></div><div class="line">			 <span class="symbol">:config</span></div><div class="line">			 (<span class="name">setq</span> nrepl-popup-stacktraces <span class="literal">nil</span>)</div><div class="line">			 (<span class="name">add-hook</span> 'cider-mode-hook 'eldoc-mode)</div><div class="line">			 (<span class="name">add-hook</span> 'cider-mode-hook #'rainbow-delimiters-mode)</div><div class="line">			 <span class="comment">;; Replace return key with newline-and-indent when in cider mode.</span></div><div class="line">			 (<span class="name">add-hook</span> 'cider-mode-hook '(lambda () (local-set-key (kbd <span class="string">"RET"</span>) 'newline-and-indent)))</div><div class="line">			 (<span class="name">add-hook</span> 'cider-mode-hook #'company-mode)</div><div class="line">			 (<span class="name">add-hook</span> 'cider-repl-mode-hook 'subword-mode)</div><div class="line">			 (<span class="name">add-hook</span> 'cider-repl-mode-hook 'paredit-mode)</div><div class="line">			 (<span class="name">add-hook</span> 'cider-repl-mode-hook #'company-mode)</div><div class="line">			 (<span class="name">add-hook</span> 'cider-repl-mode-hook #'rainbow-delimiters-mode))</div><div class="line"></div><div class="line">(<span class="name">provide</span> 'init-clojure-cider)</div></pre></td></tr></table></figure></p>
-<p>配置的首部，我使用<code>(require &#39;init-clojure)</code>先加载<em>init-clojure</em>，然后对CIDER本身进行一系列的配置。配置的详细信息可以通过CIDER github主页获取到，这里我就不再赘述。</p>
-<p>最后，需要在<em>init.el</em>文件中添加入这么一句<code>(require &#39;init-clojure-cider)</code>，重新启动emacs，找到一个Clojure项目，按下<code>C-c M-j</code> (hack-jack-in)，就能获得一个Clojure的交互式开发环境。</p>
-<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>当然，我的emacs配置绝对不止这些，但是其余的过程大体类似。由于emacs速来有伪装成编辑器的操作系统的称号，所以我的探索是无止境的。如果大家对我的配置感兴趣，可以直接去我github上<a href="https://github.com/qianyan/dotfiles" target="_blank" rel="external">dotfiles</a>上查看。</p>
-<h2 id="—"><a href="#—" class="headerlink" title="—"></a>—</h2><p>参考链接<br>[1] <a href="https://sriramkswamy.github.io/dotemacs/" target="_blank" rel="external">sriramkswamy dotemacs</a><br>[2] <a href="https://github.com/purcell/emacs.d/" target="_blank" rel="external">purcell emacs.d</a></p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;俗话说，工欲善其事必先利其器，完善开发工具与我而言是一件快乐的事情，分享也是一件令人愉悦的事情，所以我想把学习过程中的点滴记录下，留作备忘。本文不会介绍太多花式或有深度的emacs配置，更多是摸索学习的过程，其中充满了乐趣。&lt;/p&gt;
-&lt;h2 id=&quot;原因&quot;&gt;&lt;a href=
-    
-    </summary>
-    
-      <category term="Clojure" scheme="https://lambeta.com/categories/Clojure/"/>
-    
-    
-      <category term="emacs" scheme="https://lambeta.com/tags/emacs/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Generative Testing</title>
-    <link href="https://lambeta.com/2016/11/04/Generative-Testing/"/>
-    <id>https://lambeta.com/2016/11/04/Generative-Testing/</id>
-    <published>2016-11-03T23:21:34.000Z</published>
-    <updated>2016-11-04T01:13:01.000Z</updated>
-    
-    <content type="html"><![CDATA[<p>我们为什么要写单元测试？</p>
-<p>满足需求是所有软件存在的必要条件，单元测试一定是为它服务的。从这一点出发，我们可以总结出写单元测试的两个动机：驱动（如：TDD）和验证功能实现。另外，软件需求易变的特征决定修改代码成为必然，在这种情况下，单元测试能保护已有的功能不被破坏。</p>
-<p>基于以上两点共识，我们看看传统的单元测试有什么特征？</p>
-<h2 id="基于用例的测试（By-Example）"><a href="#基于用例的测试（By-Example）" class="headerlink" title="基于用例的测试（By Example）"></a>基于用例的测试（By Example）</h2><p>单元测试最常见的套路就是Given、When、Then三部曲。</p>
-<ul>
-<li>Given：初始状态或前置条件 </li>
-<li>When：行为发生</li>
-<li>Then：断言结果</li>
-</ul>
-<p>编写时，我们会精心准备（Given）一组输入数据，然后在调用行为后，断言返回的结果与预期相符。这种基于用例的测试方式在开发（包括TDD）过程中十分好用。因为它清晰地定义了输入输出，而且大部分情况下体量都很小、容易理解。</p>
-<p>但这样的测试方式也有坏处。</p>
-<p>第一点在于测试的意图。用例太过具体，我们就很容易忽略自己的测试意图。比如我曾经看过有人在写计算器kata程序的时候，将其中的一个测试命名为<em>return 3 when add 1 and 2</em>，这样的命名其实掩盖了测试用例背后的真实意图——传入两个整型参数，调用add方法之后得到的结果应该是参数之和。我们常说测试即文档，既然是文档就应该明确描述待测方法的行为，而不是陈述一个例子。</p>
-<p>第二点在于测试完备性。因为省事省心并且回报率高，我们更乐于写<em>happy path</em>的代码。尽管出于职业道德，我们也会找一个明显的异常路径进行测试，不过这还远远不够。</p>
-<p>为了辅助单元测试改善这两点。我这里介绍另一种测试方式——生成式测试（Generative Testing，也称<a href="https://github.com/fpinscala/fpinscala/wiki/Chapter-8:-Property-based-testing" target="_blank" rel="external">Property-Based Testing</a>）。这种测试方式会基于输入假设输出，并且生成许多可能的数据验证假设的正确性。</p>
-<h2 id="生成式测试"><a href="#生成式测试" class="headerlink" title="生成式测试"></a>生成式测试</h2><p>对于第一个问题，我们换种思路思考一下。假设我们不需要写具体的测试用例，那么掩盖意图的可能性也就没有了。想法很美好，但如何实践Given、When、Then呢？答案是让程序生成并自动验证它们。这也就引出生成式测试的概念——我们先声明传入数据可能的情况，然后使用生成器生成符合入参情况的数据，调用待测方法，最后才进行验证。</p>
-<h3 id="Given阶段"><a href="#Given阶段" class="headerlink" title="Given阶段"></a>Given阶段</h3><p>Clojure 1.9（Alpha）新内置的clojure.spec可以很轻松地做到这点：<br><figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment">;; 定义输入参数的可能情况：两个整型参数</span></div><div class="line">(<span class="name">s/def</span> :<span class="symbol">:add-operators</span> (<span class="name">s/cat</span> <span class="symbol">:a</span> int? <span class="symbol">:b</span> int?))</div><div class="line"><span class="comment">;; 尝试生成数据</span></div><div class="line">(<span class="name">gen/generate</span> (<span class="name">s/gen</span> :<span class="symbol">:add-operators</span>))</div><div class="line"></div><div class="line"><span class="comment">;; 生成的数据</span></div><div class="line">-&gt; (<span class="number">1</span> <span class="number">-122</span>)</div></pre></td></tr></table></figure></p>
-<p>首先，我们尝试声明两个参数可能出现的情况或者称为规格（specification），即参数a和b都是整数。然后调用生成器产生一对整数。整个分析和构造的过程中，都没有涉及具体的数据，这样会强制我们揣摩输入数据可能的模样，而且也能避免测试意图被掩盖掉——正如前面所说，<em>return 3 when add 1 and 2</em>并不代表什么，<em>return the sum of two integers</em>才具有普遍意义。</p>
-<h3 id="Then阶段"><a href="#Then阶段" class="headerlink" title="Then阶段"></a>Then阶段</h3><p>数据是生成了，待测方法也可以调用，但是Then这个断言阶段又让人头疼了，因为我们根本没法预知生成的数据，也就无法知道正确的结果，怎么断言？</p>
-<p>拿我们定义的加法运算为例：<br><figure class="highlight clojure"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">(<span class="name"><span class="builtin-name">defn</span></span> add [a b]</div><div class="line">  (<span class="name"><span class="builtin-name">+</span></span> a b))</div></pre></td></tr></table></figure></p>
-<p>我们尝试把断言改成一个全称命题的格式：</p>
-<blockquote>
-<p>任取两个整数a, b，a和b加起来的结果总是a, b之和。</p>
-</blockquote>
-<p>借助<a href="https://github.com/clojure/test.check" target="_blank" rel="external">test.check</a>，我们在<em>Clojure</em>可以这样表达<br><figure class="highlight clojure"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">(<span class="name"><span class="builtin-name">def</span></span> test-add</div><div class="line">  (<span class="name">prop/for-all</span> [a (<span class="name">gen/int</span>)</div><div class="line">                 b (<span class="name">gen/int</span>)]</div><div class="line">                (<span class="name"><span class="builtin-name">=</span></span> (<span class="name">add</span> a b) (<span class="name"><span class="builtin-name">+</span></span> a b))))</div></pre></td></tr></table></figure></p>
-<p>等等，我们把add方法的实现<code>(+ a b)</code>写到了断言里，这几乎丧失了单元测试的基本意义。换一种断言方式，我们使用加法的逆运算进行描述：</p>
-<blockquote>
-<p>任取两个整数，把a和b加起来的结果减去a总会得到b。</p>
-</blockquote>
-<figure class="highlight scheme"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">(<span class="name">def</span> test-add</div><div class="line">  (<span class="name">prop/for-all</span> [<span class="name">a</span> (<span class="name">gen/int</span>)</div><div class="line">                 b (<span class="name">gen/int</span>)]</div><div class="line">                (<span class="name"><span class="builtin-name">=</span></span> (<span class="name"><span class="builtin-name">-</span></span> (<span class="name">add</span> a b) a) b))))</div></pre></td></tr></table></figure>
-<p>我们通过程序陈述了一个已知的真命题。变换以后，就可以使用<code>quick-check</code>对多组生成的整数进行测试。<br><figure class="highlight elixir"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">;; 随机生成<span class="number">100</span>组数据测试add方法</div><div class="line">(tc/quick-check <span class="number">100</span> test-add)</div><div class="line"></div><div class="line">;; 测试结果</div><div class="line">-&gt; &#123;<span class="symbol">:result</span> <span class="keyword">true</span>, <span class="symbol">:num-tests</span> <span class="number">100</span>, <span class="symbol">:seed</span> <span class="number">1477285296502</span>&#125;</div></pre></td></tr></table></figure></p>
-<p>测试结果表明，刚才运行了100组测试，并且都通过了。理论上，程序可以生成无数的测试数据来验证add方法的正确性。即便不能穷尽，我们也获得一组统计上的数字，而不仅仅是几个纯手工挑选的用例。</p>
-<p>至于第二个问题，首先得明确测试是无法做到完备的。很多指导方法保证使用较少的用例做到有效覆盖，比如：等价类、边界值、判定表、因果图、pairwise等等。但是在实际使用过程当中，依然存在问题。举个等价类的例子，假如我们有一个接受自然数并直接返回入参的方法<em>identity-nat</em>，那么对于输入参数而言，全体自然数都互为等价类，其中的一个有效等价类可以是自然数1。如果入参被假定在整数的范围，我们很容易找到一个无效等价类，比如-1。</p>
-<p>用Clojure测试代码表现出来：<br><figure class="highlight clojure"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">(<span class="name">deftest</span> test-with-identity-nat</div><div class="line">  (<span class="name">testing</span> <span class="string">"identity of natural integers"</span></div><div class="line">    (<span class="name">is</span> (<span class="name"><span class="builtin-name">=</span></span> <span class="number">1</span> (<span class="name">identity-nat</span> <span class="number">1</span>))))</div><div class="line">  (<span class="name">testing</span> <span class="string">"throw exception for non-natural integers"</span></div><div class="line">    (<span class="name">is</span> (<span class="name">thrown?</span> RuntimeException (<span class="name">identity-nat</span> <span class="number">-1</span>)))))</div></pre></td></tr></table></figure></p>
-<p>不过如果有人修改了方法<em>identity-nat</em>的实现，单独处理入参为0的情况，这个测试还是能够照常通过。也就是说，实现发生改变，基于等价类的测试有可能起不到防护作用的。当然你完全可以反驳：规则改变，等价类也得重新定义。道理确实如此，但是反过来想想，我们写测试的目的不正是构建一张安全网吗？我们信任测试能在代码变动时给予警告，但此处它失信了，这就尴尬了。</p>
-<p>如果使用生成式测试，我们规定：</p>
-<blockquote>
-<p>任取一个自然数a，在其上调用f的结果总是a。</p>
-</blockquote>
-<figure class="highlight elixir"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">(<span class="function"><span class="keyword">def</span> <span class="title">test</span></span>-identity-nat</div><div class="line"> (prop/<span class="keyword">for</span>-all [a (s/gen nat-int?)]</div><div class="line">               (= a (identity-nat a))))</div><div class="line"></div><div class="line"></div><div class="line">(tc/quick-check <span class="number">100</span> test-identity-nat)</div><div class="line"></div><div class="line">-&gt; &#123;<span class="symbol">:result</span> <span class="keyword">false</span>, <span class="symbol">:seed</span> <span class="number">1477362396044</span>, <span class="symbol">:failing-size</span> <span class="number">0</span>, <span class="symbol">:num-tests</span> <span class="number">1</span>, <span class="symbol">:fail</span> [<span class="number">0</span>], <span class="symbol">:shrunk</span> &#123;<span class="symbol">:total-nodes-visited</span> <span class="number">0</span>, </div><div class="line">         <span class="symbol">:depth</span> <span class="number">0</span>, </div><div class="line">         <span class="symbol">:result</span> <span class="keyword">false</span>, </div><div class="line">         <span class="symbol">:smallest</span> [<span class="number">0</span>]&#125;&#125;</div></pre></td></tr></table></figure>
-<p>这个测试尝试对100组生成的自然数（nat-int?）进行测试，但首次运行就发现代码发生过变动。失败的数据是0，而且还给出了最小失败集[0]。拿着这个最小失败集，我们就可以快速地重现失败用例，从而修正。</p>
-<p>当然也有可能在一次运行中，我们的测试无法发现失败的用例。但是，如果100个测试用例都通过了，至少表明我们程序对于100个随机的自然数都是正确的。和基于用例的测试相比，这就如同编织出一道更加紧密的安全网。网孔越小，漏掉的情况也越少。</p>
-<p>Clojure语言之父Rich Hickey推崇<em><a href="https://www.infoq.com/presentations/Simple-Made-Easy" target="_blank" rel="external">Simple Made Easy</a></em>哲学，所以生成式测试在Clojure.spec中有更为简约的表达。以上述为例：<br><figure class="highlight clojure"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">(<span class="name">s/fdef</span> identity-nat</div><div class="line">        <span class="symbol">:args</span> (<span class="name">s/cat</span> <span class="symbol">:a</span> nat-int?) <span class="comment">;输入参数的规格</span></div><div class="line">        <span class="symbol">:ret</span> nat-int?             <span class="comment">;返回结果的规格</span></div><div class="line">        <span class="symbol">:fn</span> #(<span class="name"><span class="builtin-name">=</span></span> (<span class="symbol">:ret</span> %) (<span class="name"><span class="builtin-name">-&gt;</span></span> % <span class="symbol">:args</span> <span class="symbol">:a</span>))) <span class="comment">;入参和出参之间的约束</span></div><div class="line"></div><div class="line">(<span class="name">stest/check</span> `identity-nat)</div></pre></td></tr></table></figure></p>
-<p><em>fdef</em>宏定义了方法<em>identity-nat</em>的规格，默认情况下会基于参数的规格生成1000组数据进行生成式测试。除了这一好处，它还提供部分类型检查的功能。</p>
-<h2 id="再谈TDD"><a href="#再谈TDD" class="headerlink" title="再谈TDD"></a>再谈TDD</h2><p>TDD（测试驱动开发）是一种驱动代码实现和设计的过程。我们说要先有测试，再去实现；保证实现功能的前提下，重构代码以达到较好的设计。整个过程就好比演绎推理，测试就是其中的证明步骤，而最终实现的功能则是证明的结果。</p>
-<p>对于开发人员而言，基于用例的测试方式是友好的，因为它能简单直接地表达实现的功能并保证其正确性。一旦进入红、绿、重构的节（guai）奏（quan），开发人员根本停不下来，进入一种心流状态。只不过问题是，基于用例驱动出来的实现可能并不是<strong>恰好</strong>通过的。我们常常会发现，在写完上组测试用例的实现之后，无需任何改动，下组测试照常能运行通过。换句话说，实现代码可能做了多余的事情而我们却浑然不知。在这种情况下，我们可以利用生成式测试准备大量符合规格的数据探测程序，以此检查程序的健壮性，让缺陷无处遁形。</p>
-<p>凡是想到的情况都能测试，但是想不到情况也需要测试。这才是生成式测试的价值所在。有人把TDD概念化为“展示你的功能”（Show your work），而把生成式测试概念化为“检查你的功能“（Check your work），我深以为然。</p>
-<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>回到我们写单元测试的动机上：</p>
-<ol>
-<li>保证或验证实现功能；</li>
-<li>保护已经实现的功能不被破坏。<br>基于用例的单元测试和生成式测试在这两点上是相辅相成的。我们可以借助它们尽可能早地找出缺陷，避免缺陷逃逸到生产环境。</li>
-</ol>
-<p>ThoughtWorks 2016年11月份的技术雷达把Clojure.spec移到了工具象限的评估环中，这表明这个工具值得作一番探究。当然，除了Clojure，<a href="http://hypothesis.works/articles/quickcheck-in-every-language/" target="_blank" rel="external">其它语言</a>都有相应的生成式测试的框架，你不妨在自己的项目中试一试。</p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;我们为什么要写单元测试？&lt;/p&gt;
-&lt;p&gt;满足需求是所有软件存在的必要条件，单元测试一定是为它服务的。从这一点出发，我们可以总结出写单元测试的两个动机：驱动（如：TDD）和验证功能实现。另外，软件需求易变的特征决定修改代码成为必然，在这种情况下，单元测试能保护已有的功能不被破
-    
-    </summary>
-    
-      <category term="Clojure" scheme="https://lambeta.com/categories/Clojure/"/>
-    
-    
-      <category term="testing" scheme="https://lambeta.com/tags/testing/"/>
     
   </entry>
   
