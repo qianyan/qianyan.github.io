@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://lambeta.name/"/>
-  <updated>2019-05-07T14:43:07.142Z</updated>
+  <updated>2019-05-07T14:43:49.300Z</updated>
   <id>https://lambeta.name/</id>
   
   <author>
@@ -16,11 +16,11 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>try embark</title>
+    <title>区块链DApp开发环境 embark 初探</title>
     <link href="https://lambeta.name/2019/05/07/try-embark/"/>
     <id>https://lambeta.name/2019/05/07/try-embark/</id>
     <published>2019-05-07T14:42:39.000Z</published>
-    <updated>2019-05-07T14:43:07.142Z</updated>
+    <updated>2019-05-07T14:43:49.300Z</updated>
     
     <content type="html"><![CDATA[<h2 id="embark是什么"><a href="#embark是什么" class="headerlink" title="embark是什么"></a>embark是什么</h2><p><a href="http://embark.status.im/" target="_blank" rel="external">embark</a>是一款特定于Ethereum区块链平台的DApp开发环境，辅助开发者创建、构建编译、测试和部署DApp，可无缝集成计算（EVM）、存储（IPFS/Swarm）和网络（Whisper）资源。</p>
 <h2 id="embark的便捷之处"><a href="#embark的便捷之处" class="headerlink" title="embark的便捷之处"></a>embark的便捷之处</h2><p>在尝试embark并和truffle框架进行对比之后，我总结以下几个方面的优势：功能全面，上手迅速，反馈快速，可视化程度高，合约可调试。</p>
