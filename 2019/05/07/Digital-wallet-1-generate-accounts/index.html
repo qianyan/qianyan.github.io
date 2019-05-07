@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    
+    <meta name="baidu-site-verification" content="dwwExeQWOx" />
+    <title>创建数字钱包（一）账号生成 | λ</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+        <meta name="keywords" content="digital-wallet" />
+    
+    <meta name="description" content="椭圆曲线数字签名算法生成私钥Secp256k1通过椭圆曲线数字签名算法生成私钥和公钥，其中SEC（Standards for Efficient Cryptography）是专门利用ECDSA或者其可选项Schnorr算法来产生高效的加密方法。特点是生成密钥很快。
+Scep256k1 基本特性
+
+secp256k1 ECDSA signing/verification and key genera">
+<meta property="og:type" content="article">
+<meta property="og:title" content="创建数字钱包（一）账号生成">
+<meta property="og:url" content="https://lambeta.name/2019/05/07/Digital-wallet-1-generate-accounts/index.html">
+<meta property="og:site_name" content="λ">
+<meta property="og:description" content="椭圆曲线数字签名算法生成私钥Secp256k1通过椭圆曲线数字签名算法生成私钥和公钥，其中SEC（Standards for Efficient Cryptography）是专门利用ECDSA或者其可选项Schnorr算法来产生高效的加密方法。特点是生成密钥很快。
+Scep256k1 基本特性
+
+secp256k1 ECDSA signing/verification and key genera">
+<meta property="og:updated_time" content="2019-05-07T14:36:39.109Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="创建数字钱包（一）账号生成">
+<meta name="twitter:description" content="椭圆曲线数字签名算法生成私钥Secp256k1通过椭圆曲线数字签名算法生成私钥和公钥，其中SEC（Standards for Efficient Cryptography）是专门利用ECDSA或者其可选项Schnorr算法来产生高效的加密方法。特点是生成密钥很快。
+Scep256k1 基本特性
+
+secp256k1 ECDSA signing/verification and key genera">
+    
+
+    
+        <link rel="alternate" href="/atom.xml" title="λ" type="application/atom+xml" />
+    
+
+    
+        <link rel="icon" href="/favicon.ico# path to favicon" />
+    
+
+    <link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/libs/titillium-web/styles.css">
+    <link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <script src="/libs/jquery/2.0.3/jquery.min.js"></script>
+    
+    
+        <link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+    
+    
+    
+        <script type="text/javascript">
+(function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-83870107-1# enter the tracking ID for your Google Analytics', 'auto');
+ga('send', 'pageview');
+
+</script>
+    
+    
+        <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?e6231610fe66acf322391d7546c28f21# enter Baidu Analytics hash key";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+    
+
+</head>
+
+<body>
+    <div id="wrap">
+        <header id="header">
+    <div id="header-outer" class="outer">
+        <div class="container">
+            <div class="container-inner">
+                <div id="header-title">
+                    <h1 class="logo-wrap">
+                        <a href="/" class="logo"></a>
+                    </h1>
+                    
+                        <h2 class="subtitle-wrap">
+                            <p class="subtitle">(conj clojurians me)</p>
+                        </h2>
+                    
+                </div>
+                <div id="header-inner" class="nav-container">
+                    <a id="main-nav-toggle" class="nav-icon fa fa-bars"></a>
+                    <div class="nav-container-inner">
+                        <ul id="main-nav">
+                            
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" href="/">主页</a>
+                                </li>
+                            
+                                        <ul class="main-nav-list"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Blockchain/">Blockchain</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Clojure/">Clojure</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/技术/">技术</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/生活/">生活</a></li></ul>
+                                    
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" href="/about/index.html">关于</a>
+                                </li>
+                            
+                        </ul>
+                        <nav id="sub-nav">
+                            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="想要查找什么..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+        <div class="container">
+            <div class="main-body container-inner">
+                <div class="main-body-inner">
+                    <section id="main">
+                        <div class="main-body-header">
+    <h1 class="header">
+    
+    <a class="page-title-link" href="/categories/Blockchain/">Blockchain</a>
+    </h1>
+</div>
+                        <div class="main-body-content">
+                            <article id="post-Digital-wallet-1-generate-accounts" class="article article-single article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+        创建数字钱包（一）账号生成
+        </h1>
+    
+
+            </header>
+        
+        
+            <div class="article-meta">
+                
+    <div class="article-date">
+        <a href="/2019/05/07/Digital-wallet-1-generate-accounts/" class="article-date">
+            <time datetime="2019-05-07T14:35:30.000Z" itemprop="datePublished">2019-05-07</time>
+        </a>
+    </div>
+
+                
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/digital-wallet/">digital-wallet</a>
+    </div>
+
+            </div>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+            <h2 id="椭圆曲线数字签名算法生成私钥"><a href="#椭圆曲线数字签名算法生成私钥" class="headerlink" title="椭圆曲线数字签名算法生成私钥"></a>椭圆曲线数字签名算法生成私钥</h2><p><a href="https://en.bitcoin.it/wiki/Secp256k1" target="_blank" rel="external">Secp256k1</a><br>通过椭圆曲线数字签名算法生成私钥和公钥，其中SEC（Standards for Efficient Cryptography）是专门利用ECDSA或者其可选项Schnorr算法来产生高效的加密方法。<br>特点是生成密钥很快。</p>
+<p>Scep256k1 基本特性</p>
+<ul>
+<li>secp256k1 ECDSA signing/verification and key generation.</li>
+<li>Adding/multiplying private/public keys.</li>
+<li>Serialization/parsing of private keys, public keys, signatures.</li>
+<li>Constant time, constant memory access signing and pubkey generation.</li>
+<li>Derandomized DSA (via RFC6979 or with a caller provided function.)</li>
+<li>Very efficient implementation.</li>
+</ul>
+<h2 id="讲解代码"><a href="#讲解代码" class="headerlink" title="讲解代码"></a>讲解代码</h2><h3 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h3><ol>
+<li>生成私钥</li>
+<li>加密私钥</li>
+<li>生成 keyObject 对象</li>
+<li>从keyObject对象中恢复私钥</li>
+</ol>
+<h3 id="生成私钥"><a href="#生成私钥" class="headerlink" title="生成私钥"></a>生成私钥</h3><p>下面利用 keythereum<a href="[Keythereum](https://github.com/ethereumjs/keythereum)">^1</a> 产生符合以太坊的密钥，并产生keyObject文件<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> params = &#123; <span class="attr">keyBytes</span>: <span class="number">32</span>, <span class="attr">ivBytes</span>: <span class="number">16</span> &#125;;</div><div class="line"><span class="keyword">let</span> &#123;privateKey, salt, iv&#125; = keythereum.create(params);</div></pre></td></tr></table></figure></p>
+<p>keythereum可以产生私钥，以及后面加密私钥所用的PBKDF2算法需要的salt，和加密aes-128-ctr私钥的iv值。</p>
+<p>得到私钥之后，我们可以通过私钥生成公钥。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> privateKeyBuffer = Buffer.from(privateKey, <span class="string">"hex"</span>) <span class="comment">// or "base64"</span></div><div class="line"><span class="keyword">let</span> publicKey = secp256k1.publicKeyCreate(privateKeyBuffer, <span class="literal">false</span>).slice(<span class="number">1</span>);</div><div class="line"><span class="keyword">let</span> address = <span class="string">"0x"</span> + keccak256(publicKey).slice(<span class="number">-20</span>).toString(<span class="string">"hex"</span>);</div></pre></td></tr></table></figure></p>
+<h3 id="加密私钥"><a href="#加密私钥" class="headerlink" title="加密私钥"></a>加密私钥</h3><p>利用KDF算法基于password派生出密钥，然后利用这个密钥加密我们的私钥。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> password = <span class="string">"Hello,Ethereum"</span></div><div class="line"><span class="keyword">const</span> options = &#123;</div><div class="line">    <span class="attr">kdf</span>: <span class="string">"pbkdf2"</span>,</div><div class="line">    <span class="attr">cipher</span>: <span class="string">"aes-128-ctr"</span>,</div><div class="line">    <span class="attr">kdfparams</span>: &#123;</div><div class="line">        <span class="attr">c</span>: <span class="number">262144</span>,</div><div class="line">        <span class="attr">dklen</span>: <span class="number">32</span>,</div><div class="line">        <span class="attr">prf</span>: <span class="string">"hmac-sha256"</span></div><div class="line">    &#125;</div><div class="line">&#125;;</div><div class="line"><span class="keyword">const</span> keyObject = keythereum.dump(password, privateKey, salt, iv, options);</div></pre></td></tr></table></figure></p>
+<p>这就是产生keyObject基本思路。我们在看看dump函数到底做了什么<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">this</span>.marshal(<span class="keyword">this</span>.deriveKey(password, salt, options), privateKey, salt, iv, options);</div></pre></td></tr></table></figure></p>
+<p>deriveKey(…) 的源码如下：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">this</span>.crypto.pbkdf2Sync(</div><div class="line">        password,</div><div class="line">        salt,</div><div class="line">        options.kdfparams.c || <span class="keyword">this</span>.constants.pbkdf2.c,</div><div class="line">        options.kdfparams.dklen || <span class="keyword">this</span>.constants.pbkdf2.dklen,</div><div class="line">        prf <span class="comment">//hmac-sha256</span></div><div class="line">      );</div></pre></td></tr></table></figure></p>
+<p>这里基于password生成的derivedKey，这个密钥并不是我们要用的私钥，而是用来加密先前生成的privateKey的，加密的过程在marshal函数中调用的encrypt函数里。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> ciphertext = <span class="keyword">this</span>.encrypt(privateKey, derivedKey.slice(<span class="number">0</span>, <span class="number">16</span>), iv, algo).toString(<span class="string">"hex"</span>);</div></pre></td></tr></table></figure></p>
+<p>encrypt函数，如下：<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> cipher, ciphertext;</div><div class="line">algo = algo || <span class="keyword">this</span>.constants.cipher;</div><div class="line"><span class="keyword">if</span> (!<span class="keyword">this</span>.isCipherAvailable(algo)) <span class="keyword">throw</span> new Error(algo + <span class="string">" is not available"</span>);</div><div class="line"></div><div class="line"><span class="comment">//加密过程</span></div><div class="line">cipher = <span class="keyword">this</span>.crypto.createCipheriv(algo, <span class="keyword">this</span>.str2buf(key), <span class="keyword">this</span>.str2buf(iv));</div><div class="line">ciphertext = cipher.update(<span class="keyword">this</span>.str2buf(plaintext));</div><div class="line"></div><div class="line"><span class="keyword">return</span> Buffer.concat([ciphertext, cipher.<span class="keyword">final</span>()]);</div></pre></td></tr></table></figure></p>
+<p>此处的ciphertext代表的是privateKey，而key则是derivedKey</p>
+<h3 id="生成-keyObject-对象"><a href="#生成-keyObject-对象" class="headerlink" title="生成 keyObject 对象"></a>生成 keyObject 对象</h3><p>得到了加密后的ciphertext之后，开始组装keyObject对象并返回。<br><figure class="highlight roboconf"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">keyObject = &#123;</div><div class="line">      <span class="attribute">address</span>: this<span class="variable">.privateKeyToAddress</span>(privateKey)<span class="variable">.slice</span>(2),</div><div class="line">      crypto: &#123;</div><div class="line">        cipher: options<span class="variable">.cipher</span> || this<span class="variable">.constants</span><span class="variable">.cipher</span>,</div><div class="line">        ciphertext: ciphertext,</div><div class="line">        cipherparams: &#123; iv: iv<span class="variable">.toString</span>("hex") &#125;,</div><div class="line">        mac: this<span class="variable">.getMAC</span>(derivedKey, ciphertext)</div><div class="line">      &#125;,</div><div class="line">      id: uuid<span class="variable">.v</span>4(), // random 128-bit UUID</div><div class="line">      version: 3</div><div class="line">    &#125;;</div><div class="line"><span class="attribute">keyObject.crypto.kdf = "pbkdf2";</span></div><div class="line">      keyObject.crypto.kdfparams = &#123;</div><div class="line">        c: options<span class="variable">.kdfparams</span><span class="variable">.c</span> || this<span class="variable">.constants</span><span class="variable">.pbkdf</span>2<span class="variable">.c</span>,</div><div class="line">        dklen: options<span class="variable">.kdfparams</span><span class="variable">.dklen</span> || this<span class="variable">.constants</span><span class="variable">.pbkdf</span>2<span class="variable">.dklen</span>,</div><div class="line">        prf: options<span class="variable">.kdfparams</span><span class="variable">.prf</span> || this<span class="variable">.constants</span><span class="variable">.pbkdf</span>2<span class="variable">.prf</span>,</div><div class="line">        salt: salt<span class="variable">.toString</span>("hex")</div><div class="line">      &#125;;</div></pre></td></tr></table></figure></p>
+<p>privateKeyToAddress(…)方法里首先通过privateKey产生publicKey，然后使用keccak256哈希publicKey得到地址。</p>
+<p>具体实现如下：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> privateKeyBuffer = Buffer.from(privateKey);</div><div class="line"><span class="keyword">let</span> publicKey = secp256k1.publicKeyCreate(privateKeyBuffer, <span class="literal">false</span>).slice(<span class="number">1</span>);</div><div class="line"><span class="keyword">let</span> address = <span class="string">"0x"</span> + keccak256(publicKey).slice(<span class="number">-20</span>).toString(<span class="string">"hex"</span>);</div></pre></td></tr></table></figure></p>
+<p>keccak256(publicKey) 产生了32bytes，截取尾部20bytes转换成十六进制之后就是40字符，加上前导0x之后，就是42个字符的以太坊地址，比如：<em>0x0f645438395206b408e52be4fcf4bc21c330bfa2</em></p>
+<h3 id="从keyObject对象中恢复私钥"><a href="#从keyObject对象中恢复私钥" class="headerlink" title="从keyObject对象中恢复私钥"></a>从keyObject对象中恢复私钥</h3><p>有了keyObject和密码就可以恢复原来的私钥<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> privateKey = keythereum.recover(password, keyObject)</div></pre></td></tr></table></figure></p>
+<p>可以想到，recover方法中，首先会利用password和keyObject中的salt派生出当初的密钥derivedKey，然后把加密过的私钥ciphertext和derivedKey, iv作为原来加密算法aes-128-ctr的输入参数，成功解密后返回明文的私钥。</p>
+<p>具体代码如下：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">verifyAndDecrypt(<span class="keyword">this</span>.deriveKey(password, salt, keyObjectCrypto), salt, iv, ciphertext, algo)</div></pre></td></tr></table></figure></p>
+<p>这里首先得到了derivedKey，然后验证并解密kyeObject中的ciphertext，如下：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">verifyAndDecrypt</span>(<span class="params">derivedKey, salt, iv, ciphertext, algo</span>) </span>&#123;</div><div class="line">  <span class="keyword">var</span> key;</div><div class="line">  <span class="keyword">if</span> (self.getMAC(derivedKey, ciphertext) !== keyObjectCrypto.mac) &#123;</div><div class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">"message authentication code mismatch"</span>);</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">if</span> (keyObject.version === <span class="string">"1"</span>) &#123;</div><div class="line">    key = keccak256(derivedKey.slice(<span class="number">0</span>, <span class="number">16</span>)).slice(<span class="number">0</span>, <span class="number">16</span>);</div><div class="line">  &#125; <span class="keyword">else</span> &#123;</div><div class="line">    key = derivedKey.slice(<span class="number">0</span>, <span class="number">16</span>);</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">return</span> self.decrypt(ciphertext, key, iv, algo);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>注意这里的mac值比较，确保了ciphertext没有被人篡改才有解密的必要。</p>
+<h2 id="参考实现"><a href="#参考实现" class="headerlink" title="参考实现"></a>参考实现</h2><ol>
+<li><a href="https://github.com/cryptocoinjs/secp256k1-node" target="_blank" rel="external">NodeJS</a></li>
+<li><a href="https://github.com/bitcoin-core/secp256k1" target="_blank" rel="external">Bitcoin-core</a></li>
+</ol>
+
+        </div>
+        <footer class="article-footer">
+            
+
+
+
+    <a data-url="https://lambeta.name/2019/05/07/Digital-wallet-1-generate-accounts/" data-id="cjvdwlqc70063k3m45k4u9isv" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
+<script>
+    (function ($) {
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+</script>
+
+        </footer>
+    </div>
+</article>
+
+    <section id="comments">
+    
+        
+    <div class="ds-thread" data-thread-key="2019/05/07/Digital-wallet-1-generate-accounts/" data-title="创建数字钱包（一）账号生成" data-url="https://lambeta.name/2019/05/07/Digital-wallet-1-generate-accounts/"></div>
+    <style>
+        #ds-thread #ds-reset .ds-textarea-wrapper {
+            background: none;
+        }
+        #ds-reset .ds-avatar img {
+            box-shadow: none;
+        }
+        #ds-reset .ds-gradient-bg {
+            background: #f7f7f7;
+        }
+        #ds-thread #ds-reset li.ds-tab a {
+            border-radius: 3px;
+        }
+        #ds-thread #ds-reset .ds-post-button {
+            color: white;
+            border: none;
+            box-shadow: none;
+            background: #d32;
+            text-shadow: none;
+            font-weight: normal;
+            font-family: 'Microsoft Yahei';
+        }
+        #ds-thread #ds-reset .ds-post-button:hover {
+            color: white;
+            background: #DE594C;
+        }
+        #ds-thread #ds-reset .ds-post-button:active {
+            background: #d32;
+        }
+        #ds-smilies-tooltip ul.ds-smilies-tabs li a.ds-current {
+            color: white;
+            background: #d32;
+            box-shadow: none;
+            text-shadow: none;
+            font-weight: normal;
+        }
+    </style>
+
+    
+    </section>
+
+
+                        </div>
+                    </section>
+                    <aside id="sidebar">
+    <a class="sidebar-toggle" title="Expand Sidebar"><i class="toggle icon"></i></a>
+    <div class="sidebar-top">
+        <p>关注我 :</p>
+        <ul class="social-links">
+            
+                
+                <li>
+                    <a class="social-tooltip" title="twitter" href="https://twitter.com/lambetaX" target="_blank">
+                        <i class="icon fa fa-twitter"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="github" href="https://github.com/qianyan" target="_blank">
+                        <i class="icon fa fa-github"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="weibo" href="http://weibo.com/3672207020/" target="_blank">
+                        <i class="icon fa fa-weibo"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="rss" href="/atom.xml" target="_blank">
+                        <i class="icon fa fa-rss"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="jianshu" href="https://www.jianshu.com/u/0775189eef67" target="_blank">
+                        <i class="icon fa fa-jianshu"></i>
+                    </a>
+                </li>
+                
+            
+        </ul>
+    </div>
+    
+        
+<nav id="article-nav">
+    
+        <a href="/2019/05/07/Digital-wallet-2-hd-wallet/" id="article-nav-newer" class="article-nav-link-wrap">
+        <strong class="article-nav-caption">下一篇</strong>
+        <p class="article-nav-title">
+        
+            创建数字钱包（二）HD Wallet
+        
+        </p>
+        <i class="icon fa fa-chevron-right" id="icon-chevron-right"></i>
+    </a>
+    
+    
+        <a href="/2019/05/07/Digital-wallet-0-kdf-algorithm/" id="article-nav-older" class="article-nav-link-wrap">
+        <strong class="article-nav-caption">上一篇</strong>
+        <p class="article-nav-title">创建数字钱包（零）KDF 密钥派生算法</p>
+        <i class="icon fa fa-chevron-left" id="icon-chevron-left"></i>
+        </a>
+    
+</nav>
+
+    
+    <div class="widgets-container">
+        
+            
+                
+    <div class="widget-wrap">
+        <h3 class="widget-title">最新文章</h3>
+        <div class="widget">
+            <ul id="recent-post" class="no-thumbnail">
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Blockchain/">Blockchain</a></p>
+                            <p class="item-title"><a href="/2019/05/07/try-embark/" class="title">try embark</a></p>
+                            <p class="item-date"><time datetime="2019-05-07T14:42:39.000Z" itemprop="datePublished">2019-05-07</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Blockchain/">Blockchain</a></p>
+                            <p class="item-title"><a href="/2019/05/07/Digital-wallet-3-mnemonic-sentence/" class="title">创建数字钱包（三）助记词</a></p>
+                            <p class="item-date"><time datetime="2019-05-07T14:39:13.000Z" itemprop="datePublished">2019-05-07</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Blockchain/">Blockchain</a></p>
+                            <p class="item-title"><a href="/2019/05/07/Digital-wallet-2-hd-wallet/" class="title">创建数字钱包（二）HD Wallet</a></p>
+                            <p class="item-date"><time datetime="2019-05-07T14:37:28.000Z" itemprop="datePublished">2019-05-07</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Blockchain/">Blockchain</a></p>
+                            <p class="item-title"><a href="/2019/05/07/Digital-wallet-1-generate-accounts/" class="title">创建数字钱包（一）账号生成</a></p>
+                            <p class="item-date"><time datetime="2019-05-07T14:35:30.000Z" itemprop="datePublished">2019-05-07</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Blockchain/">Blockchain</a></p>
+                            <p class="item-title"><a href="/2019/05/07/Digital-wallet-0-kdf-algorithm/" class="title">创建数字钱包（零）KDF 密钥派生算法</a></p>
+                            <p class="item-date"><time datetime="2019-05-07T14:31:44.000Z" itemprop="datePublished">2019-05-07</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">分类</h3>
+        <div class="widget">
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Blockchain/">Blockchain</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Clojure/">Clojure</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/技术/">技术</a><span class="category-list-count">52</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/生活/">生活</a><span class="category-list-count">8</span></li></ul>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">归档</h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">五月 2019</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">一月 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">十月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">九月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">七月 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">五月 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">四月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">十一月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">九月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">五月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">四月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">一月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">十一月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">七月 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">六月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">三月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">二月 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">一月 2015</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/11/">十一月 2014</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/10/">十月 2014</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/09/">九月 2014</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/07/">七月 2014</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/05/">五月 2014</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02/">二月 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/01/">一月 2014</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/12/">十二月 2013</a><span class="archive-list-count">5</span></li></ul>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-float">
+        <h3 class="widget-title">标签云</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/FP/" style="font-size: 13.33px;">FP</a> <a href="/tags/Mistakes-I-Hav-Made/" style="font-size: 13.33px;">Mistakes I Hav Made</a> <a href="/tags/OO/" style="font-size: 10px;">OO</a> <a href="/tags/agile/" style="font-size: 11.67px;">agile</a> <a href="/tags/angularJs/" style="font-size: 10px;">angularJs</a> <a href="/tags/code/" style="font-size: 10px;">code</a> <a href="/tags/concurrency/" style="font-size: 10px;">concurrency</a> <a href="/tags/devOps/" style="font-size: 10px;">devOps</a> <a href="/tags/digital-wallet/" style="font-size: 15px;">digital-wallet</a> <a href="/tags/elixir/" style="font-size: 10px;">elixir</a> <a href="/tags/emacs/" style="font-size: 10px;">emacs</a> <a href="/tags/embark/" style="font-size: 10px;">embark</a> <a href="/tags/file/" style="font-size: 10px;">file</a> <a href="/tags/geek/" style="font-size: 10px;">geek</a> <a href="/tags/gradle/" style="font-size: 10px;">gradle</a> <a href="/tags/idris/" style="font-size: 10px;">idris</a> <a href="/tags/java/" style="font-size: 18.33px;">java</a> <a href="/tags/javascript/" style="font-size: 16.67px;">javascript</a> <a href="/tags/kata/" style="font-size: 10px;">kata</a> <a href="/tags/language/" style="font-size: 13.33px;">language</a> <a href="/tags/leiningen/" style="font-size: 11.67px;">leiningen</a> <a href="/tags/maven/" style="font-size: 10px;">maven</a> <a href="/tags/mysql/" style="font-size: 11.67px;">mysql</a> <a href="/tags/node/" style="font-size: 11.67px;">node</a> <a href="/tags/poetry/" style="font-size: 11.67px;">poetry</a> <a href="/tags/promise/" style="font-size: 10px;">promise</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/q/" style="font-size: 10px;">q</a> <a href="/tags/rake/" style="font-size: 10px;">rake</a> <a href="/tags/reading/" style="font-size: 15px;">reading</a> <a href="/tags/shell/" style="font-size: 13.33px;">shell</a> <a href="/tags/sublime/" style="font-size: 10px;">sublime</a> <a href="/tags/test/" style="font-size: 10px;">test</a> <a href="/tags/testing/" style="font-size: 10px;">testing</a> <a href="/tags/thinking/" style="font-size: 20px;">thinking</a> <a href="/tags/transaction/" style="font-size: 10px;">transaction</a> <a href="/tags/vim/" style="font-size: 11.67px;">vim</a> <a href="/tags/yeoman/" style="font-size: 10px;">yeoman</a> <a href="/tags/zeal/" style="font-size: 10px;">zeal</a> <a href="/tags/散文/" style="font-size: 10px;">散文</a>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">链接</h3>
+        <div class="widget">
+            <ul>
+                
+                    <li>
+                        <a href="http://blog.jayfields.com/">Jay Fields</a>
+                    </li>
+                
+                    <li>
+                        <a href="https://aphyr.com">Aphyr</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://bucharestfp.ro">Bucharest FP</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://www.yinwang.org">Wangyin</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://blog.rlmflores.me/">Rodrigo Flores</a>
+                    </li>
+                
+                    <li>
+                        <a href="https://seancorfield.github.io/">Seancorfield</a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+
+            
+        
+    </div>
+</aside>
+                </div>
+            </div>
+        </div>
+        <footer id="footer">
+    <div class="container">
+        <div class="container-inner">
+            <a id="back-to-top" href="javascript:;"><i class="icon fa fa-angle-up"></i></a>
+            <div class="credit">
+                <h1 class="logo-wrap">
+                    <a href="/" class="logo"></a>
+                </h1>
+                <p>&copy; 2019 lambeta</p>
+                <p>Powered by <a href="//hexo.io/" target="_blank">Hexo</a>. Theme by <a href="//github.com/ppoffice" target="_blank">PPOffice</a></p>
+            </div>
+        </div>
+    </div>
+</footer>
+        
+    
+    <script type="text/javascript">
+    var duoshuoQuery = {short_name:'lambeta'};
+    (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0]
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+    </script>
+
+
+
+
+    
+        <script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-share.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-video.min.js"></script>
+    
+    
+    
+
+
+<!-- Custom Scripts -->
+<script src="/js/main.js"></script>
+
+    </div>
+</body>
+</html>

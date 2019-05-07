@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    
+    <meta name="baidu-site-verification" content="dwwExeQWOx" />
+    <title>创建数字钱包（三）助记词 | λ</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+        <meta name="keywords" content="digital-wallet" />
+    
+    <meta name="description" content="BIP39解释定义BIP39^1定义了一种将计算机产生的随机数翻译成人类可读的方式，初衷很简单：结合BIP32^2，辅助人类记忆产生主密钥的种子。
+主要概念
+initial entropy (ENT)
+check sum (CS)
+mnemonic sentence (MS)
+wordlists
+
+这三者的长度关系如下：12CS = ENT/32MS = (ENT + CS)/11 化简成 MS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="创建数字钱包（三）助记词">
+<meta property="og:url" content="https://lambeta.name/2019/05/07/Digital-wallet-3-mnemonic-sentence/index.html">
+<meta property="og:site_name" content="λ">
+<meta property="og:description" content="BIP39解释定义BIP39^1定义了一种将计算机产生的随机数翻译成人类可读的方式，初衷很简单：结合BIP32^2，辅助人类记忆产生主密钥的种子。
+主要概念
+initial entropy (ENT)
+check sum (CS)
+mnemonic sentence (MS)
+wordlists
+
+这三者的长度关系如下：12CS = ENT/32MS = (ENT + CS)/11 化简成 MS">
+<meta property="og:updated_time" content="2019-05-07T14:40:04.453Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="创建数字钱包（三）助记词">
+<meta name="twitter:description" content="BIP39解释定义BIP39^1定义了一种将计算机产生的随机数翻译成人类可读的方式，初衷很简单：结合BIP32^2，辅助人类记忆产生主密钥的种子。
+主要概念
+initial entropy (ENT)
+check sum (CS)
+mnemonic sentence (MS)
+wordlists
+
+这三者的长度关系如下：12CS = ENT/32MS = (ENT + CS)/11 化简成 MS">
+    
+
+    
+        <link rel="alternate" href="/atom.xml" title="λ" type="application/atom+xml" />
+    
+
+    
+        <link rel="icon" href="/favicon.ico# path to favicon" />
+    
+
+    <link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/libs/titillium-web/styles.css">
+    <link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <script src="/libs/jquery/2.0.3/jquery.min.js"></script>
+    
+    
+        <link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+    
+    
+    
+        <script type="text/javascript">
+(function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-83870107-1# enter the tracking ID for your Google Analytics', 'auto');
+ga('send', 'pageview');
+
+</script>
+    
+    
+        <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?e6231610fe66acf322391d7546c28f21# enter Baidu Analytics hash key";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+    
+
+</head>
+
+<body>
+    <div id="wrap">
+        <header id="header">
+    <div id="header-outer" class="outer">
+        <div class="container">
+            <div class="container-inner">
+                <div id="header-title">
+                    <h1 class="logo-wrap">
+                        <a href="/" class="logo"></a>
+                    </h1>
+                    
+                        <h2 class="subtitle-wrap">
+                            <p class="subtitle">(conj clojurians me)</p>
+                        </h2>
+                    
+                </div>
+                <div id="header-inner" class="nav-container">
+                    <a id="main-nav-toggle" class="nav-icon fa fa-bars"></a>
+                    <div class="nav-container-inner">
+                        <ul id="main-nav">
+                            
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" href="/">主页</a>
+                                </li>
+                            
+                                        <ul class="main-nav-list"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Blockchain/">Blockchain</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Clojure/">Clojure</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/技术/">技术</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/生活/">生活</a></li></ul>
+                                    
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" href="/about/index.html">关于</a>
+                                </li>
+                            
+                        </ul>
+                        <nav id="sub-nav">
+                            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="想要查找什么..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+        <div class="container">
+            <div class="main-body container-inner">
+                <div class="main-body-inner">
+                    <section id="main">
+                        <div class="main-body-header">
+    <h1 class="header">
+    
+    <a class="page-title-link" href="/categories/Blockchain/">Blockchain</a>
+    </h1>
+</div>
+                        <div class="main-body-content">
+                            <article id="post-Digital-wallet-3-mnemonic-sentence" class="article article-single article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+        创建数字钱包（三）助记词
+        </h1>
+    
+
+            </header>
+        
+        
+            <div class="article-meta">
+                
+    <div class="article-date">
+        <a href="/2019/05/07/Digital-wallet-3-mnemonic-sentence/" class="article-date">
+            <time datetime="2019-05-07T14:39:13.000Z" itemprop="datePublished">2019-05-07</time>
+        </a>
+    </div>
+
+                
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/digital-wallet/">digital-wallet</a>
+    </div>
+
+            </div>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+            <h2 id="BIP39解释"><a href="#BIP39解释" class="headerlink" title="BIP39解释"></a>BIP39解释</h2><h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p>BIP39<a href="[BIP39](https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki)">^1</a>定义了一种将计算机产生的随机数翻译成人类可读的方式，初衷很简单：结合BIP32<a href="[BIP32](https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki)">^2</a>，辅助人类记忆产生主密钥的种子。</p>
+<h3 id="主要概念"><a href="#主要概念" class="headerlink" title="主要概念"></a>主要概念</h3><ol>
+<li>initial entropy (ENT)</li>
+<li>check sum (CS)</li>
+<li>mnemonic sentence (MS)</li>
+<li>wordlists</li>
+</ol>
+<p>这三者的长度关系如下：<br><figure class="highlight crmsh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">CS = ENT/<span class="number">32</span></div><div class="line"><span class="keyword">MS</span> <span class="title">= (ENT</span> + CS)/<span class="number">11</span> 化简成 <span class="keyword">MS</span> <span class="title">= 3</span> * CS</div></pre></td></tr></table></figure></p>
+<p>举个例子，如果初始熵长度为 128，ENT/CS/MS组成的关系表格填充如下：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">ENT</th>
+<th style="text-align:center">CS</th>
+<th style="text-align:center">MS</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">128</td>
+<td style="text-align:center">4</td>
+<td style="text-align:center">12</td>
+</tr>
+</tbody>
+</table>
+<h4 id="初始熵-initial-entropy"><a href="#初始熵-initial-entropy" class="headerlink" title="初始熵 initial entropy"></a>初始熵 initial entropy</h4><p>初始熵可以通过随机数生成器生成，允许的大小在 128-256 bits 范围之内。</p>
+<h4 id="校验码-check-sum"><a href="#校验码-check-sum" class="headerlink" title="校验码 check sum"></a>校验码 check sum</h4><p>校验码利用初始熵经过哈希得出，而且长度必须是$ENT/32$。</p>
+<h4 id="助记词-mnemonic-sentence"><a href="#助记词-mnemonic-sentence" class="headerlink" title="助记词 mnemonic sentence"></a>助记词 mnemonic sentence</h4><p>助记词需要将初始熵和校验码拼接，然后切分成每11位为一组，每一组二进制数转换成十进制数作为索引wordlists的下标，以便提取对应的词汇。以128位的ENT为例，它最终会产生12个词汇。</p>
+<h4 id="词汇表-wordlists"><a href="#词汇表-wordlists" class="headerlink" title="词汇表 wordlists"></a>词汇表 wordlists</h4><p>词汇表的构成是有原则可遵守的，其一，词汇之间可辨识性强，英文的词汇在前4个词汇就能有很快速的区分；其二，避免相似的词语，人毕竟是健忘的；其三，词汇应该排过序，便于二分查找。</p>
+<h3 id="代码解释"><a href="#代码解释" class="headerlink" title="代码解释"></a>代码解释</h3><p>下面利用Nodejs版本的BIP39<a href="[NodeJS-BIP39](https://github.com/bitcoinjs/bip39)">^3</a>解释</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">generateMnemonic</span> (<span class="params">strength, rng, wordlist</span>) </span>&#123;</div><div class="line">  strength = strength || <span class="number">128</span></div><div class="line">  <span class="keyword">if</span> (strength % <span class="number">32</span> !== <span class="number">0</span>) <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">TypeError</span>(INVALID_ENTROPY)</div><div class="line">  rng = rng || randomBytes</div><div class="line"></div><div class="line">  <span class="keyword">return</span> entropyToMnemonic(rng(strength / <span class="number">8</span>), wordlist)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><code>generateMnemonic(...)</code>函数的参数rng全称是random number generator，即随机数发生器，默认是randomBytes。此处，ENT的默认长度是128位，运行<code>randomBytes(128/8)</code>将产生了16字节的随机数。然后调用<code>entropyToMnemonic(...)</code>函数生成助记词。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">entropyToMnemonic</span> (<span class="params">entropy, wordlist</span>) </span>&#123;</div><div class="line">  <span class="keyword">if</span> (!Buffer.isBuffer(entropy)) entropy = Buffer.from(entropy, <span class="string">'hex'</span>)</div><div class="line">  wordlist = wordlist || DEFAULT_WORDLIST</div><div class="line"></div><div class="line">  <span class="comment">// 128 &lt;= ENT &lt;= 256</span></div><div class="line">  <span class="keyword">if</span> (entropy.length &lt; <span class="number">16</span>) <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">TypeError</span>(INVALID_ENTROPY)</div><div class="line">  <span class="keyword">if</span> (entropy.length &gt; <span class="number">32</span>) <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">TypeError</span>(INVALID_ENTROPY)</div><div class="line">  <span class="keyword">if</span> (entropy.length % <span class="number">4</span> !== <span class="number">0</span>) <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">TypeError</span>(INVALID_ENTROPY)</div><div class="line"></div><div class="line">  <span class="keyword">var</span> entropyBits = bytesToBinary([].slice.call(entropy))</div><div class="line">  <span class="keyword">var</span> checksumBits = deriveChecksumBits(entropy)</div><div class="line"></div><div class="line">  <span class="keyword">var</span> bits = entropyBits + checksumBits</div><div class="line">  <span class="keyword">var</span> chunks = bits.match(<span class="regexp">/(.&#123;1,11&#125;)/g</span>)</div><div class="line">  <span class="keyword">var</span> words = chunks.map(<span class="function"><span class="keyword">function</span> (<span class="params">binary</span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> index = binaryToByte(binary)</div><div class="line">    <span class="keyword">return</span> wordlist[index]</div><div class="line">  &#125;)</div><div class="line"></div><div class="line">  <span class="keyword">return</span> wordlist === JAPANESE_WORDLIST ? words.join(<span class="string">'\u3000'</span>) : words.join(<span class="string">' '</span>)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>entropyBits是entropy的二进制表示；checksumBits是entropy经由SHA256计算得到的哈希值再截断到CS的长度得来的，调用<code>deriveChecksumBits(...)</code>函数产生checksumBits的逻辑如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">deriveChecksumBits</span> (<span class="params">entropyBuffer</span>) </span>&#123;</div><div class="line">  <span class="keyword">var</span> ENT = entropyBuffer.length * <span class="number">8</span></div><div class="line">  <span class="keyword">var</span> CS = ENT / <span class="number">32</span></div><div class="line">  <span class="keyword">var</span> hash = createHash(<span class="string">'sha256'</span>).update(entropyBuffer).digest()</div><div class="line"></div><div class="line">  <span class="keyword">return</span> bytesToBinary([].slice.call(hash)).slice(<span class="number">0</span>, CS)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这里的计算和前面长度关系规则完全吻合，checksumBits通过<code>slice(0, CS)</code>截断得到4位的二进制数。</p>
+<p>计算得到entropyBits和checksumBits之后，把它们拼接到一起，得到一组bits，然后按每组11bits分隔，这里使用了正则表达式 <code>bits.match(/(.{1,11})/g)</code>，正则表达式<code>(.{1,11})</code>表示对任意1-11个bit进行分组，由于正则默认是最长匹配，所以每11位就被分成了一组。最终，每组二进制数都会被转成十进制数，进而作为词汇表的下标索引对应的词汇，详细见上文的<code>chunks.map(function (binary) ...</code> 过程。</p>
+<h3 id="中文词汇表"><a href="#中文词汇表" class="headerlink" title="中文词汇表"></a>中文词汇表</h3><p>BIP39其实并没有定义词汇表，所以不同的自然语言都可以自行实现自己的词汇表。NodeJS版本的BIP39<a href="[NodeJS-BIP39](https://github.com/bitcoinjs/bip39)">^3</a>就支持中文的词汇表。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> mnemonic = bip39.generateMnemonic(<span class="number">160</span>, <span class="literal">null</span>, bip39.wordlists.chinese_simplified)</div><div class="line">-&gt;</div><div class="line"><span class="string">'定 过 丘 搭 斥 紫 遍 官 寿 穿 贯 别 讯 卵 符'</span></div></pre></td></tr></table></figure>
+<p>除了中文的词汇表，它还支持下列词汇，如：繁体中文等。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">export</span> <span class="keyword">const</span> wordlists: &#123;</div><div class="line">    <span class="attr">EN</span>: string[];</div><div class="line">    JA: string[];</div><div class="line">    chinese_simplified: string[];</div><div class="line">    chinese_traditional: string[];</div><div class="line">    english: string[];</div><div class="line">    french: string[];</div><div class="line">    italian: string[];</div><div class="line">    japanese: string[];</div><div class="line">    spanish: string[];</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h3 id="生成BIP32种子"><a href="#生成BIP32种子" class="headerlink" title="生成BIP32种子"></a>生成BIP32种子</h3><p>拿到助记词之后，就可以从助记词生成种子。这里其实使用了pbkdf2算法，不过有趣的是，参数mnemonic反而是pdkdf2算法中的password参数：<br><figure class="highlight actionscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">mnemonicToSeed</span> <span class="params">(mnemonic, password)</span> </span>&#123;</div><div class="line">  <span class="keyword">var</span> mnemonicBuffer = Buffer.from(unorm.nfkd(mnemonic), <span class="string">'utf8'</span>)</div><div class="line">  <span class="keyword">var</span> saltBuffer = Buffer.from(salt(unorm.nfkd(password)), <span class="string">'utf8'</span>)</div><div class="line"></div><div class="line">  <span class="keyword">return</span> pbkdf2(mnemonicBuffer, saltBuffer, <span class="number">2048</span>, <span class="number">64</span>, <span class="string">'sha512'</span>)</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+
+        </div>
+        <footer class="article-footer">
+            
+
+
+
+    <a data-url="https://lambeta.name/2019/05/07/Digital-wallet-3-mnemonic-sentence/" data-id="cjvdwlqcb006fk3m44rmcgoxx" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
+<script>
+    (function ($) {
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+</script>
+
+        </footer>
+    </div>
+</article>
+
+    <section id="comments">
+    
+        
+    <div class="ds-thread" data-thread-key="2019/05/07/Digital-wallet-3-mnemonic-sentence/" data-title="创建数字钱包（三）助记词" data-url="https://lambeta.name/2019/05/07/Digital-wallet-3-mnemonic-sentence/"></div>
+    <style>
+        #ds-thread #ds-reset .ds-textarea-wrapper {
+            background: none;
+        }
+        #ds-reset .ds-avatar img {
+            box-shadow: none;
+        }
+        #ds-reset .ds-gradient-bg {
+            background: #f7f7f7;
+        }
+        #ds-thread #ds-reset li.ds-tab a {
+            border-radius: 3px;
+        }
+        #ds-thread #ds-reset .ds-post-button {
+            color: white;
+            border: none;
+            box-shadow: none;
+            background: #d32;
+            text-shadow: none;
+            font-weight: normal;
+            font-family: 'Microsoft Yahei';
+        }
+        #ds-thread #ds-reset .ds-post-button:hover {
+            color: white;
+            background: #DE594C;
+        }
+        #ds-thread #ds-reset .ds-post-button:active {
+            background: #d32;
+        }
+        #ds-smilies-tooltip ul.ds-smilies-tabs li a.ds-current {
+            color: white;
+            background: #d32;
+            box-shadow: none;
+            text-shadow: none;
+            font-weight: normal;
+        }
+    </style>
+
+    
+    </section>
+
+
+                        </div>
+                    </section>
+                    <aside id="sidebar">
+    <a class="sidebar-toggle" title="Expand Sidebar"><i class="toggle icon"></i></a>
+    <div class="sidebar-top">
+        <p>关注我 :</p>
+        <ul class="social-links">
+            
+                
+                <li>
+                    <a class="social-tooltip" title="twitter" href="https://twitter.com/lambetaX" target="_blank">
+                        <i class="icon fa fa-twitter"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="github" href="https://github.com/qianyan" target="_blank">
+                        <i class="icon fa fa-github"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="weibo" href="http://weibo.com/3672207020/" target="_blank">
+                        <i class="icon fa fa-weibo"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="rss" href="/atom.xml" target="_blank">
+                        <i class="icon fa fa-rss"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="jianshu" href="https://www.jianshu.com/u/0775189eef67" target="_blank">
+                        <i class="icon fa fa-jianshu"></i>
+                    </a>
+                </li>
+                
+            
+        </ul>
+    </div>
+    
+        
+<nav id="article-nav">
+    
+        <a href="/2019/05/07/try-embark/" id="article-nav-newer" class="article-nav-link-wrap">
+        <strong class="article-nav-caption">下一篇</strong>
+        <p class="article-nav-title">
+        
+            try embark
+        
+        </p>
+        <i class="icon fa fa-chevron-right" id="icon-chevron-right"></i>
+    </a>
+    
+    
+        <a href="/2019/05/07/Digital-wallet-2-hd-wallet/" id="article-nav-older" class="article-nav-link-wrap">
+        <strong class="article-nav-caption">上一篇</strong>
+        <p class="article-nav-title">创建数字钱包（二）HD Wallet</p>
+        <i class="icon fa fa-chevron-left" id="icon-chevron-left"></i>
+        </a>
+    
+</nav>
+
+    
+    <div class="widgets-container">
+        
+            
+                
+    <div class="widget-wrap">
+        <h3 class="widget-title">最新文章</h3>
+        <div class="widget">
+            <ul id="recent-post" class="no-thumbnail">
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Blockchain/">Blockchain</a></p>
+                            <p class="item-title"><a href="/2019/05/07/try-embark/" class="title">try embark</a></p>
+                            <p class="item-date"><time datetime="2019-05-07T14:42:39.000Z" itemprop="datePublished">2019-05-07</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Blockchain/">Blockchain</a></p>
+                            <p class="item-title"><a href="/2019/05/07/Digital-wallet-3-mnemonic-sentence/" class="title">创建数字钱包（三）助记词</a></p>
+                            <p class="item-date"><time datetime="2019-05-07T14:39:13.000Z" itemprop="datePublished">2019-05-07</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Blockchain/">Blockchain</a></p>
+                            <p class="item-title"><a href="/2019/05/07/Digital-wallet-2-hd-wallet/" class="title">创建数字钱包（二）HD Wallet</a></p>
+                            <p class="item-date"><time datetime="2019-05-07T14:37:28.000Z" itemprop="datePublished">2019-05-07</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Blockchain/">Blockchain</a></p>
+                            <p class="item-title"><a href="/2019/05/07/Digital-wallet-1-generate-accounts/" class="title">创建数字钱包（一）账号生成</a></p>
+                            <p class="item-date"><time datetime="2019-05-07T14:35:30.000Z" itemprop="datePublished">2019-05-07</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Blockchain/">Blockchain</a></p>
+                            <p class="item-title"><a href="/2019/05/07/Digital-wallet-0-kdf-algorithm/" class="title">创建数字钱包（零）KDF 密钥派生算法</a></p>
+                            <p class="item-date"><time datetime="2019-05-07T14:31:44.000Z" itemprop="datePublished">2019-05-07</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">分类</h3>
+        <div class="widget">
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Blockchain/">Blockchain</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Clojure/">Clojure</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/技术/">技术</a><span class="category-list-count">52</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/生活/">生活</a><span class="category-list-count">8</span></li></ul>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">归档</h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">五月 2019</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">一月 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">十月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">九月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">七月 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">五月 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">四月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">十一月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">九月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">五月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">四月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">一月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">十一月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">七月 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">六月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">三月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">二月 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">一月 2015</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/11/">十一月 2014</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/10/">十月 2014</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/09/">九月 2014</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/07/">七月 2014</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/05/">五月 2014</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02/">二月 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/01/">一月 2014</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/12/">十二月 2013</a><span class="archive-list-count">5</span></li></ul>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-float">
+        <h3 class="widget-title">标签云</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/FP/" style="font-size: 13.33px;">FP</a> <a href="/tags/Mistakes-I-Hav-Made/" style="font-size: 13.33px;">Mistakes I Hav Made</a> <a href="/tags/OO/" style="font-size: 10px;">OO</a> <a href="/tags/agile/" style="font-size: 11.67px;">agile</a> <a href="/tags/angularJs/" style="font-size: 10px;">angularJs</a> <a href="/tags/code/" style="font-size: 10px;">code</a> <a href="/tags/concurrency/" style="font-size: 10px;">concurrency</a> <a href="/tags/devOps/" style="font-size: 10px;">devOps</a> <a href="/tags/digital-wallet/" style="font-size: 15px;">digital-wallet</a> <a href="/tags/elixir/" style="font-size: 10px;">elixir</a> <a href="/tags/emacs/" style="font-size: 10px;">emacs</a> <a href="/tags/embark/" style="font-size: 10px;">embark</a> <a href="/tags/file/" style="font-size: 10px;">file</a> <a href="/tags/geek/" style="font-size: 10px;">geek</a> <a href="/tags/gradle/" style="font-size: 10px;">gradle</a> <a href="/tags/idris/" style="font-size: 10px;">idris</a> <a href="/tags/java/" style="font-size: 18.33px;">java</a> <a href="/tags/javascript/" style="font-size: 16.67px;">javascript</a> <a href="/tags/kata/" style="font-size: 10px;">kata</a> <a href="/tags/language/" style="font-size: 13.33px;">language</a> <a href="/tags/leiningen/" style="font-size: 11.67px;">leiningen</a> <a href="/tags/maven/" style="font-size: 10px;">maven</a> <a href="/tags/mysql/" style="font-size: 11.67px;">mysql</a> <a href="/tags/node/" style="font-size: 11.67px;">node</a> <a href="/tags/poetry/" style="font-size: 11.67px;">poetry</a> <a href="/tags/promise/" style="font-size: 10px;">promise</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/q/" style="font-size: 10px;">q</a> <a href="/tags/rake/" style="font-size: 10px;">rake</a> <a href="/tags/reading/" style="font-size: 15px;">reading</a> <a href="/tags/shell/" style="font-size: 13.33px;">shell</a> <a href="/tags/sublime/" style="font-size: 10px;">sublime</a> <a href="/tags/test/" style="font-size: 10px;">test</a> <a href="/tags/testing/" style="font-size: 10px;">testing</a> <a href="/tags/thinking/" style="font-size: 20px;">thinking</a> <a href="/tags/transaction/" style="font-size: 10px;">transaction</a> <a href="/tags/vim/" style="font-size: 11.67px;">vim</a> <a href="/tags/yeoman/" style="font-size: 10px;">yeoman</a> <a href="/tags/zeal/" style="font-size: 10px;">zeal</a> <a href="/tags/散文/" style="font-size: 10px;">散文</a>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">链接</h3>
+        <div class="widget">
+            <ul>
+                
+                    <li>
+                        <a href="http://blog.jayfields.com/">Jay Fields</a>
+                    </li>
+                
+                    <li>
+                        <a href="https://aphyr.com">Aphyr</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://bucharestfp.ro">Bucharest FP</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://www.yinwang.org">Wangyin</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://blog.rlmflores.me/">Rodrigo Flores</a>
+                    </li>
+                
+                    <li>
+                        <a href="https://seancorfield.github.io/">Seancorfield</a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+
+            
+        
+    </div>
+</aside>
+                </div>
+            </div>
+        </div>
+        <footer id="footer">
+    <div class="container">
+        <div class="container-inner">
+            <a id="back-to-top" href="javascript:;"><i class="icon fa fa-angle-up"></i></a>
+            <div class="credit">
+                <h1 class="logo-wrap">
+                    <a href="/" class="logo"></a>
+                </h1>
+                <p>&copy; 2019 lambeta</p>
+                <p>Powered by <a href="//hexo.io/" target="_blank">Hexo</a>. Theme by <a href="//github.com/ppoffice" target="_blank">PPOffice</a></p>
+            </div>
+        </div>
+    </div>
+</footer>
+        
+    
+    <script type="text/javascript">
+    var duoshuoQuery = {short_name:'lambeta'};
+    (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0]
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+    </script>
+
+
+
+
+    
+        <script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-share.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-video.min.js"></script>
+    
+    
+    
+
+
+<!-- Custom Scripts -->
+<script src="/js/main.js"></script>
+
+    </div>
+</body>
+</html>
