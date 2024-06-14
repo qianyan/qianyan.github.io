@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.2.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"qianyan.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="缘起 实践出真知 快速获取 澄清概念 Ownership Move Reference Mutable reference   解释错误 数据竞态条件 构建树状结构 渲染树状结构   总结 源码 Github  缘起做区块链的基本几乎没有人不知道 Rust 这门编程语言，它非常受区块链底层开发人员的青睐。说来也奇怪，Rust 起源于 Mazilla，唯一大规模应用就是 Firefox，作为小众语">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Rust 入门（Rust rocks）">
+<meta property="og:url" content="https://qianyan.github.io/2019/09/23/2019-09-23-Rust-rocks/index.html">
+<meta property="og:site_name" content="λ">
+<meta property="og:description" content="缘起 实践出真知 快速获取 澄清概念 Ownership Move Reference Mutable reference   解释错误 数据竞态条件 构建树状结构 渲染树状结构   总结 源码 Github  缘起做区块链的基本几乎没有人不知道 Rust 这门编程语言，它非常受区块链底层开发人员的青睐。说来也奇怪，Rust 起源于 Mazilla，唯一大规模应用就是 Firefox，作为小众语">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2019-09-23T01:32:14.000Z">
+<meta property="article:modified_time" content="2019-09-23T02:01:43.000Z">
+<meta property="article:author" content="Qian Yan">
+<meta property="article:tag" content="rust">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://qianyan.github.io/2019/09/23/2019-09-23-Rust-rocks/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://qianyan.github.io/2019/09/23/2019-09-23-Rust-rocks/","path":"2019/09/23/2019-09-23-Rust-rocks/","title":"Rust 入门（Rust rocks）"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Rust 入门（Rust rocks） | λ</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">λ</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">(conj clojurians me)</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%98%E8%B5%B7"><span class="nav-number">1.</span> <span class="nav-text">缘起</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E8%B7%B5%E5%87%BA%E7%9C%9F%E7%9F%A5"><span class="nav-number">2.</span> <span class="nav-text">实践出真知</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BF%AB%E9%80%9F%E8%8E%B7%E5%8F%96"><span class="nav-number">2.1.</span> <span class="nav-text">快速获取</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%BE%84%E6%B8%85%E6%A6%82%E5%BF%B5"><span class="nav-number">2.2.</span> <span class="nav-text">澄清概念</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Ownership"><span class="nav-number">2.2.1.</span> <span class="nav-text">Ownership</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Move"><span class="nav-number">2.2.2.</span> <span class="nav-text">Move</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Reference"><span class="nav-number">2.2.3.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Mutable-reference"><span class="nav-number">2.2.4.</span> <span class="nav-text">Mutable reference</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E9%87%8A%E9%94%99%E8%AF%AF"><span class="nav-number">2.3.</span> <span class="nav-text">解释错误</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E7%AB%9E%E6%80%81%E6%9D%A1%E4%BB%B6"><span class="nav-number">2.4.</span> <span class="nav-text">数据竞态条件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9E%84%E5%BB%BA%E6%A0%91%E7%8A%B6%E7%BB%93%E6%9E%84"><span class="nav-number">2.5.</span> <span class="nav-text">构建树状结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B8%B2%E6%9F%93%E6%A0%91%E7%8A%B6%E7%BB%93%E6%9E%84"><span class="nav-number">2.6.</span> <span class="nav-text">渲染树状结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%84%E5%90%88%E8%B0%83%E7%94%A8"><span class="nav-number">2.7.</span> <span class="nav-text">组合调用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">3.</span> <span class="nav-text">总结</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Qian Yan</p>
+  <div class="site-description" itemprop="description">Elegance and familiarity are orthogonal</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">76</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">41</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://qianyan.github.io/2019/09/23/2019-09-23-Rust-rocks/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Qian Yan">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="λ">
+      <meta itemprop="description" content="Elegance and familiarity are orthogonal">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Rust 入门（Rust rocks） | λ">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Rust 入门（Rust rocks）
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2019-09-23 09:32:14 / 修改时间：10:01:43" itemprop="dateCreated datePublished" datetime="2019-09-23T09:32:14+08:00">2019-09-23</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%8A%80%E6%9C%AF/" itemprop="url" rel="index"><span itemprop="name">技术</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><ul>
+<li>缘起</li>
+<li>实践出真知<ul>
+<li>快速获取</li>
+<li>澄清概念<ul>
+<li>Ownership</li>
+<li>Move</li>
+<li>Reference</li>
+<li>Mutable reference</li>
+</ul>
+</li>
+<li>解释错误</li>
+<li>数据竞态条件</li>
+<li>构建树状结构</li>
+<li>渲染树状结构</li>
+</ul>
+</li>
+<li>总结</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/qianyan/tree/blob/master/tree.rs">源码 Github</a></li>
+</ul>
+<h2 id="缘起"><a href="#缘起" class="headerlink" title="缘起"></a>缘起</h2><p>做区块链的基本几乎没有人不知道 Rust 这门编程语言，它非常受区块链底层开发人员的青睐。说来也奇怪，Rust 起源于 Mazilla，唯一大规模应用就是 Firefox，作为小众语言却在区块链圈子里火了。这其中应该和以太坊的发起人 Govin Wood 创建的 Parity 项目有关，Parity 是一款用 Rust 编写的以太坊客户端。</p>
+<p>最初接触 Rust 的时间大概是 2015 年，当年有同事发了一封“是否对 Rust 编程语言感兴趣的”的邮件。当时年少<del>不懂事</del>热血，觉得这门语言因为它小众很酷，所以特别适合拿来练功，所以就激情地回应了邮件，结果之后就没有了下文，想必那位同事也因为响应的人数太少而兴致缺缺。</p>
+<p>第二次关注 Rust 是因为陈天在自己的公众号中提到了这门语言。我比较欣赏陈天，当初学习 Elixir 也是受他影响，所以也跟着他的步伐去听了张汉东的知乎Live，然后加入了他的读者群（魅力Rust），在这个群中潜水了大半年，一直很惊叹这个群的活跃度。</p>
+<p>2019年，区块链圈中的一次大事件是 Facebook 要发非主权货币 Libra，随之而来是基于 Rust 之上的 Move 编程语言。这个 Move 说白了就是 Move 的一种 DSL，用比较学术的话说是指称（denotational）语义，用简单的编译器把 Move 的语法翻译成 Rust 的语法然后借助 Rust 的编译器生成二进制码。这个过程没有什么惊喜，不过 Move 语言显然是借鉴了 Rust 中移交（Move）主权（Ownership）的概念，它表征了这样一种事实——数字资产只能有一个主人，一旦移动，就会发生主权转移，以前的主人就丧失了该主权。这种想法和 Rust 中主权管理非常契合，所以不难理解为什么 Libra 的开发团队把名字也照搬过来了。当然，Libra 的底层区块链也用的是 Rust。这个大事件加上以太坊 Parity 的珠玉在前，对于程序员这群天生喜欢新鲜事物的人类而言，学习 Rust 的热情必然水涨船高。</p>
+<p>大概就是在这种契机下，我开始学习 Rust 的。依照老规矩，我还是会从 tree 这个命令行程序入手，在试错中逐步学习 Rust 这门语言。包含它的基本数据类型，组合数据类型，控制流，模块（函数）以及文件和集合操作，还有最关键的 Ownership 的应用。</p>
+<h2 id="实践出真知"><a href="#实践出真知" class="headerlink" title="实践出真知"></a>实践出真知</h2><p>学习 Rust 最深刻的体验莫过于和编译器较劲，这也是我听到过最多的抱怨。我想许多新手看到这么多警告或者错误，嘴上不说，心里应该很不是滋味。但是这也是 Rust 引以为豪的设计哲学，每一门新进的语言都有自己的本质原因（Rationale）或者设计哲学，比如 Lisp 家族的 Clojure 就有 <em>Elegance and familiarity are orthogonal</em> 的玄言妙语；往远古追溯，Java 的 <em>Write Once, Run Anywhere</em> 豪言壮语；而 Rust 的基本设计哲学是 <em>If it compiles, then it works</em>，这个条件有多苛刻我们稍微想一想就能知道——动态弱类型语言向静态强类型语言的逐步趋同态势，基本已经宣告了类型系统的胜利，但即便如此，现代软件工程也还是处处强调程序员要手写各种测试确保代码运行时的正确性——从单元测试到集成测试，从冒烟测试到回归测试，从 Profiling 到性能测试。这些测试方法和工具已经深入到软件工程的方方面面，然而各类软件还是漏洞百出。Rust 发出这种高调宣言，不免有夜郎自大之嫌疑。不过程序届是个能造概念也能落地概念的神奇圈子，高调的牛吹着吹着也就实现了。况且，Rust 充分诠释了现代编程语言的核心思想——约束程序员，不是劝劝你的意思，是憋死你的意思。</p>
+<p>我在<a href="/2018/07/18/the-joy-of-learning-new-programming-language/">《我是如何学习新的编程语言》</a>中说过学习的最好方式是有目的地试错，我时常拿来练手的程序叫<em>tree - list contents of directories in a tree-like format.</em> 这段程序需要用到的 Rust 基本构件有：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">基础概念</span><br><span class="line">1. 变量 - let</span><br><span class="line">2. ownership borrow - &amp;</span><br><span class="line">3. 可变性 - mut</span><br><span class="line">4. 可变引用 - &amp;mut</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">复合数据类型</span><br><span class="line">1. String - String::from(&quot;&quot;) // 非基本类型</span><br><span class="line">2. Slice - &quot;&quot; or vec[..]</span><br><span class="line">2. struct - struct &#123;&#125;</span><br><span class="line"></span><br><span class="line">集合及其操作</span><br><span class="line">1. Vec&lt;_&gt; - Vec::new() // 考虑到集合需要自动扩展</span><br><span class="line">2. iter()</span><br><span class="line">3. .map()</span><br><span class="line">4. .enumerate()</span><br><span class="line">5. .flatten()</span><br><span class="line">6. .collect()</span><br><span class="line">7. .extend() //集合拼接</span><br><span class="line"></span><br><span class="line">控制语句</span><br><span class="line">1. if Expressions - if &#123;&#125; else &#123;&#125;</span><br><span class="line">2. recursions</span><br><span class="line"></span><br><span class="line">模块</span><br><span class="line">1. fn - fn x(s: String) -&gt; Vec&lt;String&gt;</span><br><span class="line"></span><br><span class="line">功能组件</span><br><span class="line">1. Path</span><br><span class="line">2. fs</span><br><span class="line">3. env</span><br></pre></td></tr></table></figure>
+<p>当尝试寻找这些元素时，我发现 Rust 或者诸如此类的编译型语言都有一个让人不舒服的地方——验证的前置步骤耗时太长。因为没有<em>repl</em>，所以想去了解一些概念的使用方法，就不得不另外创建一个项目（我可不想污染当前项目的代码），在它的 main 函数里编写试验程序，这比起具有快速反馈能力的<em>repl</em>，着实太慢了。不过这里的慢也是相对的，Rust 也有一个显著的优势，在出现编译错误时，编译器不仅能向你解释原因，还能推荐潜在的修改方式，这就比 Javascript 一类的动态语言要清晰和高明得多。再利用内置的 <code>assert_eq!</code> 等断言函数预判结果，又比单独写测试省事。所以，总体而言，学习的过程还是很愉悦的。</p>
+<h3 id="快速获取"><a href="#快速获取" class="headerlink" title="快速获取"></a>快速获取</h3><p>这里举个例子，为了解如何拼接两个集合时，需要事先搞明白几个问题：</p>
+<ol>
+<li>集合的构造？</li>
+<li>集合的拼接？</li>
+<li>结果的断言？</li>
+</ol>
+<p>在没有<em>repl</em>的条件下，唯一快速上手的工具就是文档，在 <a target="_blank" rel="noopener" href="https://doc.rust-lang.org/std/">https://doc.rust-lang.org/std/</a> 的官方标准库中，可以搜到<code>Struct std::vec::Vec</code>的<a target="_blank" rel="noopener" href="https://doc.rust-lang.org/std/vec/struct.Vec.html">详细解释</a>。</p>
+<p>通过例子程序，可以很快知道集合的构造方式如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">let mut v = vec![1, 2, 3];</span><br><span class="line">v.reverse();</span><br><span class="line">assert_eq!(v, [3, 2, 1]);</span><br></pre></td></tr></table></figure>
+<p><code>vec!</code> 宏可以快速构造出一个集合来，顺便试验下它的<code>reverse</code>方法。那么集合如何拼接呢？为了解答这个问题，我一般会用搜索引擎，或者深入文档，查找如 <code>concat</code>，<code>append</code>等关键字，每每总有收获。</p>
+<p>在不考虑非功能需求的前提下，我们先用最直接的方式实现，例如：文档中给出的样例<code>extend</code>方法</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">let v = vec![1, 2, 3];</span><br><span class="line">v.extend([1, 2, 3].iter().cloned()); // 编译错误</span><br></pre></td></tr></table></figure>
+<p>注意，这里编译失败。Rust 编译器会直截了当地给出错误信息。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">error[E0596]: cannot borrow `v` as mutable, as it is not declared as mutable</span><br><span class="line"><span class="meta prompt_">  --&gt; </span><span class="language-bash">src/main.rs:13:5</span></span><br><span class="line">   |</span><br><span class="line">12 |     let v = vec![1, 2, 3];</span><br><span class="line">   |         - help: consider changing this to be mutable: `mut v`</span><br><span class="line">13 |     v.extend([1, 2, 3].iter().cloned());</span><br><span class="line">   |     ^ cannot borrow as mutable</span><br></pre></td></tr></table></figure>
+<p>错误信息中透露出我们的程序在尝试借用（borrow）一个不可变的变量。<em>borrow</em>和 <em>mutable</em>都是新的概念。对于新的概念，我们会习惯地用熟知的知识去类比。如果套用函数式编程中不可变的特性，大体可以猜到 Rust 中的变量默认是不可变的。但是 <em>cannot borrow as mutable</em> 中 <em>borrow</em> 确实是有点超出认知范围。那么此时弄清定义是非常有必要的。</p>
+<h3 id="澄清概念"><a href="#澄清概念" class="headerlink" title="澄清概念"></a>澄清概念</h3><p><strong>学习语言的过程中最需要注意的事项就是澄清概念</strong>。当遇到崭新的概念时，我们得停下先去补充这部分的知识，然后再回过头来理解和解决实际遇到的问题。因为每一门编程语言都有本门派的哲学原理，它本身就萃取了多种理论和实践的成果，所以必须学习这些概念。学习的过程其实就是逐步澄清概念的过程。</p>
+<p>在学习（尝试定义）<em>borrow</em> 的过程中，我又先后接触到了 <em>ownership</em>, <em>move</em>, <em>reference</em>, <em>mutable reference</em> 等概念。所以我定义了这些概念：</p>
+<h4 id="Ownership"><a href="#Ownership" class="headerlink" title="Ownership"></a>Ownership</h4><p>变量拥有它指称的值的所有权。<br>在 Rust 当中，变量拥有它指称的值，即变量（variable）是它指称值（value）的主人（owner），值一次只能有一个主人，一旦主人离开作用域它的值就会被销毁。</p>
+<h4 id="Move"><a href="#Move" class="headerlink" title="Move"></a>Move</h4><p>把一个变量的值重新赋值给另一个变量的行为。<br>根据 Ownership 的定义，值一次只能有一个主人，所以此时该值的所有权会被<strong>转移</strong>给另一个变量，原来的变量就丧失了对这个值的所有权，导致的直接影响就是这个变量此后不再可用。</p>
+<h4 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h4><p>一个变量指向（refer to）值而非拥有该值的所有权的状态。<br>在很多赋值的场景，包括变量赋值或者函数参数赋值，我们并不希望之后原来的变量不再可用，此时可以通过<code>&amp;</code>(ampersands创建一个指向值的引用，将引用进行赋值时不会发生 <em>Move</em>，所以原来的变量依旧可用。这种赋值行为被称为<em>borrow</em>（借用）。结合实际，我们拥有的物品可以出借给别人，别人享有该物品的使用权（Possession），而非所有权（Ownership）。</p>
+<h4 id="Mutable-reference"><a href="#Mutable-reference" class="headerlink" title="Mutable reference"></a>Mutable reference</h4><p>标识该引用的值是可变的。</p>
+<p>很多场景下，我们希望引用传递的值是可以改变的。此时我们就必须通过<code>&amp;mut</code>标识该引用，否则不允许修改操作发生。值得注意的是，<code>&amp;mut</code>标识要求原来的变量也必须是<code>mut</code>的，这很好理解，可变的变量的引用也得可变。而且为了防止数据竞态条件的发生，在同一个作用域下，<code>&amp;mut</code>的引用只能有一个，因为一旦出现多个可变引用，就可能遭遇不可重复读风险（注意，Rust 保证这里没有并行修改的风险）。而且同一个值的<code>&amp;mut</code>和<code>&amp;</code>的引用不能共存，因为我们不希望一个只读<code>&amp;</code>的值同时还能被写<code>&amp;mut</code>，这样会导致歧义。</p>
+<h3 id="解释错误"><a href="#解释错误" class="headerlink" title="解释错误"></a>解释错误</h3><p>澄清了必要概念以后，我们再来回顾上面的代码。先去看一下这个<code>extend</code>函数的定义：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">fn extend&lt;I&gt;(&amp;mut self, iter: I)</span><br><span class="line">where</span><br><span class="line">    I: IntoIterator&lt;Item = T&gt;, </span><br><span class="line">Extends a collection with the contents of an iterator...</span><br></pre></td></tr></table></figure>
+<p>原来<code>v.extend</code>只是一个语法糖，真正的方法调用会把<code>self</code>作为第一个参数传递到<code>extend(&amp;mut self, iter: I)</code>当中。可变引用作为函数参数赋值，那么自然原来的变量也必须声明成可变的。</p>
+<p>所以我们照着它的指示修正如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">let mut v = vec![1, 2, 3]; // 加上一个mut修饰符</span><br><span class="line">v.extend([1, 2, 3].iter().cloned());</span><br></pre></td></tr></table></figure>
+<p>这回编译器消停了，利用<code>assert_eq!</code>，我们来验证<code>extend</code>操作的正确性。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">assert_eq!(v, [1, 2, 3, 1, 2, 3]);</span><br></pre></td></tr></table></figure>
+<p>另外，值得注意的是，Rust 和我们熟悉的函数式编程有些不同，集合的拼接不会产生一个新的集合，而是对原有的集合进行修改。一般情况下，我们都会警惕可能会出现数据的竞态条件——<strong>多个线程对该集合进行写入操作怎么办？</strong>带着这个问题，我们反思一下什么是数据的竞态条件。</p>
+<h3 id="数据竞态条件"><a href="#数据竞态条件" class="headerlink" title="数据竞态条件"></a>数据竞态条件</h3><p>数据竞态条件发生的必要条件有：</p>
+<ol>
+<li>多个引用同时指向相同的数据；</li>
+<li>至少有一个引用在写数据；</li>
+<li>对于数据的访问没有同步机制。</li>
+</ol>
+<p><strong>考察1和2：</strong><br>假如此处有两个引用指向同一个集合，如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">let mut v = vec![1, 2, 3];</span><br><span class="line">let r1 = &amp;mut v;</span><br><span class="line">let r2 = &amp;mut v;</span><br><span class="line">assert_eq!(r1, r2);</span><br></pre></td></tr></table></figure>
+<p>编译器会立即给出编译错误</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">error[E0499]: cannot borrow `v` as mutable more than once at a time</span><br><span class="line">--&gt; src/main.rs:13:10</span><br><span class="line">|</span><br><span class="line">12 | let r1 = &amp;mut v;</span><br><span class="line">|          ------ first mutable borrow occurs here</span><br><span class="line">13 | let r2 = &amp;mut v;</span><br><span class="line">|          ^^^^^^ second mutable borrow occurs here</span><br><span class="line">14 | assert_eq!(r1, r2);</span><br><span class="line">| ------------------- first borrow later used here</span><br></pre></td></tr></table></figure>
+<p>也就是说，在指定的作用域下只能有一个可变引用。为什么要如此设计呢？在单线程下，这好像并不会出现数据竞争的问题<a target="_blank" rel="noopener" href="https://www.reddit.com/r/rust/comments/95ky6u/why_arent_multiple_mutable_references_allowed_in/">^1</a>。不过考虑到下面这种场景的语义，我们思考一下。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">let mut v = vec![1, 2, 3];</span><br><span class="line">let r1 = &amp;mut v;</span><br><span class="line">let r2 = &amp;mut v;</span><br><span class="line">assert_eq!(r2[1], 2);</span><br><span class="line">*r1 = vec![0]</span><br><span class="line">assert_eq!(r2[1], 2); // 失效</span><br></pre></td></tr></table></figure>
+<p>一旦允许r1改变数据，那对于r2而言，它先前持有的数据就已经发生改变甚至失效，再拿来使用就有问题了，在上面这个例子当中，<code>*r1</code>解除引用后被重新赋值，导致v的值随之改变，但是r2并不知情，依旧使用<code>r2[1]</code>导致此处越界。这个问题和数据库中事务的不可重复读（提交读）的隔离级别类似，但是在单线程下这并不能算作充分的理由，只是说在语义层面有细微的不自然，留待后续研究。</p>
+<p>蹊跷的是，如果我将两个可变引用放到不同的函数中，同样的逻辑却可以绕过编译器错误。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">fn main() &#123;</span><br><span class="line">    let mut v = vec![1, 2, 3];</span><br><span class="line">    mut1(&amp;mut v);</span><br><span class="line">    mut2(&amp;mut v);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">fn mut1(v: &amp;mut Vec&lt;i32&gt;) &#123;</span><br><span class="line">    *v = vec![0];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">fn mut2(v: &amp;mut Vec&lt;i32&gt;) &#123;</span><br><span class="line">    println!(&quot;&#123;&#125;&quot;, v[1]); // panicked at &#x27;index out of bounds&#x27; 运行时错误</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可见，上述的论述并没有解释清楚在单线程下同一个作用域下限制多个可变引用的根本原因。</p>
+<p>对于<code>&amp;mut</code>和<code>&amp;</code>其实也可以做同样的解释。所以<code>&amp;mut</code>和<code>&amp;</code>在 Rust 同一个作用域中无法共存。</p>
+<p><strong>考察3：</strong><br>至于在多线程的环境下，是否会出现数据竞态条件，我们得看 Rust 在线程使用方面的限制。在 Rust 的上下文里，使用<code>Thread::spawn</code>的线程时必须 <em>Move</em> 所有权<a target="_blank" rel="noopener" href="http://squidarth.com/rc/rust/2018/06/04/rust-concurrency.html">^2</a>，因为在 Rust 看来，Thread 的 <em>LifeTime</em>（生命周期）会比调用它的函数的生命周期的长，如果不 <em>Move</em> 所有权，那么线程中数据就会在调用函数结束后释放掉变量的内存，导致线程中的数据无效。所以，这样的限制是很有必要的，但反过来想，一旦数据的所有权发生转移，那么多个线程并行修改同样数据的可能性也就不复存在。</p>
+<h3 id="构建树状结构"><a href="#构建树状结构" class="headerlink" title="构建树状结构"></a>构建树状结构</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">struct Entry &#123;</span><br><span class="line">    name: String,</span><br><span class="line">    children: Vec&lt;Entry&gt; </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">fn tree(path: &amp;Path) -&gt; Entry &#123;</span><br><span class="line">    Entry&#123;</span><br><span class="line">        name: path.file_name()</span><br><span class="line">            .and_then(|name| name.to_str())</span><br><span class="line">            .map_or(String::from(&quot;.&quot;), |str| String::from(str)),</span><br><span class="line">       </span><br><span class="line">        children: if path.is_dir() &#123;</span><br><span class="line">            children(path)</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            Vec::new()</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>既然是树状结构，定义的结构体就是递归的。这里的<code>struct Entry &#123;&#125;</code>就是一种递归的结构。我想实现的树状结构大致如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">entry :: &#123;name, [child]&#125;</span><br><span class="line">child :: entry</span><br></pre></td></tr></table></figure>
+<p>Rust 中没有显式的return，最后一个表达式的结果会被当成返回值，所以此处整个<code>Entry</code>结构体会被返回。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">path.file_name()</span><br><span class="line"> .and_then(|name| name.to_str())</span><br><span class="line"> .map_or(String::from(&quot;.&quot;), |str| String::from(str)),</span><br></pre></td></tr></table></figure>
+<p>这段代码看上去很复杂，但实现的功能其实很简单，目的是为了获取当前文件的文件名。那么逻辑为何如此绕呢？这是由于 Rust 中的多种字符串表示导致的问题，暂按不表。先去看看各个函数的定义。</p>
+<p><strong>Path.file_name 的定义</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pub fn file_name(&amp;self) -&gt; Option&lt;&amp;OsStr&gt;</span><br></pre></td></tr></table></figure>
+<p><code>and_then</code>是我们常见的<code>flat_map</code>操作在 Rust 中的命名，其目的是为了在两个<code>Option</code>之间实现转换。</p>
+<p><strong>OsStr.to_str 的定义</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pub fn to_str(&amp;self) -&gt; Option&lt;&amp;str&gt;</span><br></pre></td></tr></table></figure>
+<p>上面的<code>path.file_name().and_then(|name| name.to_str())</code>最终转变成了<code>Option&lt;&amp;str&gt;</code>，在其上调用<code>Option.map_or</code>方法并提供默认值：字符串<code>&quot;.&quot;</code>。为什么要提供默认值呢？这和<code>OsStr</code>到<code>Str</code>的转换密切相关，当我们传入参数<code>&quot;.&quot;</code>时，<code>Path.file_name</code>返回的其实是一个<code>None</code>。</p>
+<p>构建了父级的树状结构，我们需要把子级的树状结构也一并完成，最终通过递归，构建出一棵内存中的目录树。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">fn children(dir: &amp;Path) -&gt; Vec&lt;Entry&gt; &#123;</span><br><span class="line">    fs::read_dir(dir)</span><br><span class="line">        .expect(&quot;unable to read dir&quot;)</span><br><span class="line">        .into_iter()</span><br><span class="line">        .map(|e| e.expect(&quot;unable to get entry&quot;))</span><br><span class="line">        .filter(|e| is_not_hidden(&amp;e))</span><br><span class="line">        .map(|e| e.path())</span><br><span class="line">        .map(|e| tree(&amp;e))</span><br><span class="line">        .collect()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">fn is_not_hidden(entry: &amp;DirEntry) -&gt; bool &#123;</span><br><span class="line">    entry</span><br><span class="line">         .file_name()</span><br><span class="line">         .to_str()</span><br><span class="line">         .map(|s| !s.starts_with(&quot;.&quot;))</span><br><span class="line">         .unwrap_or(false)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里也存在挺多的转换操作，我们一一解释。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fs::read_dir(dir).expect(&quot;unable to read dir&quot;)</span><br></pre></td></tr></table></figure>
+<p>使用<code>expect</code>是因为<code>fs::read_dir</code>返回的是一个<code>Result&lt;ReadDir&gt;</code>，在其上调用<code>expect</code>会尝试解开其中的值，如果有错则会抛出错误。解开的结果类型是<code>ReadDir</code>，它是<code>io::Result&lt;DirEntry&gt;</code>的迭代器，也就是一个目录下的所有类目，可以在上面调用<code>into_iter()</code>创建出可以被消费的迭代器。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">.map(|e| e.expect(&quot;unable to get entry&quot;))</span><br><span class="line">.filter(|e| is_not_hidden(e))</span><br><span class="line">.map(|e| e.path())</span><br><span class="line">.map(|e| tree(&amp;e))</span><br></pre></td></tr></table></figure>
+
+<p>接着，解开<code>Result&lt;DirEntry&gt;</code>之后，我们把隐藏文件过滤掉，因为<code>filter</code>接收的一个闭包，这个闭包的类型声明是<code>P: FnMut(&amp;Self::Item) -&gt; bool</code>，所以filter接收的所有元素都是引用类型，故调用时无需需声明成<code>is_not_hidden(&amp;e)</code>。</p>
+<p>然后利用<code>e.path()</code>获取每个文件的全路径，并依次交给<code>tree</code>去递归构建。经过<code>tree</code>和<code>children</code>两个函数的交替递归，内存中的一棵目录树就被构建出来了。</p>
+<p>有了内存中的树状结构，我们接下来就可以渲染这个结构了。具体的做法如下：</p>
+<ol>
+<li>对于第一层目录名，如果它是最后一个目录，则前缀修饰为<code>L_branch = &quot;└── &quot;</code>；反之，装饰成 <code>T_branch = &quot;├── &quot; </code>。</li>
+<li>对于有子目录，如果是其父目录是父级最后一个目录，则前缀装饰为<code>SPACER   = &quot;    &quot;</code>；反之，前缀装饰成 <code>I_branch = &quot;│   &quot;</code>。</li>
+</ol>
+<h3 id="渲染树状结构"><a href="#渲染树状结构" class="headerlink" title="渲染树状结构"></a>渲染树状结构</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">fn render_tree(tree: &amp;Entry) -&gt; Vec&lt;String&gt; &#123;</span><br><span class="line">    let mut names = vec![tree.name]; // error</span><br><span class="line">    let children = &amp;tree.children;</span><br><span class="line">    let children: Vec&lt;_&gt; = children</span><br><span class="line">        .iter()</span><br><span class="line">        .enumerate()</span><br><span class="line">        .map(|(i, child)| decorate(children.len() - 1 == i, render_tree(child)))</span><br><span class="line">        .flatten()</span><br><span class="line">        .collect();</span><br><span class="line">    </span><br><span class="line">    names.extend(children);</span><br><span class="line"></span><br><span class="line">    names</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里会有编译错误，错误信息如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">error[e0507]: cannot move out of `tree.name` which is behind a shared reference</span><br><span class="line">  --&gt; src/main.rs:48:26</span><br><span class="line">   |</span><br><span class="line">48 |     let mut names = vec![tree.name];</span><br><span class="line">   |                          ^^^^^^^^^ move occurs because `tree.name` has type `std::string::string`, which does not implement the `copy` trait</span><br></pre></td></tr></table></figure>
+<p>由于<code>tree.name</code>不是标量类型（Scalar Type），它没有实现<code>copy</code> trait（见提示），又因为<code>tree</code>本身是复合类型（Compound Type），<code>tree.name</code>如果发生 <em>Move</em> 的话，包含它的<code>tree</code>就有问题了。为了避免发生这种情况，我们不得不去引用<code>&amp;tree.name</code>。但是一旦加上引用，又会出现类型不匹配的编译错误。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">59 |     names</span><br><span class="line">   |     ^^^^^ expected struct `std::string::String`, found reference</span><br><span class="line">      |</span><br><span class="line">         = note: expected type `std::vec::Vec&lt;std::string::String&gt;`</span><br><span class="line">                       found type `std::vec::Vec&lt;&amp;std::string::String&gt;`</span><br></pre></td></tr></table></figure>
+
+<p>我们期待的是<code>Vec&lt;String&gt;</code>而不是<code>Vec&lt;&amp;String&gt;</code>，所以需要重新构建出一个<code>String</code>出来。可以使用<code>String::from(&amp;String)</code>方法</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">let mut names = vec![String::from(&amp;tree.name)];</span><br></pre></td></tr></table></figure>
+<p>这样修改下来，才能保证编译完全通过。但事实上，Rust 给我们提供了一个更加便捷的写法</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">let mut names = vec![tree.name.to_owned()]</span><br></pre></td></tr></table></figure>
+<p>使用<code>to_owned()</code>表示重新拷贝了一份数据，和重新构建一个<code>String</code>出来别无二致。</p>
+<h3 id="组合调用"><a href="#组合调用" class="headerlink" title="组合调用"></a>组合调用</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">use std::env;</span><br><span class="line">use std::path::Path;</span><br><span class="line">use std::fs::&#123;self, DirEntry&#125;;</span><br><span class="line"></span><br><span class="line">fn main() &#123;</span><br><span class="line">    let args: Vec&lt;String&gt; = env::args().collect();</span><br><span class="line">    println!(&quot;&#123;&#125;&quot;, render_tree(&amp;tree(Path::new(&amp;args[1]))).join(&quot;\n&quot;));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>render_tree</code> 返回的是<code>Vec&lt;String&gt;</code>，所以为了打印出来，我们将所有元素用<code>&quot;\n&quot;</code> <code>join</code>到一起。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br></pre></td><td class="code"><pre><span class="line">.</span><br><span class="line">├── Cargo.toml</span><br><span class="line">├── target</span><br><span class="line">│   └── debug</span><br><span class="line">│       ├── tree</span><br><span class="line">│       ├── incremental</span><br><span class="line">│       │   ├── tree-emhx2ztsyouq</span><br><span class="line">│       │   │   ├── s-fg6t1j15rq-rcdkil.lock</span><br><span class="line">│       │   │   └── s-fg6t1j15rq-rcdkil-2guhg58bq8usk</span><br><span class="line">│       │   │       ├── 2y5hmosay7v21uaa.o</span><br><span class="line">│       │   │       ├── 3bc30huj642htvsl.o</span><br><span class="line">│       │   │       ├── os4trg3bosufhmz.o</span><br><span class="line">│       │   │       ├── 24gploi4fp7jtlzq.o</span><br><span class="line">│       │   │       ├── query-cache.bin</span><br><span class="line">│       │   │       ├── dep-graph.bin</span><br><span class="line">│       │   │       ├── 4x450fwi8c4bpcw1.o</span><br><span class="line">│       │   │       └── work-products.bin</span><br><span class="line">│       │   └── tree-145pnmzdafxnt</span><br><span class="line">│       │       ├── s-fg7zukct1x-1q6vl1v.lock</span><br><span class="line">│       │       └── s-fg7zukct1x-1q6vl1v-2bl7ybv3bt926</span><br><span class="line">│       │           ├── 1hr1ye57pnkjmrbq.o</span><br><span class="line">│       │           ├── 27h2hp0z2xow1ues.o</span><br><span class="line">│       │           ├── 5ed0wukafi4fahkg.o</span><br><span class="line">│       │           ├── 2f0ihwts74qcmxow.o</span><br><span class="line">│       │           ├── 330o0ei85brt7kr4.o</span><br><span class="line">│       │           ├── 4v9apptkodzb8xa6.o</span><br><span class="line">│       │           ├── 1g9e2frs3e2z69pv.o</span><br><span class="line">│       │           ├── 37b06wzocgbel481.o</span><br><span class="line">│       │           ├── 4l05de8rviyudi4f.o</span><br><span class="line">│       │           ├── h6fn9swczh7498b.o</span><br><span class="line">│       │           ├── 316xpau62mt4is8d.o</span><br><span class="line">│       │           ├── 5ekvjec2kf4lmbtt.o</span><br><span class="line">│       │           ├── 1futuyfy32uf6fso.o</span><br><span class="line">│       │           ├── 2h1ucudwsaw3ps8a.o</span><br><span class="line">│       │           ├── 1gotohk3wwy2f6dy.o</span><br><span class="line">│       │           ├── 3b9tgf3uo9qj9m4l.o</span><br><span class="line">│       │           ├── 11nu5z6vt7pkotko.o</span><br><span class="line">│       │           ├── 1iwt54u59d6ic7px.o</span><br><span class="line">│       │           ├── 2knnbzs842y8uh0j.o</span><br><span class="line">│       │           ├── 3ifvzvvypros5ggf.o</span><br><span class="line">│       │           ├── 2z2hec5yokv1i4dp.o</span><br><span class="line">│       │           ├── ya9r48v2sak0pg6.o</span><br><span class="line">│       │           ├── 155em2p8h2hm19ng.o</span><br><span class="line">│       │           ├── 32v7dlio50845m8.o</span><br><span class="line">│       │           ├── 4c1hc1pxl75vi07x.o</span><br><span class="line">│       │           ├── 2yqijaid0vje1zn1.o</span><br><span class="line">│       │           ├── 4vjgrzm4xto1375t.o</span><br><span class="line">│       │           ├── 21iztlljbl6euh9m.o</span><br><span class="line">│       │           ├── 20v9k1fk8kja961x.o</span><br><span class="line">│       │           ├── 4z53k2t8wxm10fyq.o</span><br><span class="line">│       │           ├── bhyzck3ll360qet.o</span><br><span class="line">│       │           ├── 1y3hdwm9ww9b9y5i.o</span><br><span class="line">│       │           ├── 3c44aga3rejf73f6.o</span><br><span class="line">│       │           ├── rj0yv7mdi9un1aq.o</span><br><span class="line">│       │           ├── 50x9vm1j7pl93o9s.o</span><br><span class="line">│       │           ├── 217lokaaxwdhlrx9.o</span><br><span class="line">│       │           ├── 4wnp20b81q6iaxux.o</span><br><span class="line">│       │           ├── 3r82h5ttm93ejtxf.o</span><br><span class="line">│       │           ├── 3ot3q95g45ci1vo6.o</span><br><span class="line">│       │           ├── query-cache.bin</span><br><span class="line">│       │           ├── 39sf80jvxavwpxo3.o</span><br><span class="line">│       │           ├── 8oeuahm3962nobh.o</span><br><span class="line">│       │           ├── cik7i0re2dlsxhk.o</span><br><span class="line">│       │           ├── 1waoie6zpkzqj4ct.o</span><br><span class="line">│       │           ├── 19luckbhcaquztt8.o</span><br><span class="line">│       │           ├── 3g7vkdnj0ai0qhcm.o</span><br><span class="line">│       │           ├── 1rp337sq8mpirnfu.o</span><br><span class="line">│       │           ├── 1b3x8y2m27htwxg6.o</span><br><span class="line">│       │           ├── 41wp4wr46haq7yo6.o</span><br><span class="line">│       │           ├── gupfi67uepu20cm.o</span><br><span class="line">│       │           ├── dep-graph.bin</span><br><span class="line">│       │           ├── 5btmoqde9gzs48ku.o</span><br><span class="line">│       │           ├── 4vmtr5p2n2ar0hfj.o</span><br><span class="line">│       │           ├── work-products.bin</span><br><span class="line">│       │           ├── 2jd13r5ry01uwce0.o</span><br><span class="line">│       │           ├── 54om8xu4dcwmt36o.o</span><br><span class="line">│       │           ├── 3pjvdh4zm61wtvac.o</span><br><span class="line">│       │           ├── 21mzfl756r7eb753.o</span><br><span class="line">│       │           ├── 57o4bjq3o18zq3ji.o</span><br><span class="line">│       │           ├── 4lh6qwni3j9cdda6.o</span><br><span class="line">│       │           └── 4rj8jramt231qg09.o</span><br><span class="line">│       ├── native</span><br><span class="line">│       ├── tree-e27a55060278e1c5.dSYM</span><br><span class="line">│       │   └── Contents</span><br><span class="line">│       │       ├── Resources</span><br><span class="line">│       │       │   └── DWARF</span><br><span class="line">│       │       │       └── tree-e27a55060278e1c5</span><br><span class="line">│       │       └── Info.plist</span><br><span class="line">│       ├── tree.dSYM</span><br><span class="line">│       │   └── Contents</span><br><span class="line">│       │       ├── Resources</span><br><span class="line">│       │       │   └── DWARF</span><br><span class="line">│       │       │       └── tree-5fa2575d1085e7f2</span><br><span class="line">│       │       └── Info.plist</span><br><span class="line">│       ├── tree-e27a55060278e1c5.d</span><br><span class="line">│       ├── examples</span><br><span class="line">│       ├── tree-e27a55060278e1c5</span><br><span class="line">│       ├── deps</span><br><span class="line">│       │   ├── tree-5fa2575d1085e7f2.dSYM</span><br><span class="line">│       │   │   └── Contents</span><br><span class="line">│       │   │       ├── Resources</span><br><span class="line">│       │   │       │   └── DWARF</span><br><span class="line">│       │   │       │       └── tree-5fa2575d1085e7f2</span><br><span class="line">│       │   │       └── Info.plist</span><br><span class="line">│       │   ├── tree-5fa2575d1085e7f2.d</span><br><span class="line">│       │   ├── tree-e27a55060278e1c5.dSYM</span><br><span class="line">│       │   │   └── Contents</span><br><span class="line">│       │   │       ├── Resources</span><br><span class="line">│       │   │       │   └── DWARF</span><br><span class="line">│       │   │       │       └── tree-e27a55060278e1c5</span><br><span class="line">│       │   │       └── Info.plist</span><br><span class="line">│       │   ├── tree-5fa2575d1085e7f2</span><br><span class="line">│       │   ├── tree-e27a55060278e1c5.d</span><br><span class="line">│       │   └── tree-e27a55060278e1c5</span><br><span class="line">│       ├── build</span><br><span class="line">│       └── tree.d</span><br><span class="line">├── Cargo.lock</span><br><span class="line">└── src</span><br><span class="line">    └── main.rs</span><br></pre></td></tr></table></figure>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>学习下来的一些主观感觉是 Rust 中的概念繁杂，有些地方的设计确实让人有些迷惑。再加上类型众多（如：OsStr, String），代码很难通过直觉判断写出，需要大量查阅文档才能让编译器消停。所以学习曲线相对陡峭。</p>
+<p>不过，语言约束的越多，某种程度上讲，对于程序员而言却是福音。<em>If it compiles, then it works.</em> 的哲学理念在前。学习道阻且长，努力加餐饭。</p>
+<hr>
+<p><strong>提示</strong><br>一般标量类型都实现了<code>copy</code> trait.</p>
+<ul>
+<li>所有的整，如：u32</li>
+<li>布尔类型，如：true 或 false</li>
+<li>字符类型，如：char</li>
+<li>浮点数类型，如：f64</li>
+<li>当且仅当所有元素都是Copy的元组，如：(i32, i32)是Copy，但是(i32, String)就不是Copy的。</li>
+</ul>
+<hr>
+<p>于2019年9月22日</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/rust/" rel="tag"># rust</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2019/05/07/2019-05-07-try-embark/" rel="prev" title="区块链DApp开发环境 embark 初探">
+                  <i class="fa fa-angle-left"></i> 区块链DApp开发环境 embark 初探
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Qian Yan</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.2.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"qianyan.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="特征 日常语言描述 捕获系统行为 个数有限  在故事基础部分，我提到用户故事通常是日常或者商务语言写成的句子，这些句子描述了用户在其工作职责范围内想要达成的某个目的以及达成该目的需要的功能（手段）。所以书写用户的故事的句式一般都是：As（用户的角色）… I Want（功能或手段）… So That（目的）。根据用户故事的 INVEST 划分原则中 N (Negotiated 可协商的) 原则，故事">
+<meta property="og:type" content="article">
+<meta property="og:title" content="验收条件">
+<meta property="og:url" content="https://qianyan.github.io/2017/09/24/2017-09-24-Acceptance-Criteria/index.html">
+<meta property="og:site_name" content="λ">
+<meta property="og:description" content="特征 日常语言描述 捕获系统行为 个数有限  在故事基础部分，我提到用户故事通常是日常或者商务语言写成的句子，这些句子描述了用户在其工作职责范围内想要达成的某个目的以及达成该目的需要的功能（手段）。所以书写用户的故事的句式一般都是：As（用户的角色）… I Want（功能或手段）… So That（目的）。根据用户故事的 INVEST 划分原则中 N (Negotiated 可协商的) 原则，故事">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/217988-c3f6913b5098b359.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="article:published_time" content="2017-09-24T09:01:31.000Z">
+<meta property="article:modified_time" content="2017-09-24T23:58:51.000Z">
+<meta property="article:author" content="Qian Yan">
+<meta property="article:tag" content="agile">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/217988-c3f6913b5098b359.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+
+<link rel="canonical" href="https://qianyan.github.io/2017/09/24/2017-09-24-Acceptance-Criteria/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://qianyan.github.io/2017/09/24/2017-09-24-Acceptance-Criteria/","path":"2017/09/24/2017-09-24-Acceptance-Criteria/","title":"验收条件"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>验收条件 | λ</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">λ</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">(conj clojurians me)</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%89%B9%E5%BE%81"><span class="nav-number">1.</span> <span class="nav-text">特征</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%BC%E5%BC%8F"><span class="nav-number">2.</span> <span class="nav-text">格式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Given-When-Then"><span class="nav-number">2.1.</span> <span class="nav-text">Given&#x2F;When&#x2F;Then</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Verifiable-checklists"><span class="nav-number">2.2.</span> <span class="nav-text">Verifiable checklists</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%8D%E6%A8%A1%E5%BC%8F"><span class="nav-number">3.</span> <span class="nav-text">反模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E6%A3%B1%E4%B8%A4%E5%8F%AF%E7%9A%84%E9%99%88%E8%BF%B0"><span class="nav-number">3.1.</span> <span class="nav-text">模棱两可的陈述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9D%9E%E7%B3%BB%E7%BB%9F%E4%BA%A4%E4%BA%92"><span class="nav-number">3.2.</span> <span class="nav-text">非系统交互</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9D%9E%E7%B3%BB%E7%BB%9F%E8%BE%93%E5%87%BA"><span class="nav-number">3.3.</span> <span class="nav-text">非系统输出</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9D%9E%E7%B3%BB%E7%BB%9F%E5%BC%82%E5%B8%B8"><span class="nav-number">3.4.</span> <span class="nav-text">非系统异常</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#when-%E9%9A%90%E8%97%8F%E5%88%B0-given"><span class="nav-number">3.5.</span> <span class="nav-text">when 隐藏到 given</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%80%E4%BD%B3%E6%A8%A1%E5%BC%8F"><span class="nav-number">4.</span> <span class="nav-text">最佳模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%8F%AF%E8%AF%BB%E7%9A%84"><span class="nav-number">4.1.</span> <span class="nav-text">1. 可读的</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E5%8F%AF%E6%B5%8B%E8%AF%95%E7%9A%84"><span class="nav-number">4.1.1.</span> <span class="nav-text">2. 可测试的</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-%E5%AE%9E%E7%8E%B0%E6%97%A0%E5%85%B3%E7%9A%84"><span class="nav-number">4.1.2.</span> <span class="nav-text">3. 实现无关的</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%83%E4%B9%A0"><span class="nav-number">5.</span> <span class="nav-text">练习</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%A8%E6%88%B7%E6%95%85%E4%BA%8B"><span class="nav-number">5.1.</span> <span class="nav-text">用户故事</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%86%E6%9E%90%E6%AD%A5%E9%AA%A4"><span class="nav-number">5.2.</span> <span class="nav-text">分析步骤</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E5%AE%9A%E4%B9%89%E8%BE%B9%E7%95%8C"><span class="nav-number">5.2.1.</span> <span class="nav-text">1. 定义边界</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E6%8F%90%E7%82%BC%E5%92%8C%E7%BB%86%E5%8C%96"><span class="nav-number">5.2.2.</span> <span class="nav-text">2. 提炼和细化</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AD%A6%E5%91%8A"><span class="nav-number">6.</span> <span class="nav-text">警告</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Qian Yan</p>
+  <div class="site-description" itemprop="description">Elegance and familiarity are orthogonal</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">76</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">41</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://qianyan.github.io/2017/09/24/2017-09-24-Acceptance-Criteria/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Qian Yan">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="λ">
+      <meta itemprop="description" content="Elegance and familiarity are orthogonal">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="验收条件 | λ">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          验收条件
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2017-09-24 17:01:31" itemprop="dateCreated datePublished" datetime="2017-09-24T17:01:31+08:00">2017-09-24</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2017-09-25 07:58:51" itemprop="dateModified" datetime="2017-09-25T07:58:51+08:00">2017-09-25</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%8A%80%E6%9C%AF/" itemprop="url" rel="index"><span itemprop="name">技术</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="特征"><a href="#特征" class="headerlink" title="特征"></a>特征</h2><ol>
+<li>日常语言描述</li>
+<li>捕获系统行为</li>
+<li>个数有限</li>
+</ol>
+<p>在故事基础部分，我提到用户故事通常是日常或者商务语言写成的句子，这些句子描述了用户在其工作职责范围内想要达成的某个目的以及达成该目的需要的功能（手段）。所以书写用户的故事的句式一般都是：As（用户的角色）… I Want（功能或手段）… So That（目的）。根据用户故事的 INVEST 划分原则中 N (Negotiated 可协商的) 原则，故事包含的是对需求的简短描述，具体的细节需要沟通产出，产出物表现为验收条件。</p>
+<p>换言之，验收条件是在开发前的分析阶段输出的，它的作用是补充需求细节。更进一步，验收条件其实有力地消除了用户和开发人员之间的沟通鸿沟。为什么这么说呢？因为验收条件具备两点很重要的特征：</p>
+<ul>
+<li>日常语言描述</li>
+<li>捕获系统行为</li>
+</ul>
+<p>这两点特征促进了参与各方在需求点上快速反馈，如下图：<br><img src="http://upload-images.jianshu.io/upload_images/217988-c3f6913b5098b359.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="验收条件-反馈环"><br>在敏捷活动中高效地沟通一直被反复强调，因为不高效的沟通造成的信息误导和返工是精益生产活动中应当极力消除的，所以任何能够促进沟通的方式方法都值得提倡。</p>
+<p>除此之外，有限的个数 (2-8 ACs&#x2F;story) 也是验收条件的一个特征，这也是 INVEST 原则中 E (Estimable 可评估的) 所要求的。所以，也引出了验收条件的一个简明定义——用户故事的 DoD (Definition of Done)。也有人说，一组验收条件定义了用户故事的边界（Boundary）。如果任由用户故事自然“疯长”，范围无限放大，交付怕是遥遥无期。</p>
+<p>验收条件会作为业务活动描述的一部分存在于用户故事中，一般会在开发之前准备就绪。在敏捷活动 kick-off 时，由业务分析师（BA）和开发人员（Dev），也可叫上质量保证师（QA）一起逐条澄清验收条件，以便保证开发之前达成共识，减少返工和浪费。在其它敏捷活动如：desk-checks, customer sign-off, UI testing, BDD 中也会重度参与。</p>
+<h2 id="格式"><a href="#格式" class="headerlink" title="格式"></a>格式</h2><h3 id="Given-When-Then"><a href="#Given-When-Then" class="headerlink" title="Given&#x2F;When&#x2F;Then"></a>Given&#x2F;When&#x2F;Then</h3><blockquote>
+<p><strong>#Title</strong><br><strong>Given</strong> 用户触发操作之前处于的系统状态<br><strong>When</strong> 触发系统结果的操作<br><strong>Then</strong> 系统预期返回的结果</p>
+</blockquote>
+<h3 id="Verifiable-checklists"><a href="#Verifiable-checklists" class="headerlink" title="Verifiable checklists"></a>Verifiable checklists</h3><blockquote>
+<p>e.g. [PhoneNumber] 只能包含0-9, +</p>
+</blockquote>
+<h2 id="反模式"><a href="#反模式" class="headerlink" title="反模式"></a>反模式</h2><h3 id="模棱两可的陈述"><a href="#模棱两可的陈述" class="headerlink" title="模棱两可的陈述"></a>模棱两可的陈述</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Given: that I have the search page loaded</span><br><span class="line"></span><br><span class="line">When: I perform a search</span><br><span class="line"></span><br><span class="line">Then: the search results come back within a reasonable period of time</span><br></pre></td></tr></table></figure>
+<p>这里的 reasonable period of time 就是不可测试的，因为没有人可以决定什么才是 reasonable.</p>
+<p>合理的改法是:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Given: that I have the search page loaded</span><br><span class="line"></span><br><span class="line">When: I perform a search</span><br><span class="line"></span><br><span class="line">Then: the search results come back within 5ms</span><br></pre></td></tr></table></figure>
+<p>5ms 之内，这是一个标量，完全可以衡量。</p>
+<h3 id="非系统交互"><a href="#非系统交互" class="headerlink" title="非系统交互"></a>非系统交互</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Given I have pulled my car up to the valet area</span><br><span class="line"></span><br><span class="line">When I hand over my keys to the valet person</span><br><span class="line"></span><br><span class="line">Then I receive a paper ticket from the valet person</span><br><span class="line"></span><br><span class="line">And I am instructed to hold on to it so I can use it to retrieve my car later.</span><br></pre></td></tr></table></figure>
+<p>这里的所有描述都是对现实场景的描述，和系统并无关系，对于开发人员构建系统几乎没有丝毫帮助。这种反模式的修正方法是剔除那些非系统的验收条件，重新梳理用户故事。</p>
+<h3 id="非系统输出"><a href="#非系统输出" class="headerlink" title="非系统输出"></a>非系统输出</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Given: that I am on the home page</span><br><span class="line"></span><br><span class="line">And: I am logged in</span><br><span class="line"></span><br><span class="line">When: I navigate to account preferences</span><br><span class="line"></span><br><span class="line">Then: I can see my account preferences</span><br></pre></td></tr></table></figure>
+<p>这里的 I can see my account preferences 是无法进行断言的，因为这是系统无关的，说得极端些，假如用户闭上眼睛，这个功能就没法通过验收了。</p>
+<p>合理的改法是：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Given: that I am on the home page</span><br><span class="line"></span><br><span class="line">And: I am logged in</span><br><span class="line"></span><br><span class="line">When: I navigate to account preferences</span><br><span class="line"></span><br><span class="line">Then: my account preferences are displayed</span><br></pre></td></tr></table></figure>
+<p>这个时候，我可以检查系统展示了我的用户页面。</p>
+<h3 id="非系统异常"><a href="#非系统异常" class="headerlink" title="非系统异常"></a>非系统异常</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Given 我选择了一份图表模板</span><br><span class="line">When 我跳转到显示界面</span><br><span class="line">Then 我发现图表不是我想要的</span><br></pre></td></tr></table></figure>
+<p>这里的问题涉及了非系统输出没法进行测试等问题，还有一个显著的毛病是误认为用户自身的误操作也必须反映到用户故事中。这里出错的点是用户自己选错了模板，发现产生的图表不是自己想要的格式，系统是自动无法判别选择模板的正确性的。</p>
+<h3 id="when-隐藏到-given"><a href="#when-隐藏到-given" class="headerlink" title="when 隐藏到 given"></a>when 隐藏到 given</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Given: that I am on the homepage</span><br><span class="line"></span><br><span class="line">And: I navigate to the search</span><br><span class="line"></span><br><span class="line">When: I look at the page</span><br><span class="line"></span><br><span class="line">Then: the search options are displayed</span><br></pre></td></tr></table></figure>
+<p>基本上，这是团队编写 AC 时最容易犯的错误，操作出现在前置条件中，<em>when</em> 中反而不是系统行为了。</p>
+<p>合理的改法是：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Given: that I am on the homepage</span><br><span class="line"></span><br><span class="line">When: I navigate to the search</span><br><span class="line"></span><br><span class="line">Then: the search options are displayed</span><br></pre></td></tr></table></figure>
+<h2 id="最佳模式"><a href="#最佳模式" class="headerlink" title="最佳模式"></a>最佳模式</h2><h3 id="1-可读的"><a href="#1-可读的" class="headerlink" title="1. 可读的"></a>1. 可读的</h3><p>我们希望业务人员审阅和修正验收条件，如果写的内容只有开发人员能懂，我们就失去了获得反馈的机会。使用上述书写格式，可以提高可读性。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Given: that my mobile phone is switched on</span><br><span class="line"></span><br><span class="line">And: I have sufficient signal to make a call</span><br><span class="line"></span><br><span class="line">When: I dial a number</span><br><span class="line"></span><br><span class="line">Then: I am connected to the person I want to talk to</span><br><span class="line"></span><br><span class="line">And: incoming calls are diverted to my voicemail</span><br></pre></td></tr></table></figure>
+<h4 id="2-可测试的"><a href="#2-可测试的" class="headerlink" title="2. 可测试的"></a>2. 可测试的</h4><p>参见反模式中合理改法。</p>
+<h4 id="3-实现无关的"><a href="#3-实现无关的" class="headerlink" title="3. 实现无关的"></a>3. 实现无关的</h4><p>验收条件应该是实现无关的，它和用户故事一样，是给业务和开发人员提供交流凭证的一种工具，所以它应该聚焦于功能，而不是功能的展现形式。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">Given: that I am on the home page</span><br><span class="line"></span><br><span class="line">And: I am logged in</span><br><span class="line"></span><br><span class="line">When: I navigate to advanced search</span><br><span class="line"></span><br><span class="line">Then: the advanced search web page must be displayed</span><br><span class="line"></span><br><span class="line">And: a text box labelled &quot;Name&quot; is displayed</span><br><span class="line"></span><br><span class="line">And: a text box labelled &quot;Description&quot; is displayed</span><br><span class="line"></span><br><span class="line">And: a command button named &quot;Search&quot; is displayed</span><br></pre></td></tr></table></figure>
+<p>这里已经框死了必须要使用 text box 实现展示功能，而实际上其背后真正的意图是通过属性字段进行搜索，隐藏了业务含义的验收条件是不可取的。</p>
+<p>合理的改法是：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">Given: that I am on the home page</span><br><span class="line"></span><br><span class="line">And: I am logged in</span><br><span class="line"></span><br><span class="line">When: I navigate to advanced search</span><br><span class="line"></span><br><span class="line">Then: the advanced search is displayed</span><br><span class="line"></span><br><span class="line">And: an option to search by name is displayed</span><br><span class="line"></span><br><span class="line">And: an option search by description is displayed</span><br><span class="line"></span><br><span class="line">And: the advanced search is displayed in accordance with the attached wireframe</span><br></pre></td></tr></table></figure>
+<p>换句话说，验收条件本身不应该关注于展现形式，当然，为了便于理解，wireframe 是提供直观素材的更好的方式。</p>
+<h2 id="练习"><a href="#练习" class="headerlink" title="练习"></a>练习</h2><h3 id="用户故事"><a href="#用户故事" class="headerlink" title="用户故事"></a>用户故事</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">作为一名管理员</span><br><span class="line">我想要把一名员工加入系统中</span><br><span class="line">以便管理他们的权限</span><br></pre></td></tr></table></figure>
+<h3 id="分析步骤"><a href="#分析步骤" class="headerlink" title="分析步骤"></a>分析步骤</h3><h4 id="1-定义边界"><a href="#1-定义边界" class="headerlink" title="1. 定义边界"></a>1. 定义边界</h4><ul>
+<li>触发添加员工操作</li>
+<li>输入员工的详情</li>
+<li>验证遗漏或者错误的字段</li>
+<li>保存</li>
+</ul>
+<h4 id="2-提炼和细化"><a href="#2-提炼和细化" class="headerlink" title="2. 提炼和细化"></a>2. 提炼和细化</h4><ol>
+<li>触发添加员工操作<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">假如我进入了员工管理系统</span><br><span class="line">当我进入员工的浏览页</span><br><span class="line">之后添加员工的操作出现在页面上</span><br></pre></td></tr></table></figure>
+2. 输入员工的详情<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">假如添加员工的操作出现在浏览页</span><br><span class="line">当我调用了添加员工的操作</span><br><span class="line">那么我可以输入员工的姓名和出生日期</span><br><span class="line">并且出现了保存操作</span><br></pre></td></tr></table></figure>
+3. 验证遗漏的字段<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">假如我没有填写员工的姓名和/或生日</span><br><span class="line">当我尝试保存</span><br><span class="line">那么保存不会成功</span><br><span class="line">并且会有消息显示遗漏的字段</span><br></pre></td></tr></table></figure>
+4. 验证错误的生日日期<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">假如我正在添加一名员工的详情</span><br><span class="line">并且我输入了未来或者早于1900年的日期，或者错误的日期格式</span><br><span class="line">当我尝试保存</span><br><span class="line">那么保存不会成功</span><br><span class="line">并且会有消息显示输入的生日日期无效</span><br><span class="line"></span><br><span class="line">验证列表：</span><br><span class="line">[日期格式] yyyy/MM/dd</span><br></pre></td></tr></table></figure>
+5. 保存<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">假如我正在添加一名员工的详情</span><br><span class="line">并且我输入了有效的生日和姓名</span><br><span class="line">当我尝试保存</span><br><span class="line">那么会有消息显示保存成功</span><br><span class="line">并且包含该员工详情的页面会呈现</span><br><span class="line">并且详情中的生日和姓名和之前输入的一致</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h2 id="警告"><a href="#警告" class="headerlink" title="警告"></a>警告</h2><p>验收条件并不是唯一澄清和约束用户故事的方式！任何可以提升理解和降低沟通成本的方式方法都值得尝试。比如：用户偏好 —— 希望使用下拉框而不是复选框，往往可以通过添加一条记录在故事中补充这部分信息。另外，一个完整的故事最好能附上线框图，一图胜千言。</p>
+<hr>
+<p>进一步阅读<br>[1] <a target="_blank" rel="noopener" href="http://lambeta.com/2017/09/19/agile-team-workflow/">敏捷团队工作流</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/agile/" rel="tag"># agile</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2017/09/19/2017-09-19-agile-team-workflow/" rel="prev" title="敏捷团队工作流">
+                  <i class="fa fa-angle-left"></i> 敏捷团队工作流
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2017/11/22/2017-11-22-thinking-in-systems/" rel="next" title="系统之美">
+                  系统之美 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Qian Yan</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

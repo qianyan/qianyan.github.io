@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.2.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"qianyan.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="为什么要面向接口编程？ 背景提要 莱恩是一名程序员，混迹Java界三载有余。从刚接触这门语言起，就被前辈告知必须遵循面向接口编程这一原则。之后，反复翻阅《设计模式》，面向接口编程的理念便深入脑髓。当然，他也不是没有思想的小白，“不好的东西不用”这种基本常识还是有的。人类这种动物，最擅长地就是提问，莱恩也会问“为什么我要面向接口编程呐？”。有经验的老人告诉过他，这样有利于解除耦合，根据依赖倒置原则—">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Thinking in IoC">
+<meta property="og:url" content="https://qianyan.github.io/2014/11/02/2014-11-02-thinking-in-ioc/index.html">
+<meta property="og:site_name" content="λ">
+<meta property="og:description" content="为什么要面向接口编程？ 背景提要 莱恩是一名程序员，混迹Java界三载有余。从刚接触这门语言起，就被前辈告知必须遵循面向接口编程这一原则。之后，反复翻阅《设计模式》，面向接口编程的理念便深入脑髓。当然，他也不是没有思想的小白，“不好的东西不用”这种基本常识还是有的。人类这种动物，最擅长地就是提问，莱恩也会问“为什么我要面向接口编程呐？”。有经验的老人告诉过他，这样有利于解除耦合，根据依赖倒置原则—">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2014-11-02T09:09:57.000Z">
+<meta property="article:modified_time" content="2016-09-06T14:39:15.000Z">
+<meta property="article:author" content="Qian Yan">
+<meta property="article:tag" content="thinking">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://qianyan.github.io/2014/11/02/2014-11-02-thinking-in-ioc/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://qianyan.github.io/2014/11/02/2014-11-02-thinking-in-ioc/","path":"2014/11/02/2014-11-02-thinking-in-ioc/","title":"Thinking in IoC"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Thinking in IoC | λ</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">λ</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">(conj clojurians me)</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E9%9D%A2%E5%90%91%E6%8E%A5%E5%8F%A3%E7%BC%96%E7%A8%8B%EF%BC%9F"><span class="nav-number">1.</span> <span class="nav-text">为什么要面向接口编程？</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%83%8C%E6%99%AF%E6%8F%90%E8%A6%81"><span class="nav-number">1.1.</span> <span class="nav-text">背景提要</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#IoC%E4%B8%AD%E8%B0%81%E7%9A%84%E6%8E%A7%E5%88%B6%E6%9D%83%E8%A2%AB%E5%8F%8D%E8%BD%AC%EF%BC%9F"><span class="nav-number">1.2.</span> <span class="nav-text">IoC中谁的控制权被反转？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%9D%A2%E5%90%91%E6%8E%A5%E5%8F%A3%E7%BC%96%E7%A8%8B%EF%BC%9D%E5%AE%9A%E4%B9%89%E8%A1%8C%E4%B8%BA%E7%9A%84%E6%A0%87%E5%87%86"><span class="nav-number">1.3.</span> <span class="nav-text">面向接口编程＝定义行为的标准</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%B0%88%E8%B0%88IoC%E5%92%8CDI"><span class="nav-number">1.4.</span> <span class="nav-text">谈谈IoC和DI</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%96%B9%E6%B3%95%E7%BA%A7%E5%88%AB%E4%B8%8A%E7%9A%84IoC"><span class="nav-number">1.5.</span> <span class="nav-text">方法级别上的IoC</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">2.</span> <span class="nav-text">总结</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Qian Yan</p>
+  <div class="site-description" itemprop="description">Elegance and familiarity are orthogonal</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">76</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">41</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://qianyan.github.io/2014/11/02/2014-11-02-thinking-in-ioc/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Qian Yan">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="λ">
+      <meta itemprop="description" content="Elegance and familiarity are orthogonal">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Thinking in IoC | λ">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Thinking in IoC
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2014-11-02 17:09:57" itemprop="dateCreated datePublished" datetime="2014-11-02T17:09:57+08:00">2014-11-02</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2016-09-06 22:39:15" itemprop="dateModified" datetime="2016-09-06T22:39:15+08:00">2016-09-06</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%8A%80%E6%9C%AF/" itemprop="url" rel="index"><span itemprop="name">技术</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h3 id="为什么要面向接口编程？"><a href="#为什么要面向接口编程？" class="headerlink" title="为什么要面向接口编程？"></a>为什么要面向接口编程？</h3><hr>
+<h4 id="背景提要"><a href="#背景提要" class="headerlink" title="背景提要"></a>背景提要</h4><blockquote>
+<p>莱恩是一名程序员，混迹Java界三载有余。从刚接触这门语言起，就被前辈告知必须遵循面向接口编程这一原则。之后，反复翻阅《设计模式》，面向接口编程的理念便深入脑髓。当然，他也不是没有思想的小白，“不好的东西不用”这种基本常识还是有的。人类这种动物，最擅长地就是提问，莱恩也会问“为什么我要面向接口编程呐？”。有经验的老人告诉过他，这样有利于解除耦合，根据依赖倒置原则——高层次的模块不应该依赖低层次的模块，抽象不应该依赖实现，实现应该依赖抽象。换句话说，就是要面向抽象编程。这顿论调，老生常谈了，但是高度概括的东西没有实践的基石，就如同空中楼阁，虚幻飘渺，能否理解，需要看小沙弥的悟性。</p>
+</blockquote>
+<h4 id="IoC中谁的控制权被反转？"><a href="#IoC中谁的控制权被反转？" class="headerlink" title="IoC中谁的控制权被反转？"></a>IoC中谁的控制权被反转？</h4><blockquote>
+<p>莱恩实践过Java界家喻户晓的framework spring，被它强大的IoC容器深深吸引。好莱坞经典语录：“Don’t call me, I’ll call you”。它揭示的是这样一个道理：我需要你自然会找你。莱恩不禁问自己：IoC容器究竟和这个道理有什么关系呢？<br>大师说：获取和管理对象的方式被倒转了。</p>
+</blockquote>
+<p>接下来，通过一个实际的例子探索IoC容器的意义所在。</p>
+<h4 id="面向接口编程＝定义行为的标准"><a href="#面向接口编程＝定义行为的标准" class="headerlink" title="面向接口编程＝定义行为的标准"></a>面向接口编程＝定义行为的标准</h4><p>以开关和灯泡为例：</p>
+<blockquote>
+<p>最简单的实现：开关依赖(<em>use</em>)灯泡，然后控制。</p>
+</blockquote>
+<p>这个例子中，开关创建并维护了灯泡的实例。不过有一天，灯泡要延伸出多种类型了。没关系，简单实现：</p>
+<blockquote>
+<p>开关依赖灯泡这个抽象东西，其余的灯泡派生自灯泡。</p>
+</blockquote>
+<p>好像问题也不大。然而，实际上开关不会只控制灯泡，还有冰箱，电视，空调呢？我们终于发现，其实开关的职责不是去开关灯泡，而是开合电源。<em>but who cares the electrinic?</em> 所以我们假设电源就是一只信号，某位ruby大牛把所有对象的调用，都看作是向这些对象发送message。用在这里，倒是很合理。</p>
+<p>那么现在我们运用接口隔离原则，提升一个最小接口。</p>
+<blockquote>
+<p>依赖又不是只有聚合、组合，还有继承和<strong>实现(implement)<strong>。这样的话，我们把灯泡依赖到一个具有开合行为的接口。</strong>开关</strong>此时就定义了电源开合的接口。</p>
+</blockquote>
+<p>这里，灯泡并不知道哪只开关让自己或亮或暗，而开关也只知道开合某个电源接口。言而总之，所谓的面向接口编程等同于定义行为的标准。不过问题来了，谁为开关连上灯泡呢？我们现在只知道开关持有一个开合接口，不能在开关里新建一个灯泡的对象，否则好不容易获得依赖抽象的好处便会付诸东流了。</p>
+<p>怎么办？记住计算机中的任何问题都能通过构造一个抽象层解决。IoC容器就是干这件事的，根据各个实例之间的依赖关系创建和管理对象的实例。</p>
+<p>所以说，IoC中被反转控制权的是获取和管理对象的方式，它被反转到IoC容器当中了。“I’ll call you.”中的I也就是IoC容器。</p>
+<h4 id="谈谈IoC和DI"><a href="#谈谈IoC和DI" class="headerlink" title="谈谈IoC和DI"></a>谈谈IoC和DI</h4><p>大部分书上，都把这两者混为一谈。</p>
+<p>DI是IoC的子集。IoC是个泛泛之论，通俗来讲，任何有利于程序高内聚低耦合的框架都具有IoC的特征。在OO里，Dependency被反转；在基于Event的编程模型里，Event Loop被反转了；在Observer Pattern中，Subject通知Observer的方式被反转了。</p>
+<h4 id="方法级别上的IoC"><a href="#方法级别上的IoC" class="headerlink" title="方法级别上的IoC"></a>方法级别上的IoC</h4><p>Template Method方法具有IoC的特点：</p>
+<ul>
+<li>父类方法决定了必要的流程和某些不变的部分；</li>
+<li>子类继承父类，重写可变的方法；</li>
+<li>子类只关心职责，而不关心流程。</li>
+</ul>
+<p>所以是父类定义了标准，让子类实现之。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><hr>
+<ul>
+<li>IoC不等于DI；</li>
+<li>IoC不是对象的专利，方法级别一样适用。</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/thinking/" rel="tag"># thinking</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2014/10/30/2014-10-30-vim-in-practice/" rel="prev" title="vim in practice (1)">
+                  <i class="fa fa-angle-left"></i> vim in practice (1)
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2014/11/09/2014-11-09-thinking-about-microservice/" rel="next" title="Thinking about microservice">
+                  Thinking about microservice <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Qian Yan</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

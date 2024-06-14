@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.2.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"qianyan.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="太长不读篇 在 issues tracker 上注册 创建 issues 配置 build.gradle gpg 生成 key pair 以便签名 上传 Release Archive 关闭并验证 Staging 环境的 Archive 发布 Archive 通知 issue 管理员开启同步  细读篇1. 注册Maven Central 网站并不提供注册的功能，你需要到 Sonatype 网站上进">
+<meta property="og:type" content="article">
+<meta property="og:title" content="如何发布Jar包到Maven Central Repository">
+<meta property="og:url" content="https://qianyan.github.io/2017/09/15/2017-09-15-release-jar-to-maven-central-repository/index.html">
+<meta property="og:site_name" content="λ">
+<meta property="og:description" content="太长不读篇 在 issues tracker 上注册 创建 issues 配置 build.gradle gpg 生成 key pair 以便签名 上传 Release Archive 关闭并验证 Staging 环境的 Archive 发布 Archive 通知 issue 管理员开启同步  细读篇1. 注册Maven Central 网站并不提供注册的功能，你需要到 Sonatype 网站上进">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/217988-502c1f4fc580c120.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/217988-29e35a58393f39ce.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/217988-c6a888ec20e93530.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="article:published_time" content="2017-09-15T14:29:07.000Z">
+<meta property="article:modified_time" content="2017-09-18T13:40:57.000Z">
+<meta property="article:author" content="Qian Yan">
+<meta property="article:tag" content="java">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/217988-502c1f4fc580c120.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+
+<link rel="canonical" href="https://qianyan.github.io/2017/09/15/2017-09-15-release-jar-to-maven-central-repository/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://qianyan.github.io/2017/09/15/2017-09-15-release-jar-to-maven-central-repository/","path":"2017/09/15/2017-09-15-release-jar-to-maven-central-repository/","title":"如何发布Jar包到Maven Central Repository"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>如何发布Jar包到Maven Central Repository | λ</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">λ</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">(conj clojurians me)</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%AA%E9%95%BF%E4%B8%8D%E8%AF%BB%E7%AF%87"><span class="nav-number">1.</span> <span class="nav-text">太长不读篇</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%86%E8%AF%BB%E7%AF%87"><span class="nav-number">2.</span> <span class="nav-text">细读篇</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E6%B3%A8%E5%86%8C"><span class="nav-number">2.1.</span> <span class="nav-text">1. 注册</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%88%9B%E5%BB%BA-issue"><span class="nav-number">2.2.</span> <span class="nav-text">2. 创建 issue</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E9%85%8D%E7%BD%AE%E9%A1%B9%E7%9B%AE%E7%9A%84-build-gradle"><span class="nav-number">2.3.</span> <span class="nav-text">3. 配置项目的 build.gradle</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#maven-%E6%8F%92%E4%BB%B6"><span class="nav-number">2.3.1.</span> <span class="nav-text">maven 插件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-%E8%AE%BE%E7%BD%AE-gpg-%E4%BB%A5%E7%AD%BE%E5%90%8D-Archive"><span class="nav-number">2.3.2.</span> <span class="nav-text">4. 设置 gpg 以签名 Archive</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#signing-%E6%8F%92%E4%BB%B6"><span class="nav-number">2.3.3.</span> <span class="nav-text">signing 插件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#archive"><span class="nav-number">2.3.4.</span> <span class="nav-text">archive</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-%E4%B8%8A%E4%BC%A0-Release-Archives"><span class="nav-number">2.4.</span> <span class="nav-text">5. 上传 Release Archives</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-%E5%85%B3%E9%97%AD%E5%B9%B6%E9%AA%8C%E8%AF%81-Staging-%E7%8E%AF%E5%A2%83%E4%B8%8A%E7%9A%84-Archive"><span class="nav-number">2.5.</span> <span class="nav-text">6. 关闭并验证 Staging 环境上的 Archive</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-%E5%8F%91%E5%B8%83-Archive"><span class="nav-number">2.6.</span> <span class="nav-text">7. 发布 Archive</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-%E9%80%9A%E7%9F%A5-issue-%E7%AE%A1%E7%90%86%E5%91%98%E5%BC%80%E5%90%AF%E5%90%8C%E6%AD%A5"><span class="nav-number">2.7.</span> <span class="nav-text">8. 通知 issue 管理员开启同步</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#9-%E6%A3%80%E6%9F%A5%E5%90%8C%E6%AD%A5%E6%88%90%E5%8A%9F"><span class="nav-number">2.8.</span> <span class="nav-text">9. 检查同步成功</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Qian Yan</p>
+  <div class="site-description" itemprop="description">Elegance and familiarity are orthogonal</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">76</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">41</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://qianyan.github.io/2017/09/15/2017-09-15-release-jar-to-maven-central-repository/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Qian Yan">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="λ">
+      <meta itemprop="description" content="Elegance and familiarity are orthogonal">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="如何发布Jar包到Maven Central Repository | λ">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          如何发布Jar包到Maven Central Repository
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2017-09-15 22:29:07" itemprop="dateCreated datePublished" datetime="2017-09-15T22:29:07+08:00">2017-09-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2017-09-18 21:40:57" itemprop="dateModified" datetime="2017-09-18T21:40:57+08:00">2017-09-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%8A%80%E6%9C%AF/" itemprop="url" rel="index"><span itemprop="name">技术</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="太长不读篇"><a href="#太长不读篇" class="headerlink" title="太长不读篇"></a>太长不读篇</h2><ol>
+<li>在 <a target="_blank" rel="noopener" href="https://issues.sonatype.org/secure/Signup!default.jspa">issues tracker</a> 上注册</li>
+<li>创建 <a target="_blank" rel="noopener" href="https://issues.sonatype.org/browse/OSSRH-33944">issues</a></li>
+<li>配置 <a target="_blank" rel="noopener" href="https://github.com/qianyan/underscore.string.java/blob/master/build.gradle">build.gradle</a></li>
+<li>gpg 生成 key pair 以便签名</li>
+<li>上传 Release Archive</li>
+<li>关闭并验证 <a target="_blank" rel="noopener" href="https://oss.sonatype.org/">Staging 环境</a>的 Archive</li>
+<li>发布 Archive</li>
+<li>通知 issue 管理员开启同步</li>
+</ol>
+<h2 id="细读篇"><a href="#细读篇" class="headerlink" title="细读篇"></a>细读篇</h2><h3 id="1-注册"><a href="#1-注册" class="headerlink" title="1. 注册"></a>1. 注册</h3><p>Maven Central 网站并不提供注册的功能，你需要到 Sonatype 网站上进行注册。而事实上，Sonatype 网站也没有直接提供一个注册链接。真正的注册入口在 <a target="_blank" rel="noopener" href="https://issues.sonatype.org/secure/Signup!default.jspa">issues tracker</a> 上。一旦完成注册后，你需要创建包含待发布包信息的 issue。</p>
+<h3 id="2-创建-issue"><a href="#2-创建-issue" class="headerlink" title="2. 创建 issue"></a>2. 创建 issue</h3><p><img src="http://upload-images.jianshu.io/upload_images/217988-502c1f4fc580c120.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="创建 issues"><br>在 Sonatype 的 <a target="_blank" rel="noopener" href="https://issues.sonatype.org/secure/Dashboard.jspa">dashboard</a> 上点击创建按钮，根据弹出框的提示，填写简介、描述、GroupId、Project URL、SCM url 以及你在 jira 上的用户名。创建完毕后，会被自动跳转到该 issue 的详情页并分配一个唯一的ID，如：OSSRH-33944。余下的时间只需要等待，一般在两个工作日之内，Sonatype 的工作人员就会着手处理，然后他会在该 issue 底下的评论区留言。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/217988-29e35a58393f39ce.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="创建成功的 issue"></p>
+<p>如果代码是托管在 github 上，按照惯例，GroupId 应该取 github 上的域名，比如：com.github.qianyan。不过，这里我预备上传的包的 GroupId 是 com.lambeta，这是我购买的域名。审核者对此有所顾虑，所以很贴心地留言如下：</p>
+<blockquote>
+<p>Do you own the domain lambeta.com? If not, please read:<br><a target="_blank" rel="noopener" href="http://central.sonatype.org/pages/choosing-your-coordinates.html">http://central.sonatype.org/pages/choosing-your-coordinates.html</a><br>You may also choose a groupId that reflects your project hosting, in this case, something like io.github.qianyan or com.github.qianyan</p>
+</blockquote>
+<p>在回复这个域名确实为我所有之后，工作人员就贴出不同环境的仓库地址。</p>
+<blockquote>
+<p>Configuration has been prepared, now you can:<br>Deploy snapshot artifacts into repository <a target="_blank" rel="noopener" href="https://oss.sonatype.org/content/repositories/snapshots">https://oss.sonatype.org/content/repositories/snapshots</a><br>Deploy release artifacts into the staging repository <a target="_blank" rel="noopener" href="https://oss.sonatype.org/service/local/staging/deploy/maven2">https://oss.sonatype.org/service/local/staging/deploy/maven2</a><br>Promote staged artifacts into repository ‘Releases’<br>Download snapshot and release artifacts from group <a target="_blank" rel="noopener" href="https://oss.sonatype.org/content/groups/public">https://oss.sonatype.org/content/groups/public</a><br>Download snapshot, release and staged artifacts from staging group <a target="_blank" rel="noopener" href="https://oss.sonatype.org/content/groups/staging">https://oss.sonatype.org/content/groups/staging</a><br><strong>please comment on this ticket when you promoted your first release, thanks</strong></p>
+</blockquote>
+<p><strong>最后一句很重要</strong>，说的是，当我第一次正式发布的时候，需要留言告知工作人员，以便他们开启中央仓库的同步，这样我的包才会在 Maven Central 仓库中可见。</p>
+<h3 id="3-配置项目的-build-gradle"><a href="#3-配置项目的-build-gradle" class="headerlink" title="3. 配置项目的 build.gradle"></a>3. 配置项目的 build.gradle</h3><p>拿到仓库地址，我们就需要在自己的项目中进行一些必要的配置，包含：jar、sourcesJar、javadocJar 以及对这些产物的 signing（签名）。</p>
+<h4 id="maven-插件"><a href="#maven-插件" class="headerlink" title="maven 插件"></a>maven 插件</h4><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apply <span class="attr">plugin:</span> <span class="string">&#x27;maven&#x27;</span></span><br></pre></td></tr></table></figure>
+<p>maven 插件提供了 uploadArchives task，我们需要在这个 task 中配置仓库地址，以及 pom 的相关信息，因为上载到 maven 仓库的包必须要有 pom 文件，否则无法查找或被依赖。具体配置如下：</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">uploadArchives &#123;</span><br><span class="line">    repositories &#123;</span><br><span class="line">        mavenDeployer &#123;</span><br><span class="line">            beforeDeployment &#123; deployment -&gt; signing.signPom(deployment) &#125;</span><br><span class="line"></span><br><span class="line">            repository(<span class="attr">url:</span> <span class="string">&quot;https://oss.sonatype.org/service/local/staging/deploy/maven2/&quot;</span>) &#123;</span><br><span class="line">                authentication(<span class="attr">userName:</span> ossrhUsername, <span class="attr">password:</span> ossrhPassword)</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            snapshotRepository(<span class="attr">url:</span> <span class="string">&quot;https://oss.sonatype.org/content/repositories/snapshots&quot;</span>) &#123;</span><br><span class="line">                authentication(<span class="attr">userName:</span> sonatypeUsername, <span class="attr">password:</span> sonatypePassword)</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            pom.project &#123;</span><br><span class="line">                name project.name</span><br><span class="line">                packaging <span class="string">&#x27;jar&#x27;</span></span><br><span class="line">                description <span class="string">&#x27;underscore string in java&#x27;</span></span><br><span class="line">                url <span class="string">&#x27;https://github.com/qianyan/underscore.string.java&#x27;</span></span><br><span class="line"></span><br><span class="line">                scm &#123;</span><br><span class="line">                    url <span class="string">&#x27;https://github.com/qianyan/underscore.string.java&#x27;</span></span><br><span class="line">                    connection <span class="string">&#x27;https://github.com/qianyan/underscore.string.java.git&#x27;</span></span><br><span class="line">                    developerConnection <span class="string">&#x27;git@github.com:qianyan/underscore.string.java.git&#x27;</span></span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                licenses &#123;</span><br><span class="line">                    license &#123;</span><br><span class="line">                        name <span class="string">&#x27;MIT Licence&#x27;</span></span><br><span class="line">                        url <span class="string">&#x27;https://raw.githubusercontent.com/qianyan/underscore.string.java/master/LICENSE&#x27;</span></span><br><span class="line">                        distribution <span class="string">&#x27;repo&#x27;</span></span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                developers &#123;</span><br><span class="line">                    developer &#123;</span><br><span class="line">                        id <span class="string">&#x27;lambeta&#x27;</span></span><br><span class="line">                        name <span class="string">&#x27;Yan Qian&#x27;</span></span><br><span class="line">                        email <span class="string">&#x27;qianyan.lambeta@gmail.com&#x27;</span></span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>对应生成的 pom.xml 大致如下：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">name</span>&gt;</span>underscore.string.java<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">description</span>&gt;</span>underscore string in java<span class="tag">&lt;/<span class="name">description</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">url</span>&gt;</span>https://github.com/qianyan/underscore.string.java<span class="tag">&lt;/<span class="name">url</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">licenses</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">license</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">name</span>&gt;</span>MIT Licence<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">url</span>&gt;</span>https://raw.githubusercontent.com/qianyan/underscore.string.java/master/LICENSE<span class="tag">&lt;/<span class="name">url</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">distribution</span>&gt;</span>repo<span class="tag">&lt;/<span class="name">distribution</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">license</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">licenses</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">developers</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">developer</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">id</span>&gt;</span>lambeta<span class="tag">&lt;/<span class="name">id</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">name</span>&gt;</span>Yan Qian<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">email</span>&gt;</span>qianyan.lambeta@gmail.com<span class="tag">&lt;/<span class="name">email</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">developer</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">developers</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">scm</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">connection</span>&gt;</span>https://github.com/qianyan/underscore.string.java.git<span class="tag">&lt;/<span class="name">connection</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">developerConnection</span>&gt;</span>git@github.com:qianyan/underscore.string.java.git<span class="tag">&lt;/<span class="name">developerConnection</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">url</span>&gt;</span>https://github.com/qianyan/underscore.string.java<span class="tag">&lt;/<span class="name">url</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">scm</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p><strong>注意</strong> <code>authentication(userName: ossrhUsername, password: ossrhPassword)</code> 和 <code>authentication(userName: sonatypeUsername, password: sonatypePassword)</code>，这里的用户名和密码其实就是在 Sonatype 上注册的用户名和密码。为了让 gradle 脚本顺利执行，需要在当前工程下的 gradle.properties 文件中设置对应的变量，如下：</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sonatypeUsername=</span><br><span class="line">sonatypePassword=</span><br><span class="line">ossrhUsername=</span><br><span class="line">ossrhPassword=</span><br></pre></td></tr></table></figure>
+<p>这份文件会作为源代码的一部分提交，所以聪明的我们不会傻傻地把自己的用户名和密码 push 到 github 上面。和大部分 *nix 系统上的工具类似，gradle 也有本地配置，我们可以新建一份 gradle.properties 文件到 <code>~/.gradle/gradle.properties</code>，然后把用户名和密码写入其中。这样，实际运行时，本地配置就会覆盖项目下对应的这些变量值。</p>
+<h4 id="4-设置-gpg-以签名-Archive"><a href="#4-设置-gpg-以签名-Archive" class="headerlink" title="4. 设置 gpg 以签名 Archive"></a>4. 设置 gpg 以签名 Archive</h4><p><a target="_blank" rel="noopener" href="https://gnupg.org/">gpg</a> 生成的 key pair 主要是供签名使用的。假定本机已经安装 gpg，首先使用 gpg 生成 key pair。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">gpg --gen-key</span></span><br></pre></td></tr></table></figure>
+<p>然后，查找你的 keyId：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">gpg --list-keys</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">-&gt;</span></span><br><span class="line">pub   2048R/XXXXXX 2017-09-14 [expires: 2018-05-14]</span><br><span class="line">uid       [ultimate] Yan Qian (lambeta) &lt;qianyan.lambeta@gmail.com&gt;</span><br></pre></td></tr></table></figure>
+<p>其中 XXXXXX 就是你的 keyId。接下来必须发布你的公钥：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">gpg --keyserver hkp://pgp.mit.edu --send-keys XXXXXX</span></span><br></pre></td></tr></table></figure>
+<p>验证公钥已经发布成功：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">gpg --keyserver hkp://pgp.mit.edu --search-keys qianyan.lambeta@gamil.com <span class="comment"># user email address</span></span></span><br></pre></td></tr></table></figure>
+<p>当然，上述操作都可以使用 <a target="_blank" rel="noopener" href="https://gpgtools.org/">gpg tools</a> 在 UI 上完成。</p>
+<h4 id="signing-插件"><a href="#signing-插件" class="headerlink" title="signing 插件"></a>signing 插件</h4><p>完成上述步骤之后，我们需要在 build.gradle 中添加 signing 插件及其配置，如下：</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">apply <span class="attr">plugin:</span> <span class="string">&#x27;signing&#x27;</span></span><br><span class="line"></span><br><span class="line">signing &#123;</span><br><span class="line">    required &#123; gradle.taskGraph.hasTask(<span class="string">&quot;uploadArchives&quot;</span>) &#125;</span><br><span class="line">    sign configurations.archives</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面的配置明确了 gradle task 的 DAG 中必须含有 uploadArchives，之后针对 archives 进行签名。</p>
+<p>signing 插件如何同 gpg 生成 key pair 交互呢？这就需要在<code>~/.gradle/gradle.properties</code>再声明三个变量，如下：</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">signing.keyId=XXXXXX</span><br><span class="line">signing.password=your_key_pair_password</span><br><span class="line">signing.secretKeyRingFile=<span class="regexp">/Users/</span>your_name<span class="regexp">/.gnupg/</span>secring.gpg</span><br></pre></td></tr></table></figure>
+<p>还剩下最后的一步，归档 Jar，sourceJar（源代码）和javadocJar（API 文档），这些是需要签名的对象。</p>
+<h4 id="archive"><a href="#archive" class="headerlink" title="archive"></a>archive</h4><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">apply <span class="attr">plugin:</span> <span class="string">&#x27;java&#x27;</span></span><br><span class="line"></span><br><span class="line">task sourcesJar(<span class="attr">type:</span> Jar) &#123;</span><br><span class="line">    classifier = <span class="string">&#x27;sources&#x27;</span></span><br><span class="line">    from sourceSets.main.allSource</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">task javadocJar(<span class="attr">type:</span> Jar, <span class="attr">dependsOn:</span> javadoc) &#123;</span><br><span class="line">    classifier = <span class="string">&#x27;javadoc&#x27;</span></span><br><span class="line">    from <span class="string">&#x27;build/docs/javadoc&#x27;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">artifacts &#123;</span><br><span class="line">    archives jar</span><br><span class="line">    archives sourcesJar</span><br><span class="line">    archives javadocJar</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>归档产物最终都会被签名，生成以 .asc 为后缀的签名文件。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">build/libs</span><br><span class="line">├── underscore.string.java-0.0.1-javadoc.jar</span><br><span class="line">├── underscore.string.java-0.0.1-javadoc.jar.asc</span><br><span class="line">├── underscore.string.java-0.0.1-sources.jar</span><br><span class="line">├── underscore.string.java-0.0.1-sources.jar.asc</span><br><span class="line">├── underscore.string.java-0.0.1.jar</span><br><span class="line">└── underscore.string.java-0.0.1.jar.asc</span><br></pre></td></tr></table></figure>
+<p>这些产出物在最终发布的时候，需要经过验证，如果验证失败，比如：缺少 javadoc 或者某个 *.asc 文件，则不被允许发布。</p>
+<h3 id="5-上传-Release-Archives"><a href="#5-上传-Release-Archives" class="headerlink" title="5. 上传 Release Archives"></a>5. 上传 Release Archives</h3><p>根据的 maven 的标准，日常开发我们会使用 snapshot 版本，如：0.0.1-SNAPSHOT；发布时，去掉后缀-SNAPSHOT，即：0.0.1。而 maven 会根据这个特点，机智地辨识是上传到 snapshotRepository 还是 releaseRepository 的。因为我们得发布包，所以修改版本为 0.0.1 之后，我们只需要简单地执行如下命令：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">gradle uploadArchives <span class="comment"># or `gradle uA` this is a shortcut.</span></span></span><br></pre></td></tr></table></figure>
+<h3 id="6-关闭并验证-Staging-环境上的-Archive"><a href="#6-关闭并验证-Staging-环境上的-Archive" class="headerlink" title="6. 关闭并验证 Staging 环境上的 Archive"></a>6. 关闭并验证 Staging 环境上的 Archive</h3><p><img src="http://upload-images.jianshu.io/upload_images/217988-c6a888ec20e93530.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="staging Repo"></p>
+<p>登录 Sonatype 的 <a target="_blank" rel="noopener" href="https://oss.sonatype.org/">Nexus Repository Manager</a>，然后点击左边侧边栏的 Staging Repositories，搜索<code>comlambeta</code> (GroupId 去掉中间的’.’)。接下来查看 Content tab，重点检查 pom 或者签名文件是否遗漏！当确认无误后，即可关闭 (Close) 这个 Repo。关闭过程中，Nexus 会逐项检查产物是否合规，如果出现验证错误，则在 Activity tab 中显示具体失败的步骤及原因。</p>
+<h3 id="7-发布-Archive"><a href="#7-发布-Archive" class="headerlink" title="7. 发布 Archive"></a>7. 发布 Archive</h3><p>如果上面的验证通过，上面本来不可用的 Release 按钮会变为可用。点击 Release 按钮，直接发布包。</p>
+<h3 id="8-通知-issue-管理员开启同步"><a href="#8-通知-issue-管理员开启同步" class="headerlink" title="8. 通知 issue 管理员开启同步"></a>8. 通知 issue 管理员开启同步</h3><p>发布包之后，就可以通知管理员开启同步。我在原来的 issue 的评论区留言：</p>
+<blockquote>
+<p>I have a first release version 0.0.1 for this library.</p>
+</blockquote>
+<p>很快地，管理员就回复同步已经开启：</p>
+<blockquote>
+<p>Central sync is activated for com.lambeta. After you successfully release, your component will be published to Central, typically within 10 minutes, though updates to search.maven.org can take up to two hours.</p>
+</blockquote>
+<p>不过，由于当时所用 gradle2.1 的版本，导致了上传时 pom 文件被遗漏，在 search.maven.org 中搜索不到。管理员很热心地解释了这个现象：</p>
+<blockquote>
+<p>search.maven.org needs a valid POM file to be a part of your uploaded artifacts. Browsing Maven Central directly:<br><a target="_blank" rel="noopener" href="http://repo1.maven.org/maven2/com/lambeta/underscore.string.java/0.0.1/">http://repo1.maven.org/maven2/com/lambeta/underscore.string.java/0.0.1/</a><br>it appears that a POM file is missing.</p>
+</blockquote>
+<p>遂升级到 3.1 版本，重新上传之后就能在 <a target="_blank" rel="noopener" href="http://search.maven.org/#search%7Cga%7C1%7Ccom.lambeta">search.maven.org</a> 中看到。</p>
+<h3 id="9-检查同步成功"><a href="#9-检查同步成功" class="headerlink" title="9. 检查同步成功"></a>9. 检查同步成功</h3><p>除了通过 <a target="_blank" rel="noopener" href="http://search.maven.org/#search%7Cga%7C1%7Ccom.lambeta">search.maven.org</a> 检查同步是否成功之外，查询<a target="_blank" rel="noopener" href="http://mvnrepository.com/search?q=com.lambeta">mvnrepository</a>也是常用的搜索方式。不过，值得一提的是，mvnrepository 相较于 search.maven.org 同步会更慢点，原因是 mvnrepository 引用了 central.maven.org 仓库。而 <code>central.maven.org == repo1.maven.org</code>，两个域名对应的 IP 是一样的，而这个 repo1.maven.org 就是默认的 Maven central repository，也就是 search.maven.org 的仓库。<br>所以，你可以在以下两个仓库看到发布包：<br><a target="_blank" rel="noopener" href="http://central.maven.org/maven2/com/lambeta/underscore.string.java/">http://central.maven.org/maven2/com/lambeta/underscore.string.java/</a><br><a target="_blank" rel="noopener" href="http://repo1.maven.org/maven2/com/lambeta/underscore.string.java/">http://repo1.maven.org/maven2/com/lambeta/underscore.string.java/</a></p>
+<hr>
+<p>参考链接<br>[1] <a target="_blank" rel="noopener" href="http://zserge.com/blog/gradle-maven-publish.html">simple library publishing with gradle</a><br>[2] <a target="_blank" rel="noopener" href="http://central.sonatype.org/pages/releasing-the-deployment.html">release deployment</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/java/" rel="tag"># java</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2017/09/06/2017-09-06-Underscore-string-java/" rel="prev" title="一个Java中操作字符串的类库">
+                  <i class="fa fa-angle-left"></i> 一个Java中操作字符串的类库
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2017/09/17/2017-09-17-release-jar-to-clojars/" rel="next" title="如何发布jar到clojars">
+                  如何发布jar到clojars <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Qian Yan</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.2.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"qianyan.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="起源TDD讨论组里的申导最近在B站直播了Martin Fowler的经典文章*Refactoring with Loops and Collection Pipelines中谈到的利用集合管道对循环进行函数式重构。视频地址在这里，申导的翻译在这里。组织者小波（Seaborn Lee）趁机出了一道关于集合管道函数题目。我就想啊，论函数式编程，舍Clojure其谁？而且我在Clojure*很少能写出l">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Clojure集合管道函数练习">
+<meta property="og:url" content="https://qianyan.github.io/2016/09/12/2016-09-12-Collection-Pipelines-By-TDD/index.html">
+<meta property="og:site_name" content="λ">
+<meta property="og:description" content="起源TDD讨论组里的申导最近在B站直播了Martin Fowler的经典文章*Refactoring with Loops and Collection Pipelines中谈到的利用集合管道对循环进行函数式重构。视频地址在这里，申导的翻译在这里。组织者小波（Seaborn Lee）趁机出了一道关于集合管道函数题目。我就想啊，论函数式编程，舍Clojure其谁？而且我在Clojure*很少能写出l">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2016-09-12T01:26:24.000Z">
+<meta property="article:modified_time" content="2016-10-06T02:30:45.000Z">
+<meta property="article:author" content="Qian Yan">
+<meta property="article:tag" content="kata">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://qianyan.github.io/2016/09/12/2016-09-12-Collection-Pipelines-By-TDD/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://qianyan.github.io/2016/09/12/2016-09-12-Collection-Pipelines-By-TDD/","path":"2016/09/12/2016-09-12-Collection-Pipelines-By-TDD/","title":"Clojure集合管道函数练习"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Clojure集合管道函数练习 | λ</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">λ</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">(conj clojurians me)</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B5%B7%E6%BA%90"><span class="nav-number">1.</span> <span class="nav-text">起源</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE"><span class="nav-number">2.</span> <span class="nav-text">题目</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E6%9E%90"><span class="nav-number">3.</span> <span class="nav-text">解析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-Clojure-%E8%A7%A3%E6%B3%95"><span class="nav-number">4.</span> <span class="nav-text">1. Clojure 解法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BD%AC%E6%8D%A2%E6%95%B0%E6%8D%AE%E6%A0%BC%E5%BC%8F"><span class="nav-number">4.1.</span> <span class="nav-text">转换数据格式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81"><span class="nav-number">4.2.</span> <span class="nav-text">代码</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Clojure-TDD-%E8%A7%A3%E6%B3%95"><span class="nav-number">5.</span> <span class="nav-text">2. Clojure TDD 解法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%8E%AF%E5%A2%83%E5%87%86%E5%A4%87"><span class="nav-number">5.1.</span> <span class="nav-text">环境准备</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Tasking%EF%BC%88%E4%BB%BB%E5%8A%A1%E6%8B%86%E5%88%86%EF%BC%89"><span class="nav-number">5.2.</span> <span class="nav-text">Tasking（任务拆分）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC1%E4%B8%AA%E4%BB%BB%E5%8A%A1"><span class="nav-number">5.3.</span> <span class="nav-text">第1个任务</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E5%86%99%E6%B5%8B%E8%AF%95"><span class="nav-number">5.3.1.</span> <span class="nav-text">1. 写测试</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E5%86%99%E5%AE%9E%E7%8E%B0"><span class="nav-number">5.3.2.</span> <span class="nav-text">2. 写实现</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-%E5%85%B3%E9%97%AD%E5%B9%B6%E6%8F%90%E4%BA%A4"><span class="nav-number">5.3.3.</span> <span class="nav-text">3. 关闭并提交</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC2%E4%B8%AA%E4%BB%BB%E5%8A%A1"><span class="nav-number">5.4.</span> <span class="nav-text">第2个任务</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E5%86%99%E6%B5%8B%E8%AF%95-1"><span class="nav-number">5.4.1.</span> <span class="nav-text">1. 写测试</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E5%85%B3%E9%97%AD%E5%B9%B6%E6%8F%90%E4%BA%A4"><span class="nav-number">5.4.2.</span> <span class="nav-text">2. 关闭并提交</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC3%E4%B8%AA%E4%BB%BB%E5%8A%A1"><span class="nav-number">5.5.</span> <span class="nav-text">第3个任务</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E5%86%99%E6%B5%8B%E8%AF%95-2"><span class="nav-number">5.5.1.</span> <span class="nav-text">1. 写测试</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E5%86%99%E5%AE%9E%E7%8E%B0-1"><span class="nav-number">5.5.2.</span> <span class="nav-text">2. 写实现</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-%E5%85%B3%E9%97%AD%E5%B9%B6%E6%8F%90%E4%BA%A4-1"><span class="nav-number">5.5.3.</span> <span class="nav-text">3. 关闭并提交</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC4%E4%B8%AA%E4%BB%BB%E5%8A%A1"><span class="nav-number">5.6.</span> <span class="nav-text">第4个任务</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E5%86%99%E6%B5%8B%E8%AF%95-3"><span class="nav-number">5.6.1.</span> <span class="nav-text">1. 写测试</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E5%86%99%E5%AE%9E%E7%8E%B0-2"><span class="nav-number">5.6.2.</span> <span class="nav-text">2. 写实现</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-%E5%85%B3%E9%97%AD%E5%B9%B6%E6%8F%90%E4%BA%A4-2"><span class="nav-number">5.6.3.</span> <span class="nav-text">3. 关闭并提交</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-%E9%87%8D%E6%9E%84"><span class="nav-number">5.6.4.</span> <span class="nav-text">4. 重构</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC5%E4%B8%AA%E4%BB%BB%E5%8A%A1"><span class="nav-number">5.7.</span> <span class="nav-text">第5个任务</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E5%86%99%E6%B5%8B%E8%AF%95-4"><span class="nav-number">5.7.1.</span> <span class="nav-text">1. 写测试</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E5%85%B3%E9%97%AD%E5%B9%B6%E6%8F%90%E4%BA%A4-1"><span class="nav-number">5.7.2.</span> <span class="nav-text">2. 关闭并提交</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E7%AC%AC3%E4%B8%AA%E4%BB%BB%E5%8A%A1%E8%A1%A5%E4%B8%8A%E6%B5%8B%E8%AF%95%E7%94%A8%E4%BE%8B"><span class="nav-number">5.8.</span> <span class="nav-text">为第3个任务补上测试用例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B4%E7%90%86%E6%B5%8B%E8%AF%95"><span class="nav-number">5.9.</span> <span class="nav-text">整理测试</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%87%E6%A1%A3"><span class="nav-number">5.10.</span> <span class="nav-text">文档</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BE%8E%E5%8C%96%E4%BB%A3%E7%A0%81"><span class="nav-number">5.11.</span> <span class="nav-text">美化代码</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E5%A5%BD%E7%9C%8B%E7%9A%84%E4%BB%A3%E7%A0%81%EF%BC%9F%E9%99%A4%E4%BA%86%E6%B8%85%E6%99%B0%E6%98%8E%E4%BA%86%EF%BC%8C%E6%A0%BC%E5%BC%8F%E4%B9%9F%E5%BF%85%E9%A1%BB%E4%BA%A7%E7%94%9F%E7%BE%8E%E6%84%9F%E3%80%82%E9%A1%BA%E7%9C%BC%E4%B8%8D%E5%B0%91%EF%BC%8C%E6%9C%80%E5%90%8E%E6%8F%90%E4%BA%A4%E4%B8%80%E4%B8%8B%E3%80%82"><span class="nav-number">6.</span> <span class="nav-text">什么是好看的代码？除了清晰明了，格式也必须产生美感。12345678910111213(defn the-earliest-available-recommand [rooms]  (letfn [(period [{:keys [periods]}]            (-&gt; periods                (-&gt;&gt; (filter #(#{:available} (:status %))))                (ffirst) ; 统一套上括号                (or [:time ::non-available])))]    (-&gt; rooms        (-&gt;&gt; (map (juxt first period))             (map #(into {} %)) ; 合并单独提出来             (remove #(#{::non-available} (:time %)))             (sort-by :time)             (first)) ; 统一套上括号        (or :no-available-room))))顺眼不少，最后提交一下。12ga .gcmsg &quot;[refactor] beautify pipe format&quot;</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Qian Yan</p>
+  <div class="site-description" itemprop="description">Elegance and familiarity are orthogonal</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">76</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">41</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://qianyan.github.io/2016/09/12/2016-09-12-Collection-Pipelines-By-TDD/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Qian Yan">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="λ">
+      <meta itemprop="description" content="Elegance and familiarity are orthogonal">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Clojure集合管道函数练习 | λ">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Clojure集合管道函数练习
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2016-09-12 09:26:24" itemprop="dateCreated datePublished" datetime="2016-09-12T09:26:24+08:00">2016-09-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2016-10-06 10:30:45" itemprop="dateModified" datetime="2016-10-06T10:30:45+08:00">2016-10-06</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Clojure/" itemprop="url" rel="index"><span itemprop="name">Clojure</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="起源"><a href="#起源" class="headerlink" title="起源"></a>起源</h2><p>TDD讨论组里的<a target="_blank" rel="noopener" href="http://www.jackyshen.com/">申导</a>最近在B站直播了Martin Fowler的经典文章*<a target="_blank" rel="noopener" href="http://www.martinfowler.com/articles/refactoring-pipelines.html">Refactoring with Loops and Collection Pipelines</a><em>中谈到的<strong>利用集合管道对循环进行函数式重构</strong>。视频地址在<a target="_blank" rel="noopener" href="http://www.bilibili.com/mobile/video/av6146294.html">这里</a>，申导的翻译在<a target="_blank" rel="noopener" href="http://www.jackyshen.com/2016/07/04/Refactoring-with-Loops-and-Collection-Pipelines/">这里</a>。组织者<a target="_blank" rel="noopener" href="http://www.seabornlee.cn/">小波（Seaborn Lee）</a>趁机出了一道关于集合管道函数<a target="_blank" rel="noopener" href="https://codingstyle.cn/topics/205">题目</a>。我就想啊，论函数式编程，舍</em>Clojure<em>其谁？而且我在</em>Clojure*很少能写出<code>loop... recur</code>这样偏底层的循环代码。话不多说，撸起袖子开工。</p>
+<h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><p>一家澡堂有 m 个房间，每个房间有 n 个时段，现在要给用户推荐「最早的可以预约的时段」。</p>
+<p>例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">rooms: [</span><br><span class="line">  &#123;</span><br><span class="line">     room_id: 1,</span><br><span class="line">     periods: [</span><br><span class="line">        &#123;</span><br><span class="line">           time: &#x27;17:00-18:00&#x27;,</span><br><span class="line">           status: &#x27;available&#x27;</span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">           time: &#x27;18:00-19:00&#x27;,</span><br><span class="line">           status: &#x27;occupied&#x27;</span><br><span class="line">        &#125;</span><br><span class="line">     ]</span><br><span class="line">  &#125;, &#123;</span><br><span class="line">     room_id: 2,</span><br><span class="line">     periods: [</span><br><span class="line">        &#123;</span><br><span class="line">           time: &#x27;17:00-18:00&#x27;,</span><br><span class="line">           status: &#x27;occupied&#x27;</span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">           time: &#x27;18:00-19:00&#x27;,</span><br><span class="line">           status: &#x27;available&#x27;</span><br><span class="line">        &#125;</span><br><span class="line">     ]</span><br><span class="line">  &#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+<p>期望返回：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  room_id: 1,</span><br><span class="line">  time: &#x27;17:00-18:00&#x27;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="解析"><a href="#解析" class="headerlink" title="解析"></a>解析</h2><p>题目很简单，基本思路：首先过滤出每个房间<code>periods</code>中<code>status</code>为<code>available</code>的时间段，然后取第一个也就是最早的时间段（默认为递增排序的），接着将<code>room_id</code>和这个时间段以<strong>期望返回</strong>的形式合并。再然后对所有合并的结果依据时间段进行一次排序（<code>sort</code>），最后取第一个结果即可。</p>
+<h2 id="1-Clojure-解法"><a href="#1-Clojure-解法" class="headerlink" title="1. Clojure 解法"></a>1. Clojure 解法</h2><h3 id="转换数据格式"><a href="#转换数据格式" class="headerlink" title="转换数据格式"></a>转换数据格式</h3><p>原题中给的是json的格式，不适合在<em>Clojure</em>中处理，所以我们手工转换成需要的形式，如下：<br><strong>清单1-1</strong> 数据定义</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">(<span class="keyword">def</span> <span class="title">rooms</span></span><br><span class="line">  [&#123;<span class="symbol">:room-id</span> <span class="number">1</span></span><br><span class="line">    <span class="symbol">:periods</span> [&#123;<span class="symbol">:time</span> <span class="string">&quot;17:00-18:00&quot;</span></span><br><span class="line">               <span class="symbol">:status</span> <span class="symbol">:available</span>&#125;</span><br><span class="line">              &#123;<span class="symbol">:time</span> <span class="string">&quot;18:00-19:00&quot;</span></span><br><span class="line">               <span class="symbol">:status</span> <span class="symbol">:occupied</span>&#125;]&#125;</span><br><span class="line">   &#123;<span class="symbol">:room-id</span> <span class="number">2</span></span><br><span class="line">    <span class="symbol">:periods</span> [&#123;<span class="symbol">:time</span> <span class="string">&quot;17:00-18:00&quot;</span></span><br><span class="line">               <span class="symbol">:status</span> <span class="symbol">:occupied</span>&#125;</span><br><span class="line">              &#123;<span class="symbol">:time</span> <span class="string">&quot;18:00-19:00&quot;</span></span><br><span class="line">               <span class="symbol">:status</span> <span class="symbol">:available</span>&#125;]&#125;])</span><br></pre></td></tr></table></figure>
+
+<h3 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h3><p><strong>清单1-2</strong> 房间最早可预约时间段</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">(<span class="keyword">defn</span> <span class="title">the-earliest-available-room</span> [rooms]</span><br><span class="line">  (<span class="name"><span class="built_in">-&gt;&gt;</span></span> rooms</span><br><span class="line">       (<span class="name"><span class="built_in">map</span></span></span><br><span class="line">        (<span class="name"><span class="built_in">juxt</span></span> first (<span class="name"><span class="built_in">fn</span></span> [&#123;<span class="symbol">:keys</span> [periods]&#125;]</span><br><span class="line">                      (<span class="name"><span class="built_in">-&gt;&gt;</span></span> periods</span><br><span class="line">                           (<span class="name"><span class="built_in">filter</span></span> #(<span class="name"><span class="built_in">=</span></span> (<span class="symbol">:status</span> %) <span class="symbol">:available</span>))</span><br><span class="line">                           (<span class="name"><span class="built_in">ffirst</span></span>)))))</span><br><span class="line">       (<span class="name"><span class="built_in">map</span></span> #(<span class="name"><span class="built_in">into</span></span> &#123;&#125; %))</span><br><span class="line">       (<span class="name"><span class="built_in">sort-by</span></span> <span class="symbol">:time</span>)</span><br><span class="line">       (<span class="name"><span class="built_in">first</span></span>)))</span><br><span class="line">       </span><br><span class="line">(<span class="name">the-earliest-available-room</span> rooms)</span><br><span class="line">-&gt; &#123;<span class="symbol">:room-id</span> <span class="number">1</span><span class="punctuation">,</span> <span class="symbol">:time</span> <span class="string">&quot;17:00-18:00&quot;</span>&#125;</span><br></pre></td></tr></table></figure>
+<p>这段代码和上面的解析是一一对应的关系。为了让程序清晰，符合管道的用法，这里使用了thread last宏（<code>-&gt;&gt;</code>），它的作用是把前面一个<code>form</code>作为后一个<code>form</code>的最后一个参数。与之呼应的是thread first宏（<code>-&gt;</code>），它的作用类似，不过会传成第一个参数。</p>
+<p>我们先看<code>(map (juxt ...) ...)</code>这一段代码。<code>juxt</code>是一个非常有意思的函数，而且超级实用。它的文档描述如下：</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">doc</span> juxt)</span><br><span class="line">-&gt;</span><br><span class="line">clojure.core/juxt</span><br><span class="line"> [f]</span><br><span class="line"> [f g]</span><br><span class="line"> [f g h]</span><br><span class="line"> [f g h &amp; fs]</span><br><span class="line">Added in <span class="number">1.1</span></span><br><span class="line">  Takes a set of functions and returns a fn that is the juxtaposition</span><br><span class="line">  of those fns.  The returned fn takes a variable number of args<span class="punctuation">,</span> and</span><br><span class="line">  returns a vector containing the result of applying each fn to the</span><br><span class="line">  args (<span class="name">left-to-right</span>).</span><br><span class="line">  ((<span class="name"><span class="built_in">juxt</span></span> a b c) x) =&gt; [(<span class="name">a</span> x) (<span class="name">b</span> x) (<span class="name">c</span> x)]</span><br></pre></td></tr></table></figure>
+<p>它的神奇之处在于可以对同一个参数应用不同的函数，而且还能将应用的结果全部收集起来。想想题目的解析中提及的以<strong>期望返回</strong>的形式合并，如果我们应用<code>juxt</code>函数，就能得到<code>[(:room-id 1) (:time &quot;17:00-18:00&quot;)]</code>这样的中间结果。</p>
+<p><code>(juxt first (fn ...))</code>中<code>first</code>用于提取<code>:room-id</code>，而后面的<code>lambda</code>表达式则用于提取<code>:time</code>。解法很直观，筛选出<code>:status</code>是<code>:available</code>的时间段，然后使用<code>(ffirst)</code>取第一个map的首个entry。如：<code>&#123;:time &quot;17:00-18:00&quot; :status :available&#125;</code>，那么应用<code>(ffirst)</code>的结果就是<code>[:time &quot;17:00-18:00&quot;]</code>。</p>
+<p>接下来，又进行了一次map操作，这次的目的是把元组的entries，转换为map。举个例子：<code>[[:room-id 1] [:time &quot;17:00-18:00&quot;]]</code> &#x3D;&gt; <code>&#123;:room-id 1 :time &quot;17:00-18:00&quot;&#125;</code>。转换成map之后，方便以<code>:time</code>对结果进行排序<code>(sort-by :time)</code>，最后取出第一个元素<code>(first)</code>，即我们期望的返回。</p>
+<p>写完之后，我很想再写个TDD版本的。话不多说，继续撸袖子。</p>
+<h2 id="2-Clojure-TDD-解法"><a href="#2-Clojure-TDD-解法" class="headerlink" title="2. Clojure TDD 解法"></a>2. Clojure TDD 解法</h2><h3 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h3><ul>
+<li>生成工程</li>
+</ul>
+<p>进入命令行，输入<code>lein new midje the-earliest-available-period-of-bathroom</code>，leiningen会生成基于<code>midje</code>这个测试框架的工程。</p>
+<ul>
+<li><p>Git</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">git init</span><br><span class="line">&gt; .gitignore</span><br><span class="line">.lein*</span><br><span class="line">.nrep*</span><br><span class="line">target/</span><br><span class="line">这里ctrl-c退出</span><br><span class="line">git add .</span><br><span class="line">git commit --message &quot;init commit&quot;</span><br></pre></td></tr></table></figure>
+<p>我使用了<code>zsh</code>和<code>oh-my-zsh</code>，自带了很多git操作的alias，可以通过<code>alias |grep git</code>查看。后续的git操作都会使用alias。</p>
+</li>
+<li><p>自动测试</p>
+</li>
+</ul>
+<p>输入<code>lein repl</code>，然后<code>(use &#39;midje.repl)</code>，最后输入<code>(autotest)</code>。这样一旦文件修改保存，测试就会自动触发。</p>
+<ul>
+<li>Emacs</li>
+</ul>
+<p>用来写代码的。</p>
+<h3 id="Tasking（任务拆分）"><a href="#Tasking（任务拆分）" class="headerlink" title="Tasking（任务拆分）"></a>Tasking（任务拆分）</h3><p>先不急着敲代码，我们先从测试的角度看看完成这个需求需要哪几步？</p>
+<ul>
+<li><input disabled="" type="checkbox"> 单间澡堂有一个可用时间段</li>
+<li><input disabled="" type="checkbox"> 单间澡堂有多个可用时间段</li>
+<li><input disabled="" type="checkbox"> 所有澡堂（包含输入为空）没有可用时间段</li>
+<li><input disabled="" type="checkbox"> 多间澡堂都有可用时间段</li>
+<li><input disabled="" type="checkbox"> 多间澡堂中有的有可用时间段，有的没有可用时间段</li>
+</ul>
+<h3 id="第1个任务"><a href="#第1个任务" class="headerlink" title="第1个任务"></a>第1个任务</h3><ul>
+<li><input disabled="" type="checkbox"> 单间澡堂有一个可用时间段</li>
+</ul>
+<h4 id="1-写测试"><a href="#1-写测试" class="headerlink" title="1. 写测试"></a>1. 写测试</h4><figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">(<span class="keyword">def</span> <span class="title">room-1</span> &#123;<span class="symbol">:room-id</span> <span class="number">1</span></span><br><span class="line">    <span class="symbol">:periods</span> [&#123;<span class="symbol">:time</span> <span class="string">&quot;17:00-18:00&quot;</span></span><br><span class="line">               <span class="symbol">:status</span> <span class="symbol">:available</span>&#125;</span><br><span class="line">              &#123;<span class="symbol">:time</span> <span class="string">&quot;18:00-19:00&quot;</span></span><br><span class="line">               <span class="symbol">:status</span> <span class="symbol">:occupied</span>&#125;]&#125;)</span><br><span class="line"></span><br><span class="line">(<span class="keyword">def</span> <span class="title">room-2</span> &#123;<span class="symbol">:room-id</span> <span class="number">2</span></span><br><span class="line">             <span class="symbol">:periods</span> [&#123;<span class="symbol">:time</span> <span class="string">&quot;17:00-18:00&quot;</span></span><br><span class="line">                        <span class="symbol">:status</span> <span class="symbol">:occupied</span>&#125;</span><br><span class="line">                       &#123;<span class="symbol">:time</span> <span class="string">&quot;18:00-19:00&quot;</span></span><br><span class="line">                        <span class="symbol">:status</span> <span class="symbol">:available</span>&#125;]&#125;)</span><br><span class="line">                        </span><br><span class="line">(<span class="name">facts</span> <span class="string">&quot;about `the-earliest-avaible-period-of-bathroom`&quot;</span></span><br><span class="line">  (<span class="name">fact</span> <span class="string">&quot;should recommand if there is only one room with available period&quot;</span></span><br><span class="line">    <span class="comment">;; 1号</span></span><br><span class="line">    (<span class="name">the-earliest-available-recommand</span> [room-1]) =&gt; &#123;<span class="symbol">:room-id</span> <span class="number">1</span> <span class="symbol">:time</span> <span class="string">&quot;17:00-18:00&quot;</span>&#125;)</span><br><span class="line">    <span class="comment">;; 2号</span></span><br><span class="line">    (<span class="name">the-earliest-available-recommand</span> [room-2]) =&gt; &#123;<span class="symbol">:room-id</span> <span class="number">2</span> <span class="symbol">:time</span> <span class="string">&quot;18:00-19:00&quot;</span>&#125;))</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-写实现"><a href="#2-写实现" class="headerlink" title="2. 写实现"></a>2. 写实现</h4><figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="keyword">defn</span> <span class="title">the-earliest-available-recommand</span> [rooms]</span><br><span class="line">  &#123;<span class="symbol">:room-id</span> <span class="number">1</span> <span class="symbol">:time</span> <span class="string">&quot;17:00-18:00&quot;</span>&#125;)</span><br></pre></td></tr></table></figure>
+<p>针对1号测试，这个实现有点“荒诞”，术语<code>hard code</code>说的就是这个，但是眼下足够了。不过此时，应该再写一个类似的测试来去除<code>hard code</code>，即2号测试。<br>相应地，我们要修改实现。</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">defn the-earliest-available-recommand [rooms]</span><br><span class="line">  (<span class="name"><span class="built_in">let</span></span> [&#123;<span class="symbol">:keys</span> [room-id periods]&#125; (<span class="name"><span class="built_in">first</span></span> rooms)</span><br><span class="line">        available-periods (<span class="name"><span class="built_in">filter</span></span> #(#&#123;<span class="symbol">:available</span>&#125; (<span class="symbol">:status</span> %)) periods)]</span><br><span class="line">    (<span class="name"><span class="built_in">merge</span></span> &#123;<span class="symbol">:room-id</span> room-id&#125;</span><br><span class="line">           (<span class="name"><span class="built_in">select-keys</span></span> (<span class="name"><span class="built_in">first</span></span> available-periods) [<span class="symbol">:time</span>]))))</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-关闭并提交"><a href="#3-关闭并提交" class="headerlink" title="3. 关闭并提交"></a>3. 关闭并提交</h4><ul>
+<li><input checked="" disabled="" type="checkbox"> 单间澡堂有一个可用时间段</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ga .</span><br><span class="line">gcmsg &quot;one available room&quot;</span><br></pre></td></tr></table></figure>
+<h3 id="第2个任务"><a href="#第2个任务" class="headerlink" title="第2个任务"></a>第2个任务</h3><ul>
+<li><input disabled="" type="checkbox"> 单间澡堂有多个可用时间段</li>
+</ul>
+<h4 id="1-写测试-1"><a href="#1-写测试-1" class="headerlink" title="1. 写测试"></a>1. 写测试</h4><figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">(<span class="keyword">def</span> <span class="title">room-3</span> &#123;<span class="symbol">:room-id</span> <span class="number">3</span></span><br><span class="line">             <span class="symbol">:periods</span> [&#123;<span class="symbol">:time</span> <span class="string">&quot;17:00-18:00&quot;</span></span><br><span class="line">                        <span class="symbol">:status</span> <span class="symbol">:occupied</span>&#125;</span><br><span class="line">                       &#123;<span class="symbol">:time</span> <span class="string">&quot;18:00-19:00&quot;</span></span><br><span class="line">                        <span class="symbol">:status</span> <span class="symbol">:available</span>&#125;</span><br><span class="line">                       &#123;<span class="symbol">:time</span> <span class="string">&quot;19:00-20:00&quot;</span></span><br><span class="line">                        <span class="symbol">:status</span> <span class="symbol">:available</span>&#125;]&#125;)</span><br><span class="line">...                        </span><br><span class="line">(<span class="name">fact</span> <span class="string">&quot;should recommand the earliest one if there is only one room with multiple available periods&quot;</span></span><br><span class="line">    (<span class="name">the-earliest-available-recommand</span> [room-3]) =&gt; &#123;<span class="symbol">:room-id</span> <span class="number">3</span> <span class="symbol">:time</span> <span class="string">&quot;18:00-19:00&quot;</span>&#125;)</span><br></pre></td></tr></table></figure>
+<p>保存，发现测试还是跑过了。原因在于我们默认了<code>period</code>是递增排序的。我们看看有没有重构点？实现太简单了暂时找不到，那就欢欢喜喜地跳过实现步骤。</p>
+<h4 id="2-关闭并提交"><a href="#2-关闭并提交" class="headerlink" title="2. 关闭并提交"></a>2. 关闭并提交</h4><ul>
+<li><input checked="" disabled="" type="checkbox"> 单间澡堂有多个可用时间段<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ga .</span><br><span class="line">gcmsg &quot;one room with multiple available periods&quot;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="第3个任务"><a href="#第3个任务" class="headerlink" title="第3个任务"></a>第3个任务</h3><ul>
+<li><input disabled="" type="checkbox"> 所有澡堂（包含输入为空）没有可用时间段</li>
+</ul>
+<h4 id="1-写测试-2"><a href="#1-写测试-2" class="headerlink" title="1. 写测试"></a>1. 写测试</h4><figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">(<span class="keyword">def</span> <span class="title">non-available-room</span> &#123;<span class="symbol">:room-id</span> <span class="number">4</span></span><br><span class="line">             <span class="symbol">:periods</span> [&#123;<span class="symbol">:time</span> <span class="string">&quot;17:00-18:00&quot;</span></span><br><span class="line">                        <span class="symbol">:status</span> <span class="symbol">:occupied</span>&#125;</span><br><span class="line">                       &#123;<span class="symbol">:time</span> <span class="string">&quot;18:00-19:00&quot;</span></span><br><span class="line">                        <span class="symbol">:status</span> <span class="symbol">:occupied</span>&#125;</span><br><span class="line">                       &#123;<span class="symbol">:time</span> <span class="string">&quot;19:00-20:00&quot;</span></span><br><span class="line">                        <span class="symbol">:status</span> <span class="symbol">:occupied</span>&#125;]&#125;)</span><br><span class="line">                        </span><br><span class="line">(<span class="name">fact</span> <span class="string">&quot;should show `:no-available-room` if there is no available room&quot;</span></span><br><span class="line">    (<span class="name">the-earliest-available-recommand</span> []) =&gt; <span class="symbol">:no-available-room</span></span><br><span class="line">    (<span class="name">the-earliest-available-recommand</span> [non-available-room]) =&gt; <span class="symbol">:no-available-room</span>))                        </span><br></pre></td></tr></table></figure>
+<p>这回肯定挂掉。</p>
+<h4 id="2-写实现-1"><a href="#2-写实现-1" class="headerlink" title="2. 写实现"></a>2. 写实现</h4><figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">(<span class="keyword">defn</span> <span class="title">the-earliest-available-recommand</span> [rooms]</span><br><span class="line">  (<span class="name"><span class="built_in">let</span></span> [&#123;<span class="symbol">:keys</span> [room-id periods]&#125; (<span class="name"><span class="built_in">first</span></span> rooms)</span><br><span class="line">        available-periods (<span class="name"><span class="built_in">filter</span></span> #(#&#123;<span class="symbol">:available</span>&#125; (<span class="symbol">:status</span> %)) periods)]</span><br><span class="line">    (<span class="name"><span class="built_in">if</span></span> (<span class="name"><span class="built_in">seq</span></span> available-periods)</span><br><span class="line">      (<span class="name"><span class="built_in">merge</span></span> &#123;<span class="symbol">:room-id</span> room-id&#125;</span><br><span class="line">             (<span class="name"><span class="built_in">select-keys</span></span> (<span class="name"><span class="built_in">first</span></span> available-periods) [<span class="symbol">:time</span>]))</span><br><span class="line">      <span class="symbol">:no-available-room</span>)))</span><br></pre></td></tr></table></figure>
+<p>这里使用了<em>Clojure</em>中判断集合是否为空较为常用的手法<code>(seq )</code>，如果集合非空，那么返回集合本身；反之，返回nil，nil在逻辑上是false。测试通过。</p>
+<h4 id="3-关闭并提交-1"><a href="#3-关闭并提交-1" class="headerlink" title="3. 关闭并提交"></a>3. 关闭并提交</h4><ul>
+<li><input checked="" disabled="" type="checkbox"> 所有澡堂（包含输入为空）没有可用时间段</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ga .</span><br><span class="line">gcmsg &quot;no available room&quot;</span><br></pre></td></tr></table></figure>
+
+<h3 id="第4个任务"><a href="#第4个任务" class="headerlink" title="第4个任务"></a>第4个任务</h3><ul>
+<li><input disabled="" type="checkbox"> 多间澡堂都有可用时间段</li>
+</ul>
+<h4 id="1-写测试-3"><a href="#1-写测试-3" class="headerlink" title="1. 写测试"></a>1. 写测试</h4><figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">fact</span> <span class="string">&quot;should recommand the earliest if there has more than one room and each has available periods&quot;</span></span><br><span class="line">   (<span class="name">the-earliest-available-recommand</span> [room-1 room-2]) =&gt; &#123;<span class="symbol">:room-id</span> <span class="number">1</span> <span class="symbol">:time</span> <span class="string">&quot;17:00-18:00&quot;</span>&#125;</span><br><span class="line">   (<span class="name">the-earliest-available-recommand</span> [room-2 room-1]) =&gt; &#123;<span class="symbol">:room-id</span> <span class="number">1</span> <span class="symbol">:time</span> <span class="string">&quot;17:00-18:00&quot;</span>&#125;</span><br><span class="line">   (<span class="name">the-earliest-available-recommand</span> [room-2 room-3]) =&gt; &#123;<span class="symbol">:room-id</span> <span class="number">2</span> <span class="symbol">:time</span> <span class="string">&quot;18:00-19:00&quot;</span>&#125;</span><br><span class="line">   (<span class="name">the-earliest-available-recommand</span> [room-1 room-2 room-3]) =&gt; &#123;<span class="symbol">:room-id</span> <span class="number">1</span> <span class="symbol">:time</span> <span class="string">&quot;17:00-18:00&quot;</span>&#125;)</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-写实现-2"><a href="#2-写实现-2" class="headerlink" title="2. 写实现"></a>2. 写实现</h4><figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">(<span class="keyword">defn</span> <span class="title">the-earliest-available-recommand</span> [rooms]</span><br><span class="line">  (<span class="name"><span class="built_in">if</span></span> (<span class="name"><span class="built_in">seq</span></span> rooms)</span><br><span class="line">    (<span class="name"><span class="built_in">first</span></span> (<span class="name"><span class="built_in">sort-by</span></span> <span class="symbol">:time</span></span><br><span class="line">                    (<span class="name"><span class="built_in">map</span></span> (<span class="name"><span class="built_in">fn</span></span> [room]</span><br><span class="line">                           (<span class="name"><span class="built_in">let</span></span> [&#123;<span class="symbol">:keys</span> [room-id periods]&#125; room</span><br><span class="line">                                 available-periods (<span class="name"><span class="built_in">filter</span></span> #(#&#123;<span class="symbol">:available</span>&#125; (<span class="symbol">:status</span> %)) periods)]</span><br><span class="line">                             (<span class="name"><span class="built_in">if</span></span> (<span class="name"><span class="built_in">seq</span></span> available-periods)</span><br><span class="line">                               (<span class="name"><span class="built_in">merge</span></span> &#123;<span class="symbol">:room-id</span> room-id&#125;</span><br><span class="line">                                      (<span class="name"><span class="built_in">select-keys</span></span> (<span class="name"><span class="built_in">first</span></span> available-periods) [<span class="symbol">:time</span>]))</span><br><span class="line">                               <span class="symbol">:no-available-room</span>)))</span><br><span class="line">                         rooms)))</span><br><span class="line">    <span class="symbol">:no-available-room</span>))</span><br></pre></td></tr></table></figure>
+<p>到这里，我们开始使用<code>(map )</code>函数处理多个房间的内容。注意，当输入房间是空集合的时候，这里需要相应地做<code>(seq rooms)</code>判空处理，否则会返回nil，而不是我们想要的<code>:no-available-room</code>。</p>
+<h4 id="3-关闭并提交-2"><a href="#3-关闭并提交-2" class="headerlink" title="3. 关闭并提交"></a>3. 关闭并提交</h4><ul>
+<li><input checked="" disabled="" type="checkbox"> 多间澡堂都有可用时间段</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ga .</span><br><span class="line">gcmsg &quot;more than one room&quot;</span><br></pre></td></tr></table></figure>
+
+<h4 id="4-重构"><a href="#4-重构" class="headerlink" title="4. 重构"></a>4. 重构</h4><p>代码写到这里，再不重构就说不过去了。另外，管道没看到，倒是看到一堆括号。<br>我们使用thread last<code>(-&gt;&gt; )</code>做一次重构：</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">(<span class="keyword">defn</span> <span class="title">the-earliest-available-recommand</span> [rooms]</span><br><span class="line">  (<span class="name"><span class="built_in">if</span></span> (<span class="name"><span class="built_in">seq</span></span> rooms)</span><br><span class="line">    (<span class="name"><span class="built_in">-&gt;&gt;</span></span> rooms</span><br><span class="line">         (<span class="name"><span class="built_in">map</span></span> (<span class="name"><span class="built_in">fn</span></span> [room]</span><br><span class="line">                (<span class="name"><span class="built_in">let</span></span> [&#123;<span class="symbol">:keys</span> [room-id periods]&#125; room</span><br><span class="line">                      available-periods (<span class="name"><span class="built_in">filter</span></span> #(#&#123;<span class="symbol">:available</span>&#125; (<span class="symbol">:status</span> %)) periods)]</span><br><span class="line">                  (<span class="name"><span class="built_in">if</span></span> (<span class="name"><span class="built_in">seq</span></span> available-periods)</span><br><span class="line">                    (<span class="name"><span class="built_in">merge</span></span> &#123;<span class="symbol">:room-id</span> room-id&#125;</span><br><span class="line">                           (<span class="name"><span class="built_in">select-keys</span></span> (<span class="name"><span class="built_in">first</span></span> available-periods) [<span class="symbol">:time</span>]))</span><br><span class="line">                    <span class="symbol">:no-available-room</span>))))</span><br><span class="line">         (<span class="name"><span class="built_in">sort-by</span></span> <span class="symbol">:time</span>)</span><br><span class="line">         first)</span><br><span class="line">    <span class="symbol">:no-available-room</span>))</span><br></pre></td></tr></table></figure>
+<p>还行，至少没那么多嵌套了。提交一次。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ga .</span><br><span class="line">gcmsg &quot;[refactor] use macro thread-last -&gt;&gt; to pipe&quot;</span><br></pre></td></tr></table></figure>
+<p>继续重构，使用我们的<code>juxt</code>函数。</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">(<span class="keyword">defn</span> <span class="title">the-earliest-available-recommand</span> [rooms]</span><br><span class="line">  (<span class="name"><span class="built_in">letfn</span></span> [(<span class="name">period</span> [&#123;<span class="symbol">:keys</span> [periods]&#125;]</span><br><span class="line">            (<span class="name"><span class="built_in">-&gt;&gt;</span></span> periods</span><br><span class="line">                 (<span class="name"><span class="built_in">filter</span></span> #(#&#123;<span class="symbol">:available</span>&#125; (<span class="symbol">:status</span> %)))</span><br><span class="line">                 ffirst</span><br><span class="line">                 (#(<span class="name"><span class="built_in">or</span></span> % [<span class="symbol">:time</span> <span class="symbol">::non-available</span>]))))]</span><br><span class="line">    (<span class="name"><span class="built_in">-&gt;&gt;</span></span> rooms</span><br><span class="line">         (<span class="name"><span class="built_in">map</span></span> (<span class="name"><span class="built_in">fn</span></span> [room]</span><br><span class="line">                (<span class="name"><span class="built_in">apply</span></span> conj &#123;&#125; ((<span class="name"><span class="built_in">juxt</span></span> first period) room))))</span><br><span class="line">         (<span class="name"><span class="built_in">remove</span></span> #(#&#123;<span class="symbol">::non-available</span>&#125; (<span class="symbol">:time</span> %)))</span><br><span class="line">         (<span class="name"><span class="built_in">sort-by</span></span> <span class="symbol">:time</span>)</span><br><span class="line">         first</span><br><span class="line">         (#(<span class="name"><span class="built_in">or</span></span> % <span class="symbol">:no-available-room</span>)))))</span><br></pre></td></tr></table></figure>
+<p>看上去还行，不过不爽的是<code>(#(or % [:time ::non-available]))</code>。为了迎合<code>(-&gt;&gt; )</code>宏，我们给<code>(or )</code>包了一层。原因是<code>(-&gt;&gt; )</code>会让前面的结果出现在最后一个参数的位置，而我们需要将结果放到<code>(or )</code>的第一个参数的位置。有没有什么好看的解决方法呢？当然有！我们可以使用<code>(-&gt; )</code>来做到这点。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">(defn the-earliest-available-recommand [rooms]</span><br><span class="line">  (letfn [(period [&#123;:keys [periods]&#125;]</span><br><span class="line">            (-&gt; periods</span><br><span class="line">                (-&gt;&gt; (filter #(#&#123;:available&#125; (:status %)))</span><br><span class="line">                     ffirst)</span><br><span class="line">                (or [:time ::non-available])))]</span><br><span class="line">    (-&gt; rooms</span><br><span class="line">        (-&gt;&gt; (map (fn [room]</span><br><span class="line">                    (apply conj &#123;&#125; ((juxt first period) room))))</span><br><span class="line">             (remove #(#&#123;::non-available&#125; (:time %)))</span><br><span class="line">             (sort-by :time)</span><br><span class="line">             first)</span><br><span class="line">        (or :no-available-room))))</span><br></pre></td></tr></table></figure>
+<p>顿时觉得世界干净了不少。再提交一次。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ga .</span><br><span class="line">gcmsg &quot;[refactor] use juxt to extract needed fields&quot;</span><br></pre></td></tr></table></figure>
+<h3 id="第5个任务"><a href="#第5个任务" class="headerlink" title="第5个任务"></a>第5个任务</h3><ul>
+<li><input disabled="" type="checkbox"> 多间澡堂中有的有可用时间段，有的没有可用时间段</li>
+</ul>
+<h4 id="1-写测试-4"><a href="#1-写测试-4" class="headerlink" title="1. 写测试"></a>1. 写测试</h4><figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">fact</span> <span class="string">&quot;should recommand the earliest available room even if there has non available room&quot;</span></span><br><span class="line">    (<span class="name">the-earliest-available-recommand</span> [room-1 non-available-room]) =&gt; &#123;<span class="symbol">:room-id</span> <span class="number">1</span> <span class="symbol">:time</span> <span class="string">&quot;17:00-18:00&quot;</span>&#125;</span><br><span class="line">    (<span class="name">the-earliest-available-recommand</span> [room-2 non-available-room]) =&gt; &#123;<span class="symbol">:room-id</span> <span class="number">2</span> <span class="symbol">:time</span> <span class="string">&quot;18:00-19:00&quot;</span>&#125;)</span><br></pre></td></tr></table></figure>
+<p>测试直接通过，又可以跳过实现代码了。不过，这也预示着我们的测试是有覆盖的，也需要花时间整理这些测试用例。在那之前，先提交一下。</p>
+<h4 id="2-关闭并提交-1"><a href="#2-关闭并提交-1" class="headerlink" title="2. 关闭并提交"></a>2. 关闭并提交</h4><ul>
+<li><input checked="" disabled="" type="checkbox"> 多间澡堂中有的有可用时间段，有的没有可用时间段</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ga .</span><br><span class="line">gcmsg &quot;mixed non-available and available rooms&quot;</span><br></pre></td></tr></table></figure>
+<h3 id="为第3个任务补上测试用例"><a href="#为第3个任务补上测试用例" class="headerlink" title="为第3个任务补上测试用例"></a>为第3个任务补上测试用例</h3><ul>
+<li><input checked="" disabled="" type="checkbox"> 所有（包含多个）澡堂（包含输入为空）没有可用时间段</li>
+</ul>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">fact</span> <span class="string">&quot;should show `:no-available-room` if there is no available room&quot;</span></span><br><span class="line">   (<span class="name">the-earliest-available-recommand</span> []) =&gt; <span class="symbol">:no-available-room</span></span><br><span class="line">   (<span class="name">the-earliest-available-recommand</span> [non-available-room]) =&gt; <span class="symbol">:no-available-room</span></span><br><span class="line">   (<span class="name">the-earliest-available-recommand</span> [non-available-room non-available-room]) =&gt; <span class="symbol">:no-available-room</span>))</span><br></pre></td></tr></table></figure>
+<p>这里的第3个用例包含第2个用例，我们待会整理掉。不过现在先提交一下。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ga .</span><br><span class="line">gcmsg &quot;multiple non-available rooms&quot;</span><br></pre></td></tr></table></figure>
+<h3 id="整理测试"><a href="#整理测试" class="headerlink" title="整理测试"></a>整理测试</h3><p>在前面进行的任务当中，我们发现有两次没有写实现测试就通过的情况。这说明测试用例是有覆盖的。</p>
+<ul>
+<li>第2个任务的测试用例其实覆盖了第1个任务的测试用例，所以可以直接删去后者；</li>
+<li>第5个任务的测试用例覆盖了第4个任务的部分测试用例，所以可以合并到一起。</li>
+</ul>
+<p>整理下来，最终的测试变成下面这样：</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">facts</span> <span class="string">&quot;about `the-earliest-avaible-period-of-bathroom`&quot;</span></span><br><span class="line">  (<span class="name">fact</span> <span class="string">&quot;should recommand the earliest one if there is only one room with multiple available periods&quot;</span></span><br><span class="line">    (<span class="name">the-earliest-available-recommand</span> [room-3]) =&gt; &#123;<span class="symbol">:room-id</span> <span class="number">3</span> <span class="symbol">:time</span> <span class="string">&quot;18:00-19:00&quot;</span>&#125;)</span><br><span class="line">  </span><br><span class="line">  (<span class="name">fact</span> <span class="string">&quot;should show `:no-available-room` if there is no available room&quot;</span></span><br><span class="line">    (<span class="name">the-earliest-available-recommand</span> []) =&gt; <span class="symbol">:no-available-room</span></span><br><span class="line">    (<span class="name">the-earliest-available-recommand</span> [non-available-room non-available-room]) =&gt; <span class="symbol">:no-available-room</span>)</span><br><span class="line"> </span><br><span class="line">  (<span class="name">fact</span> <span class="string">&quot;should recommand the earliest if there has more than one room and each may have available periods&quot;</span></span><br><span class="line">    (<span class="name">the-earliest-available-recommand</span> [room-1 room-2]) =&gt; &#123;<span class="symbol">:room-id</span> <span class="number">1</span> <span class="symbol">:time</span> <span class="string">&quot;17:00-18:00&quot;</span>&#125;</span><br><span class="line">    (<span class="name">the-earliest-available-recommand</span> [room-2 room-1]) =&gt; &#123;<span class="symbol">:room-id</span> <span class="number">1</span> <span class="symbol">:time</span> <span class="string">&quot;17:00-18:00&quot;</span>&#125;</span><br><span class="line">    (<span class="name">the-earliest-available-recommand</span> [room-2 room-3]) =&gt; &#123;<span class="symbol">:room-id</span> <span class="number">2</span> <span class="symbol">:time</span> <span class="string">&quot;18:00-19:00&quot;</span>&#125;</span><br><span class="line">    (<span class="name">the-earliest-available-recommand</span> [room-1 room-2 room-3]) =&gt; &#123;<span class="symbol">:room-id</span> <span class="number">1</span> <span class="symbol">:time</span> <span class="string">&quot;17:00-18:00&quot;</span>&#125;</span><br><span class="line">    (<span class="name">the-earliest-available-recommand</span> [room-1 non-available-room]) =&gt; &#123;<span class="symbol">:room-id</span> <span class="number">1</span> <span class="symbol">:time</span> <span class="string">&quot;17:00-18:00&quot;</span>&#125;))</span><br></pre></td></tr></table></figure>
+<h3 id="文档"><a href="#文档" class="headerlink" title="文档"></a>文档</h3><blockquote>
+<p>The final goal of any engineering activity is some type of documentation.</p>
+</blockquote>
+<p>更新README.md文件，其中描述程序解决的问题以及运行步骤，当然包含设计思路那更好了。提交一下。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ga .</span><br><span class="line">gcmsg &quot;update readme&quot;</span><br></pre></td></tr></table></figure>
+
+<h3 id="美化代码"><a href="#美化代码" class="headerlink" title="美化代码"></a>美化代码</h3><blockquote>
+<p>代码是诗行 - by lambeta</p>
+</blockquote>
+<h2 id="什么是好看的代码？除了清晰明了，格式也必须产生美感。顺眼不少，最后提交一下。"><a href="#什么是好看的代码？除了清晰明了，格式也必须产生美感。顺眼不少，最后提交一下。" class="headerlink" title="什么是好看的代码？除了清晰明了，格式也必须产生美感。顺眼不少，最后提交一下。"></a>什么是好看的代码？除了清晰明了，格式也必须产生美感。<br><figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">(<span class="keyword">defn</span> <span class="title">the-earliest-available-recommand</span> [rooms]</span><br><span class="line">  (<span class="name"><span class="built_in">letfn</span></span> [(<span class="name">period</span> [&#123;<span class="symbol">:keys</span> [periods]&#125;]</span><br><span class="line">            (<span class="name"><span class="built_in">-&gt;</span></span> periods</span><br><span class="line">                (<span class="name"><span class="built_in">-&gt;&gt;</span></span> (<span class="name"><span class="built_in">filter</span></span> #(#&#123;<span class="symbol">:available</span>&#125; (<span class="symbol">:status</span> %))))</span><br><span class="line">                (<span class="name"><span class="built_in">ffirst</span></span>) <span class="comment">; 统一套上括号</span></span><br><span class="line">                (<span class="name"><span class="built_in">or</span></span> [<span class="symbol">:time</span> <span class="symbol">::non-available</span>])))]</span><br><span class="line">    (<span class="name"><span class="built_in">-&gt;</span></span> rooms</span><br><span class="line">        (<span class="name"><span class="built_in">-&gt;&gt;</span></span> (<span class="name"><span class="built_in">map</span></span> (<span class="name"><span class="built_in">juxt</span></span> first period))</span><br><span class="line">             (<span class="name"><span class="built_in">map</span></span> #(<span class="name"><span class="built_in">into</span></span> &#123;&#125; %)) <span class="comment">; 合并单独提出来</span></span><br><span class="line">             (<span class="name"><span class="built_in">remove</span></span> #(#&#123;<span class="symbol">::non-available</span>&#125; (<span class="symbol">:time</span> %)))</span><br><span class="line">             (<span class="name"><span class="built_in">sort-by</span></span> <span class="symbol">:time</span>)</span><br><span class="line">             (<span class="name"><span class="built_in">first</span></span>)) <span class="comment">; 统一套上括号</span></span><br><span class="line">        (<span class="name"><span class="built_in">or</span></span> <span class="symbol">:no-available-room</span>))))</span><br></pre></td></tr></table></figure><br>顺眼不少，最后提交一下。<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ga .</span><br><span class="line">gcmsg &quot;[refactor] beautify pipe format&quot;</span><br></pre></td></tr></table></figure></h2><p>这篇文章发出来一天，TDD讨论群的一位麦姓朋友@我道：</p>
+<blockquote>
+<p>core&#x3D;&gt; (first {:a 1 :b 2})<br>[:a 1]<br>core&#x3D;&gt; (first {:b 2 :a 1})<br>[:b 2]<br>@lambeta map的元素应该是无序的，用first来获得key value pair是不可靠的。</p>
+</blockquote>
+<p>看到这个建议的时候，我心里一阵欣喜——又有一员<em>Clojurians</em>，可以切磋技艺了！冷静下来，发现自己确实忽略了map中的entries可能是无序的。所以我做了如下的验证：</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="built_in">type</span></span> &#123;&#125;)</span><br><span class="line">-&gt; clojure.lang.PersistentArrayMap</span><br></pre></td></tr></table></figure>
+<p>看到<code>PersistentArrayMap</code>的时候，我明白这些entries是保持插入顺序的，也就是说，<code>(first &#123;:a 1 :b 2&#125;)</code>的求值结果一定是<code>[:a 1]</code>。照这个思路，在我的程序当中使用<code>(first )</code>取map的第一个元素并不会出错。不过，本着谨慎的心态，我查了一下clojure的<a target="_blank" rel="noopener" href="https://clojuredocs.org/clojure.core/array-map">array-map</a>，发现一个有趣的例子：</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="keyword">defn</span> <span class="title">make-map</span> [count] (<span class="name"><span class="built_in">zipmap</span></span> (<span class="name"><span class="built_in">range</span></span> count) (<span class="name"><span class="built_in">range</span></span> count)))</span><br><span class="line">(<span class="name"><span class="built_in">type</span></span> (<span class="name">make-map</span> <span class="number">9</span>))</span><br><span class="line"><span class="comment">;; =&gt; clojure.lang.PersistentArrayMap</span></span><br><span class="line">(<span class="name"><span class="built_in">type</span></span> (<span class="name">make-map</span> <span class="number">10</span>))</span><br><span class="line"><span class="comment">;; =&gt; clojure.lang.PersistentHashMap</span></span><br></pre></td></tr></table></figure>
+<p>这表明当map中的entries数量超过一定数量（不一定是9，例外见：<a target="_blank" rel="noopener" href="http://dev.clojure.org/jira/browse/CLJ-1587">PersistentArrayMap’s assoc doesn’t respect HASHTABLE_THRESHOLD</a>）时，<code>PersistentArrayMap</code>就变成了<code>PersistentHashMap</code>，那也就意味着，<code>(first )</code>取出来的值可能是<em>随机的</em>。举个例子：</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="built_in">first</span></span> &#123;<span class="number">7</span> <span class="number">7</span><span class="punctuation">,</span> <span class="number">1</span> <span class="number">1</span><span class="punctuation">,</span> <span class="number">4</span> <span class="number">4</span><span class="punctuation">,</span> <span class="number">6</span> <span class="number">6</span><span class="punctuation">,</span> <span class="number">3</span> <span class="number">3</span><span class="punctuation">,</span> <span class="number">2</span> <span class="number">2</span><span class="punctuation">,</span> <span class="number">9</span> <span class="number">9</span><span class="punctuation">,</span> <span class="number">0</span> <span class="number">0</span><span class="punctuation">,</span> <span class="number">8</span> <span class="number">8</span><span class="punctuation">,</span> <span class="number">5</span> <span class="number">5</span>&#125;)</span><br><span class="line">-&gt; [<span class="number">0</span> <span class="number">0</span>]</span><br></pre></td></tr></table></figure>
+<p>返回的结果并不是相当然的<code>[7 7]</code>，而是<code>[0 0]</code>。那么<code>(first )</code>到底干了些什么呢？Cognitect公司的<a target="_blank" rel="noopener" href="https://github.com/puredanger">alexmiller</a>回答我说：<code>(first )</code>会把它的参数强制转换（coerce）成了一个序列，然后取第一个值。我们试着用<code>(seq )</code>转换一下：</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="built_in">type</span></span> &#123; <span class="number">7</span> <span class="number">7</span><span class="punctuation">,</span> <span class="number">1</span> <span class="number">1</span><span class="punctuation">,</span> <span class="number">4</span> <span class="number">4</span><span class="punctuation">,</span> <span class="number">6</span> <span class="number">6</span><span class="punctuation">,</span> <span class="number">3</span> <span class="number">3</span><span class="punctuation">,</span> <span class="number">2</span> <span class="number">2</span><span class="punctuation">,</span> <span class="number">9</span> <span class="number">9</span><span class="punctuation">,</span> <span class="number">0</span> <span class="number">0</span><span class="punctuation">,</span> <span class="number">8</span> <span class="number">8</span><span class="punctuation">,</span> <span class="number">5</span> <span class="number">5</span>&#125;)</span><br><span class="line">-&gt; clojure.lang.PersistentHashMap</span><br><span class="line">(<span class="name"><span class="built_in">seq</span></span> &#123; <span class="number">7</span> <span class="number">7</span><span class="punctuation">,</span> <span class="number">1</span> <span class="number">1</span><span class="punctuation">,</span> <span class="number">4</span> <span class="number">4</span><span class="punctuation">,</span> <span class="number">6</span> <span class="number">6</span><span class="punctuation">,</span> <span class="number">3</span> <span class="number">3</span><span class="punctuation">,</span> <span class="number">2</span> <span class="number">2</span><span class="punctuation">,</span> <span class="number">9</span> <span class="number">9</span><span class="punctuation">,</span> <span class="number">0</span> <span class="number">0</span><span class="punctuation">,</span> <span class="number">8</span> <span class="number">8</span><span class="punctuation">,</span> <span class="number">5</span> <span class="number">5</span>&#125;)</span><br><span class="line">-&gt; ([<span class="number">0</span> <span class="number">0</span>] [<span class="number">7</span> <span class="number">7</span>] [<span class="number">1</span> <span class="number">1</span>] [<span class="number">4</span> <span class="number">4</span>] [<span class="number">6</span> <span class="number">6</span>] [<span class="number">3</span> <span class="number">3</span>] [<span class="number">2</span> <span class="number">2</span>] [<span class="number">9</span> <span class="number">9</span>] [<span class="number">8</span> <span class="number">8</span>])</span><br></pre></td></tr></table></figure>
+<p>果然，<code>[0 0]</code>出现在序列的首位。至于为什么是这样的顺序，需要深入<em>Clojure</em>的hash算法和数据结构当中，有时间另起一篇博客解释。我们再试试<code>PersistentArrayMap</code>的情况：</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="built_in">type</span></span> &#123; <span class="number">7</span> <span class="number">7</span><span class="punctuation">,</span> <span class="number">1</span> <span class="number">1</span><span class="punctuation">,</span> <span class="number">4</span> <span class="number">4</span><span class="punctuation">,</span> <span class="number">6</span> <span class="number">6</span><span class="punctuation">,</span> <span class="number">3</span> <span class="number">3</span><span class="punctuation">,</span> <span class="number">2</span> <span class="number">2</span><span class="punctuation">,</span> <span class="number">9</span> <span class="number">9</span><span class="punctuation">,</span> <span class="number">0</span> <span class="number">0</span>&#125;)</span><br><span class="line">-&gt; clojure.lang.PersistentArrayMap</span><br><span class="line">(<span class="name"><span class="built_in">seq</span></span> &#123; <span class="number">7</span> <span class="number">7</span><span class="punctuation">,</span> <span class="number">1</span> <span class="number">1</span><span class="punctuation">,</span> <span class="number">4</span> <span class="number">4</span><span class="punctuation">,</span> <span class="number">6</span> <span class="number">6</span><span class="punctuation">,</span> <span class="number">3</span> <span class="number">3</span><span class="punctuation">,</span> <span class="number">2</span> <span class="number">2</span><span class="punctuation">,</span> <span class="number">9</span> <span class="number">9</span><span class="punctuation">,</span> <span class="number">0</span> <span class="number">0</span>&#125;)</span><br><span class="line">-&gt; ([<span class="number">7</span> <span class="number">7</span>] [<span class="number">1</span> <span class="number">1</span>] [<span class="number">4</span> <span class="number">4</span>] [<span class="number">6</span> <span class="number">6</span>] [<span class="number">3</span> <span class="number">3</span>] [<span class="number">2</span> <span class="number">2</span>] [<span class="number">9</span> <span class="number">9</span>] [<span class="number">0</span> <span class="number">0</span>])</span><br></pre></td></tr></table></figure>
+<p>顺序确实和原来的一致。</p>
+<p>我们的程序当中是不应该假设map是有序的，所以需要修改实现代码。</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">(<span class="keyword">defn</span> <span class="title">the-earliest-available-recommand</span> [rooms]</span><br><span class="line">  (<span class="name"><span class="built_in">letfn</span></span> [(<span class="name">period</span> [&#123;<span class="symbol">:keys</span> [periods]&#125;]</span><br><span class="line">            (<span class="name"><span class="built_in">-&gt;</span></span> periods</span><br><span class="line">                (<span class="name"><span class="built_in">-&gt;&gt;</span></span> (<span class="name"><span class="built_in">filter</span></span> (<span class="name"><span class="built_in">comp</span></span> #&#123;<span class="symbol">:available</span>&#125; <span class="symbol">:status</span>)))</span><br><span class="line">                (<span class="name"><span class="built_in">first</span></span>)</span><br><span class="line">                (<span class="name"><span class="built_in">find</span></span> <span class="symbol">:time</span>)))</span><br><span class="line">          (<span class="name">room-id</span> [room]</span><br><span class="line">            (<span class="name"><span class="built_in">find</span></span> room <span class="symbol">:room-id</span>))]</span><br><span class="line">    (<span class="name"><span class="built_in">-&gt;</span></span> rooms</span><br><span class="line">        (<span class="name"><span class="built_in">-&gt;&gt;</span></span> (<span class="name"><span class="built_in">map</span></span> (<span class="name"><span class="built_in">comp</span></span> (<span class="name"><span class="built_in">partial</span></span> into &#123;&#125;) (<span class="name"><span class="built_in">juxt</span></span> room-id period)))</span><br><span class="line">             (<span class="name"><span class="built_in">filter</span></span> <span class="symbol">:time</span>)</span><br><span class="line">             (<span class="name"><span class="built_in">sort-by</span></span> <span class="symbol">:time</span>)</span><br><span class="line">             (<span class="name"><span class="built_in">first</span></span>))</span><br><span class="line">        (<span class="name"><span class="built_in">or</span></span> <span class="symbol">:no-available-room</span>))))</span><br></pre></td></tr></table></figure>
+<p><code>(find )</code>函数，用于从map中获取包含该键值的entry，如果找不到，返回nil。这样就避免了潜在无序的entries对程序的干扰。另外，<code>(partial into &#123;&#125;)</code>和<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Currying">Currying</a>很像，它通过接收<code>into</code>函数及其首个参数，构造出一个接收后续参数的函数。当然也可以直接使用<code>#(into &#123;&#125; %)</code>这样的形式。</p>
+<p>下面是麦姓朋友的另一种解法，和我的解法思路不完全一样，值得学习借鉴。</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">(<span class="keyword">defn</span> <span class="title">the-earliest-available-recommand</span> [rooms]</span><br><span class="line">  (<span class="name"><span class="built_in">letfn</span></span> [(<span class="name">earliest-available-time</span> [periods]</span><br><span class="line">            (<span class="name"><span class="built_in">-&gt;&gt;</span></span> periods</span><br><span class="line">                 (<span class="name"><span class="built_in">filter</span></span> (<span class="name"><span class="built_in">comp</span></span> #&#123;<span class="symbol">:available</span>&#125; <span class="symbol">:status</span>))</span><br><span class="line">                 (<span class="name"><span class="built_in">map</span></span> <span class="symbol">:time</span>)</span><br><span class="line">                 (<span class="name"><span class="built_in">sort</span></span>)</span><br><span class="line">                 (<span class="name"><span class="built_in">first</span></span>)))]</span><br><span class="line">    (<span class="name">rename-keys</span></span><br><span class="line">     (<span class="name"><span class="built_in">-&gt;&gt;</span></span> rooms</span><br><span class="line">          (<span class="name"><span class="built_in">map</span></span> #(<span class="name"><span class="built_in">update-in</span></span> % [<span class="symbol">:periods</span>] earliest-available-time))</span><br><span class="line">          (<span class="name"><span class="built_in">filter</span></span> <span class="symbol">:periods</span>)</span><br><span class="line">          (<span class="name"><span class="built_in">sort-by</span></span> <span class="symbol">:periods</span>)</span><br><span class="line">          (<span class="name"><span class="built_in">first</span></span>))</span><br><span class="line">     &#123;<span class="symbol">:periods</span> <span class="symbol">:time</span>&#125;)))</span><br></pre></td></tr></table></figure>
+<p>真诚欢迎大家继续点评。</p>
+<hr>
+<p><a target="_blank" rel="noopener" href="https://github.com/qianyan/kata-bathroom/">本文样例</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/kata/" rel="tag"># kata</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2016/09/04/2016-09-04-Reading-and-Writing-Files/" rel="prev" title="Reading and Writing Files">
+                  <i class="fa fa-angle-left"></i> Reading and Writing Files
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2016/11/04/2016-11-04-Generative-Testing/" rel="next" title="Generative Testing">
+                  Generative Testing <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Qian Yan</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

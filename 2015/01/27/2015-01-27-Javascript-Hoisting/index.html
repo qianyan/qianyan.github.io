@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.2.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"qianyan.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="编程过程中，别人谈到Javascript中的funcation是顺序执行的，所以书写的顺序要留心，不然会出未定义就执行的错误。当然，C语言出身的程序员不以为意，会认为理所当然，C语言就是这么干的。但Javascript并非如此！ ints.js12345678910function ints(arrOfNumberStr) &#123;	return arrOfNumberStr.map(toIn">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Javascript Hoisting">
+<meta property="og:url" content="https://qianyan.github.io/2015/01/27/2015-01-27-Javascript-Hoisting/index.html">
+<meta property="og:site_name" content="λ">
+<meta property="og:description" content="编程过程中，别人谈到Javascript中的funcation是顺序执行的，所以书写的顺序要留心，不然会出未定义就执行的错误。当然，C语言出身的程序员不以为意，会认为理所当然，C语言就是这么干的。但Javascript并非如此！ ints.js12345678910function ints(arrOfNumberStr) &#123;	return arrOfNumberStr.map(toIn">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2015-01-27T14:47:12.000Z">
+<meta property="article:modified_time" content="2017-10-23T11:35:24.000Z">
+<meta property="article:author" content="Qian Yan">
+<meta property="article:tag" content="javascript">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://qianyan.github.io/2015/01/27/2015-01-27-Javascript-Hoisting/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://qianyan.github.io/2015/01/27/2015-01-27-Javascript-Hoisting/","path":"2015/01/27/2015-01-27-Javascript-Hoisting/","title":"Javascript Hoisting"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Javascript Hoisting | λ</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">λ</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">(conj clojurians me)</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%80%98use-strict%E2%80%99-%E5%8F%AF%E4%BB%A5%E9%98%B2%E6%AD%A2-only-reference-hoisting"><span class="nav-number">1.</span> <span class="nav-text">‘use strict’ 可以防止 only reference hoisting?</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%98%E5%85%88%E4%BD%BF%E7%94%A8function-declaration"><span class="nav-number">2.</span> <span class="nav-text">优先使用function declaration</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Qian Yan</p>
+  <div class="site-description" itemprop="description">Elegance and familiarity are orthogonal</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">76</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">41</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://qianyan.github.io/2015/01/27/2015-01-27-Javascript-Hoisting/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Qian Yan">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="λ">
+      <meta itemprop="description" content="Elegance and familiarity are orthogonal">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Javascript Hoisting | λ">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Javascript Hoisting
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2015-01-27 22:47:12" itemprop="dateCreated datePublished" datetime="2015-01-27T22:47:12+08:00">2015-01-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2017-10-23 19:35:24" itemprop="dateModified" datetime="2017-10-23T19:35:24+08:00">2017-10-23</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%8A%80%E6%9C%AF/" itemprop="url" rel="index"><span itemprop="name">技术</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>编程过程中，别人谈到Javascript中的funcation是顺序执行的，所以书写的顺序要留心，不然会出未定义就执行的错误。当然，C语言出身的程序员不以为意，会认为理所当然，C语言就是这么干的。但Javascript并非如此！</p>
+<figure class="highlight javascript"><figcaption><span>ints.js</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">ints</span>(<span class="params">arrOfNumberStr</span>) &#123;</span><br><span class="line">	<span class="keyword">return</span> arrOfNumberStr.<span class="title function_">map</span>(toInt);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">function</span> <span class="title function_">toInt</span>(<span class="params">str</span>) &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="built_in">parseInt</span>(str, <span class="number">10</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title function_">ints</span>([<span class="string">&#x27;11&#x27;</span>, <span class="string">&#x27;11&#x27;</span>, <span class="string">&#x27;11&#x27;</span>]);</span><br><span class="line">-&gt; [<span class="number">11</span>, <span class="number">11</span>, <span class="number">11</span>]</span><br></pre></td></tr></table></figure>
+<p>从执行结果上来看，先调用后执行时正确的。但是JS是解析执行的，如果没有预先定义，执行到调用处必然会失败，那么为什么这段代码可以工作呢？</p>
+<p>先看一段略做修改之后的代码</p>
+<figure class="highlight javascript"><figcaption><span>ints_fail.js</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">ints</span>(<span class="params">arrOfNumberStr</span>) &#123;</span><br><span class="line">	<span class="keyword">return</span> arrOfNumberStr.<span class="title function_">map</span>(toInt);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">var</span> toInt = <span class="keyword">function</span>(<span class="params">str</span>) &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="built_in">parseInt</span>(str, <span class="number">10</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title function_">ints</span>([<span class="string">&#x27;11&#x27;</span>, <span class="string">&#x27;11&#x27;</span>, <span class="string">&#x27;11&#x27;</span>]);</span><br><span class="line">-&gt; <span class="title class_">TypeError</span>: <span class="literal">undefined</span> is not a <span class="keyword">function</span></span><br></pre></td></tr></table></figure>
+<p>执行结果失败了。回头看这两段代码的定义，不难发现程序对于<code>toInt</code>的定义方式有差别，一种用常规的函数定义方式，一种使用<strong>var</strong>定义。</p>
+<p>接着再看一段代码</p>
+<figure class="highlight javascript"><figcaption><span>variables.js</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">loop</span>(<span class="params">n</span>) &#123;</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">0</span>; i&lt;n; i++);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> i;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title function_">loop</span>(<span class="number">10</span>);</span><br><span class="line">-&gt; <span class="number">10</span></span><br></pre></td></tr></table></figure>
+<p>估计学习C语言的人开始惊讶了：这个<code>i</code>的作用域不是应该只在<code>for loop</code>中吗？</p>
+<p>那么到底是什么原因造成的呢？这就是Javascript Hoisting！简单解释，声明提升到作用域的最前面。</p>
+<p>接上面的<em>variable.js</em></p>
+<figure class="highlight javascript"><figcaption><span>variables_hoisting.js</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">loop</span>(<span class="params">n</span>) &#123;</span><br><span class="line">	<span class="keyword">var</span> i;</span><br><span class="line">	<span class="keyword">for</span>(i=<span class="number">0</span>; i&lt;n; i++);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> i;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这和原来的写法是等价的，所以<code>i</code>的作用域在整个<code>function</code>中都是有效的。依次类推，<em>init_fail.js</em>中的<code>var toInt</code>这样的函数声明也会被提升到作用域的最上方，但是只是声明被提升了，真正赋值还是在后面，所以此时调用该函数，它还是<code>undefined</code>。</p>
+<p>但是对于<em>init.js</em>而言，它的声明方式会将整个函数都提升，所以它是先于调用方赋值初始化的，所以能工作。</p>
+<h3 id="‘use-strict’-可以防止-only-reference-hoisting"><a href="#‘use-strict’-可以防止-only-reference-hoisting" class="headerlink" title="‘use strict’ 可以防止 only reference hoisting?"></a>‘use strict’ 可以防止 only reference hoisting?</h3><hr>
+<p>如果变量未声明，<strong>use strict</strong>模式下赋值会报错。</p>
+<figure class="highlight javascript"><figcaption><span>use_strict.js</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="keyword">function</span>(<span class="params"></span>)&#123;</span><br><span class="line">    <span class="string">&#x27;use strict&#x27;</span>;</span><br><span class="line">    <span class="keyword">var</span> foo = <span class="number">123</span>;<span class="comment">//works fine</span></span><br><span class="line">    bar = <span class="number">345</span>;<span class="comment">//ReferenceError: bar is not defined</span></span><br><span class="line">&#125;());</span><br></pre></td></tr></table></figure>
+<p>如果在以前例子中使用<strong>use strict</strong>，并不能提前报出<code>toInt</code>未赋值的错误。直到运行期间，才会发现<code>toInt</code>依然<code>undefined</code>。</p>
+<figure class="highlight javascript"><figcaption><span>use_strict_for_hoisting.js</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">(<span class="keyword">function</span> <span class="title function_">ints</span>(<span class="params">arrOfNumberStr</span>) &#123;</span><br><span class="line">	<span class="string">&#x27;use strict&#x27;</span>;</span><br><span class="line">	<span class="keyword">return</span> arrOfNumberStr.<span class="title function_">map</span>(toInt);</span><br><span class="line">	<span class="keyword">var</span> toInt = <span class="keyword">function</span>(<span class="params">str</span>) &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="built_in">parseInt</span>(str, <span class="number">10</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;)([<span class="string">&#x27;11&#x27;</span>, <span class="string">&#x27;11&#x27;</span>]);</span><br><span class="line">-&gt; <span class="title class_">Uncaught</span> <span class="title class_">TypeError</span>: <span class="literal">undefined</span> is not a <span class="keyword">function</span>(<span class="params">…</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="优先使用function-declaration"><a href="#优先使用function-declaration" class="headerlink" title="优先使用function declaration"></a>优先使用function declaration</h3><hr>
+<blockquote>
+<p>Why? Function declarations are named, so they’re easier to identify in call stacks. Also, the whole body of a function declaration is hoisted, whereas only the reference of a function expression is hoisted. This rule makes it possible to always use Arrow Functions in place of function expressions. – from <a target="_blank" rel="noopener" href="https://github.com/airbnb/javascript#functions">javascript style guide</a></p>
+</blockquote>
+<p>下篇会记录Javascript的<a target="_blank" rel="noopener" href="http://lambeta.com/2015/01/30/Javascript-Scope/">作用域</a>，<code>Global Scope, Lexical Scope, Dynamic Scope, Function Scope</code></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/javascript/" rel="tag"># javascript</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2015/01/27/2015-01-27-Javascript-Modularize-2nd/" rel="prev" title="Javascript Modularize 2nd">
+                  <i class="fa fa-angle-left"></i> Javascript Modularize 2nd
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2015/01/28/2015-01-28-Javascript-Reference/" rel="next" title="Javascript Reference">
+                  Javascript Reference <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Qian Yan</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

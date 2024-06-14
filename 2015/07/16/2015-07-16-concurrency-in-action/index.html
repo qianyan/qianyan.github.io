@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.2.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"qianyan.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="什么是竞态条件？  tips: The situation where two threads compete for the same resource, where the sequence in which the resource is accessed is significant, is called race conditions. A code section that leads">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Concurrency in action">
+<meta property="og:url" content="https://qianyan.github.io/2015/07/16/2015-07-16-concurrency-in-action/index.html">
+<meta property="og:site_name" content="λ">
+<meta property="og:description" content="什么是竞态条件？  tips: The situation where two threads compete for the same resource, where the sequence in which the resource is accessed is significant, is called race conditions. A code section that leads">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2015-07-16T00:25:58.000Z">
+<meta property="article:modified_time" content="2016-09-06T14:58:32.000Z">
+<meta property="article:author" content="Qian Yan">
+<meta property="article:tag" content="concurrency">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://qianyan.github.io/2015/07/16/2015-07-16-concurrency-in-action/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://qianyan.github.io/2015/07/16/2015-07-16-concurrency-in-action/","path":"2015/07/16/2015-07-16-concurrency-in-action/","title":"Concurrency in action"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Concurrency in action | λ</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">λ</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">(conj clojurians me)</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E7%AB%9E%E6%80%81%E6%9D%A1%E4%BB%B6%EF%BC%9F"><span class="nav-number">1.</span> <span class="nav-text">什么是竞态条件？</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%80%E4%B8%AA%E4%B8%B4%E7%95%8C%E5%8C%BA%E7%9A%84%E4%BE%8B%E5%AD%90%EF%BC%9A"><span class="nav-number">1.1.</span> <span class="nav-text">一个临界区的例子：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%EF%BC%9F"><span class="nav-number">2.</span> <span class="nav-text">什么是线程安全？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%AF%E8%A7%81%E6%80%A7%E5%92%8C%E7%AB%9E%E6%80%81%E6%9D%A1%E4%BB%B6%E7%9A%84%E5%85%B3%E7%B3%BB%EF%BC%9F"><span class="nav-number">3.</span> <span class="nav-text">可见性和竞态条件的关系？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%AF%E8%A7%81%E6%80%A7%E5%92%8C%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E7%9A%84%E5%85%B3%E7%B3%BB%EF%BC%9F"><span class="nav-number">4.</span> <span class="nav-text">可见性和线程安全的关系？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AB%9E%E6%80%81%E6%9D%A1%E4%BB%B6%E5%92%8C%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E7%9A%84%E5%85%B3%E7%B3%BB%EF%BC%9F"><span class="nav-number">5.</span> <span class="nav-text">竞态条件和线程安全的关系？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%AF%B4%E8%B7%A8%E8%B6%8A%E5%86%85%E5%AD%98%E6%A0%85%E6%A0%8F%EF%BC%88%E5%8F%AF%E8%A7%81%E6%80%A7%EF%BC%89%E5%92%8C%E9%81%BF%E5%85%8D%E7%AB%9E%E6%80%81%E6%9D%A1%E4%BB%B6%E6%98%AF%E5%90%8C%E6%AD%A5%E7%9B%B8%E5%85%B3%E7%9A%84%E4%B8%A4%E5%A4%A7%E4%B8%BB%E8%A6%81%E9%97%AE%E9%A2%98%EF%BC%9F"><span class="nav-number">6.</span> <span class="nav-text">为什么说跨越内存栅栏（可见性）和避免竞态条件是同步相关的两大主要问题？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9B%B8%E5%85%B3%E6%9C%AF%E8%AF%AD"><span class="nav-number">7.</span> <span class="nav-text">相关术语</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Qian Yan</p>
+  <div class="site-description" itemprop="description">Elegance and familiarity are orthogonal</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">76</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">41</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://qianyan.github.io/2015/07/16/2015-07-16-concurrency-in-action/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Qian Yan">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="λ">
+      <meta itemprop="description" content="Elegance and familiarity are orthogonal">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Concurrency in action | λ">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Concurrency in action
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2015-07-16 08:25:58" itemprop="dateCreated datePublished" datetime="2015-07-16T08:25:58+08:00">2015-07-16</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2016-09-06 22:58:32" itemprop="dateModified" datetime="2016-09-06T22:58:32+08:00">2016-09-06</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%8A%80%E6%9C%AF/" itemprop="url" rel="index"><span itemprop="name">技术</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h3 id="什么是竞态条件？"><a href="#什么是竞态条件？" class="headerlink" title="什么是竞态条件？"></a>什么是竞态条件？</h3><hr>
+<blockquote>
+<p><strong>tips</strong>: The situation where two threads compete for the same resource, where the sequence in which the resource is accessed is significant, is called race conditions. A code section that leads to race conditions is called a critical section. In the below example the method add() is a critical section, leading to race conditions. Race conditions can be avoided by proper thread synchronization in critical sections.<br>两个线程竞争同一个资源，而该资源的访问顺序十分重要的情况就被称为竞态条件。导致竞态条件的代码区就被称为临界区。下面的例子中的add()方法就是一个导致竞态条件的临界区。临界区上合适的线程同步能避免竞态条件。<br>Race conditions arise in software when an application depends on the sequence or timing of processes or threads for it to operate properly.<br>race conditions often happen when the processes or threads depend on some shared state.<br>软件里的竞态条件发生在一个应用程序依赖进程或者线程的执行顺序和时间以确保该程序执行正确的时候。竞态条件总是发生在进程或线程依赖某些共享资源的时候。</p>
+</blockquote>
+<h4 id="一个临界区的例子："><a href="#一个临界区的例子：" class="headerlink" title="一个临界区的例子："></a>一个临界区的例子：</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">public class Counter &#123;</span><br><span class="line">    protected long count = 0;</span><br><span class="line"></span><br><span class="line">    public void add(long value)&#123;</span><br><span class="line">        this.count = this.count + value;</span><br><span class="line">    &#125;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<h3 id="什么是线程安全？"><a href="#什么是线程安全？" class="headerlink" title="什么是线程安全？"></a>什么是线程安全？</h3><hr>
+<blockquote>
+<p><strong>tips</strong>: Code that is safe to call by multiple threads simultanously is called thread safe. If a piece of code is thread safe, then it contains no race conditions.<br>能被多个线程同时安全地调用的代码就是线程安全。如果一段代码是安全的，那么它就不存在竞态条件。</p>
+</blockquote>
+<ul>
+<li>Thread safe: Implementation is guaranteed to be free of race conditions when accessed by multiple threads simultaneously.</li>
+<li>Conditionally safe: Different threads can access different objects simultaneously, and access to shared data is protected from race conditions.</li>
+<li>Not thread safe: Code should not be accessed simultaneously by different threads.<blockquote>
+</blockquote>
+</li>
+<li>线程安全：实现以保证多个线程同时访问不存在竞态条件</li>
+<li>条件安全：不同的线程可以同时访问不同的对象，且在访问共享资源时保护以免于竞态条件</li>
+<li>非线程安全：代码不能被多个线程同时访问</li>
+</ul>
+<h3 id="可见性和竞态条件的关系？"><a href="#可见性和竞态条件的关系？" class="headerlink" title="可见性和竞态条件的关系？"></a>可见性和竞态条件的关系？</h3><hr>
+<blockquote>
+<p>如果存在竞态条件，那么就必须保证变量的可见性</p>
+</blockquote>
+<h3 id="可见性和线程安全的关系？"><a href="#可见性和线程安全的关系？" class="headerlink" title="可见性和线程安全的关系？"></a>可见性和线程安全的关系？</h3><hr>
+<blockquote>
+<p>严格意义上，线程安全其实是相对于非线程安全的，即包含了线程安全和条件安全两部分。</p>
+</blockquote>
+<p>Below we discuss two approaches for avoiding race conditions to achieve thread safety.</p>
+<blockquote>
+</blockquote>
+<p>The first class of approaches focuses on avoiding shared state, and includes:<br>也就是纯粹的线程安全。</p>
+<blockquote>
+</blockquote>
+<ul>
+<li>Re-entrancy<br>  Writing code in such a way that it can be partially executed by a thread, reexecuted by the same thread or simultaneously executed by another thread and still correctly complete the original execution. This requires the saving of state information in variables local to each execution, usually on a stack, instead of in static or global variables or other non-local state. All non-local state must be accessed through atomic operations and the data-structures must also be reentrant.</li>
+<li>Thread-local storage<br>  Variables are localized so that each thread has its own private copy. These variables retain their values across subroutine and other code boundaries, and are thread-safe since they are local to each thread, even though the code which accesses them might be executed simultaneously by another thread.<blockquote>
+</blockquote>
+The second class of approaches are synchronization-related, and are used in situations where shared state cannot be avoided:<br>也就是条件安全部分。<blockquote>
+</blockquote>
+</li>
+<li>Mutual exclusion<br>  Access to shared data is serialized using mechanisms that ensure only one thread reads or writes to the shared data at any time. Incorporation of mutual exclusion needs to be well thought out, since improper usage can lead to side-effects like deadlocks, livelocks and resource starvation.</li>
+<li>Atomic operations<br>  Shared data are accessed by using atomic operations which cannot be interrupted by other threads. This usually requires using special machine language instructions, which might be available in a runtime library. Since the operations are atomic, the shared data are always kept in a valid state, no matter how other threads access it. Atomic operations form the basis of many thread locking mechanisms, and are used to implement mutual exclusion primitives.</li>
+<li>Immutable objects<br>  The state of an object cannot be changed after construction. This implies both that only read-only data is shared and that inherent thread safety is attained. Mutable (non-const) operations can then be implemented in such a way that they create new objects instead of modifying existing ones. This approach is used by the string implementations in Java, C# and Python.<blockquote>
+<p>所以可见性只是针对于条件安全部分而言的。</p>
+</blockquote>
+</li>
+</ul>
+<h3 id="竞态条件和线程安全的关系？"><a href="#竞态条件和线程安全的关系？" class="headerlink" title="竞态条件和线程安全的关系？"></a>竞态条件和线程安全的关系？</h3><hr>
+<blockquote>
+<p>避免竞态条件以获得线程安全。换句话说，避免竞态条件是线程安全的充要条件。</p>
+</blockquote>
+<h3 id="为什么说跨越内存栅栏（可见性）和避免竞态条件是同步相关的两大主要问题？"><a href="#为什么说跨越内存栅栏（可见性）和避免竞态条件是同步相关的两大主要问题？" class="headerlink" title="为什么说跨越内存栅栏（可见性）和避免竞态条件是同步相关的两大主要问题？"></a>为什么说跨越内存栅栏（可见性）和避免竞态条件是同步相关的两大主要问题？</h3><hr>
+<blockquote>
+<p>跨越内存栅栏（可见性）是应对竞态条件的一种方式，出现竞态条件必须确保可见性。举个例子：一个写线程写完之后，要保证所做更改对其它线程可见，否则会让其它线程读到脏数据。<br>避免竞态条件的方式有很多种，包括上述的线程安全的各种手段。</p>
+</blockquote>
+<h3 id="相关术语"><a href="#相关术语" class="headerlink" title="相关术语"></a>相关术语</h3><hr>
+<blockquote>
+<ol>
+<li>livelock（活锁）：请求一个锁的时候不断失败。</li>
+<li>starvation（饿死）：无法定期访问共享资源来执行，发生在某个线程长期霸占共享资源的时候。</li>
+</ol>
+<ul>
+<li>Starvation<br>Starvation describes a situation where a thread is unable to gain regular access to shared resources and is unable to make progress. This happens when shared resources are made unavailable for long periods by “greedy” threads. For example, suppose an object provides a synchronized method that often takes a long time to return. If one thread invokes this method frequently, other threads that also need frequent synchronized access to the same object will often be blocked.</li>
+</ul>
+</blockquote>
+<ul>
+<li>Livelock<br>A thread often acts in response to the action of another thread. If the other thread’s action is also a response to the action of another thread, then livelock may result. As with deadlock, livelocked threads are unable to make further progress. However, the threads are not blocked — they are simply too busy responding to each other to resume work. This is comparable to two people attempting to pass each other in a corridor: Alphonse moves to his left to let Gaston pass, while Gaston moves to his right to let Alphonse pass. Seeing that they are still blocking each other, Alphone moves to his right, while Gaston moves to his left. They’re still blocking each other, so…</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/concurrency/" rel="tag"># concurrency</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2015/06/21/2015-06-21-you-said/" rel="prev" title="你说">
+                  <i class="fa fa-angle-left"></i> 你说
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2015/07/18/2015-07-18-transaction/" rel="next" title="Transaction">
+                  Transaction <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Qian Yan</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

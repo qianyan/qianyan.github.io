@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.2.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"qianyan.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="BIP39解释定义BIP39^1定义了一种将计算机产生的随机数翻译成人类可读的方式，初衷很简单：结合BIP32^2，辅助人类记忆产生主密钥的种子。 主要概念 initial entropy (ENT) check sum (CS) mnemonic sentence (MS) wordlists  这三者的长度关系如下： 12CS &#x3D; ENT&#x2F;32MS &#x3D; (ENT + CS)&#x2F;11 化简成 MS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="创建数字钱包（三）助记词">
+<meta property="og:url" content="https://qianyan.github.io/2019/01/24/2019-01-24-Digital-wallet-3-mnemonic-sentence/index.html">
+<meta property="og:site_name" content="λ">
+<meta property="og:description" content="BIP39解释定义BIP39^1定义了一种将计算机产生的随机数翻译成人类可读的方式，初衷很简单：结合BIP32^2，辅助人类记忆产生主密钥的种子。 主要概念 initial entropy (ENT) check sum (CS) mnemonic sentence (MS) wordlists  这三者的长度关系如下： 12CS &#x3D; ENT&#x2F;32MS &#x3D; (ENT + CS)&#x2F;11 化简成 MS">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2019-01-24T14:39:13.000Z">
+<meta property="article:modified_time" content="2019-05-07T14:46:22.000Z">
+<meta property="article:author" content="Qian Yan">
+<meta property="article:tag" content="digital-wallet">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://qianyan.github.io/2019/01/24/2019-01-24-Digital-wallet-3-mnemonic-sentence/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://qianyan.github.io/2019/01/24/2019-01-24-Digital-wallet-3-mnemonic-sentence/","path":"2019/01/24/2019-01-24-Digital-wallet-3-mnemonic-sentence/","title":"创建数字钱包（三）助记词"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>创建数字钱包（三）助记词 | λ</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">λ</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">(conj clojurians me)</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#BIP39%E8%A7%A3%E9%87%8A"><span class="nav-number">1.</span> <span class="nav-text">BIP39解释</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9A%E4%B9%89"><span class="nav-number">1.1.</span> <span class="nav-text">定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BB%E8%A6%81%E6%A6%82%E5%BF%B5"><span class="nav-number">1.2.</span> <span class="nav-text">主要概念</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%9D%E5%A7%8B%E7%86%B5-initial-entropy"><span class="nav-number">1.2.1.</span> <span class="nav-text">初始熵 initial entropy</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A0%A1%E9%AA%8C%E7%A0%81-check-sum"><span class="nav-number">1.2.2.</span> <span class="nav-text">校验码 check sum</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8A%A9%E8%AE%B0%E8%AF%8D-mnemonic-sentence"><span class="nav-number">1.2.3.</span> <span class="nav-text">助记词 mnemonic sentence</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AF%8D%E6%B1%87%E8%A1%A8-wordlists"><span class="nav-number">1.2.4.</span> <span class="nav-text">词汇表 wordlists</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E8%A7%A3%E9%87%8A"><span class="nav-number">1.3.</span> <span class="nav-text">代码解释</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%AD%E6%96%87%E8%AF%8D%E6%B1%87%E8%A1%A8"><span class="nav-number">1.4.</span> <span class="nav-text">中文词汇表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%9F%E6%88%90BIP32%E7%A7%8D%E5%AD%90"><span class="nav-number">1.5.</span> <span class="nav-text">生成BIP32种子</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Qian Yan</p>
+  <div class="site-description" itemprop="description">Elegance and familiarity are orthogonal</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">76</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">41</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://qianyan.github.io/2019/01/24/2019-01-24-Digital-wallet-3-mnemonic-sentence/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Qian Yan">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="λ">
+      <meta itemprop="description" content="Elegance and familiarity are orthogonal">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="创建数字钱包（三）助记词 | λ">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          创建数字钱包（三）助记词
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-01-24 22:39:13" itemprop="dateCreated datePublished" datetime="2019-01-24T22:39:13+08:00">2019-01-24</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2019-05-07 22:46:22" itemprop="dateModified" datetime="2019-05-07T22:46:22+08:00">2019-05-07</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Blockchain/" itemprop="url" rel="index"><span itemprop="name">Blockchain</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="BIP39解释"><a href="#BIP39解释" class="headerlink" title="BIP39解释"></a>BIP39解释</h2><h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p>BIP39<a href="%5BBIP39%5D(https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki)">^1</a>定义了一种将计算机产生的随机数翻译成人类可读的方式，初衷很简单：结合BIP32<a href="%5BBIP32%5D(https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki)">^2</a>，辅助人类记忆产生主密钥的种子。</p>
+<h3 id="主要概念"><a href="#主要概念" class="headerlink" title="主要概念"></a>主要概念</h3><ol>
+<li>initial entropy (ENT)</li>
+<li>check sum (CS)</li>
+<li>mnemonic sentence (MS)</li>
+<li>wordlists</li>
+</ol>
+<p>这三者的长度关系如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">CS = ENT/32</span><br><span class="line">MS = (ENT + CS)/11 化简成 MS = 3 * CS</span><br></pre></td></tr></table></figure>
+<p>举个例子，如果初始熵长度为 128，ENT&#x2F;CS&#x2F;MS组成的关系表格填充如下：</p>
+<table>
+<thead>
+<tr>
+<th align="center">ENT</th>
+<th align="center">CS</th>
+<th align="center">MS</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">128</td>
+<td align="center">4</td>
+<td align="center">12</td>
+</tr>
+</tbody></table>
+<h4 id="初始熵-initial-entropy"><a href="#初始熵-initial-entropy" class="headerlink" title="初始熵 initial entropy"></a>初始熵 initial entropy</h4><p>初始熵可以通过随机数生成器生成，允许的大小在 128-256 bits 范围之内。</p>
+<h4 id="校验码-check-sum"><a href="#校验码-check-sum" class="headerlink" title="校验码 check sum"></a>校验码 check sum</h4><p>校验码利用初始熵经过哈希得出，而且长度必须是$ENT&#x2F;32$。</p>
+<h4 id="助记词-mnemonic-sentence"><a href="#助记词-mnemonic-sentence" class="headerlink" title="助记词 mnemonic sentence"></a>助记词 mnemonic sentence</h4><p>助记词需要将初始熵和校验码拼接，然后切分成每11位为一组，每一组二进制数转换成十进制数作为索引wordlists的下标，以便提取对应的词汇。以128位的ENT为例，它最终会产生12个词汇。</p>
+<h4 id="词汇表-wordlists"><a href="#词汇表-wordlists" class="headerlink" title="词汇表 wordlists"></a>词汇表 wordlists</h4><p>词汇表的构成是有原则可遵守的，其一，词汇之间可辨识性强，英文的词汇在前4个词汇就能有很快速的区分；其二，避免相似的词语，人毕竟是健忘的；其三，词汇应该排过序，便于二分查找。</p>
+<h3 id="代码解释"><a href="#代码解释" class="headerlink" title="代码解释"></a>代码解释</h3><p>下面利用Nodejs版本的BIP39<a href="%5BNodeJS-BIP39%5D(https://github.com/bitcoinjs/bip39)">^3</a>解释</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">generateMnemonic</span> (strength, rng, wordlist) &#123;</span><br><span class="line">  strength = strength || <span class="number">128</span></span><br><span class="line">  <span class="keyword">if</span> (strength % <span class="number">32</span> !== <span class="number">0</span>) <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">TypeError</span>(<span class="variable constant_">INVALID_ENTROPY</span>)</span><br><span class="line">  rng = rng || randomBytes</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="title function_">entropyToMnemonic</span>(<span class="title function_">rng</span>(strength / <span class="number">8</span>), wordlist)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>generateMnemonic(...)</code>函数的参数rng全称是random number generator，即随机数发生器，默认是randomBytes。此处，ENT的默认长度是128位，运行<code>randomBytes(128/8)</code>将产生了16字节的随机数。然后调用<code>entropyToMnemonic(...)</code>函数生成助记词。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">entropyToMnemonic</span> (entropy, wordlist) &#123;</span><br><span class="line">  <span class="keyword">if</span> (!<span class="title class_">Buffer</span>.<span class="title function_">isBuffer</span>(entropy)) entropy = <span class="title class_">Buffer</span>.<span class="title function_">from</span>(entropy, <span class="string">&#x27;hex&#x27;</span>)</span><br><span class="line">  wordlist = wordlist || <span class="variable constant_">DEFAULT_WORDLIST</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// 128 &lt;= ENT &lt;= 256</span></span><br><span class="line">  <span class="keyword">if</span> (entropy.<span class="property">length</span> &lt; <span class="number">16</span>) <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">TypeError</span>(<span class="variable constant_">INVALID_ENTROPY</span>)</span><br><span class="line">  <span class="keyword">if</span> (entropy.<span class="property">length</span> &gt; <span class="number">32</span>) <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">TypeError</span>(<span class="variable constant_">INVALID_ENTROPY</span>)</span><br><span class="line">  <span class="keyword">if</span> (entropy.<span class="property">length</span> % <span class="number">4</span> !== <span class="number">0</span>) <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">TypeError</span>(<span class="variable constant_">INVALID_ENTROPY</span>)</span><br><span class="line"></span><br><span class="line">  <span class="keyword">var</span> entropyBits = <span class="title function_">bytesToBinary</span>([].<span class="property">slice</span>.<span class="title function_">call</span>(entropy))</span><br><span class="line">  <span class="keyword">var</span> checksumBits = <span class="title function_">deriveChecksumBits</span>(entropy)</span><br><span class="line"></span><br><span class="line">  <span class="keyword">var</span> bits = entropyBits + checksumBits</span><br><span class="line">  <span class="keyword">var</span> chunks = bits.<span class="title function_">match</span>(<span class="regexp">/(.&#123;1,11&#125;)/g</span>)</span><br><span class="line">  <span class="keyword">var</span> words = chunks.<span class="title function_">map</span>(<span class="keyword">function</span> (<span class="params">binary</span>) &#123;</span><br><span class="line">    <span class="keyword">var</span> index = <span class="title function_">binaryToByte</span>(binary)</span><br><span class="line">    <span class="keyword">return</span> wordlist[index]</span><br><span class="line">  &#125;)</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> wordlist === <span class="variable constant_">JAPANESE_WORDLIST</span> ? words.<span class="title function_">join</span>(<span class="string">&#x27;\u3000&#x27;</span>) : words.<span class="title function_">join</span>(<span class="string">&#x27; &#x27;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>entropyBits是entropy的二进制表示；checksumBits是entropy经由SHA256计算得到的哈希值再截断到CS的长度得来的，调用<code>deriveChecksumBits(...)</code>函数产生checksumBits的逻辑如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">deriveChecksumBits</span> (entropyBuffer) &#123;</span><br><span class="line">  <span class="keyword">var</span> <span class="variable constant_">ENT</span> = entropyBuffer.<span class="property">length</span> * <span class="number">8</span></span><br><span class="line">  <span class="keyword">var</span> <span class="variable constant_">CS</span> = <span class="variable constant_">ENT</span> / <span class="number">32</span></span><br><span class="line">  <span class="keyword">var</span> hash = <span class="title function_">createHash</span>(<span class="string">&#x27;sha256&#x27;</span>).<span class="title function_">update</span>(entropyBuffer).<span class="title function_">digest</span>()</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="title function_">bytesToBinary</span>([].<span class="property">slice</span>.<span class="title function_">call</span>(hash)).<span class="title function_">slice</span>(<span class="number">0</span>, <span class="variable constant_">CS</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里的计算和前面长度关系规则完全吻合，checksumBits通过<code>slice(0, CS)</code>截断得到4位的二进制数。</p>
+<p>计算得到entropyBits和checksumBits之后，把它们拼接到一起，得到一组bits，然后按每组11bits分隔，这里使用了正则表达式 <code>bits.match(/(.&#123;1,11&#125;)/g)</code>，正则表达式<code>(.&#123;1,11&#125;)</code>表示对任意1-11个bit进行分组，由于正则默认是最长匹配，所以每11位就被分成了一组。最终，每组二进制数都会被转成十进制数，进而作为词汇表的下标索引对应的词汇，详细见上文的<code>chunks.map(function (binary) ...</code> 过程。</p>
+<h3 id="中文词汇表"><a href="#中文词汇表" class="headerlink" title="中文词汇表"></a>中文词汇表</h3><p>BIP39其实并没有定义词汇表，所以不同的自然语言都可以自行实现自己的词汇表。NodeJS版本的BIP39<a href="%5BNodeJS-BIP39%5D(https://github.com/bitcoinjs/bip39)">^3</a>就支持中文的词汇表。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> mnemonic = bip39.<span class="title function_">generateMnemonic</span>(<span class="number">160</span>, <span class="literal">null</span>, bip39.<span class="property">wordlists</span>.<span class="property">chinese_simplified</span>)</span><br><span class="line">-&gt;</span><br><span class="line"><span class="string">&#x27;定 过 丘 搭 斥 紫 遍 官 寿 穿 贯 别 讯 卵 符&#x27;</span></span><br></pre></td></tr></table></figure>
+<p>除了中文的词汇表，它还支持下列词汇，如：繁体中文等。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> <span class="attr">wordlists</span>: &#123;</span><br><span class="line">    <span class="attr">EN</span>: string[];</span><br><span class="line">    <span class="attr">JA</span>: string[];</span><br><span class="line">    <span class="attr">chinese_simplified</span>: string[];</span><br><span class="line">    <span class="attr">chinese_traditional</span>: string[];</span><br><span class="line">    <span class="attr">english</span>: string[];</span><br><span class="line">    <span class="attr">french</span>: string[];</span><br><span class="line">    <span class="attr">italian</span>: string[];</span><br><span class="line">    <span class="attr">japanese</span>: string[];</span><br><span class="line">    <span class="attr">spanish</span>: string[];</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h3 id="生成BIP32种子"><a href="#生成BIP32种子" class="headerlink" title="生成BIP32种子"></a>生成BIP32种子</h3><p>拿到助记词之后，就可以从助记词生成种子。这里其实使用了pbkdf2算法，不过有趣的是，参数mnemonic反而是pdkdf2算法中的password参数：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">function mnemonicToSeed (mnemonic, password) &#123;</span><br><span class="line">  var mnemonicBuffer = Buffer.from(unorm.nfkd(mnemonic), &#x27;utf8&#x27;)</span><br><span class="line">  var saltBuffer = Buffer.from(salt(unorm.nfkd(password)), &#x27;utf8&#x27;)</span><br><span class="line"></span><br><span class="line">  return pbkdf2(mnemonicBuffer, saltBuffer, 2048, 64, &#x27;sha512&#x27;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/digital-wallet/" rel="tag"># digital-wallet</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2019/01/24/2019-01-24-Digital-wallet-2-hd-wallet/" rel="prev" title="创建数字钱包（二）HD Wallet">
+                  <i class="fa fa-angle-left"></i> 创建数字钱包（二）HD Wallet
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2019/05/07/2019-05-07-try-embark/" rel="next" title="区块链DApp开发环境 embark 初探">
+                  区块链DApp开发环境 embark 初探 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Qian Yan</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

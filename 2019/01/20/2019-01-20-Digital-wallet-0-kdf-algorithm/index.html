@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.2.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"qianyan.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="KDF 的定义实现 key stretching [^1] 的方法，具体就是从一个 master key，password 或者 passphrase 派生出一个或者多个密钥，派生的过程，使用PRF（Pseudo Random Function 伪随机函数）可以是某种哈希算法。  [Key stretching]密钥延长算法（一种更慢的哈希算法），用于将初始密钥转换成增强密钥，在计算过程中刻意延长">
+<meta property="og:type" content="article">
+<meta property="og:title" content="创建数字钱包（零）KDF 密钥派生算法">
+<meta property="og:url" content="https://qianyan.github.io/2019/01/20/2019-01-20-Digital-wallet-0-kdf-algorithm/index.html">
+<meta property="og:site_name" content="λ">
+<meta property="og:description" content="KDF 的定义实现 key stretching [^1] 的方法，具体就是从一个 master key，password 或者 passphrase 派生出一个或者多个密钥，派生的过程，使用PRF（Pseudo Random Function 伪随机函数）可以是某种哈希算法。  [Key stretching]密钥延长算法（一种更慢的哈希算法），用于将初始密钥转换成增强密钥，在计算过程中刻意延长">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2019-01-20T14:31:44.000Z">
+<meta property="article:modified_time" content="2019-05-07T14:45:58.000Z">
+<meta property="article:author" content="Qian Yan">
+<meta property="article:tag" content="digital-wallet">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://qianyan.github.io/2019/01/20/2019-01-20-Digital-wallet-0-kdf-algorithm/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://qianyan.github.io/2019/01/20/2019-01-20-Digital-wallet-0-kdf-algorithm/","path":"2019/01/20/2019-01-20-Digital-wallet-0-kdf-algorithm/","title":"创建数字钱包（零）KDF 密钥派生算法"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>创建数字钱包（零）KDF 密钥派生算法 | λ</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">λ</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">(conj clojurians me)</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#KDF-%E7%9A%84%E5%AE%9A%E4%B9%89"><span class="nav-number">1.</span> <span class="nav-text">KDF 的定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%A4%E7%A7%8D%E5%AF%86%E9%92%A5%E6%B4%BE%E7%94%9F%E7%AE%97%E6%B3%95"><span class="nav-number">2.</span> <span class="nav-text">两种密钥派生算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#PBKDF2-CPU-Hard-algorithm"><span class="nav-number">2.1.</span> <span class="nav-text">PBKDF2 (CPU-Hard algorithm)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Scrypt-Memory-Hard-algorithm"><span class="nav-number">2.2.</span> <span class="nav-text">Scrypt (Memory-Hard algorithm)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8C%BA%E5%88%AB"><span class="nav-number">2.3.</span> <span class="nav-text">区别</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AF%86%E9%92%A5%E6%B4%BE%E7%94%9F%E5%8E%9F%E7%90%86"><span class="nav-number">3.</span> <span class="nav-text">密钥派生原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%AF%E8%AF%AD"><span class="nav-number">4.</span> <span class="nav-text">术语</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Qian Yan</p>
+  <div class="site-description" itemprop="description">Elegance and familiarity are orthogonal</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">76</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">41</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://qianyan.github.io/2019/01/20/2019-01-20-Digital-wallet-0-kdf-algorithm/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Qian Yan">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="λ">
+      <meta itemprop="description" content="Elegance and familiarity are orthogonal">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="创建数字钱包（零）KDF 密钥派生算法 | λ">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          创建数字钱包（零）KDF 密钥派生算法
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-01-20 22:31:44" itemprop="dateCreated datePublished" datetime="2019-01-20T22:31:44+08:00">2019-01-20</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2019-05-07 22:45:58" itemprop="dateModified" datetime="2019-05-07T22:45:58+08:00">2019-05-07</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Blockchain/" itemprop="url" rel="index"><span itemprop="name">Blockchain</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="KDF-的定义"><a href="#KDF-的定义" class="headerlink" title="KDF 的定义"></a>KDF 的定义</h2><p>实现 key stretching [^1] 的方法，具体就是从一个 master key，password 或者 passphrase 派生出一个或者多个密钥，派生的过程，使用PRF（Pseudo Random Function 伪随机函数）可以是某种哈希算法。</p>
+<blockquote>
+<p>[Key stretching]<br>密钥延长算法（一种更慢的哈希算法），用于将初始密钥转换成增强密钥，在计算过程中刻意延长时间或者消耗空间，这样有利于保护弱密码。</p>
+</blockquote>
+<h2 id="两种密钥派生算法"><a href="#两种密钥派生算法" class="headerlink" title="两种密钥派生算法"></a>两种密钥派生算法</h2><h3 id="PBKDF2-CPU-Hard-algorithm"><a href="#PBKDF2-CPU-Hard-algorithm" class="headerlink" title="PBKDF2 (CPU-Hard algorithm)"></a>PBKDF2 (CPU-Hard algorithm)</h3><p>PBKDF2是基于密码派生出密钥的算法，需要消耗很多算力，为了是防止暴力破解加密。</p>
+<h3 id="Scrypt-Memory-Hard-algorithm"><a href="#Scrypt-Memory-Hard-algorithm" class="headerlink" title="Scrypt (Memory-Hard algorithm)"></a>Scrypt (Memory-Hard algorithm)</h3><p>Scrypt 也是一种 password-base KDF 算法，比起 PBKDF2 需要消耗更多的资源，从而有效防止了专有硬件 ASIC&#x2F; FPGA 的暴力破解。Scrypt 内部用的还是 PBKDF2 算法，不过内部会长时间地维护一组比特数据，这些数据会在生成复杂的 salt 的过程中反复加密（Salsa20，一种流密码<a href="%5BSalsa20%5D(https://en.wikipedia.org/wiki/Salsa20)">^3</a>）得到。网上流行说，以太坊的PoW共识算法是利用Scrypt实现的，但事实上，以太坊自己实现了一套哈希算法，叫做Ethash<a href="%5BEthash%5D(https://github.com/ethereum/wiki/wiki/Ethash)">^2</a>.</p>
+<h3 id="区别"><a href="#区别" class="headerlink" title="区别"></a>区别</h3><p>一言以蔽之，PBKDF2是算力型，而Scrypt是资源消耗型的。</p>
+<blockquote>
+<p>Both PBKDF2 and scrypt are key derivation functions (KDFs) that implement key stretching by being deliberately slow to compute and, in particular, by having an adjustable parameter to control the slowness.<br>The difference is that scrypt is also designed to require a large (and adjustable) amount of memory to compute efficiently. The purpose of this is to make cracking it harder to parallelize using devices like GPGPUs or custom ASIC &#x2F; FPGA hardware. Such devices may have hundreds or even thousands of parallel processing units, each capable of hashing a different password using traditional KDFs like PBKDF2, which don’t require much memory. However, it turns out that, at least using current technology, providing each of these parallel units with large amounts of memory space is a lot more difficult and expensive than making the units themselves.</p>
+</blockquote>
+<h2 id="密钥派生原理"><a href="#密钥派生原理" class="headerlink" title="密钥派生原理"></a>密钥派生原理</h2><p><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/PBKDF2">PBKDF2</a> 运行的原理</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">passphrase -&gt; [dklen, salt, c] &gt; 1000] -&gt; hash</span><br><span class="line"></span><br><span class="line">DK = PBKDF2(PRF, Password, Salt, c, dkLen)</span><br></pre></td></tr></table></figure>
+<p>其中：</p>
+<ol>
+<li>PRF(Pseudorandom function)：伪随机数产生的密钥，如：hmac-sha256</li>
+<li>dklen：派生所产生的密钥的长度</li>
+<li>salt（盐值）：是一串随机生成的比特，加载密钥的固定位置做哈希后，可以防止彩虹表攻击导致的密码泄露</li>
+<li>c：迭代的次数</li>
+<li>DK：期望的密钥 derived key</li>
+</ol>
+<p>例子：WPA2 (WiFi Protected Access) </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">DK = PBKDF2(HMAC−SHA1, passphrase, ssid, 4096, 256)</span><br></pre></td></tr></table></figure>
+
+<h2 id="术语"><a href="#术语" class="headerlink" title="术语"></a>术语</h2><p><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Password">Password</a><br>密码就是用于证明身份，获取和身份相称的访问权限。</p>
+<p><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Passphrase">Passphase</a><br>用于用户认证或者加密程序的操作步骤，特别是KDF算法就是从passphrase中派生出来的。</p>
+<p>[^1]: <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Key_stretching">Key stretching</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/digital-wallet/" rel="tag"># digital-wallet</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2019/01/17/2019-01-17-Guide-to-Clean-Architecture-2-more/" rel="prev" title="架构整洁之道导读（二）续 组件聚合张力图">
+                  <i class="fa fa-angle-left"></i> 架构整洁之道导读（二）续 组件聚合张力图
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2019/01/23/2019-01-23-Digital-wallet-1-generate-accounts/" rel="next" title="创建数字钱包（一）账号生成">
+                  创建数字钱包（一）账号生成 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Qian Yan</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

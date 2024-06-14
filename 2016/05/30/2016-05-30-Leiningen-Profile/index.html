@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.2.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"qianyan.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="记忆用的Mindmap 标准的leiningen的工程目录结构当我们使用lein new your-project-name之后，工程目录结构如下：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Leiningen Profile">
+<meta property="og:url" content="https://qianyan.github.io/2016/05/30/2016-05-30-Leiningen-Profile/index.html">
+<meta property="og:site_name" content="λ">
+<meta property="og:description" content="记忆用的Mindmap 标准的leiningen的工程目录结构当我们使用lein new your-project-name之后，工程目录结构如下：">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://qianyan.github.io/images/Leiningen-Profiles.png">
+<meta property="article:published_time" content="2016-05-30T13:21:26.000Z">
+<meta property="article:modified_time" content="2016-09-06T22:42:23.000Z">
+<meta property="article:author" content="Qian Yan">
+<meta property="article:tag" content="leiningen">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://qianyan.github.io/images/Leiningen-Profiles.png">
+
+
+<link rel="canonical" href="https://qianyan.github.io/2016/05/30/2016-05-30-Leiningen-Profile/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://qianyan.github.io/2016/05/30/2016-05-30-Leiningen-Profile/","path":"2016/05/30/2016-05-30-Leiningen-Profile/","title":"Leiningen Profile"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Leiningen Profile | λ</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">λ</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">(conj clojurians me)</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%B0%E5%BF%86%E7%94%A8%E7%9A%84Mindmap"><span class="nav-number">1.</span> <span class="nav-text">记忆用的Mindmap</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%87%E5%87%86%E7%9A%84leiningen%E7%9A%84%E5%B7%A5%E7%A8%8B%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84"><span class="nav-number">2.</span> <span class="nav-text">标准的leiningen的工程目录结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Profile%E7%9A%84%E5%8A%9F%E8%83%BD"><span class="nav-number">3.</span> <span class="nav-text">Profile的功能</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%BB%98%E8%AE%A4Profiles"><span class="nav-number">3.1.</span> <span class="nav-text">默认Profiles</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%89%B9%E5%AE%9A%E4%BB%BB%E5%8A%A1-task-specific-Profile"><span class="nav-number">3.2.</span> <span class="nav-text">特定任务(task-specific) Profile</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Profile%E7%9A%84%E4%BC%98%E5%85%88%E7%BA%A7"><span class="nav-number">4.</span> <span class="nav-text">Profile的优先级</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%98%E5%85%88%E7%BA%A7%E6%AC%A1%E5%BA%8F"><span class="nav-number">4.1.</span> <span class="nav-text">优先级次序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9A%E4%B9%89profiles-clj"><span class="nav-number">4.2.</span> <span class="nav-text">定义profiles.clj</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%AF%E7%94%A8Profile"><span class="nav-number">5.</span> <span class="nav-text">启用Profile</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8Metadata"><span class="nav-number">6.</span> <span class="nav-text">使用Metadata</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Qian Yan</p>
+  <div class="site-description" itemprop="description">Elegance and familiarity are orthogonal</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">76</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">41</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://qianyan.github.io/2016/05/30/2016-05-30-Leiningen-Profile/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Qian Yan">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="λ">
+      <meta itemprop="description" content="Elegance and familiarity are orthogonal">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Leiningen Profile | λ">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Leiningen Profile
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2016-05-30 21:21:26" itemprop="dateCreated datePublished" datetime="2016-05-30T21:21:26+08:00">2016-05-30</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2016-09-07 06:42:23" itemprop="dateModified" datetime="2016-09-07T06:42:23+08:00">2016-09-07</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Clojure/" itemprop="url" rel="index"><span itemprop="name">Clojure</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="记忆用的Mindmap"><a href="#记忆用的Mindmap" class="headerlink" title="记忆用的Mindmap"></a>记忆用的Mindmap</h2><p><img src="/images/Leiningen-Profiles.png" alt="leingingen profiles"></p>
+<h2 id="标准的leiningen的工程目录结构"><a href="#标准的leiningen的工程目录结构" class="headerlink" title="标准的leiningen的工程目录结构"></a>标准的leiningen的工程目录结构</h2><p>当我们使用<em>lein new your-project-name</em>之后，工程目录结构如下：</p>
+<span id="more"></span>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">.</span><br><span class="line">├── CHANGELOG.md</span><br><span class="line">├── LICENSE</span><br><span class="line">├── README.md</span><br><span class="line">├── doc</span><br><span class="line">│   └── intro.md</span><br><span class="line">├── project.clj</span><br><span class="line">├── resources</span><br><span class="line">├── src</span><br><span class="line">│   └── playground</span><br><span class="line">│       └── core.clj</span><br><span class="line">└── test</span><br><span class="line">    └── playground</span><br><span class="line">        └── core_test.clj</span><br></pre></td></tr></table></figure>
+<p>此处的project.clj就是这个工程的描述文件，不过内容是使用clojure编写的，展开如下：</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defproject</span> playground <span class="string">&quot;0.1.0-SNAPSHOT&quot;</span></span><br><span class="line">  <span class="symbol">:description</span> <span class="string">&quot;FIXME: write description&quot;</span></span><br><span class="line">  <span class="symbol">:url</span> <span class="string">&quot;http://example.com/FIXME&quot;</span></span><br><span class="line">  <span class="symbol">:license</span> &#123;<span class="symbol">:name</span> <span class="string">&quot;Eclipse Public License&quot;</span></span><br><span class="line">            <span class="symbol">:url</span> <span class="string">&quot;http://www.eclipse.org/legal/epl-v10.html&quot;</span>&#125;</span><br><span class="line">  <span class="symbol">:dependencies</span> [[org.clojure/clojure <span class="string">&quot;1.8.0&quot;</span>]])</span><br></pre></td></tr></table></figure>
+<p>此时还看不到profiles的影子，不过试想一下这样的场景：某些工具只是开发时需要，打包artifact却不应包含——写过Node.js的应该对package.json中devDependencies不陌生，其实是一个道理。只不过在project.clj中是这样定义的：</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defproject</span> playground <span class="string">&quot;0.1.0-SNAPSHOT&quot;</span></span><br><span class="line">...</span><br><span class="line"><span class="symbol">:profiles</span> &#123;<span class="symbol">:dev</span> &#123;<span class="symbol">:plugins</span> [[refactor-nrepl <span class="string">&quot;2.0.0-SNAPSHOT&quot;</span>]</span><br><span class="line">                           [cider/cider-nrepl <span class="string">&quot;0.10.0&quot;</span>]]&#125;</span><br><span class="line">           <span class="symbol">:provided</span> &#123;<span class="symbol">:dependencies</span> [[javax.servlet/servlet-api <span class="string">&quot;2.5&quot;</span>]]&#125;)</span><br></pre></td></tr></table></figure>
+<p>因为我使用emacs编程，除了亲和编辑源码的<a target="_blank" rel="noopener" href="https://github.com/clojure-emacs/clojure-mode">clojure-mode</a>，还使用了<a target="_blank" rel="noopener" href="https://github.com/clojure-emacs/cider">cider</a>这个与Clojure进程交互的工具，而<a target="_blank" rel="noopener" href="https://github.com/clojure-emacs/clj-refactor.el">clj-refactor.el</a>则是Clojure中重构的神器，所以在开发的时候，需要显式地依赖进来（不过自<a target="_blank" rel="noopener" href="https://github.com/clojure-emacs/cider/releases/tag/v0.11.0">CIDER 0.11.0 (Bulgaria)</a>之后两者都自动引入了）。另外，写过servlet程序的人大概对于这个servlet-api很是熟悉，看到:provided想必也会会心一笑。</p>
+<p>其实这里:dev和:provided是leiningen内置的两种profile，它们类型不同，功能也迥异。在继续深究之前，我们先想想profile应该具有的功能。</p>
+<h2 id="Profile的功能"><a href="#Profile的功能" class="headerlink" title="Profile的功能"></a>Profile的功能</h2><p>Profile的主要功能和pom.xml以及package.json一致，描述当前工程的配置、为构建工具（leiningen）提供一套执行流程。具体来讲，包括项目的不同scope（compile&#x2F;test&#x2F;provided）的依赖、开发环境依赖、各种plugin的依赖，以及范围性质的依赖，比如:user，表明当前用户下所有的leinigen工程都会使用到该profile。</p>
+<p>每个project（项目）当前<strong>可用</strong>的profiles，可以通过下面这条命令查看：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">//under root of project playground</span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">lein show-profiles</span></span><br><span class="line">...</span><br><span class="line">base</span><br><span class="line">debug</span><br><span class="line">default</span><br><span class="line">dev</span><br><span class="line">leiningen/default</span><br><span class="line">leiningen/test</span><br><span class="line">offline</span><br><span class="line">repl</span><br><span class="line">uberjar</span><br><span class="line">update</span><br><span class="line">user</span><br></pre></td></tr></table></figure>
+<p>可能其他人的机器上看到的结果和我的不一致，这是正常的，原因是我在~&#x2F;.lein&#x2F;profiles.clj中配置过了。</p>
+<h3 id="默认Profiles"><a href="#默认Profiles" class="headerlink" title="默认Profiles"></a>默认Profiles</h3><p>默认启用的profiles定义在:default当中，我们来查看default profile中包含哪些profiles？</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"> lein show-profiles default</span></span><br><span class="line">[:leiningen/default] ;;指向leiningen/default</span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">lein show-profiles leiningen/default</span></span><br><span class="line">[:base :system :user :provided :dev] ;;五个默认启用的profiles</span><br></pre></td></tr></table></figure>
+
+<p>这五个profiles代表的含义，在官方文档中有详细的描述，这里我只简略地描述一下:</p>
+<ul>
+<li>base: leiningen使用到的最基本的配置项，包括设置jvm-opts参数、往resource-paths中添加dev-resources等。它是leinigen的一部分，不应该被修改；</li>
+<li>system: 和user类似，不过针对的是所有的用户；</li>
+<li>user: 对当前用户下的所有projects有效。所以不应该在project.clj中设置user profile.</li>
+<li>provided: 这个和pom.xml中scope是provided类似，只在生成jar的时候才有效，即生成pom.xml时，会把这个profile中定义的依赖以provided的scope添加进入pom.xml。</li>
+<li>dev: 指定project专属的开发工具时会用到。</li>
+</ul>
+<h3 id="特定任务-task-specific-Profile"><a href="#特定任务-task-specific-Profile" class="headerlink" title="特定任务(task-specific) Profile"></a>特定任务(task-specific) Profile</h3><p>除了上面的default profile，还有像:repl和:uberjar这样以任务名称命名的profile。顾名思义，当你运行repl或者uberjar任务时，这些profiles的配置项会被合并到当前工程的profile当中。举个例子，我们定义一个uberjar profile，如下：</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">:uberjar</span> &#123;<span class="symbol">:aot</span> <span class="symbol">:all</span>&#125;</span><br></pre></td></tr></table></figure>
+<p>这里有个概念需要澄清，什么是:aot?<br>Clojure的代码总是会以两种方式被编译，aot和runtime。<br>aot是指Ahead of Time Compilation，与之相对的是Runtime Compilation。 两者的区别就是aot会将生成的bytecode保存到磁盘上，也就是我们所熟知的class文件；而Runtime Compilation时的bytecode则在JVM终止后消失。</p>
+<p>此时，当你运行<em>lein uberjar</em>时，就会首先在target&#x2F;classes目录下生成clj源文件对应的class文件，打包包含clj和class文件；反之，如果不指定:aot，最终打出的jar包只会包含clj文件。</p>
+<p>对于repl profile，这里也给出一个例子：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">:repl &#123;:dependencies [^:displace [org.clojure/clojure &quot;1.9.0-alpha3&quot;]] &#125;&#125;</span><br></pre></td></tr></table></figure>
+<p>现在当你在任意工程（project）之外运行<em>lein repl</em>的时候，默认的Clojure版本就是1.9.0-alpha3了，如下：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">nREPL server started on port 54003 on host 127.0.0.1 - nrepl://127.0.0.1:54003</span><br><span class="line">REPL-y 0.3.7, nREPL 0.2.12</span><br><span class="line">Clojure 1.9.0-alpha3 //这里的版本号</span><br><span class="line">Java HotSpot(TM) 64-Bit Server VM 1.8.0_45-b14</span><br><span class="line">    Docs: (doc function-name-here)</span><br><span class="line">          (find-doc &quot;part-of-name-here&quot;)</span><br><span class="line">  Source: (source function-name-here)</span><br><span class="line"> Javadoc: (javadoc java-object-or-class-here)</span><br><span class="line">    Exit: Control+D or (exit) or (quit)</span><br><span class="line"> Results: Stored in vars *1, *2, *3, an exception in *e</span><br></pre></td></tr></table></figure>
+
+<p>这里说到在任意工程之外运行会有不一样的结果，隐含的一层意思是项目根目录下的project.clj描述文件的优先级比较高。</p>
+<h2 id="Profile的优先级"><a href="#Profile的优先级" class="headerlink" title="Profile的优先级"></a>Profile的优先级</h2><p>leiningen中有3类profiles定义：</p>
+<ol>
+<li>项目范围：<em>your-project&#x2F;profiles.clj</em></li>
+<li>用户范围：*(or ~&#x2F;.lein&#x2F;profiles.clj ~&#x2F;.lein&#x2F;profiles.d&#x2F;xxx.clj)*</li>
+<li>系统范围：*&#x2F;etc&#x2F;leiningen&#x2F;profiles.clj*</li>
+</ol>
+<h3 id="优先级次序"><a href="#优先级次序" class="headerlink" title="优先级次序"></a>优先级次序</h3><p>这些profiles的优先级是这样的：项目范围 &gt; project.clj &gt; 用户范围 &gt; 系统范围。其中项目范围的profile有一种典型应用：对当前项目进行个性化的配置（通过覆写project.clj中的配置），而不提交到git仓库。</p>
+<h3 id="定义profiles-clj"><a href="#定义profiles-clj" class="headerlink" title="定义profiles.clj"></a>定义profiles.clj</h3><p>知道优先级之后，接下来的问题是我们该如何定义这样的profiles.clj呢？先看一下我的~&#x2F;.lein&#x2F;profiles.clj</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">&#123;<span class="symbol">:user</span>  &#123;<span class="symbol">:plugins</span> [[lein-codox <span class="string">&quot;0.9.4&quot;</span>]</span><br><span class="line">                   [lein-pprint <span class="string">&quot;1.1.1&quot;</span>]</span><br><span class="line">                   [lein-midje <span class="string">&quot;3.1.3&quot;</span>]</span><br><span class="line">                   [lein-try <span class="string">&quot;0.4.3&quot;</span>]</span><br><span class="line">                   [lein-midje-doc <span class="string">&quot;0.0.22&quot;</span>] ]</span><br><span class="line">         <span class="symbol">:injections</span>  [(<span class="name">require</span> &#x27;spyscope.core)</span><br><span class="line">                       (<span class="name">require</span> &#x27;io.aviso.repl </span><br><span class="line">                       &#x27;clojure.repl </span><br><span class="line">                       &#x27;clojure.main)</span><br><span class="line">              (<span class="name">alter-var-root</span> #&#x27;clojure.main/repl-caught</span><br><span class="line">                (<span class="name"><span class="built_in">constantly</span></span> @#&#x27;io.aviso.repl/pretty-pst))</span><br><span class="line">              (<span class="name">alter-var-root</span> #&#x27;clojure.repl/pst</span><br><span class="line">                (<span class="name"><span class="built_in">constantly</span></span> @#&#x27;io.aviso.repl/pretty-pst))]</span><br><span class="line"></span><br><span class="line">         <span class="symbol">:dependencies</span> [[org.clojure/tools.nrepl <span class="string">&quot;0.2.12&quot;</span>]</span><br><span class="line">                        <span class="comment">;; exception</span></span><br><span class="line">                        [io.aviso/pretty <span class="string">&quot;0.1.26&quot;</span>]</span><br><span class="line">                        <span class="comment">;; debug</span></span><br><span class="line">                        [spyscope <span class="string">&quot;0.1.5&quot;</span>] ]</span><br><span class="line">         <span class="symbol">:repositories</span> [[<span class="string">&quot;releases&quot;</span> &#123;<span class="symbol">:url</span> <span class="string">&quot;http://blueant.com/archiva/internal&quot;</span></span><br><span class="line">                           <span class="symbol">:creds</span> <span class="symbol">:gpg</span>&#125;]]&#125;</span><br><span class="line"> <span class="symbol">:dev</span>  &#123;<span class="symbol">:dependencies</span> [[org.clojure/tools.namespace <span class="string">&quot;0.2.11&quot;</span>]]&#125; </span><br><span class="line"> <span class="symbol">:repl</span> &#123;<span class="symbol">:dependencies</span> [^<span class="symbol">:displace</span> [org.clojure/clojure <span class="string">&quot;1.9.0-alpha3&quot;</span>]] &#125;&#125; </span><br></pre></td></tr></table></figure>
+<p>这个文件定义了3种profiles，分别是:user, :dev, :repl. 语法结构是一个map的maps，通过keyword命名来区分。:user定义了插件、依赖和启动时自动绑定命名空间，:dev定义了依赖，:repl也定义了依赖，不过这个依赖前面用到了^:displace (Metadata)，标识在具体的项目之外才会依赖此版本的Clojure.</p>
+<h2 id="启用Profile"><a href="#启用Profile" class="headerlink" title="启用Profile"></a>启用Profile</h2><p>前面提到leiningen默认会启用包含[:base :system :user :provided :dev]的leiningen&#x2F;profile，default profile指向了leiningen&#x2F;profile. 这里头其实包含了几层意义：</p>
+<ul>
+<li>profiles是可以自由组合的；</li>
+<li>default profile是可以敷写的；</li>
+<li>完全可以显式地启用某些profiles.</li>
+</ul>
+<p>如何组合这些profiles，官方文档中定义的很清楚，无须赘述。敷写default profile也比较简单，直接这么操作{:default [:profile-you-want]}. 那么只剩下如何显式地启用某些profiles了？答案是：with-profile.</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lein with-profile user repl</span><br></pre></td></tr></table></figure>
+<p>这就是只启用user profile来运行repl命令了。</p>
+<h2 id="使用Metadata"><a href="#使用Metadata" class="headerlink" title="使用Metadata"></a>使用Metadata</h2><p>这里的Metadata是用于描述profile自身，那么它们到底有什么作用呢？<br>文档中列举了3个Metadata: ^:leaky, ^{:pom-scope :test}, ^{:pom-scope :provided}. 并告诉我们在生成pom.xml时会根据Metadata的类型将profile中定义的依赖写入其中，但是并未讲述如何使用它们。其实很简单，只要像下面那样在profile的名字之后写上这些Metadata即可。</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">:repl</span> ^&#123;<span class="symbol">:pom-scope</span> <span class="symbol">:test</span>&#125; &#123;<span class="symbol">:dependencies</span> [[clj-http <span class="string">&quot;3.1.0&quot;</span>]] &#125;</span><br></pre></td></tr></table></figure>
+<p>leiningen会自动把该profile的dependencies的scope设置成test，如下：</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">:repl</span> &#123;<span class="symbol">:dependencies</span> [ [clj-http <span class="string">&quot;3.1.0&quot;</span> <span class="symbol">:scope</span> <span class="string">&quot;test&quot;</span>] ]&#125;</span><br></pre></td></tr></table></figure>
+<p>这段逻辑可以从leiningen的<a target="_blank" rel="noopener" href="https://github.com/technomancy/leiningen/blob/master/leiningen-core/src/leiningen/core/project.clj#L784">源码</a>当中获得：</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">apply-profile-meta</span> [default-meta profile]</span><br><span class="line">    ...</span><br><span class="line">    (<span class="name"><span class="built_in">-&gt;</span></span> dep (<span class="name"><span class="built_in">conj</span></span> <span class="symbol">:scope</span>) (<span class="name"><span class="built_in">conj</span></span> (<span class="name"><span class="built_in">name</span></span> scope)))).</span><br></pre></td></tr></table></figure>
+
+<p>所以如果你指定:repl profile生成pom.xml时，clj-http就会出现在test scope的dependency定义中。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lein with-profile repl pom</span><br></pre></td></tr></table></figure>
+<p>生成的pom文件，如下：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>clj-http<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>clj-http<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">version</span>&gt;</span>3.1.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">scope</span>&gt;</span>test<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>其余主题Dynamic Eval和Debugging，文档中叙述的比较完整且简单。</p>
+<hr>
+<p>参考链接<br>[1] <a target="_blank" rel="noopener" href="https://github.com/technomancy/leiningen/blob/master/doc/PROFILES.md">Leiningen Profile</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/leiningen/" rel="tag"># leiningen</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2016/05/24/2016-05-24-Using-Java1.8-to-Target-Older-JVMs/" rel="prev" title="高编译低运行错误(ConcurrentHashMap.keySet)">
+                  <i class="fa fa-angle-left"></i> 高编译低运行错误(ConcurrentHashMap.keySet)
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2016/06/24/2016-06-24-SonarQube-Plugin-Step-by-Step/" rel="next" title="SonarQube Plugin Step by Step">
+                  SonarQube Plugin Step by Step <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Qian Yan</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

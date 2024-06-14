@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.2.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"qianyan.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="当夜幕已近闭合，沉睡的晚灯张起结界，昏黄中没半点柔情，仿佛在告诉行人：非诚勿扰  夜晚11:11分，注定孤独的时分。Carl倚靠窗台失神了半晌，回过来就顺手拉紧了窗帘。拧开台灯，桌上静静地躺着一本书，是日本人西尾太和的《代码之髓》。他翻开扉页，签上自己的大名，满足地撇撇嘴，开始看起来。  Lisp是这个世界上最精练，最美观的语言 123(setq f      (let ((x 1))">
+<meta property="og:type" content="article">
+<meta property="og:title" content="程序语言的精髓">
+<meta property="og:url" content="https://qianyan.github.io/2014/10/11/2014-10-11-briefing-of-programming-language/index.html">
+<meta property="og:site_name" content="λ">
+<meta property="og:description" content="当夜幕已近闭合，沉睡的晚灯张起结界，昏黄中没半点柔情，仿佛在告诉行人：非诚勿扰  夜晚11:11分，注定孤独的时分。Carl倚靠窗台失神了半晌，回过来就顺手拉紧了窗帘。拧开台灯，桌上静静地躺着一本书，是日本人西尾太和的《代码之髓》。他翻开扉页，签上自己的大名，满足地撇撇嘴，开始看起来。  Lisp是这个世界上最精练，最美观的语言 123(setq f      (let ((x 1))">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2014-10-10T16:31:34.000Z">
+<meta property="article:modified_time" content="2016-09-12T13:53:54.000Z">
+<meta property="article:author" content="Qian Yan">
+<meta property="article:tag" content="language">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://qianyan.github.io/2014/10/11/2014-10-11-briefing-of-programming-language/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://qianyan.github.io/2014/10/11/2014-10-11-briefing-of-programming-language/","path":"2014/10/11/2014-10-11-briefing-of-programming-language/","title":"程序语言的精髓"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>程序语言的精髓 | λ</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">λ</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">(conj clojurians me)</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Lisp%E6%98%AF%E8%BF%99%E4%B8%AA%E4%B8%96%E7%95%8C%E4%B8%8A%E6%9C%80%E7%B2%BE%E7%BB%83%EF%BC%8C%E6%9C%80%E7%BE%8E%E8%A7%82%E7%9A%84%E8%AF%AD%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">Lisp是这个世界上最精练，最美观的语言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%A8python2%E9%87%8C%E9%9D%A2%EF%BC%8C%E8%BF%99%E4%B8%AA%E4%B8%96%E7%95%8C%E9%87%8C%E6%9C%89%E6%80%AA%E7%89%A9%E5%AD%98%E5%9C%A8%E2%80%94%E2%80%94%E5%B5%8C%E5%A5%97%E7%9A%84%E5%87%BD%E6%95%B0%E5%92%8C%E5%A4%96%E9%83%A8%E4%BD%9C%E7%94%A8%E5%9F%9F%E7%9A%84%E5%86%8D%E7%BB%91%E5%AE%9A%E3%80%82"><span class="nav-number">2.</span> <span class="nav-text">在python2里面，这个世界里有怪物存在——嵌套的函数和外部作用域的再绑定。</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Qian Yan</p>
+  <div class="site-description" itemprop="description">Elegance and familiarity are orthogonal</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">76</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">41</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://qianyan.github.io/2014/10/11/2014-10-11-briefing-of-programming-language/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Qian Yan">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="λ">
+      <meta itemprop="description" content="Elegance and familiarity are orthogonal">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="程序语言的精髓 | λ">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          程序语言的精髓
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2014-10-11 00:31:34" itemprop="dateCreated datePublished" datetime="2014-10-11T00:31:34+08:00">2014-10-11</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2016-09-12 21:53:54" itemprop="dateModified" datetime="2016-09-12T21:53:54+08:00">2016-09-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%8A%80%E6%9C%AF/" itemprop="url" rel="index"><span itemprop="name">技术</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p><code>当夜幕已近闭合，沉睡的晚灯张起结界，昏黄中没半点柔情，仿佛在告诉行人：非诚勿扰</code></p>
+<blockquote>
+<p>夜晚11:11分，注定孤独的时分。Carl倚靠窗台失神了半晌，回过来就顺手拉紧了窗帘。拧开台灯，桌上静静地躺着一本书，是日本人西尾太和的《代码之髓》。他翻开扉页，签上自己的大名，满足地撇撇嘴，开始看起来。</p>
+</blockquote>
+<h3 id="Lisp是这个世界上最精练，最美观的语言"><a href="#Lisp是这个世界上最精练，最美观的语言" class="headerlink" title="Lisp是这个世界上最精练，最美观的语言"></a>Lisp是这个世界上最精练，最美观的语言</h3><hr>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(setq f</span><br><span class="line">      (let ((x 1))</span><br><span class="line">        (lambda (y) (* x y))))</span><br></pre></td></tr></table></figure>
+<p>直观上，这个函数f的结果就是(* 1 y)，也就是y的值。那么实际调用的结果如何呢？</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(let ((x 2))</span><br><span class="line">  (funcall f 2))</span><br></pre></td></tr></table></figure>
+<p>即f(2)的结果是2？实际运行的结果让人大跌眼镜，是4！</p>
+<blockquote>
+<p>Carl揉揉被蹂躏多时的眼球，问自己：为什么是这样，像梦一场？</p>
+</blockquote>
+<p>行文到这里，我们的黑暗主角慢慢走向台前——作用域(Scope)。作用域在程序的世界里，见怪不怪，谁都知道它的第一要务就是防止命名冲突！</p>
+<blockquote>
+<p>Carl点点头，道：嗯，教材里是这么说的。他抬头看了一下光，阴影里有种烦躁的情绪在跳动。</p>
+</blockquote>
+<p>其实，作用域是分类别的。Lisp中用到了其中之一的动态作用域(Dynamic Scope)，动态作用域最根本的特点是从时间维度上判断进入和离开某个函数具有独立的作用域。上面Lisp的例子当中，<code>(let ((x 2)) (funcall f 2))</code>表示一个函数，也就是独立的作用域。它调用了f这个函数，但从时间上看，调用点依旧处于原来的作用域当中，所以x&#x3D;2这样的变量在f函数里是有效的，最后的结果是(* 2 y)，等于4也就理所应当了。</p>
+<blockquote>
+<p>Carl接受了这样的解释，他想：既然存在，那么一定合理。闭目养神的时间里，他的思维遨游了很久，有溺水的迹象，仿佛得到了神启。他想到了人生，理想，家人，婚姻和<code>python2</code></p>
+</blockquote>
+<h3 id="在python2里面，这个世界里有怪物存在——嵌套的函数和外部作用域的再绑定。"><a href="#在python2里面，这个世界里有怪物存在——嵌套的函数和外部作用域的再绑定。" class="headerlink" title="在python2里面，这个世界里有怪物存在——嵌套的函数和外部作用域的再绑定。"></a>在<code>python2</code>里面，这个世界里有怪物存在——嵌套的函数和外部作用域的再绑定。</h3><hr>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">x = &quot;global&quot;</span><br><span class="line">def foo():</span><br><span class="line">	x = &quot;foo&quot;</span><br><span class="line">	def bar():</span><br><span class="line">		print x</span><br><span class="line">	bar()</span><br><span class="line">foo()</span><br></pre></td></tr></table></figure>
+<p>答案是global，而不是想当然的foo。<code>python2</code>里头使用了静态作用域(Static Scope), 与动态作用域相对。静态作用域的显著特点是源码级别上拥有独立的作用域，简单地可以理解成每一个函数都是独立的作用域。然后，2011年发布的<code>python2.1</code>修改了逻辑，最终返回了foo，他们显然认为嵌套的函数不是函数，而是形同if&#x2F;else这样的嵌套结构体。感觉上，又回到了当初动态作用域的年代。</p>
+<blockquote>
+<p>Carl咽了口水，他讨厌动态作用域如同父母窥视了孩子狭小私人空间，这让他很不舒服。有一首诗：阴郁的日子总会过去。接下来，事情总算不太坏。</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">def foo():</span><br><span class="line">	x = &quot;old&quot;</span><br><span class="line">	def bar():</span><br><span class="line">		x ＝ &quot;new&quot;</span><br><span class="line">	bar()</span><br><span class="line">	print x</span><br><span class="line">foo()</span><br></pre></td></tr></table></figure>
+<p>这回得到的还是old。</p>
+<blockquote>
+<p>Carl笑了，这才像话。</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">def foo():</span><br><span class="line">	x = &quot;old&quot;</span><br><span class="line">	def bar():</span><br><span class="line">		nonlocal x</span><br><span class="line">		x ＝ &quot;new&quot;</span><br><span class="line">	bar()</span><br><span class="line">	print x</span><br><span class="line">foo()</span><br></pre></td></tr></table></figure>
+<p>这回得到的却是new。</p>
+<blockquote>
+<p>Carl哭了。他想起来了，java里的类，private, protected修饰符，还有静态变量。他触摸到了作用域的本质，如同一直看不见的手，抚摸那薄膜面纱背后吹弹可破的脸蛋。至于有没有被赐予洪亮的耳光，那已经是后话了。</p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/language/" rel="tag"># language</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2014/09/25/2014-09-25-a-way-to-handle-angularjs-components-problem/" rel="prev" title="AngularJS components">
+                  <i class="fa fa-angle-left"></i> AngularJS components
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2014/10/30/2014-10-30-vim-in-practice/" rel="next" title="vim in practice (1)">
+                  vim in practice (1) <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Qian Yan</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

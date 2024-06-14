@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.2.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"qianyan.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="函数式编程是什么 函数式编程更加强调程序执行的结果而非执行的过程，倡导利用若干简单的执行单元让计算结果不断渐进，逐层推导复杂的运算，而不是设计一个复杂的执行过程。 – wiki  例子一 累加运算12345678910111213&#x2F;&#x2F; sumList&lt;Integer&gt; nums &#x3D; Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 10);public">
+<meta property="og:type" content="article">
+<meta property="og:title" content="函数式编程简介">
+<meta property="og:url" content="https://qianyan.github.io/2018/02/17/2018-02-17-The-Simple-Summary-of-FP/index.html">
+<meta property="og:site_name" content="λ">
+<meta property="og:description" content="函数式编程是什么 函数式编程更加强调程序执行的结果而非执行的过程，倡导利用若干简单的执行单元让计算结果不断渐进，逐层推导复杂的运算，而不是设计一个复杂的执行过程。 – wiki  例子一 累加运算12345678910111213&#x2F;&#x2F; sumList&lt;Integer&gt; nums &#x3D; Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 10);public">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/217988-bd2f325f4578f4c4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/217988-b32e43ff96d620f2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/217988-83061fa854cfadf2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/217988-f83728f3beea90e9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/217988-db581f0f87265914.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/217988-6017ad15b573ab02.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/217988-f9b16b9dc18ba66c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/217988-8bb6c8f3354a5640.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="article:published_time" content="2018-02-17T14:45:31.000Z">
+<meta property="article:modified_time" content="2018-02-17T14:45:56.000Z">
+<meta property="article:author" content="Qian Yan">
+<meta property="article:tag" content="FP">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/217988-bd2f325f4578f4c4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+
+<link rel="canonical" href="https://qianyan.github.io/2018/02/17/2018-02-17-The-Simple-Summary-of-FP/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://qianyan.github.io/2018/02/17/2018-02-17-The-Simple-Summary-of-FP/","path":"2018/02/17/2018-02-17-The-Simple-Summary-of-FP/","title":"函数式编程简介"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>函数式编程简介 | λ</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">λ</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">(conj clojurians me)</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B%E6%98%AF%E4%BB%80%E4%B9%88"><span class="nav-number">1.</span> <span class="nav-text">函数式编程是什么</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BE%8B%E5%AD%90%E4%B8%80-%E7%B4%AF%E5%8A%A0%E8%BF%90%E7%AE%97"><span class="nav-number">2.</span> <span class="nav-text">例子一 累加运算</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BE%8B%E5%AD%90%E4%BA%8C-fabonacci%E6%95%B0%E5%88%97"><span class="nav-number">3.</span> <span class="nav-text">例子二 fabonacci数列</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B%E7%9A%84%E5%8E%86%E5%8F%B2"><span class="nav-number"></span> <span class="nav-text">函数式编程的历史</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%8EHilbert-23%E4%B8%AA%E6%95%B0%E5%AD%A6%E9%9A%BE%E9%A2%98%E8%B0%88%E8%B5%B7"><span class="nav-number">1.</span> <span class="nav-text">从Hilbert 23个数学难题谈起</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Lambda-Calculus"><span class="nav-number">2.</span> <span class="nav-text">Lambda Calculus</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80%E7%9A%84%E5%8F%91%E5%B1%95"><span class="nav-number">3.</span> <span class="nav-text">函数式编程语言的发展</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A5%9E%E5%A5%87%E7%9A%84-Y-Combinator"><span class="nav-number">4.</span> <span class="nav-text">神奇的 Y Combinator</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Lisp%E3%80%81ML%E4%BB%A5%E5%8F%8AHaskell%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="nav-number">5.</span> <span class="nav-text">Lisp、ML以及Haskell的关系</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E6%98%AF%E4%B8%80%E7%AD%89%E5%85%AC%E6%B0%91"><span class="nav-number"></span> <span class="nav-text">函数是一等公民</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E4%BD%9C%E4%B8%BA%E5%8F%82%E6%95%B0"><span class="nav-number">1.</span> <span class="nav-text">1. 作为参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E4%BD%9C%E4%B8%BA%E8%BF%94%E5%9B%9E%E5%80%BC"><span class="nav-number">2.</span> <span class="nav-text">2. 作为返回值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="nav-number">3.</span> <span class="nav-text">3. 数据结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E5%8C%BF%E5%90%8D%E5%87%BD%E6%95%B0"><span class="nav-number">4.</span> <span class="nav-text">4. 匿名函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-%E6%A8%A1%E5%9D%97%E5%8C%96"><span class="nav-number">5.</span> <span class="nav-text">5. 模块化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BA%AF%E5%87%BD%E6%95%B0%E5%92%8C%E4%B8%8D%E5%8F%AF%E5%8F%98%E6%80%A7"><span class="nav-number"></span> <span class="nav-text">纯函数和不可变性</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%95%E7%94%A8%E9%80%8F%E6%98%8E"><span class="nav-number">1.</span> <span class="nav-text">引用透明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8D%E5%8F%AF%E5%8F%98%E8%AE%A1%E7%AE%97"><span class="nav-number">2.</span> <span class="nav-text">不可变计算</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8D%E5%8F%AF%E5%8F%98%E7%9A%84%E9%93%BE%E5%BC%8F%E7%BB%93%E6%9E%84"><span class="nav-number">3.</span> <span class="nav-text">不可变的链式结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8D%E5%8F%AF%E5%8F%98%E7%9A%84%E6%A0%91%E7%8A%B6%E7%BB%93%E6%9E%84"><span class="nav-number">4.</span> <span class="nav-text">不可变的树状结构</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%92%E5%BD%92"><span class="nav-number"></span> <span class="nav-text">递归</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%9F%E6%88%90%E5%BC%8F%E6%B5%8B%E8%AF%95"><span class="nav-number"></span> <span class="nav-text">生成式测试</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8A%BD%E8%B1%A1%E6%98%AF%E4%BB%80%E4%B9%88"><span class="nav-number"></span> <span class="nav-text">抽象是什么</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%91%BD%E5%90%8D"><span class="nav-number">1.</span> <span class="nav-text">命名</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BB%B6%E8%BF%9F%E5%86%B3%E7%AD%96"><span class="nav-number">2.</span> <span class="nav-text">延迟决策</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%AB%98%E9%98%B6%E5%87%BD%E6%95%B0"><span class="nav-number"></span> <span class="nav-text">高阶函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%87%E7%A8%8B%E6%8A%BD%E8%B1%A1"><span class="nav-number">1.</span> <span class="nav-text">过程抽象</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E7%9A%84%E7%BB%84%E5%90%88"><span class="nav-number"></span> <span class="nav-text">函数的组合</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A5%9E%E5%A5%87%E7%9A%84%E5%8A%A0%E6%B3%95"><span class="nav-number">1.</span> <span class="nav-text">神奇的加法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#transducer"><span class="nav-number">2.</span> <span class="nav-text">transducer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Monad"><span class="nav-number">3.</span> <span class="nav-text">Monad</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A1%A8%E8%BE%BE%E5%BC%8F%E4%BC%98%E4%BA%8E%E8%AF%AD%E5%8F%A5"><span class="nav-number"></span> <span class="nav-text">表达式优于语句</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#S%E8%A1%A8%E8%BE%BE%E5%BC%8F"><span class="nav-number">1.</span> <span class="nav-text">S表达式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#if-else-Optional"><span class="nav-number">2.</span> <span class="nav-text">if-else -&gt; Optional</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%88%91%E4%BB%AC%E8%AE%A4%E8%AF%86%E4%BA%8B%E7%89%A9%E7%9A%84%E6%96%B9%E5%BC%8F"><span class="nav-number"></span> <span class="nav-text">我们认识事物的方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8E%A8%E8%8D%90%E7%9A%84%E4%B9%A6%E7%B1%8D"><span class="nav-number"></span> <span class="nav-text">推荐的书籍</span></a></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Qian Yan</p>
+  <div class="site-description" itemprop="description">Elegance and familiarity are orthogonal</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">76</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">41</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://qianyan.github.io/2018/02/17/2018-02-17-The-Simple-Summary-of-FP/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Qian Yan">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="λ">
+      <meta itemprop="description" content="Elegance and familiarity are orthogonal">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="函数式编程简介 | λ">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          函数式编程简介
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2018-02-17 22:45:31 / 修改时间：22:45:56" itemprop="dateCreated datePublished" datetime="2018-02-17T22:45:31+08:00">2018-02-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%8A%80%E6%9C%AF/" itemprop="url" rel="index"><span itemprop="name">技术</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h3 id="函数式编程是什么"><a href="#函数式编程是什么" class="headerlink" title="函数式编程是什么"></a>函数式编程是什么</h3><blockquote>
+<p>函数式编程更加强调程序执行的结果而非执行的过程，倡导利用若干简单的执行单元让计算结果不断渐进，逐层推导复杂的运算，而不是设计一个复杂的执行过程。 – wiki</p>
+</blockquote>
+<h3 id="例子一-累加运算"><a href="#例子一-累加运算" class="headerlink" title="例子一 累加运算"></a>例子一 累加运算</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// sum</span></span><br><span class="line">List&lt;Integer&gt; nums = Arrays.asList(<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">8</span>, <span class="number">10</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> Integer <span class="title function_">sum</span><span class="params">(List&lt;Integer&gt; nums)</span> &#123;</span><br><span class="line">	<span class="type">int</span> <span class="variable">result</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">for</span> (Integer num : nums) &#123;</span><br><span class="line">		result += num;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">sum(nums); <span class="comment">// -&gt; 46</span></span><br></pre></td></tr></table></figure>
+<p>同样的代码用 Java8 Stream 实现</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 10).stream().reduce(0, Integer::sum);</span><br></pre></td></tr></table></figure>
+<p>同样的代码用 Clojure 实现</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="built_in">apply</span></span> + [<span class="number">0</span> <span class="number">1</span> <span class="number">2</span> <span class="number">3</span> <span class="number">4</span> <span class="number">5</span> <span class="number">6</span> <span class="number">7</span> <span class="number">8</span> <span class="number">10</span>]) <span class="comment">; -&gt; 46</span></span><br><span class="line">#_(<span class="name"><span class="built_in">reduce</span></span> + [<span class="number">0</span> <span class="number">1</span> <span class="number">2</span> <span class="number">3</span> <span class="number">4</span> <span class="number">5</span> <span class="number">6</span> <span class="number">7</span> <span class="number">8</span> <span class="number">10</span>])</span><br></pre></td></tr></table></figure>
+<h3 id="例子二-fabonacci数列"><a href="#例子二-fabonacci数列" class="headerlink" title="例子二 fabonacci数列"></a>例子二 fabonacci数列</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// java</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">fibonacci</span><span class="params">(<span class="type">int</span> number)</span> &#123;</span><br><span class="line">	<span class="keyword">if</span> (number == <span class="number">1</span>) &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span>(number == <span class="number">2</span>) &#123;</span><br><span class="line">	    <span class="keyword">return</span> <span class="number">2</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="type">int</span> <span class="variable">a</span> <span class="operator">=</span> <span class="number">1</span>;</span><br><span class="line">	<span class="type">int</span> <span class="variable">b</span> <span class="operator">=</span> <span class="number">2</span>;</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> <span class="variable">cnt</span> <span class="operator">=</span> <span class="number">3</span>; cnt &lt;= number; cnt++) &#123;</span><br><span class="line">		<span class="type">int</span> <span class="variable">c</span> <span class="operator">=</span> a + b;</span><br><span class="line">		a = b;</span><br><span class="line">		b = c;</span><br><span class="line">	&#125;	</span><br><span class="line">	<span class="keyword">return</span> b;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">// java8</span><br><span class="line">Stream.iterate(new int[]&#123;1, 1&#125;, s -&gt; new int[]&#123;s[1], s[0] + s[1]&#125;)</span><br><span class="line">				.limit(10)</span><br><span class="line">				.map(n -&gt; n[1])</span><br><span class="line">				.collect(toList())</span><br><span class="line">// -&gt; [1, 2, 3, 5, 8, 13, 21, 34, 55, 89]</span><br></pre></td></tr></table></figure>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">// clojure</span><br><span class="line">(<span class="name"><span class="built_in">-&gt;&gt;</span></span> (<span class="name"><span class="built_in">iterate</span></span> (<span class="name"><span class="built_in">fn</span></span> [[a b]] [b (<span class="name"><span class="built_in">+</span></span> a b)]) [<span class="number">1</span> <span class="number">1</span>])</span><br><span class="line">     (<span class="name"><span class="built_in">map</span></span> second)</span><br><span class="line">     (<span class="name"><span class="built_in">take</span></span> <span class="number">10</span>))</span><br><span class="line"><span class="comment">; -&gt; (1 2 3 5 8 13 21 34 55 89)  </span></span><br></pre></td></tr></table></figure>
+<p>比起命令式的语言，函数式语言更加关注执行的结果，而非执行的过程。</p>
+<h2 id="函数式编程的历史"><a href="#函数式编程的历史" class="headerlink" title="函数式编程的历史"></a>函数式编程的历史</h2><h3 id="从Hilbert-23个数学难题谈起"><a href="#从Hilbert-23个数学难题谈起" class="headerlink" title="从Hilbert 23个数学难题谈起"></a>从Hilbert 23个数学难题谈起</h3><p>1900年，Hilbert 提出了数学界悬而未决的10大问题，后续陆续添加成了23个问题，被称为著名的 Hilbert 23 Problem。针对其中第2个决定数学基础的问题——算术公理之相容性，年轻的哥德尔提出了哥德尔不完备定理，解决了这个问题形式化之后的前两点，即数学是完备的吗？数学是相容的吗？哥德尔用两条定理给出了否定的回答。所谓不完备，即系统中存在一个为真，但是无法在系统中推导出来的命题。比如：U说：“U在PM中不可证”。虽然和说谎者很类似，但其实有明显的差异。我们可以假设U为可证，那么可以推出PM是矛盾（不相容）的；但是假设U不可证，却推导不出PM是矛盾的。U的含义是在M中不可证，而事实上，它被证明不可证，所以U是PM中不可证的真命题。基于第一条不完备定理，又可以推导出第二条定理。如果一个（强度足以证明基本算术公理的）公理系统可以用来证明它自身的相容性，那么它是不相容的。</p>
+<p>而最后一个问题，数学是确定的吗？也就是说，存在一个算法判定一个给定的命题是否是不确定的吗（Entscheidungsproblem 确定性问题）？这个问题引起了阿隆佐·邱奇和年轻的阿兰·图灵的兴趣。阿隆佐·邱奇的lambda calculus和图灵的图灵机构造出了可计算数，图灵的那篇论文  <em>ON COMPUTABLE NUMBERS, WITH AN APPLICATION TO THE ENTSCHEIDUNGSPROBLEM</em>  的意义不在于证明可计算数是否可数，而在于证明可判定性是否成立。在1936年他们对判定性问题分别独立给出了否定的答案。也就是现在被我们熟知的图灵停机问题：不存在这样一个程序（算法），它能够计算任何程序（算法）在给定输入上是否会结束（停机）。图灵借此发明了通用图灵机的概念，为后来的冯·诺依曼体系的计算机体系提供了理论基础。</p>
+<h3 id="Lambda-Calculus"><a href="#Lambda-Calculus" class="headerlink" title="Lambda Calculus"></a>Lambda Calculus</h3><p><img src="http://upload-images.jianshu.io/upload_images/217988-bd2f325f4578f4c4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Lambda Calculus"></p>
+<p>Lambda 表达式包含三个要素</p>
+<ol>
+<li>变量</li>
+<li>lambda 抽象</li>
+<li>lambda 应用<br>据此我们可以用函数给出布尔值的定义<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">data BOOL = FALSE | TRUE</span><br><span class="line">TRUE = λx.λy.x</span><br><span class="line">FALSE = λx.λy.y</span><br><span class="line"></span><br><span class="line">not = λb.b FALSE TRUE</span><br><span class="line">and = λb1.λb2.b1 b2 FALSE</span><br><span class="line">or  = λb1.λb2.b1 TRUE b2</span><br><span class="line">xor = λb1.λb2.b1 (not b2) b2</span><br></pre></td></tr></table></figure>
+自然数的定义<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">data NAT = Z | S NAT</span><br><span class="line">0 = λf.λs.s</span><br><span class="line">1 = λf.λs.f s</span><br><span class="line">2 = λf.λs.f f s</span><br><span class="line"></span><br><span class="line">succ n = λf.λs.f (n f s)</span><br><span class="line">zero? n = n (λb.FALSE) TRUE</span><br><span class="line">add = succ n1 n2</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="函数式编程语言的发展"><a href="#函数式编程语言的发展" class="headerlink" title="函数式编程语言的发展"></a>函数式编程语言的发展</h3><p>在这之后，随着通用计算机的产生，人们发觉使用机器码写程序太没有效率。所以1956年左右，John Buckus发明了Fortran（FORmula TRANslating 的缩写）语言，如果对编译原理有了解，那么对BNF范式就不陌生了。与此同时，John McCarthy 发明了Lisp语言，现代的Clojure就是Lisp的方言之一。1966年，Niklaus Wirth发明了Pascal。1969年，Ken Thompson和Dennis Ritchie发明了C语言，过程式语言由于其高效和可移植性迅速崛起。1973年，Robin Milner 发明了ML（Meta Language），后来演变成了OCaml和Stardard ML。1977年，John Buckus在其图灵奖的演讲中创造了 Functional Programming 这个词。1990年，惰性求值的函数式编程语言 Haskell 1.0 发布。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/217988-b32e43ff96d620f2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="编程语言发展历史"></p>
+<h3 id="神奇的-Y-Combinator"><a href="#神奇的-Y-Combinator" class="headerlink" title="神奇的 Y Combinator"></a>神奇的 Y Combinator</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(def Y (fn [f]</span><br><span class="line">         ((fn [x] (x x))</span><br><span class="line">          (fn [x]</span><br><span class="line">            (f (fn [y]</span><br><span class="line">                 ((x x) y)))))))</span><br></pre></td></tr></table></figure>
+
+<h3 id="Lisp、ML以及Haskell的关系"><a href="#Lisp、ML以及Haskell的关系" class="headerlink" title="Lisp、ML以及Haskell的关系"></a>Lisp、ML以及Haskell的关系</h3><p>Lisp是动态语言，使用S表达式<br>ML和Haskell都是静态强类型函数式语言<br>ML是第一个使用Hindley-Milner type inference algorithm的语言<br>Lisp和ML都是call-by-value，但是Haskell则是call-by-name<br>Lisp和ML都是不纯的编程语言，但是Haskell是side effect free的</p>
+<h2 id="函数是一等公民"><a href="#函数是一等公民" class="headerlink" title="函数是一等公民"></a>函数是一等公民</h2><p>函数是一等公民，指的是你可以将函数作为参数、返回值、数据结构存在，而且不仅可以用函数名引用，甚至可以匿名调用。</p>
+<h3 id="1-作为参数"><a href="#1-作为参数" class="headerlink" title="1. 作为参数"></a>1. 作为参数</h3><figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="built_in">map</span></span> inc [<span class="number">1</span> <span class="number">2</span> <span class="number">3</span> <span class="number">4</span> <span class="number">5</span>]) <span class="comment">;-&gt; (2 3 4 5 6) ;; inc is an argument</span></span><br></pre></td></tr></table></figure>
+<h3 id="2-作为返回值"><a href="#2-作为返回值" class="headerlink" title="2. 作为返回值"></a>2. 作为返回值</h3><figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">(<span class="keyword">defn</span> <span class="title">add</span> [num] </span><br><span class="line">    (<span class="name"><span class="built_in">fn</span></span> [other-num] (<span class="name"><span class="built_in">+</span></span> num other-num))) <span class="comment">;; as return-value</span></span><br><span class="line">(<span class="keyword">def</span> <span class="title">add-one</span> (<span class="name">add</span> <span class="number">1</span>))</span><br><span class="line">(<span class="name">add-one</span> <span class="number">2</span>) <span class="comment">;-&gt; 3</span></span><br><span class="line"></span><br><span class="line">(<span class="keyword">defn</span> <span class="title">flip</span> [f]  <span class="comment">;; as argument and return-value</span></span><br><span class="line">  (<span class="name"><span class="built_in">fn</span></span> [x y]</span><br><span class="line">    (<span class="name">f</span> y x)))</span><br></pre></td></tr></table></figure>
+<h3 id="3-数据结构"><a href="#3-数据结构" class="headerlink" title="3. 数据结构"></a>3. 数据结构</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(def dictionary &#123;:a &quot;abandon&quot;&#125;) ;; map is also a function, data is code.</span><br><span class="line">(dictionary :a) ;-&gt; &quot;abandon&quot;</span><br><span class="line">(:a dictionary) ;-&gt; &quot;abandon&quot;</span><br></pre></td></tr></table></figure>
+<h3 id="4-匿名函数"><a href="#4-匿名函数" class="headerlink" title="4. 匿名函数"></a>4. 匿名函数</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">((fn [x] (* x x))</span><br><span class="line">        2) ;-&gt; 4</span><br><span class="line">    </span><br><span class="line">(map </span><br><span class="line">    (fn [num] (+ 1 num)) ;; anonymous function</span><br><span class="line">    [1 2 3 4 5]) ;-&gt; (2 3 4 5 6)</span><br></pre></td></tr></table></figure>
+<h3 id="5-模块化"><a href="#5-模块化" class="headerlink" title="5. 模块化"></a>5. 模块化</h3><p>在面向对象中，对象是一等公民。所以我们处处要从对象的角度去考虑计算问题，然后产生一种共识——数据应该和它相关的操作放到一起，也就是我们所说的封装。确实没错，但是我们得知道封装的意义在哪里？功能内聚好理解（分块）和局部性影响（控制可变性）。函数式编程同样考虑这些，功能内聚不一定要用类的方式（考虑一下JS的prototype，也是一种面向对象），只要模块做得好，一样能达到效果。局部性影响，其本质是封装可变因素以避免其扩散到代码各处。函数式给出了自己的答案，消除可变因素。</p>
+<p>高阶函数和惰性求值也非常有利于模块化。</p>
+<h2 id="纯函数和不可变性"><a href="#纯函数和不可变性" class="headerlink" title="纯函数和不可变性"></a>纯函数和不可变性</h2><p>纯函数是指执行过程中没有副作用的函数，所谓副作用是说超出函数控制的操作，比如在执行过程中操作文件系统、数据库等外部资源。纯函数还具有引用透明性的特点，也就是同样的输入导致同样的输出，以至于完全可以用函数的值代替对函数的调用。</p>
+<h3 id="引用透明"><a href="#引用透明" class="headerlink" title="引用透明"></a>引用透明</h3><p>举个例子：</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="built_in">inc</span></span> <span class="number">1</span>) <span class="comment">; -&gt; 2</span></span><br><span class="line"></span><br><span class="line">(<span class="name"><span class="built_in">=</span></span> (<span class="name"><span class="built_in">inc</span></span> (<span class="name"><span class="built_in">inc</span></span> <span class="number">1</span>)</span><br><span class="line">   (<span class="name"><span class="built_in">inc</span></span> <span class="number">2</span>))) <span class="comment">; -&gt; true</span></span><br></pre></td></tr></table></figure>
+<p>你们可能就会问，这种东西究竟有什么用呢？纯函数可以很方便地进行缓存。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">(defn fibonacci [number]</span><br><span class="line">  (if (or (zero? number) (= 1 number)) 1</span><br><span class="line">      (+</span><br><span class="line">       (fibonacci (dec number))</span><br><span class="line">       (fibonacci (- number 2)))))</span><br><span class="line">(fibonacci 30) ; -&gt; &quot;Elapsed time: 185.690208 msecs&quot;</span><br><span class="line"></span><br><span class="line">(def fibonacci</span><br><span class="line">  (memoize (fn [number] ;;</span><br><span class="line">             (if (or (zero? number) (= 1 number)) 1</span><br><span class="line">                 (+</span><br><span class="line">                  (fibonacci (dec number))</span><br><span class="line">                  (fibonacci (- number 2)))))))</span><br><span class="line">(fibonacci 30) ; -&gt; &quot;Elapsed time: 0.437114 msecs&quot;</span><br></pre></td></tr></table></figure>
+<h3 id="不可变计算"><a href="#不可变计算" class="headerlink" title="不可变计算"></a>不可变计算</h3><p>谈到不可变性，我们做个游戏。统计在座的一共有多少人数。我们都知道从某个人开始依次报数，最后得到的数字就是总人数，其实这就是一种不可变计算的游戏，为什么这么说呢？因为报数其实一个计算的过程，第一个人计算出1这个数，传递给第二个人。然后第二个人拿着前面的1进行加一操作，然后把结果2传递给后面的人做加法，以此类推。为了提高统计的效率，我也可以进行分组，然后每组自行报数，最后统计结果。但是如果我在白板上写个数字1，然后让大家来过来该这个数字，很大可能会出现错误，因为这个数字成为了竞态条件。在多并发的情况下，就得用读写锁来控制。所以不可变性特别利于并发。<br><img src="http://upload-images.jianshu.io/upload_images/217988-83061fa854cfadf2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="不可变性"></p>
+<h3 id="不可变的链式结构"><a href="#不可变的链式结构" class="headerlink" title="不可变的链式结构"></a>不可变的链式结构</h3><p>好了，现在我们有个新的需求，设计一个不可变列表收集大家的名字。每个节点存储一个姓名的字符串，并且有个指针指向下一个节点。但是这也打破了列表的不可变性。怎么办？我们可以把新的节点指向旧有的列表，然后返回一个新的列表。这就是不可变列表实现的机制。随便一提，这也是区块链不可变特征的由来。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/217988-f83728f3beea90e9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="不可变的链式结构"></p>
+<p>Clojure的创造者Rich Hickey扩展了Ideal Hash Tree数据结构，实现了Persistent Vector。由于此处的叶子节点可以扩展成32个，所以可以大量存储数据。利用Ideal Hash Tree的特点可以快速索引出数据，与此同时，数据的“增删改”也能做到近常数化的时间，并且总是产生新的数据结构替换原有的数据结构，即一种不可变的链式存储结构。<br><img src="http://upload-images.jianshu.io/upload_images/217988-db581f0f87265914.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Clojure Persistent Vector"></p>
+<h3 id="不可变的树状结构"><a href="#不可变的树状结构" class="headerlink" title="不可变的树状结构"></a>不可变的树状结构</h3><p>Zipper数据结构类似于文本编辑器中的 gap buffer，编辑文本时，光标左边和右边分别是独立的buffer，光标处也是单独的buffer，这样便可以方便地添加文字，也很方便删除左右buffer中的文字；移动光标会涉及buffer之间的拷贝。基本上能在常数时间内完成编辑。Zipper数据结构模仿了这种方式，能在常数时间内完成树的编辑工作，也能很快地重新构建一棵树。<br><img src="http://upload-images.jianshu.io/upload_images/217988-6017ad15b573ab02.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="不可变的树状结构"></p>
+<h2 id="递归"><a href="#递归" class="headerlink" title="递归"></a>递归</h2><p>可计算很大问题就是得实现递归功能。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(defn reverse-seq [coll]</span><br><span class="line">  (when-let [elem (first coll)]</span><br><span class="line">    (concat (reverse-seq (rest coll)) [elem])))</span><br><span class="line">(reverse-seq [1 2 3]) ; -&gt; (3 2 1)</span><br></pre></td></tr></table></figure>
+<p>和循环无异的尾递归</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(defn gcd [&amp; nums]</span><br><span class="line">  (reduce #(if (zero? %2)</span><br><span class="line">                %</span><br><span class="line">                (recur %2 (mod % %2))) nums))</span><br><span class="line">(gcd 8 16) ; -&gt; 8                </span><br></pre></td></tr></table></figure>
+<h2 id="生成式测试"><a href="#生成式测试" class="headerlink" title="生成式测试"></a>生成式测试</h2><p>生成式测试会基于输入假设输出，并且生成许多可能的数据验证假设的正确性。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">(defn add [a b]</span><br><span class="line">  (+ a b))</span><br><span class="line">;; 任取两个整数，把a和b加起来的结果减去a总会得到b。</span><br><span class="line">(def test-add</span><br><span class="line">  (prop/for-all [a (gen/int)</span><br><span class="line">                 b (gen/int)]</span><br><span class="line">                (= (- (add a b) a) b)))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">(tc/quick-check 100 test-add)</span><br><span class="line">; -&gt; &#123;:result true, :num-tests 100, :seed 1515935038284&#125;</span><br></pre></td></tr></table></figure>
+
+<p>测试结果表明，刚才运行了100组测试，并且都通过了。理论上，程序可以生成无数的测试数据来验证add方法的正确性。即便不能穷尽，我们也获得一组统计上的数字，而不仅仅是几个纯手工挑选的用例。</p>
+<h2 id="抽象是什么"><a href="#抽象是什么" class="headerlink" title="抽象是什么"></a>抽象是什么</h2><p>抽取共性，封装细节，忘记不重要的差异点。这样的好处是可以做到局部化影响和延迟决策。<br><img src="http://upload-images.jianshu.io/upload_images/217988-f9b16b9dc18ba66c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="抽象屏障"></p>
+<h3 id="命名"><a href="#命名" class="headerlink" title="命名"></a>命名</h3><p>命名就是一种抽象，重构中最重要的技法就是重命名和提取小函数</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">(* 3 3 3)</span><br><span class="line">(* x x x)</span><br><span class="line">(* y y y)</span><br><span class="line">-&gt;</span><br><span class="line">(defn cube [x]</span><br><span class="line">  (* x x x))</span><br></pre></td></tr></table></figure>
+<h3 id="延迟决策"><a href="#延迟决策" class="headerlink" title="延迟决策"></a>延迟决策</h3><p>例如：我们定义数对 pair</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">pair:: (cons x y)</span><br><span class="line">first pair -&gt; x</span><br><span class="line">second pair -&gt; y</span><br></pre></td></tr></table></figure>
+<p>那么它的具体实现会是这样的</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">(defn cons [x y]</span><br><span class="line">  (fn [m]</span><br><span class="line">    (cond (= m 0) x</span><br><span class="line">          (= m 1) y)))</span><br><span class="line">(defn first [z]</span><br><span class="line">  (z 0))</span><br><span class="line">(defn second [z]</span><br><span class="line">  (z 1))</span><br></pre></td></tr></table></figure>
+<p>也可以是这样的，还可以是其它各种各样的形式。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">(defn cons [x y]</span><br><span class="line">  (fn [b]</span><br><span class="line">    (b x y))</span><br><span class="line">(defn first [z]</span><br><span class="line">    (z (fn [x y] x)))</span><br><span class="line">(defn second [z]</span><br><span class="line">    (z (fn [x y] y)))</span><br></pre></td></tr></table></figure>
+<h2 id="高阶函数"><a href="#高阶函数" class="headerlink" title="高阶函数"></a>高阶函数</h2><p>高阶函数就是可以接收函数的函数，高阶函数提供了足够的抽象，屏蔽了很多底层的实现细节。比如Clojure中的<code>map</code>高阶函数，它接收<code>(fn [v] ...)</code>，把一组数据映射成另外一组数据。</p>
+<h3 id="过程抽象"><a href="#过程抽象" class="headerlink" title="过程抽象"></a>过程抽象</h3><figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="built_in">map</span></span> inc [<span class="number">1</span> <span class="number">2</span> <span class="number">3</span> <span class="number">4</span> <span class="number">5</span>]) <span class="comment">; -&gt; (2 3 4 5 6)</span></span><br></pre></td></tr></table></figure>
+<p>这些函数抽象出映射这样语义，除了容易记忆，还能很方便地重新编写成高效的底层实现。也就是说，一旦出现了更高效的<code>map</code>实现算法，现有的代码都能立刻从中受益。</p>
+<h2 id="函数的组合"><a href="#函数的组合" class="headerlink" title="函数的组合"></a>函数的组合</h2><p>函数组合之后会产生巨大的能量</p>
+<h3 id="神奇的加法"><a href="#神奇的加法" class="headerlink" title="神奇的加法"></a>神奇的加法</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(((comp (map inc) (filter odd?)) +) 1 2) ; -&gt; 4</span><br></pre></td></tr></table></figure>
+<p>怎么去理解这个函数的组合？我们给它取个好听的名字</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">(def special+ ((comp (map inc) (filter odd?)) +))</span><br><span class="line">(special+ 1 2) ; -&gt; 4</span><br><span class="line"></span><br><span class="line">; &lt;=&gt; 等价于</span><br><span class="line">(if (odd? (inc 2))</span><br><span class="line">    (+ 1 3))</span><br><span class="line">    1)</span><br></pre></td></tr></table></figure>
+<p>这个未必是个好的组合方式，但是不可否认的是，我们可以用这些随意地将这些函数组合到一起，得到我们想要的结果。</p>
+<h3 id="transducer"><a href="#transducer" class="headerlink" title="transducer"></a>transducer</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(def xf (comp (filter odd?) (take 10)))</span><br><span class="line">(transduce xf conj (range))</span><br><span class="line">;; [1 3 5 7 9 11 13 15 17 19]</span><br></pre></td></tr></table></figure>
+<p>这里直接将求值延迟到了<code>transduce</code>计算的时候，换句话说，<code>xf</code>定义了一种过程：filter出奇数并取出前10个元素。同等的代码，如果用表达式直接书写的话，如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(-&gt;&gt; (range)</span><br><span class="line">     (filter odd?)</span><br><span class="line">     (take 10))</span><br></pre></td></tr></table></figure>
+<p>这里的问题就是我们没能使用高阶函数抽象出过程，如果把 conj 换成其他的reduce运算，现在的过程无法支撑，但是tranducers可以！</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(transduce xf + (range)) ;-&gt; 100</span><br></pre></td></tr></table></figure>
+<p>我们再看一个tranducer的神奇使用方式：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">(defn log [&amp; [idx]]</span><br><span class="line">  (fn [rf]</span><br><span class="line">    (fn</span><br><span class="line">      ([] (rf))</span><br><span class="line">      ([result] (rf result))</span><br><span class="line">      ([result el]</span><br><span class="line">        (let [n-step (if idx (str &quot;Step: &quot; idx &quot;. &quot;) &quot;&quot;)]</span><br><span class="line">          (println (format &quot;%sResult: %s, Item: %s&quot; n-step result el)))</span><br><span class="line">        (rf result el)))))</span><br><span class="line"></span><br><span class="line">(def ^:dynamic *dbg?* false)</span><br><span class="line"></span><br><span class="line">(defn comp* [&amp; xforms]</span><br><span class="line">  (apply comp</span><br><span class="line">         (if *dbg?*</span><br><span class="line">           (-&gt;&gt; (range)</span><br><span class="line">                (map log)</span><br><span class="line">                (interleave xforms))</span><br><span class="line">           xforms)))</span><br><span class="line"></span><br><span class="line">(binding [*dbg?* true]</span><br><span class="line">  (transduce</span><br><span class="line">   (comp*</span><br><span class="line">    (map inc)</span><br><span class="line">    (filter odd?))</span><br><span class="line">   +</span><br><span class="line">   (range 5))) ;; -&gt; 9</span><br><span class="line">   </span><br><span class="line">Step: 0. Result: 0, Item: 1</span><br><span class="line">Step: 1. Result: 0, Item: 1</span><br><span class="line">Step: 0. Result: 1, Item: 2</span><br><span class="line">Step: 0. Result: 1, Item: 3</span><br><span class="line">Step: 1. Result: 1, Item: 3</span><br><span class="line">Step: 0. Result: 4, Item: 4</span><br><span class="line">Step: 0. Result: 4, Item: 5</span><br><span class="line">Step: 1. Result: 4, Item: 5</span><br></pre></td></tr></table></figure>
+<p>之所以会出现上述的结果，是因为<code>interleave xforms</code>将<code>(map inc)</code>以及<code>(filter odd?)</code>和logs进行了交叉，得到的结果是<code>(comp (map inc) (log) (filter odd?) (log))</code>，所以如果是偶数就会被filter清除，看不见log了。</p>
+<p>首先一定得理解：每个tranducer函数都是同构的！<br>形式如下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(defn m [f]</span><br><span class="line">    (fn [rf] </span><br><span class="line">        (fn [result elem]</span><br><span class="line">            (rf result (f elem)))))</span><br></pre></td></tr></table></figure>
+<p>这意味着<code>(m f)</code>的函数都是可以组合的，组合的形式如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(comp (m f) (m1 f1) ...)</span><br></pre></td></tr></table></figure>
+<p>展开之后</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">((m f) </span><br><span class="line">    ((m1 f1) </span><br><span class="line">        ((m2 f2) ...)))</span><br><span class="line">-&gt;</span><br><span class="line">(fn [result elem]</span><br><span class="line">    (((m1 f1) </span><br><span class="line">        ((m2 f2) ...)) result (f elem)))</span><br></pre></td></tr></table></figure>
+<p>所以可以看到第一个执行的一定是 comp 的首个 reducing function 参数。故：</p>
+<ol>
+<li>xform 作为组合的前提</li>
+<li>执行顺序从左到右；</li>
+<li><code>+</code> 作为 reducing function 最后执行；</li>
+</ol>
+<h3 id="Monad"><a href="#Monad" class="headerlink" title="Monad"></a>Monad</h3><p>什么是<a target="_blank" rel="noopener" href="https://www.jianshu.com/p/324c9ce77317">Monad</a>呢？A monad is just a monoid in the category of endofunctors.</p>
+<ol>
+<li>Identity—For a monad m, m flatMap unit &#x3D;&gt; m </li>
+<li>Unit—For a monad m, unit(v) flatMap f &#x3D;&gt; f(v) </li>
+<li>Associativity—For a monad m, m flatMap g flatMap h &#x3D;&gt; m flatMap {x &#x3D;&gt; g(x) flatMap h} <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">// java8 实现的 9*9 乘法表</span><br><span class="line">public class ListMonad&lt;T&gt; &#123;</span><br><span class="line">    private List&lt;T&gt; elements;</span><br><span class="line"></span><br><span class="line">    private ListMonad(T elem) &#123;</span><br><span class="line">        this.elements = singletonList(elem);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private ListMonad(List&lt;T&gt; elems) &#123;</span><br><span class="line">        this.elements = elems;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public &lt;U&gt; ListMonad&lt;U&gt; flatmap(Function&lt;T, ListMonad&lt;U&gt;&gt; fn) &#123;</span><br><span class="line">        List&lt;U&gt; newElements = new ArrayList&lt;&gt;();</span><br><span class="line">        this.elements.forEach(elem -&gt; newElements.addAll(fn.apply(elem).elements));</span><br><span class="line">        return new ListMonad&lt;&gt;(newElements);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public &lt;X&gt; ListMonad&lt;X&gt; uint(X elem) &#123;</span><br><span class="line">        return new ListMonad&lt;&gt;(elem);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public &lt;U&gt; ListMonad&lt;U&gt; apply(ListMonad&lt;Function&lt;T, U&gt;&gt; m) &#123;</span><br><span class="line">        return m.flatmap(this::map);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public &lt;U&gt; ListMonad&lt;U&gt; map(Function&lt;T, U&gt; fn) &#123;</span><br><span class="line">        return flatmap(t -&gt; uint(fn.apply(t)));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        ListMonad&lt;Integer&gt; m = new ListMonad&lt;&gt;(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9));</span><br><span class="line">        ListMonad&lt;Integer&gt; m1 = new ListMonad&lt;&gt;(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9));</span><br><span class="line"></span><br><span class="line">        ListMonad&lt;Integer&gt; list = m.apply(m1.map(x -&gt; y -&gt; x * y));</span><br><span class="line">        // [1...81]</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h2 id="表达式优于语句"><a href="#表达式优于语句" class="headerlink" title="表达式优于语句"></a>表达式优于语句</h2><h3 id="S表达式"><a href="#S表达式" class="headerlink" title="S表达式"></a>S表达式</h3><ol>
+<li>原子，或者；</li>
+<li>形式为 (x • y) 的表达式，其中x和y也是S表达式。</li>
+</ol>
+<p>举个例子，递增一组数据，过滤奇数，然后进行排序，最终取出第一个。如果取不到，返回<code>:not-found</code>。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">(-&gt; [1 2 3] </span><br><span class="line">    (-&gt;&gt; (map inc) </span><br><span class="line">         (filter odd?) </span><br><span class="line">         (sort) </span><br><span class="line">         (first)) </span><br><span class="line">    (or :not-found))</span><br><span class="line">; -&gt; 3 </span><br><span class="line">(-&gt; [1 1 3] </span><br><span class="line">    (-&gt;&gt; (map inc) </span><br><span class="line">         (filter odd?) </span><br><span class="line">         (sort) </span><br><span class="line">         (first)) </span><br><span class="line">    (or :not-found)</span><br><span class="line">; -&gt; :not-found    </span><br></pre></td></tr></table></figure>
+<p>当然你也可以写成</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(if-let [r (first (sort (filter odd? (map inc [1 1 1]))))] </span><br><span class="line">    r </span><br><span class="line">    :not-found)</span><br><span class="line">; -&gt; :not-found    </span><br></pre></td></tr></table></figure>
+<p>其实两者都是S表达式，但是下面的写法更加偏向于语句。从串联起来读来讲，前者明显是由于后者的。这要是放在其他函数式语言上，效果更加显著。比如下面重构if-else控制语句到Optional类型。</p>
+<h3 id="if-else-Optional"><a href="#if-else-Optional" class="headerlink" title="if-else -&gt; Optional"></a>if-else -&gt; Optional</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">Optional&lt;Rule&gt; rule = ruleOf(id);</span><br><span class="line"><span class="keyword">if</span>(rule.isPresent()) &#123;</span><br><span class="line">    <span class="keyword">return</span> transform(rule.get());</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">RuntimeException</span>();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> Rule <span class="title function_">transform</span><span class="params">(Rule rule)</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> Rule.builder()</span><br><span class="line">                .withName(<span class="string">&quot;No.&quot;</span> + rule.getId())</span><br><span class="line">                .build();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这是典型的语句可以重构到表达式的场景，关键是怎么重构呢？<br>第一步，调转<code>if</code>。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">Optional</span> <span class="variable">rule</span> <span class="operator">=</span> ruleOf(id);</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(!rule.isPresent()) &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">RuntimeException</span>();</span><br><span class="line">&#125; </span><br><span class="line">   </span><br><span class="line"><span class="keyword">return</span> transform(rule.get());</span><br></pre></td></tr></table></figure>
+<p>第二步，<code>Optional.map</code>函数</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line"><span class="keyword">return</span> rule.map(r -&gt; transform(r)).get();</span><br></pre></td></tr></table></figure>
+<p>第三步，<code>inline transform</code>函数</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line">rule.map(r -&gt; Rule.builder()</span><br><span class="line">                    .withName(&quot;No.&quot; + r.getId())</span><br><span class="line">                    .build()).get();</span><br></pre></td></tr></table></figure>
+<p>第四步，<code>Optional.orElseThrow</code>函数</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line">rule.map(r -&gt; Rule.builder()</span><br><span class="line">                    .withName(&quot;No.&quot; + r.getId())</span><br><span class="line">                    .build())</span><br><span class="line">    .orElseThrow(() -&gt; new RuntimeException());</span><br></pre></td></tr></table></figure>
+<p>第五步，注<code>if</code>释语句中的<code>throw new RuntimeException()</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">if(!rule.isPresent()) &#123;</span><br><span class="line">   // throw new RuntimeException();</span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure>
+<p>这时候发现语句中为空，即可将整个语句删除。可以考虑<code>inline rule</code>。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ruleOf(id).map(r -&gt; Rule.builder()</span><br><span class="line">                    .withName(&quot;No.&quot; + r.getId())</span><br><span class="line">                    .build())</span><br><span class="line">    .orElseThrow(() -&gt; new RuntimeException());</span><br></pre></td></tr></table></figure>
+<p>完毕。</p>
+<h2 id="我们认识事物的方式"><a href="#我们认识事物的方式" class="headerlink" title="我们认识事物的方式"></a>我们认识事物的方式</h2><ol>
+<li>把几个简单的想法合并成一个复合概念，从而创造出所有复杂的概念。</li>
+<li>简单的或复杂的两种思想融合在一起，并立即把它们联系起来，不要把它们统一起来，从而得到它所有的关系思想。</li>
+<li>把他们与其他所有陪伴他们的真实存在的想法分开：这就是所谓的抽象，因此所有的一般想法都是被提出来的。</li>
+</ol>
+<h2 id="推荐的书籍"><a href="#推荐的书籍" class="headerlink" title="推荐的书籍"></a>推荐的书籍</h2><ol>
+<li><a target="_blank" rel="noopener" href="https://book.douban.com/subject/1391740/">逻辑的引擎</a></li>
+<li><a target="_blank" rel="noopener" href="https://book.douban.com/subject/26587213/">函数式编程思维</a></li>
+<li><a target="_blank" rel="noopener" href="https://book.douban.com/subject/1148282/">算机程序的构造和解释</a><br><img src="http://upload-images.jianshu.io/upload_images/217988-8bb6c8f3354a5640.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="推荐的书籍"></li>
+</ol>
+<hr>
+<p>参考资料</p>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E5%81%9C%E6%9C%BA%E9%97%AE%E9%A2%98">图灵停机问题</a></li>
+<li><a target="_blank" rel="noopener" href="http://blog.csdn.net/pongba/article/details/1336028">康托尔、哥德尔、图灵 - 永恒的金色对角线</a></li>
+<li><a target="_blank" rel="noopener" href="http://blog.klipse.tech/lambda/2016/08/07/pure-y-combinator-clojure.html">Y combinator in Clojure</a></li>
+<li><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E5%B8%8C%E5%B0%94%E4%BC%AF%E7%89%B9%E7%9A%8423%E4%B8%AA%E9%97%AE%E9%A2%98">希尔伯特的23个问题</a></li>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/28112037">再谈哥德尔不完备定理</a></li>
+<li><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E5%87%BD%E6%95%B8%E7%A8%8B%E5%BC%8F%E8%AA%9E%E8%A8%80">wiki 函数式编程</a></li>
+<li><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%CE%9B%E6%BC%94%E7%AE%97">lambda 演算</a></li>
+<li><a target="_blank" rel="noopener" href="http://athena.ecs.csus.edu/~csc135fp/project/history.html">History of functional programming</a></li>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/24648375">函数式编程的早期历史</a></li>
+<li><a target="_blank" rel="noopener" href="http://www.sohu.com/a/164321809_136745">走进计算机文化史</a></li>
+<li><a target="_blank" rel="noopener" href="https://sarabander.github.io/sicp/html/index.xhtml">SICP</a></li>
+<li><a target="_blank" rel="noopener" href="http://www.math.cmu.edu/~wgunther/talks/gsLambdaCalculus.pdf">Lambda Calculus and the Decision Problem</a></li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/FP/" rel="tag"># FP</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2018/02/04/2018-02-04-the-victorian-internet/" rel="prev" title="维多利亚时代的互联网">
+                  <i class="fa fa-angle-left"></i> 维多利亚时代的互联网
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2018/04/29/2018-04-29-multiple-implements-of-tree-command/" rel="next" title="Tree command 的多重实现">
+                  Tree command 的多重实现 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Qian Yan</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>
