@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.2.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"qianyan.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="修改Vagrantfile 123456# 把客户机器（ubuntu）的port 3306 映射到宿主机器上的port 3306config.vm.network :forwarded_port, guest: 3306, host: 3306# 执行安装程序config.vm.provision :shell :path &#x3D;&gt; &quot;install_mysql.sh&quot;  m">
+<meta property="og:type" content="article">
+<meta property="og:title" content="How to install mysql with vagrant">
+<meta property="og:url" content="https://qianyan.github.io/2014/05/16/vagrant-mysql/index.html">
+<meta property="og:site_name" content="λ">
+<meta property="og:description" content="修改Vagrantfile 123456# 把客户机器（ubuntu）的port 3306 映射到宿主机器上的port 3306config.vm.network :forwarded_port, guest: 3306, host: 3306# 执行安装程序config.vm.provision :shell :path &#x3D;&gt; &quot;install_mysql.sh&quot;  m">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2014-05-16T08:45:45.000Z">
+<meta property="article:modified_time" content="2016-09-06T14:37:55.000Z">
+<meta property="article:author" content="lambeta">
+<meta property="article:tag" content="mysql">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://qianyan.github.io/2014/05/16/vagrant-mysql/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://qianyan.github.io/2014/05/16/vagrant-mysql/","path":"2014/05/16/vagrant-mysql/","title":"How to install mysql with vagrant"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>How to install mysql with vagrant | λ</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">λ</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">(conj clojurians me)</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9Vagrantfile"><span class="nav-number">1.</span> <span class="nav-text">修改Vagrantfile</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mysql%E5%AE%89%E8%A3%85%E7%A8%8B%E5%BA%8F"><span class="nav-number">2.</span> <span class="nav-text">mysql安装程序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%99%B7%E9%98%B1"><span class="nav-number">3.</span> <span class="nav-text">陷阱</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%94%99%E8%AF%AF%E4%B8%80"><span class="nav-number">3.1.</span> <span class="nav-text">错误一</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%94%99%E8%AF%AF%E4%BA%8C"><span class="nav-number">3.2.</span> <span class="nav-text">错误二</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">lambeta</p>
+  <div class="site-description" itemprop="description">Elegance and familiarity are orthogonal</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">76</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">41</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://qianyan.github.io/2014/05/16/vagrant-mysql/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="lambeta">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="λ">
+      <meta itemprop="description" content="Elegance and familiarity are orthogonal">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="How to install mysql with vagrant | λ">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          How to install mysql with vagrant
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2014-05-16 16:45:45" itemprop="dateCreated datePublished" datetime="2014-05-16T16:45:45+08:00">2014-05-16</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2016-09-06 22:37:55" itemprop="dateModified" datetime="2016-09-06T22:37:55+08:00">2016-09-06</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%8A%80%E6%9C%AF/" itemprop="url" rel="index"><span itemprop="name">技术</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h3 id="修改Vagrantfile"><a href="#修改Vagrantfile" class="headerlink" title="修改Vagrantfile"></a>修改Vagrantfile</h3><hr>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># 把客户机器（ubuntu）的port 3306 映射到宿主机器上的port 3306</span><br><span class="line">config.vm.network :forwarded_port, guest: 3306, host: 3306</span><br><span class="line"></span><br><span class="line"># 执行安装程序</span><br><span class="line">config.vm.provision :shell :path =&gt; &quot;install_mysql.sh&quot;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="mysql安装程序"><a href="#mysql安装程序" class="headerlink" title="mysql安装程序"></a>mysql安装程序</h3><hr>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">#!/bin/bash</span><br><span class="line">echo &quot;Setup mysql-server-5.5 if not exists..&quot;</span><br><span class="line">sudo debconf-set-selections &lt;&lt;&lt; &#x27;mysql-server-5.5</span><br><span class="line">mysql-server/root_password password root&#x27;</span><br><span class="line">sudo debconf-set-selections &lt;&lt;&lt; &#x27;mysql-server-5.5</span><br><span class="line">mysql-server/root_password_again password root&#x27;</span><br><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get -y install mysql-server-5.5</span><br><span class="line"></span><br><span class="line">if [ ! -f /var/log/databasesetup ];</span><br><span class="line">then</span><br><span class="line">	echo &quot;CREATE USER &#x27;codeeker&#x27; IDENTIFIED BY &#x27;codeeker&#x27;&quot; | mysql -uroot -proot</span><br><span class="line">	echo &quot;CREATE DATABASE mall&quot; | mysql -uroot -proot</span><br><span class="line">	echo &quot;GRANT ALL ON mall.* TO &#x27;codeeker&#x27;@&#x27;%&#x27;&quot; | mysql -uroot -proot</span><br><span class="line">	echo &quot;flush privileges&quot; | mysql -uroot -proot</span><br><span class="line"></span><br><span class="line">	touch /var/log/databasesetup #为了不重复执行创建用户的操作</span><br><span class="line"></span><br><span class="line">	if [ -f /vagrant/data/initial.sql ];</span><br><span class="line">	then</span><br><span class="line">			mysql -uroot -proot codeeker &lt; /vagrant/data/initial.sql</span><br><span class="line">	fi</span><br><span class="line">fi</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="陷阱"><a href="#陷阱" class="headerlink" title="陷阱"></a>陷阱</h3><h4 id="错误一"><a href="#错误一" class="headerlink" title="错误一"></a>错误一</h4><ul>
+<li>报错误<code>Lost connection to MySQL server at &#39;reading initial communication packet&#39;, system error: 0</code></li>
+<li>原因是 &#x2F;etc&#x2F;mysql&#x2F;my.cnf中有<code>bind-address = 127.0.0.1</code>，会拒绝非localhost的访问，包括vagrant映射port到的宿主主机上</li>
+<li>解决的方法是修改<code>bind-address = 0.0.0.0</code>，表示接受本网络中所有的ip登录</li>
+</ul>
+<h4 id="错误二"><a href="#错误二" class="headerlink" title="错误二"></a>错误二</h4><p><code>echo &quot;CREATE USER &#39;codeeker&#39; IDENTIFIED BY &#39;codeeker&#39;&quot; | mysql -uroot -proot</code></p>
+<p>如果写成了</p>
+<p><code>echo &quot;CREATE USER &#39;codeeker&#39;@&#39;localhost&#39; IDENTIFIED BY &#39;codeeker&#39;&quot; | mysql -uroot -proot</code></p>
+<p>那么在宿主的机器上，会报<code>access deny</code>错误。</p>
+<ul>
+<li>原因是这样创建的用户，只能在localhost上登录</li>
+<li>解决的方法是去掉<code>@&#39;localhost&#39;</code></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/mysql/" rel="tag"># mysql</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2014/05/14/night-rain-in-Mianyang/" rel="prev" title="绵阳夜雨">
+                  <i class="fa fa-angle-left"></i> 绵阳夜雨
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2014/07/05/custom-oh-my-zsh-theme-to-support-svn/" rel="next" title="Custom Oh-my-zsh theme to support svn">
+                  Custom Oh-my-zsh theme to support svn <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">lambeta</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

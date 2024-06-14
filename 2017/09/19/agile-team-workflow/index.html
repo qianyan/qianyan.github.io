@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.2.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"qianyan.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="站会站会中的内容是每天工作的开始，也是对昨天工作的回顾。一般会由团队的某位成员主持，这位主持人有责任让电子系统上的story卡片和看板上的保持一致。站会上，大家依看板从右至左依次更新自己负责story的状态，如果遇到阻碍，应该在站会上及时提出，团队之中的成员如果能提供帮助，应该在站会之后，组织解决方案的讨论。 站会反模式 站会上由组长一人发言、分配任务； 一人长篇阔论占据大半时间（合理的发言时间为">
+<meta property="og:type" content="article">
+<meta property="og:title" content="敏捷团队工作流">
+<meta property="og:url" content="https://qianyan.github.io/2017/09/19/agile-team-workflow/index.html">
+<meta property="og:site_name" content="λ">
+<meta property="og:description" content="站会站会中的内容是每天工作的开始，也是对昨天工作的回顾。一般会由团队的某位成员主持，这位主持人有责任让电子系统上的story卡片和看板上的保持一致。站会上，大家依看板从右至左依次更新自己负责story的状态，如果遇到阻碍，应该在站会上及时提出，团队之中的成员如果能提供帮助，应该在站会之后，组织解决方案的讨论。 站会反模式 站会上由组长一人发言、分配任务； 一人长篇阔论占据大半时间（合理的发言时间为">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2017-09-19T15:07:17.000Z">
+<meta property="article:modified_time" content="2018-09-24T13:13:05.000Z">
+<meta property="article:author" content="lambeta">
+<meta property="article:tag" content="agile">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://qianyan.github.io/2017/09/19/agile-team-workflow/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://qianyan.github.io/2017/09/19/agile-team-workflow/","path":"2017/09/19/agile-team-workflow/","title":"敏捷团队工作流"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>敏捷团队工作流 | λ</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">λ</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">(conj clojurians me)</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AB%99%E4%BC%9A"><span class="nav-number">1.</span> <span class="nav-text">站会</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AB%99%E4%BC%9A%E5%8F%8D%E6%A8%A1%E5%BC%8F"><span class="nav-number">1.1.</span> <span class="nav-text">站会反模式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%AD%E4%BB%A3%E8%AE%A1%E5%88%92%E4%BC%9A%E8%AE%AE-IPM"><span class="nav-number">2.</span> <span class="nav-text">迭代计划会议 (IPM)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%A8%E6%88%B7%E6%95%85%E4%BA%8B-kickoff-%E4%BC%9A%E8%AE%AE"><span class="nav-number">3.</span> <span class="nav-text">用户故事 kickoff 会议</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Desk-Check-Shoulder-Check"><span class="nav-number">4.</span> <span class="nav-text">Desk Check &#x2F; Shoulder Check</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Tech-Huddle"><span class="nav-number">5.</span> <span class="nav-text">Tech Huddle</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%AD%E4%BB%A3%E5%9B%9E%E9%A1%BE%E4%BC%9A%E8%AE%AE"><span class="nav-number">6.</span> <span class="nav-text">迭代回顾会议</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%AD%E4%BB%A3review%E4%BC%9A%E8%AE%AE-Showcase"><span class="nav-number">7.</span> <span class="nav-text">迭代review会议 (Showcase)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%A8%E6%88%B7%E6%95%85%E4%BA%8B"><span class="nav-number">8.</span> <span class="nav-text">用户故事</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%85%E4%BA%8B%E5%9F%BA%E7%A1%80"><span class="nav-number">9.</span> <span class="nav-text">故事基础</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BE%8B%E5%AD%90"><span class="nav-number">9.1.</span> <span class="nav-text">例子</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%BC%E5%BC%8F"><span class="nav-number">9.2.</span> <span class="nav-text">格式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A6%81%E7%82%B9"><span class="nav-number">9.3.</span> <span class="nav-text">要点</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%87%8D%E7%82%B9%E6%8F%8F%E8%BF%B0%E5%95%86%E4%B8%9A%E7%9A%84%E4%BB%B7%E5%80%BC%E4%B8%8D%E5%8F%AA%E6%98%AF%E5%8A%9F%E8%83%BD"><span class="nav-number">9.3.1.</span> <span class="nav-text">重点描述商业的价值不只是功能</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%94%A8%E4%B8%9A%E5%8A%A1%E8%AF%AD%E8%A8%80%E6%8F%8F%E8%BF%B0"><span class="nav-number">9.3.2.</span> <span class="nav-text">用业务语言描述</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%A9%E7%9B%8A%E7%9B%B8%E5%85%B3%E8%80%85%E4%B8%8D%E4%BB%85%E5%8C%85%E5%90%AB%E7%94%A8%E6%88%B7"><span class="nav-number">9.3.3.</span> <span class="nav-text">利益相关者不仅包含用户</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CCC-%E7%BB%84%E4%BB%B6-The-three-%E2%80%98C%E2%80%99s"><span class="nav-number">10.</span> <span class="nav-text">CCC 组件 (The three ‘C’s)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Card-%E5%8D%A1%E7%89%87"><span class="nav-number">10.1.</span> <span class="nav-text">Card (卡片)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Conversation-%E4%BA%A4%E6%B5%81"><span class="nav-number">10.2.</span> <span class="nav-text">Conversation (交流)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Confirmation-%E7%A1%AE%E8%AE%A4"><span class="nav-number">10.3.</span> <span class="nav-text">Confirmation (确认)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%92%E5%88%86%E5%8E%9F%E5%88%99-INVEST"><span class="nav-number">11.</span> <span class="nav-text">划分原则 INVEST</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Independent-%E7%8B%AC%E7%AB%8B%E6%80%A7"><span class="nav-number">11.1.</span> <span class="nav-text">Independent (独立性)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Negotiated-%E5%8F%AF%E5%8D%8F%E5%95%86%E7%9A%84"><span class="nav-number">11.2.</span> <span class="nav-text">Negotiated (可协商的)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Valuable-%E6%9C%89%E4%BB%B7%E5%80%BC%E7%9A%84"><span class="nav-number">11.3.</span> <span class="nav-text">Valuable (有价值的)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Estimable-%E5%8F%AF%E8%AF%84%E4%BC%B0%E7%9A%84"><span class="nav-number">11.4.</span> <span class="nav-text">Estimable (可评估的)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Small-%E7%9F%AD%E5%B0%8F%E7%9A%84"><span class="nav-number">11.5.</span> <span class="nav-text">Small (短小的)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Testable-%E5%8F%AF%E6%B5%8B%E8%AF%95%E7%9A%84"><span class="nav-number">11.6.</span> <span class="nav-text">Testable (可测试的)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%A4%E6%96%AD%E6%A0%87%E5%87%86-%E7%BB%8F%E9%AA%8C%E5%87%86%E5%88%99"><span class="nav-number">11.7.</span> <span class="nav-text">判断标准 (经验准则)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%AA%8C%E6%94%B6%E6%9D%A1%E4%BB%B6"><span class="nav-number">12.</span> <span class="nav-text">验收条件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8D%95%E8%8E%B7%E9%A2%84%E6%9C%9F%E7%9A%84%E8%A1%8C%E4%B8%BA"><span class="nav-number">12.1.</span> <span class="nav-text">捕获预期的行为</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%BC%E5%BC%8F-1"><span class="nav-number">12.2.</span> <span class="nav-text">格式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5%E6%A8%A1%E5%BC%8F"><span class="nav-number">12.3.</span> <span class="nav-text">最佳实践模式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E5%8F%AF%E8%AF%BB%E7%9A%84"><span class="nav-number">12.3.1.</span> <span class="nav-text">1. 可读的</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E5%8F%AF%E6%B5%8B%E8%AF%95%E7%9A%84"><span class="nav-number">12.3.2.</span> <span class="nav-text">2. 可测试的</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%8F%8D%E6%A8%A1%E5%BC%8F1-%E6%A8%A1%E6%A3%B1%E4%B8%A4%E5%8F%AF%E7%9A%84%E9%99%88%E8%BF%B0"><span class="nav-number">12.3.2.1.</span> <span class="nav-text">反模式1 - 模棱两可的陈述</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%8F%8D%E6%A8%A1%E5%BC%8F2-%E9%9D%9E%E7%B3%BB%E7%BB%9F%E8%BE%93%E5%87%BA"><span class="nav-number">12.3.2.2.</span> <span class="nav-text">反模式2 - 非系统输出</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%8F%8D%E6%A8%A1%E5%BC%8F3-when-%E9%9A%90%E8%97%8F%E5%88%B0-given"><span class="nav-number">12.3.2.3.</span> <span class="nav-text">反模式3 - when 隐藏到 given</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-%E5%AE%9E%E7%8E%B0%E6%97%A0%E5%85%B3%E7%9A%84"><span class="nav-number">12.3.3.</span> <span class="nav-text">3. 实现无关的</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E8%AF%84%E5%AE%A1"><span class="nav-number">13.</span> <span class="nav-text">代码评审</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%93%E5%AF%B9%E7%BC%96%E7%A8%8B"><span class="nav-number">14.</span> <span class="nav-text">结对编程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E9%A9%B1%E5%8A%A8%E5%BC%80%E5%8F%91-TDD"><span class="nav-number">15.</span> <span class="nav-text">测试驱动开发 (TDD)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B5%8B%E8%AF%95%E9%A9%B1%E5%8A%A8%E5%BC%80%E5%8F%91"><span class="nav-number">16.</span> <span class="nav-text">单元测试和测试驱动开发</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B8%B8%E7%8A%AF%E7%9A%84%E9%94%99%E8%AF%AF"><span class="nav-number">16.1.</span> <span class="nav-text">常犯的错误</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A5%BD%E7%9A%84%E5%AE%9E%E8%B7%B5"><span class="nav-number">16.2.</span> <span class="nav-text">好的实践</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%97%B6%E5%80%99%E5%86%99%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95%EF%BC%9F"><span class="nav-number">16.3.</span> <span class="nav-text">什么时候写单元测试？</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%87%AA%E5%8A%A8%E5%8C%96%E6%B5%8B%E8%AF%95"><span class="nav-number">17.</span> <span class="nav-text">自动化测试</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8C%81%E7%BB%AD%E9%9B%86%E6%88%90-%E6%8C%81%E7%BB%AD%E4%BA%A4%E4%BB%98"><span class="nav-number">18.</span> <span class="nav-text">持续集成&#x2F;持续交付</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%8B%E6%83%85%E9%93%BE%E6%8E%A5"><span class="nav-number">19.</span> <span class="nav-text">友情链接</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">lambeta</p>
+  <div class="site-description" itemprop="description">Elegance and familiarity are orthogonal</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">76</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">41</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://qianyan.github.io/2017/09/19/agile-team-workflow/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="lambeta">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="λ">
+      <meta itemprop="description" content="Elegance and familiarity are orthogonal">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="敏捷团队工作流 | λ">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          敏捷团队工作流
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2017-09-19 23:07:17" itemprop="dateCreated datePublished" datetime="2017-09-19T23:07:17+08:00">2017-09-19</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2018-09-24 21:13:05" itemprop="dateModified" datetime="2018-09-24T21:13:05+08:00">2018-09-24</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%8A%80%E6%9C%AF/" itemprop="url" rel="index"><span itemprop="name">技术</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="站会"><a href="#站会" class="headerlink" title="站会"></a>站会</h2><p>站会中的内容是每天工作的开始，也是对昨天工作的回顾。一般会由团队的某位成员主持，这位主持人有责任让电子系统上的story卡片和看板上的保持一致。站会上，大家依看板从右至左依次更新自己负责story的状态，如果遇到阻碍，应该在站会上及时提出，团队之中的成员如果能提供帮助，应该在站会之后，组织解决方案的讨论。</p>
+<h3 id="站会反模式"><a href="#站会反模式" class="headerlink" title="站会反模式"></a>站会反模式</h3><ol>
+<li>站会上由组长一人发言、分配任务；</li>
+<li>一人长篇阔论占据大半时间（合理的发言时间为1-2分钟，总的时间控制在15分钟左右）；</li>
+<li>站会上谈论和story卡片无关的内容。</li>
+</ol>
+<h2 id="迭代计划会议-IPM"><a href="#迭代计划会议-IPM" class="headerlink" title="迭代计划会议 (IPM)"></a>迭代计划会议 (IPM)</h2><p>迭代计划会议是项目组成员在每一个迭代开始时，聚到一起共同决定这个迭代的 backlog (代办事项) 需要交付的故事卡。<br>这个会议的产出物包含：</p>
+<ol>
+<li>迭代的 backlog 和用户故事的验收条件</li>
+<li>这个迭代的总体业务目标</li>
+<li>故事点数，也即开发测试人员对用户故事的评估及承诺</li>
+</ol>
+<p>参与者包含：</p>
+<ol>
+<li>Product Owner</li>
+<li>Scrum Master</li>
+<li>开发团队</li>
+<li>其他干系人</li>
+</ol>
+<p>日程：</p>
+<ol>
+<li>团队确立这个迭代可以完成的工作量（以点数计），一般从历史迭代中获取</li>
+<li>团队根据定义的顺序讨论故事卡，对于每一张故事卡，需要讨论的内容包含：<ol>
+<li>衡量故事的相对大小（以点数计），可能会进行故事卡的拆分</li>
+<li>沟通验收条件</li>
+<li>根据已经讨论出来故事卡的价值、时间和风险，PO重新确定故事卡的优先级</li>
+<li>一旦预先设定的工作量到达，就停止本轮迭代会议</li>
+</ol>
+</li>
+<li>团队就迭代的业务目标达成共识</li>
+</ol>
+<h2 id="用户故事-kickoff-会议"><a href="#用户故事-kickoff-会议" class="headerlink" title="用户故事 kickoff 会议"></a>用户故事 kickoff 会议</h2><p>Story kick off，指的是启动一个 Stroy 进入开发阶段。Story kick off的时候，通常需要三种角色参与：BA、QA 以及开发 Story 的 Dev。</p>
+<p>会议内容：</p>
+<ul>
+<li>DEV 自己先完整地过一遍 Story 的描述；</li>
+<li>DEV 给 BA 和 QA 去讲这个 Story 的功能以及 AC；</li>
+<li>要能够清晰的讲出来，并且三者达成一致，如果有疑惑，需要当场得到解决；</li>
+<li>DEV 开始开发 Story，并自行将 Story 拆分成多个子任务列表，开工。</li>
+</ul>
+<p><a target="_blank" rel="noopener" href="http://www.infoq.com/cn/articles/my-agile-practice-in-thoughtworks">我在ThoughtWorks中的敏捷实践</a></p>
+<h2 id="Desk-Check-Shoulder-Check"><a href="#Desk-Check-Shoulder-Check" class="headerlink" title="Desk Check &#x2F; Shoulder Check"></a>Desk Check &#x2F; Shoulder Check</h2><p>Desk Check 发生在开发人员确信自己已经完成了故事卡，需要另外的人（BA、QA、Dev）坐到旁边一起帮忙验证是否确实完成。</p>
+<p>Desk checklist:<br>参与者：BA、QA、Dev 或者其他感兴趣的人</p>
+<ul>
+<li>故事卡测试覆盖率够吗？</li>
+<li>自己本地测过功能么？</li>
+<li>自己本地跑过全量的测试么？</li>
+<li>所有的 AC 是否都满足了？</li>
+<li>做故事卡的过程中是否遇到了理解上的问题？</li>
+</ul>
+<p><a target="_blank" rel="noopener" href="https://www.thoughtworks.com/insights/blog/defect-prevention-using-agile-techniques">Defect Prevention Using Agile Techniques</a></p>
+<h2 id="Tech-Huddle"><a href="#Tech-Huddle" class="headerlink" title="Tech Huddle"></a>Tech Huddle</h2><p>开发人员聚到一起就项目中遇到的技术展开讨论<br>前提条件：<br>会议之前确定并逐条列出会议讨论的技术主题<br>产出物：</p>
+<ol>
+<li>一个或多个行动方案，合并到用户故事</li>
+<li>方案的优缺点</li>
+<li>方案的责任人</li>
+</ol>
+<h2 id="迭代回顾会议"><a href="#迭代回顾会议" class="headerlink" title="迭代回顾会议"></a>迭代回顾会议</h2><p>在每个迭代结束时，Scrum Master会主持该会议，目的是为了确定哪些改变可以提升下个迭代的生产效率。在这个会议当中，每个人都可以开诚布公地提出自己的建议，有利于管理者从反馈中获取团队的现状。</p>
+<p>最高指导原则 (Prime Directive)：</p>
+<blockquote>
+<p>Regardless of what we discover, we understand and truly believe that everyone did the best job he or she could, given what was known at the time, his or her skills and abilities, the resources available, and the situation at hand.<br>无论我们发现了什么，考虑到当时的已知情况、个人的技术水平和能力、可用的资源，以及手上的状况，我们理解并坚信：每个人对自己的工作都已全力以赴。</p>
+</blockquote>
+<p>内容包含：</p>
+<ul>
+<li>上个迭代中做的好的有哪些？</li>
+<li>上个迭代中做的不好的有哪些？</li>
+<li>我们可以做些什么改善哪些不好的地方？（改善建议）</li>
+</ul>
+<p>参与者包含：</p>
+<ol>
+<li>Product Owner</li>
+<li>Scrum Master</li>
+<li>开发团队</li>
+<li>其他干系人</li>
+</ol>
+<p><a target="_blank" rel="noopener" href="https://insights.thoughtworks.cn/7-step-agenda-effective-retrospective/">高效回顾会议的七步议程</a></p>
+<h2 id="迭代review会议-Showcase"><a href="#迭代review会议-Showcase" class="headerlink" title="迭代review会议 (Showcase)"></a>迭代review会议 (Showcase)</h2><p>Showcase 就是开发团队把开发好的功能给客户的 Product Owner（以下简称PO）等业务相关人员演示，以获取他们对所开发系统的反馈，是敏捷开发流程中的一个实践，一般的频率是一个迭代一次，也可以根据项目具体情况做调整。</p>
+<p>内容包含：</p>
+<p><a target="_blank" rel="noopener" href="https://insights.thoughtworks.cn/agile-showcase-se7en/">敏捷实践Showcase的七宗罪</a><br><a target="_blank" rel="noopener" href="http://www.funretrospectives.com/category/energizer/">Retro 破冰游戏</a></p>
+<h2 id="用户故事"><a href="#用户故事" class="headerlink" title="用户故事"></a>用户故事</h2><h2 id="故事基础"><a href="#故事基础" class="headerlink" title="故事基础"></a>故事基础</h2><p>用户故事是指在软件开发和项目管理中用日常语言或商务用语写成的句子。这个句子反映一个用户在其工作职责的范围内要达到的某个目的, 以及此目的所需要的功能。</p>
+<h3 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h3><blockquote>
+<p>为了避免遗漏附件延误工作<br>作为邮件发送者<br>我希望邮件系统能够在我忘记带附件的时候提醒我</p>
+</blockquote>
+<h3 id="格式"><a href="#格式" class="headerlink" title="格式"></a>格式</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">为了&lt;某个目的或价值&gt;, 作为&lt;某类利益相关者&gt;, 我想要&lt;某个功能&gt;</span><br><span class="line">作为&lt;某类利益相关者&gt;, 我想要&lt;某个功能&gt;, 以便&lt;达到某个目的或获得某种价值&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="要点"><a href="#要点" class="headerlink" title="要点"></a>要点</h3><h4 id="重点描述商业的价值不只是功能"><a href="#重点描述商业的价值不只是功能" class="headerlink" title="重点描述商业的价值不只是功能"></a>重点描述商业的价值不只是功能</h4><ul>
+<li>帮助团队了解需求背后的意图，利于开发团队协同客户、业务部门设计出更好的解决方案</li>
+</ul>
+<h4 id="用业务语言描述"><a href="#用业务语言描述" class="headerlink" title="用业务语言描述"></a>用业务语言描述</h4><ul>
+<li>利于客户、业务部门理解并区分优先级</li>
+</ul>
+<h4 id="利益相关者不仅包含用户"><a href="#利益相关者不仅包含用户" class="headerlink" title="利益相关者不仅包含用户"></a>利益相关者不仅包含用户</h4><ul>
+<li>系统拥有者的角度也是需求的重要来源</li>
+</ul>
+<h2 id="CCC-组件-The-three-‘C’s"><a href="#CCC-组件-The-three-‘C’s" class="headerlink" title="CCC 组件 (The three ‘C’s)"></a>CCC 组件 (The three ‘C’s)</h2><h3 id="Card-卡片"><a href="#Card-卡片" class="headerlink" title="Card (卡片)"></a>Card (卡片)</h3><ul>
+<li>业务价值 remainder</li>
+<li>做计划和沟通业务时的 token</li>
+</ul>
+<h3 id="Conversation-交流"><a href="#Conversation-交流" class="headerlink" title="Conversation (交流)"></a>Conversation (交流)</h3><ul>
+<li>用于在做计划和沟通业务时引发沟通，制造共同话题（收敛）</li>
+<li>需求文档的生成方式</li>
+</ul>
+<h3 id="Confirmation-确认"><a href="#Confirmation-确认" class="headerlink" title="Confirmation (确认)"></a>Confirmation (确认)</h3><ul>
+<li>将细节以验收测试的方式检测功能的完整性和准确性</li>
+</ul>
+<h2 id="划分原则-INVEST"><a href="#划分原则-INVEST" class="headerlink" title="划分原则 INVEST"></a>划分原则 INVEST</h2><h3 id="Independent-独立性"><a href="#Independent-独立性" class="headerlink" title="Independent (独立性)"></a>Independent (独立性)</h3><p>故事和故事之间尽量保持独立，互相依赖的故事对于估算工作量、确定优先级和安排计划都带来很多不便。通常我们可以通过组合和拆分的方式减少依赖性（去除重复）。<br>独立性更多的指的是实现要完整。前后端拆分通常不是很好的拆分方法</p>
+<h3 id="Negotiated-可协商的"><a href="#Negotiated-可协商的" class="headerlink" title="Negotiated (可协商的)"></a>Negotiated (可协商的)</h3><p>一个故事是可以协商的，故事卡不是合同，它只是包含对一个需求的简短描述。具体的细节在沟通阶段产出，以验收测试的方式。如果带有太多的细节，反而限制了和用户的沟通。</p>
+<h3 id="Valuable-有价值的"><a href="#Valuable-有价值的" class="headerlink" title="Valuable (有价值的)"></a>Valuable (有价值的)</h3><p>每个故事都必须对客户有价值（无论是用户还是客户）。一个让用户故事有价值的好办法就是客户写下它们。</p>
+<h3 id="Estimable-可评估的"><a href="#Estimable-可评估的" class="headerlink" title="Estimable (可评估的)"></a>Estimable (可评估的)</h3><p>开发团队需要去估计一个用户故事以便确定优先级，工作量，安排计划。如果难以估计故事的时间, 意味着:</p>
+<ul>
+<li>领域知识的缺乏: 这种情况下需要更多的沟通</li>
+<li>技术实现的模糊: 这种情况下要做试验, 做原型</li>
+<li>或者故事太大了: 这时需要把故事切分成小些的</li>
+<li>还有对其它团队的依赖…</li>
+</ul>
+<h3 id="Small-短小的"><a href="#Small-短小的" class="headerlink" title="Small (短小的)"></a>Small (短小的)</h3><p>一个好的故事在工作量上应该是尽量短小的，至少确保能在一个迭代或 Sprint 中能够完成。用户故事越大，在估算、计划安排等方面的风险就越大。</p>
+<h3 id="Testable-可测试的"><a href="#Testable-可测试的" class="headerlink" title="Testable (可测试的)"></a>Testable (可测试的)</h3><p>一个用户的故事必须是可被测试的，以便它是可以完成的。如果一个故事无法测试，那么就无法知道它何时可以完成。一个不可测试的例子：为了节省时间，作为用户，我希望软件是易用的。</p>
+<h3 id="判断标准-经验准则"><a href="#判断标准-经验准则" class="headerlink" title="判断标准 (经验准则)"></a>判断标准 (经验准则)</h3><ul>
+<li>可以写在 Release Notes 里</li>
+<li>值得讲给其它行业的人听</li>
+<li>可以写在市场宣传材料中</li>
+</ul>
+<h2 id="验收条件"><a href="#验收条件" class="headerlink" title="验收条件"></a>验收条件</h2><h3 id="捕获预期的行为"><a href="#捕获预期的行为" class="headerlink" title="捕获预期的行为"></a>捕获预期的行为</h3><p>一般验收条件都会在开发之前准备好，用于捕获预期的系统行为，同时作为故事卡业务描述的一部分，定义了故事卡的 DoD（Definition of Done）。</p>
+<h3 id="格式-1"><a href="#格式-1" class="headerlink" title="格式"></a>格式</h3><ul>
+<li><strong>Given</strong> 前置条件，告诉我们在进行操作之前，需要设置和完成什么；</li>
+<li><strong>When</strong> 触发结果的操作</li>
+<li><strong>Then</strong> 操作之后的预期结果</li>
+</ul>
+<h3 id="最佳实践模式"><a href="#最佳实践模式" class="headerlink" title="最佳实践模式"></a>最佳实践模式</h3><h4 id="1-可读的"><a href="#1-可读的" class="headerlink" title="1. 可读的"></a>1. 可读的</h4><p>我们希望业务人员审阅和修正验收条件，如果写的内容只有开发人员能懂，我们就失去了获得反馈的机会。使用上述书写格式，可以提高可读性。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Given: that my mobile phone is switched on</span><br><span class="line"></span><br><span class="line">And: I have sufficient signal to make a call</span><br><span class="line"></span><br><span class="line">When: I dial a number</span><br><span class="line"></span><br><span class="line">Then: I am connected to the person I want to talk to</span><br><span class="line"></span><br><span class="line">And: incoming calls are diverted to my voicemail</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-可测试的"><a href="#2-可测试的" class="headerlink" title="2. 可测试的"></a>2. 可测试的</h4><h5 id="反模式1-模棱两可的陈述"><a href="#反模式1-模棱两可的陈述" class="headerlink" title="反模式1 - 模棱两可的陈述"></a>反模式1 - 模棱两可的陈述</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Given: that I have the search page loaded</span><br><span class="line"></span><br><span class="line">When: I perform a search</span><br><span class="line"></span><br><span class="line">Then: the search results come back within a reasonable period of time</span><br></pre></td></tr></table></figure>
+<p>这里的 reasonable period of time 就是不可测试的，因为没有人可以决定什么才是 reasonable.</p>
+<p>合理的改法是:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Given: that I have the search page loaded</span><br><span class="line"></span><br><span class="line">When: I perform a search</span><br><span class="line"></span><br><span class="line">Then: the search results come back within 5ms</span><br></pre></td></tr></table></figure>
+<p>5ms 之内，这是一个标量，完全可以衡量。</p>
+<h5 id="反模式2-非系统输出"><a href="#反模式2-非系统输出" class="headerlink" title="反模式2 - 非系统输出"></a>反模式2 - 非系统输出</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Given: that I am on the home page</span><br><span class="line"></span><br><span class="line">And: I am logged in</span><br><span class="line"></span><br><span class="line">When: I navigate to account preferences</span><br><span class="line"></span><br><span class="line">Then: I can see my account preferences</span><br></pre></td></tr></table></figure>
+<p>这里的 I can see my account preferences 是无法进行断言的，因为这是系统无关的，说得极端些，假如用户闭上眼睛，这个功能就没法通过验收了。</p>
+<p>合理的改法是：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Given: that I am on the home page</span><br><span class="line"></span><br><span class="line">And: I am logged in</span><br><span class="line"></span><br><span class="line">When: I navigate to account preferences</span><br><span class="line"></span><br><span class="line">Then: my account preferences are displayed</span><br></pre></td></tr></table></figure>
+<p>这个时候，我可以检查系统展示了我的用户页面。</p>
+<h5 id="反模式3-when-隐藏到-given"><a href="#反模式3-when-隐藏到-given" class="headerlink" title="反模式3 - when 隐藏到 given"></a>反模式3 - when 隐藏到 given</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Given: that I am on the homepage</span><br><span class="line"></span><br><span class="line">And: I navigate to the search</span><br><span class="line"></span><br><span class="line">When: I look at the page</span><br><span class="line"></span><br><span class="line">Then: the search options are displayed</span><br></pre></td></tr></table></figure>
+<p>基本上，这是团队编写 AC 时最容易犯的错误，操作出现在前置条件中，<em>when</em> 反而不是系统行为了。</p>
+<p>合理的改法是：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Given: that I am on the homepage</span><br><span class="line"></span><br><span class="line">When: I navigate to the search</span><br><span class="line"></span><br><span class="line">Then: the search options are displayed</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-实现无关的"><a href="#3-实现无关的" class="headerlink" title="3. 实现无关的"></a>3. 实现无关的</h4><p>验收条件应该是实现无关的，它和用户故事一样，是给业务和开发人员提供交流凭证的一种工具，所以它应该聚焦于功能，而不是功能的展现形式。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">Given: that I am on the home page</span><br><span class="line"></span><br><span class="line">And: I am logged in</span><br><span class="line"></span><br><span class="line">When: I navigate to advanced search</span><br><span class="line"></span><br><span class="line">Then: the advanced search web page must be displayed</span><br><span class="line"></span><br><span class="line">And: a text box labelled &quot;Name&quot; is displayed</span><br><span class="line"></span><br><span class="line">And: a text box labelled &quot;Description&quot; is displayed</span><br><span class="line"></span><br><span class="line">And: a command button named &quot;Search&quot; is displayed</span><br></pre></td></tr></table></figure>
+<p>这里已经框死了必须要使用 text box 实现展示功能，而实际上其背后真正的意图是通过属性字段进行搜索，隐藏了业务含义的验收条件是不可取的。</p>
+<p>合理的改法是：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">Given: that I am on the home page</span><br><span class="line"></span><br><span class="line">And: I am logged in</span><br><span class="line"></span><br><span class="line">When: I navigate to advanced search</span><br><span class="line"></span><br><span class="line">Then: the advanced search is displayed</span><br><span class="line"></span><br><span class="line">And: an option to search by name is displayed</span><br><span class="line"></span><br><span class="line">And: an option search by description is displayed</span><br><span class="line"></span><br><span class="line">And: the advanced search is displayed in accordance with the attached wireframe</span><br></pre></td></tr></table></figure>
+<p>换句话说，验收条件本身不应该关注于展现形式，当然，为了便于理解，wireframe 是提供直观素材的更好的方式。</p>
+<h2 id="代码评审"><a href="#代码评审" class="headerlink" title="代码评审"></a>代码评审</h2><p>代码评审是团队针对今天一天<strong>提交过的</strong>代码的评审会议。这样做的目的是去除代码的坏味道，减少累积的技术债。</p>
+<p>团队成员使用版本控制工具，轮流展示自己一天的编码成果并且说明代码的用途。这期间，其他的成员不仅要评审代码的逻辑是否正确（满足验收条件），还必须思考是否有更优雅的方式实现这段功能。大家可以随意表达自己对这些代码的好恶，代码所有者也可以据理力争，所有者一旦被说服就必须无条件地按意见修改。为防止遗忘，可以使用便笺纸记录下来。</p>
+<h2 id="结对编程"><a href="#结对编程" class="headerlink" title="结对编程"></a>结对编程</h2><p>通俗地讲，结对编程就是两个人同时工作在同一个 Story 上，一起讨论 Story 的解决方案，并编写代码实现功能，一个人敲键盘，一个人看屏幕，穿插着进行。Pair的双方在快速敲击键盘的时候会伴随一些交流。能力相当的两人，可以一人写测试，一人写实现代码。</p>
+<h2 id="测试驱动开发-TDD"><a href="#测试驱动开发-TDD" class="headerlink" title="测试驱动开发 (TDD)"></a>测试驱动开发 (TDD)</h2><p>TDD，即测试驱动开发，强调的是测试先行，跟我们先实现功能代码后添加测试的过程恰恰相反。测试驱动开发是一种驱动代码实现和设计的过程。我们说要先有测试，再去实现；保证实现功能的前提下，重构代码以达到较好的设计。整个过程就好比演绎推理，测试就是其中的证明步骤，而最终实现的功能则是证明的结果。</p>
+<p>实践方法：</p>
+<ul>
+<li>Given：初始状态或前置条件</li>
+<li>When：行为发生</li>
+<li>Then：断言结果</li>
+</ul>
+<h2 id="单元测试和测试驱动开发"><a href="#单元测试和测试驱动开发" class="headerlink" title="单元测试和测试驱动开发"></a>单元测试和测试驱动开发</h2><p>测试的价值表现在两个方面：</p>
+<ol>
+<li>防止已有的功能被破坏</li>
+<li>驱动出功能实现</li>
+</ol>
+<p>从测试金字塔描述的层级来看，单元测试是基座。这类测试数量应该是非常多的，而且还有一个显著特征——运行速度特别快。一般违反快速这个标准的，基本上可以肯定这不是单元测试。</p>
+<p>基于以往带团队的经验，我给出一些写单元测试时常犯的错误和好的实践：</p>
+<h3 id="常犯的错误"><a href="#常犯的错误" class="headerlink" title="常犯的错误"></a>常犯的错误</h3><ol>
+<li>覆盖率100%，却没有任何断言</li>
+<li>使用Java反射setAccessible(true)访问私有属性</li>
+<li>依赖某些地方产生的数据才能运行</li>
+<li>单元测试运行速度超级慢</li>
+<li>开始测试之前，准备巨量的数据</li>
+<li>测试之间必须以特定顺序运行</li>
+<li>上帝类（God Object）导致数以千行的测试代码</li>
+</ol>
+<h3 id="好的实践"><a href="#好的实践" class="headerlink" title="好的实践"></a>好的实践</h3><ol>
+<li>绝对不测试私有的方法</li>
+<li>当方法没有返回值，可以通过测试异常或者其委托对象的方式<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">1. @Test(expected = RuntimeException.class) </span><br><span class="line">2. Mockito.verify(mockObj).doSomething(args…)</span><br></pre></td></tr></table></figure>
+3. 静态方法调用是强耦合的信号。需要重构待测类依赖新接口，新接口定义的方法由子类实现，实现方法中包装这些静态方法。</li>
+</ol>
+<h3 id="什么时候写单元测试？"><a href="#什么时候写单元测试？" class="headerlink" title="什么时候写单元测试？"></a>什么时候写单元测试？</h3><ol>
+<li>新的需求，首先写单元测试（保证功能实现）</li>
+<li>已经存在的代码，补充单元测试 （保证功能不被破坏）</li>
+<li>发现Bug，首先加测试（保证缺陷不再出现）</li>
+</ol>
+<h2 id="自动化测试"><a href="#自动化测试" class="headerlink" title="自动化测试"></a>自动化测试</h2><p>测试金字塔和 <a target="_blank" rel="noopener" href="http://fabiopereira.me/blog/2012/03/18/introducing-depth-of-test-dot/">DOT</a>（Depth of Test)</p>
+<h2 id="持续集成-持续交付"><a href="#持续集成-持续交付" class="headerlink" title="持续集成&#x2F;持续交付"></a>持续集成&#x2F;持续交付</h2><p><strong>再次强调一下，持续集成是一项团队务必遵守的实践。</strong></p>
+<p>开发过程中，我们鼓励小步提交的代码控制方式。即当开发人员对story的部分功能编码完成之后，如果<strong>确认</strong>可以提交到代码仓库（如果是分布式的Git，可以考虑提交到本地仓库），应该尽早提交。开发人员的每日工作可以遵循7步提交法，如下：</p>
+<ol>
+<li>更新代码；</li>
+<li>本地编码；</li>
+<li>本地构建（使用<code>mvn test</code>）；</li>
+<li>再次更新代码；</li>
+<li>本地构建；</li>
+<li>提交到代码仓库；</li>
+<li>CI上构建。</li>
+</ol>
+<p>既然是实践（规矩），就有几项有效的纪律需要遵守：</p>
+<ul>
+<li>CI红的时候不能提交代码</li>
+<li>CI红着不能过夜（不能等到第二天才去修复）</li>
+<li>任何人提交后CI失败，无论原因，都有责任跟进修复</li>
+<li>在提交代码前运行所有测试</li>
+<li>不注释掉或删除失败的测试</li>
+</ul>
+<p>这也就意味着开发人员需要密切关注CI的状态。CI持续反馈着软件的可工作状态，所以团队应该把CI的健康状况列为项目的最高优先级，甚至高于开发新特性。</p>
+<hr>
+<h2 id="友情链接"><a href="#友情链接" class="headerlink" title="友情链接"></a>友情链接</h2><ol>
+<li><a target="_blank" rel="noopener" href="https://insights.thoughtworks.cn/thoughtworks-agile/">ThoughtWorks的敏捷开发-XR</a>)</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/agile/" rel="tag"># agile</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2017/09/17/release-jar-to-clojars/" rel="prev" title="如何发布jar到clojars">
+                  <i class="fa fa-angle-left"></i> 如何发布jar到clojars
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2017/09/24/Acceptance-Criteria/" rel="next" title="验收条件">
+                  验收条件 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">lambeta</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

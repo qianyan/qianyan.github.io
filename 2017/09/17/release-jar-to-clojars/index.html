@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.2.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"qianyan.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="Clojars 介绍Clojars 是一个为开源 Clojure 类库打造的仓库，截止2017年9月17日，大概有19831个项目发布在上面。整个网站也是用 Clojure 编写的。 发布 Clojure library1. 注册 clojars前往 clojars 注册 2. lein 部署1$ lein deploy clojars # lein deploy [repository name">
+<meta property="og:type" content="article">
+<meta property="og:title" content="如何发布jar到clojars">
+<meta property="og:url" content="https://qianyan.github.io/2017/09/17/release-jar-to-clojars/index.html">
+<meta property="og:site_name" content="λ">
+<meta property="og:description" content="Clojars 介绍Clojars 是一个为开源 Clojure 类库打造的仓库，截止2017年9月17日，大概有19831个项目发布在上面。整个网站也是用 Clojure 编写的。 发布 Clojure library1. 注册 clojars前往 clojars 注册 2. lein 部署1$ lein deploy clojars # lein deploy [repository name">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2017-09-17T13:39:40.000Z">
+<meta property="article:modified_time" content="2017-09-19T23:28:25.000Z">
+<meta property="article:author" content="lambeta">
+<meta property="article:tag" content="leiningen">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://qianyan.github.io/2017/09/17/release-jar-to-clojars/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://qianyan.github.io/2017/09/17/release-jar-to-clojars/","path":"2017/09/17/release-jar-to-clojars/","title":"如何发布jar到clojars"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>如何发布jar到clojars | λ</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">λ</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">(conj clojurians me)</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Clojars-%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.</span> <span class="nav-text">Clojars 介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%91%E5%B8%83-Clojure-library"><span class="nav-number">2.</span> <span class="nav-text">发布 Clojure library</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E6%B3%A8%E5%86%8C-clojars"><span class="nav-number">2.1.</span> <span class="nav-text">1. 注册 clojars</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-lein-%E9%83%A8%E7%BD%B2"><span class="nav-number">2.2.</span> <span class="nav-text">2. lein 部署</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E8%AE%BE%E7%BD%AE%E5%85%A8%E5%B1%80%E7%9A%84-credentials-map"><span class="nav-number">2.3.</span> <span class="nav-text">3. 设置全局的 credentials map</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Error-gpg-agent-timeout"><span class="nav-number">3.</span> <span class="nav-text">Error: gpg agent timeout</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E7%9C%8B%E7%9C%8B%E5%90%8E%E5%8F%B0%E6%98%AF%E5%90%A6%E6%9C%89%E4%B8%AA%E8%BF%9B%E7%A8%8B%E5%8F%AB%E5%81%9A-gpg-agent%EF%BC%9F"><span class="nav-number">3.1.</span> <span class="nav-text">1. 看看后台是否有个进程叫做 gpg-agent？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-gpg-%E7%9B%B4%E6%8E%A5%E8%A7%A3%E5%AF%86-credentials-clj-gpg"><span class="nav-number">3.2.</span> <span class="nav-text">2. gpg 直接解密 credentials.clj.gpg</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E9%87%8D%E6%96%B0-gpg-%E2%80%93decrypt"><span class="nav-number">3.3.</span> <span class="nav-text">3. 重新 gpg –decrypt</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E9%87%8D%E6%96%B0%E9%83%A8%E7%BD%B2"><span class="nav-number">3.4.</span> <span class="nav-text">4. 重新部署</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8F%90%E7%A4%BA"><span class="nav-number">4.</span> <span class="nav-text">提示123--default-recipient-self    Use the default key as default recipient if option --recipient is not used and don’t ask if this is a valid one.    The default key is the first one from the secret keyring or the one set with --default-key.</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">lambeta</p>
+  <div class="site-description" itemprop="description">Elegance and familiarity are orthogonal</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">76</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">41</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://qianyan.github.io/2017/09/17/release-jar-to-clojars/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="lambeta">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="λ">
+      <meta itemprop="description" content="Elegance and familiarity are orthogonal">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="如何发布jar到clojars | λ">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          如何发布jar到clojars
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2017-09-17 21:39:40" itemprop="dateCreated datePublished" datetime="2017-09-17T21:39:40+08:00">2017-09-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2017-09-20 07:28:25" itemprop="dateModified" datetime="2017-09-20T07:28:25+08:00">2017-09-20</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Clojure/" itemprop="url" rel="index"><span itemprop="name">Clojure</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="Clojars-介绍"><a href="#Clojars-介绍" class="headerlink" title="Clojars 介绍"></a>Clojars 介绍</h2><p>Clojars 是一个为开源 Clojure 类库打造的仓库，截止2017年9月17日，大概有19831个项目发布在上面。整个网站也是用 Clojure 编写的。</p>
+<h2 id="发布-Clojure-library"><a href="#发布-Clojure-library" class="headerlink" title="发布 Clojure library"></a>发布 Clojure library</h2><h3 id="1-注册-clojars"><a href="#1-注册-clojars" class="headerlink" title="1. 注册 clojars"></a>1. 注册 clojars</h3><p>前往 <a target="_blank" rel="noopener" href="https://clojars.org/register">clojars</a> 注册</p>
+<h3 id="2-lein-部署"><a href="#2-lein-部署" class="headerlink" title="2. lein 部署"></a>2. lein 部署</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ lein deploy clojars # lein deploy [repository name], here the repo name is clojars.</span><br></pre></td></tr></table></figure>
+<p>如果不想加上 <code>clojars</code> 参数，则需要在当前项目下的 <em>project.clj</em> 添加如下内容</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#123;:deploy-repositories [[&quot;releases&quot; :clojars]</span><br><span class="line">                       [&quot;snapshots&quot; :clojars]]&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>这里注意一点：</strong><br>这里使用 <code>:deploy-repositories</code> 而非 <code>:repositories</code>，原因是 <code>:repositories</code> 除了用于部署还会作为依赖源被项目使用。所以，如若必要，还是职责单一点好。这样，也可以加入 <em>:user profile (~&#x2F;.lein&#x2F;profiles.clj)</em> 供所有本地项目发布使用。</p>
+<p>这个时候可以执行</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ lein deploy</span><br><span class="line">No credentials found for snapshots(did you mean `lein deploy clojars`?) </span><br><span class="line"># 这里应该是 leiningen 的 bug，提示信息 `lein deploy clojars` 显得很奇怪，可以忽略之。</span><br><span class="line">See `lein help deploying` for how to configure credentials to avoid prompts.</span><br><span class="line">Username: username</span><br><span class="line">Password: password</span><br></pre></td></tr></table></figure>
+<p>如上，这时会弹出用户名和密码输入框。为了节省时间，避免每次输入，最好把用户凭证 (credentials) 以文件的形式存放到用户范围的目录下，即*~&#x2F;.lein&#x2F;credentials.clj*，并做加密处理。</p>
+<h3 id="3-设置全局的-credentials-map"><a href="#3-设置全局的-credentials-map" class="headerlink" title="3. 设置全局的 credentials map"></a>3. 设置全局的 credentials map</h3><p>首先，把如下的 credentials map 写入 <em>~&#x2F;.lein&#x2F;credentials.clj</em></p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;<span class="regex">#&quot;https://clojars.org/repo&quot;</span> &#123;<span class="symbol">:username</span> <span class="string">&quot;username_on_clojars&quot;</span> <span class="symbol">:password</span> <span class="string">&quot;password_on_clojars&quot;</span>&#125;&#125;</span><br></pre></td></tr></table></figure>
+<p>其次，使用 gpg 加密该文件</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ gpg --default-recipient-self -e \</span><br><span class="line">    ~/.lein/credentials.clj &gt; ~/.lein/credentials.clj.gpg</span><br></pre></td></tr></table></figure>
+<p>加密后，即可删除原文件 <em>~&#x2F;.lein&#x2F;credentials.clj</em>。然后在<code>:deploy-repositories</code> map 中指定 <code>:creds :gpg</code></p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;<span class="symbol">:deploy-repositories</span> [[<span class="string">&quot;releases&quot;</span> <span class="symbol">:clojars</span></span><br><span class="line">                        <span class="symbol">:creds</span> <span class="symbol">:gpg</span>]]</span><br><span class="line">                       [<span class="string">&quot;snapshots&quot;</span> <span class="symbol">:clojars</span></span><br><span class="line">                        <span class="symbol">:creds</span> <span class="symbol">:gpg</span>]]&#125;</span><br></pre></td></tr></table></figure>
+<p>完成上述，<code>lein deploy</code> 的时候即可解密 <code>~/.lein/credentials.clj.gpg</code>，从中获取对应仓库的<code>username</code>和<code>password</code>（<strong>注：</strong>为了便于索引查找，credentials 使用正则表达式 #”<a target="_blank" rel="noopener" href="https://clojars.org/repo">https://clojars.org/repo</a>“ 作为 key）</p>
+<h2 id="Error-gpg-agent-timeout"><a href="#Error-gpg-agent-timeout" class="headerlink" title="Error: gpg agent timeout"></a>Error: gpg agent timeout</h2><p>有时候，deploy 时会出现 gpg agent 超时的错误</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ lein deploy</span><br><span class="line">gpg: problem with the agent: Timeout</span><br><span class="line">gpg: decryption failed: No secret key</span><br><span class="line">Could not decrypt credentials from /Users/qianyan/.lein/credentials.clj.gpg</span><br><span class="line">nil</span><br><span class="line">See `lein help gpg` for how to install gpg.</span><br></pre></td></tr></table></figure>
+<p>仔细搜索<a target="_blank" rel="noopener" href="https://github.com/technomancy/leiningen/blob/master/doc/DEPLOY.md#gpg">文档</a>会发现下面这句很重要的话</p>
+<blockquote>
+<p>Due to a bug in gpg you currently need to use gpg-agent and have already unlocked your key before Leiningen launches, but with gpg-agent you only have to enter your passphrase periodically; it will keep it cached for a given period.</p>
+</blockquote>
+<p>大意是，leiningen 需要用到 gpg-agent，而且在 <code>lein deploy</code> 之前，就应该解锁密钥。</p>
+<p>不实际操作的话，还是很难弄懂这句话具体的指代。我们不妨思考一下。</p>
+<h3 id="1-看看后台是否有个进程叫做-gpg-agent？"><a href="#1-看看后台是否有个进程叫做-gpg-agent？" class="headerlink" title="1. 看看后台是否有个进程叫做 gpg-agent？"></a>1. 看看后台是否有个进程叫做 gpg-agent？</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">ps -ef |grep gpg</span></span><br><span class="line">  501 87095     1   0  8:27PM ??         0:00.00 gpg-agent --daemon</span><br></pre></td></tr></table></figure>
+<p>嗯，还真有！</p>
+<h3 id="2-gpg-直接解密-credentials-clj-gpg"><a href="#2-gpg-直接解密-credentials-clj-gpg" class="headerlink" title="2. gpg 直接解密 credentials.clj.gpg"></a>2. gpg 直接解密 credentials.clj.gpg</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">gpg --decrypt ~/.lein/credentials.clj.gpg</span></span><br><span class="line"></span><br><span class="line">You need a passphrase to unlock the secret key for</span><br><span class="line">user: &quot;Yan Qian (lambeta) &lt;qianyan.lambda@gmail.com&gt;&quot;</span><br><span class="line">2048-bit RSA key, ID E13DFD8A, created 2016-05-14 (main key ID 3C5030FF)</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">接下来，漫无止境的等待中...</span></span><br></pre></td></tr></table></figure>
+<p>这奇怪的等待让我不安，所以我使出了杀手锏 <code>kill -9</code>，直接把 gpg-agent 干掉。</p>
+<h3 id="3-重新-gpg-–decrypt"><a href="#3-重新-gpg-–decrypt" class="headerlink" title="3. 重新 gpg –decrypt"></a>3. 重新 gpg –decrypt</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">gpg --decrypt ~/.lein/credentials.clj.gpg</span></span><br><span class="line"></span><br><span class="line">You need a passphrase to unlock the secret key for</span><br><span class="line">user: &quot;Yan Qian (lambeta) &lt;qianyan.lambda@gmail.com&gt;&quot;</span><br><span class="line">2048-bit RSA key, ID E13DFD8A, created 2016-05-14 (main key ID 3C5030FF)</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">这里要输入 passphrase</span></span><br><span class="line">gpg: encrypted with 2048-bit RSA key, ID E13DFD8A, created 2016-05-14</span><br><span class="line">      &quot;Yan Qian (lambeta) &lt;qianyan.lambda@gmail.com&gt;&quot;</span><br><span class="line">&#123; #&quot;https://clojars.org/repo&quot; &#123;:username &quot;username_on_clojars&quot; :password &quot;password_on_clojars&quot;&#125;&#125;</span><br></pre></td></tr></table></figure>
+<p>终于可以输入 passphrase 了，解密完成。这大概就是上面引文所说的 unlock your key before Leiningen launches.</p>
+<h3 id="4-重新部署"><a href="#4-重新部署" class="headerlink" title="4. 重新部署"></a>4. 重新部署</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">lein deploy</span></span><br><span class="line">Created /Users/qianyan/Projects/clojure-pr/clj-moco/target/clj-moco-0.1.0-SNAPSHOT.jar</span><br><span class="line">Wrote /Users/qianyan/Projects/clojure-pr/clj-moco/pom.xml</span><br><span class="line">Retrieving clj-moco/clj-moco/0.1.0-SNAPSHOT/maven-metadata.xml</span><br><span class="line">    from https://clojars.org/repo/</span><br><span class="line">Sending clj-moco/clj-moco/0.1.0-SNAPSHOT/clj-moco-0.1.0-20170917.122837-4.jar (10k)</span><br><span class="line">    to https://clojars.org/repo/</span><br><span class="line">Sending clj-moco/clj-moco/0.1.0-SNAPSHOT/clj-moco-0.1.0-20170917.122837-4.pom (3k)</span><br><span class="line">    to https://clojars.org/repo/</span><br><span class="line">Retrieving clj-moco/clj-moco/maven-metadata.xml</span><br><span class="line">    from https://clojars.org/repo/</span><br><span class="line">Sending clj-moco/clj-moco/0.1.0-SNAPSHOT/maven-metadata.xml (1k)</span><br><span class="line">    to https://clojars.org/repo/</span><br><span class="line">Sending clj-moco/clj-moco/maven-metadata.xml (1k)</span><br><span class="line">    to https://clojars.org/repo/</span><br></pre></td></tr></table></figure>
+<p>没有出现 gpg-agent timeout 的错误，部署完成。</p>
+<hr>
+<h2 id="提示"><a href="#提示" class="headerlink" title="提示"></a><strong>提示</strong><br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">--default-recipient-self</span><br><span class="line">    Use the default key as default recipient if option --recipient is not used and don’t ask if this is a valid one.</span><br><span class="line">    The default key is the first one from the secret keyring or the one set with --default-key.</span><br></pre></td></tr></table></figure></h2><p>参考链接<br>[1] <a target="_blank" rel="noopener" href="https://github.com/technomancy/leiningen/blob/master/doc/DEPLOY.md">Leiningen Deployment</a><br>[2] <a target="_blank" rel="noopener" href="https://www.gnupg.org/documentation/manuals/gnupg-devel/GPG-Configuration-Options.html#GPG-Configuration-Options">GPG: How to change the configuration</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/leiningen/" rel="tag"># leiningen</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2017/09/15/release-jar-to-maven-central-repository/" rel="prev" title="如何发布Jar包到Maven Central Repository">
+                  <i class="fa fa-angle-left"></i> 如何发布Jar包到Maven Central Repository
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2017/09/19/agile-team-workflow/" rel="next" title="敏捷团队工作流">
+                  敏捷团队工作流 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">lambeta</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

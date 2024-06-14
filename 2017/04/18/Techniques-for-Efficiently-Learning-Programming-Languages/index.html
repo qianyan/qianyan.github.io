@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.2.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"qianyan.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="这是Clojure好书《Clojure for the Brave and True》作者 Daniel Higginbotham 写于2017年4月16日的博文。从作者的丰富的经验来看，本文非常具有指导意义。  学习编程语言是一种技巧：做好了，你会感受到掌握新事物之后的快感（dopamine：多巴胺）；做不好，就会接二连三的沮丧，甚至放弃。下面这些学习编程语言的最佳技巧是我从多年的著书写作，演">
+<meta property="og:type" content="article">
+<meta property="og:title" content="如何高效地学习编程语言">
+<meta property="og:url" content="https://qianyan.github.io/2017/04/18/Techniques-for-Efficiently-Learning-Programming-Languages/index.html">
+<meta property="og:site_name" content="λ">
+<meta property="og:description" content="这是Clojure好书《Clojure for the Brave and True》作者 Daniel Higginbotham 写于2017年4月16日的博文。从作者的丰富的经验来看，本文非常具有指导意义。  学习编程语言是一种技巧：做好了，你会感受到掌握新事物之后的快感（dopamine：多巴胺）；做不好，就会接二连三的沮丧，甚至放弃。下面这些学习编程语言的最佳技巧是我从多年的著书写作，演">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2017-04-18T07:15:09.000Z">
+<meta property="article:modified_time" content="2017-04-18T13:44:20.000Z">
+<meta property="article:author" content="lambeta">
+<meta property="article:tag" content="thinking">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://qianyan.github.io/2017/04/18/Techniques-for-Efficiently-Learning-Programming-Languages/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://qianyan.github.io/2017/04/18/Techniques-for-Efficiently-Learning-Programming-Languages/","path":"2017/04/18/Techniques-for-Efficiently-Learning-Programming-Languages/","title":"如何高效地学习编程语言"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>如何高效地学习编程语言 | λ</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">λ</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">(conj clojurians me)</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8C%81%E7%BB%AD%E6%B5%8B%E8%AF%95%E8%87%AA%E5%B7%B1%E4%BB%A5%E6%8A%B5%E6%8A%97%E8%83%9C%E4%BB%BB%E5%8A%9B%E9%94%99%E8%A7%89"><span class="nav-number">1.</span> <span class="nav-text">持续测试自己以抵抗胜任力错觉</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%8A%B1%E6%97%B6%E9%97%B4%E6%94%BE%E7%A9%BA%E8%87%AA%E5%B7%B1"><span class="nav-number">2.</span> <span class="nav-text">花时间放空自己</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%AB%E6%B5%AA%E8%B4%B9%E6%97%B6%E9%97%B4%E6%B2%AE%E4%B8%A7"><span class="nav-number">3.</span> <span class="nav-text">别浪费时间沮丧</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A1%AE%E8%AE%A4%E4%BD%A0%E6%AD%A3%E5%9C%A8%E5%A4%84%E7%90%86%E8%AF%AD%E8%A8%80%E7%9A%84%E5%93%AA%E4%B8%AA%E6%96%B9%E9%9D%A2"><span class="nav-number">4.</span> <span class="nav-text">确认你正在处理语言的哪个方面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%98%8E%E7%A1%AE%E7%9B%AE%E7%9A%84%EF%BC%8C%E5%A4%96%E9%83%A8%E6%A8%A1%E5%9E%8B%EF%BC%8C%E5%86%85%E9%83%A8%E6%A8%A1%E5%9E%8B"><span class="nav-number">5.</span> <span class="nav-text">明确目的，外部模型，内部模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%97%B4%E9%9A%94%E9%87%8D%E5%A4%8D%E5%B8%AE%E5%8A%A9%E8%AE%B0%E5%BF%86"><span class="nav-number">6.</span> <span class="nav-text">间隔重复帮助记忆</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9D%A1%E7%9C%A0%E5%92%8C%E7%BB%83%E4%B9%A0"><span class="nav-number">7.</span> <span class="nav-text">睡眠和练习</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9B%B4%E5%A4%9A%E5%B0%8F%E8%B4%B4%E5%A3%AB"><span class="nav-number">8.</span> <span class="nav-text">更多小贴士</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">lambeta</p>
+  <div class="site-description" itemprop="description">Elegance and familiarity are orthogonal</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">76</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">41</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://qianyan.github.io/2017/04/18/Techniques-for-Efficiently-Learning-Programming-Languages/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="lambeta">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="λ">
+      <meta itemprop="description" content="Elegance and familiarity are orthogonal">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="如何高效地学习编程语言 | λ">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          如何高效地学习编程语言
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2017-04-18 15:15:09 / 修改时间：21:44:20" itemprop="dateCreated datePublished" datetime="2017-04-18T15:15:09+08:00">2017-04-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Clojure/" itemprop="url" rel="index"><span itemprop="name">Clojure</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><blockquote>
+<p>这是Clojure好书《Clojure for the Brave and True》作者 Daniel Higginbotham 写于2017年4月16日的博文。从作者的丰富的经验来看，本文非常具有指导意义。</p>
+</blockquote>
+<p>学习编程语言是一种技巧：做好了，你会感受到掌握新事物之后的快感（dopamine：多巴胺）；做不好，就会接二连三的沮丧，甚至放弃。下面这些学习编程语言的最佳技巧是我从多年的<a target="_blank" rel="noopener" href="http://www.braveclojure.com/">著书</a><a target="_blank" rel="noopener" href="http://www.flyingmachinestudios.com/programming/the-unofficial-guide-to-rich-hickeys-brain/">写作</a>，<a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=eRq5UBx6cbA">演讲</a>和<a target="_blank" rel="noopener" href="http://www.braveclojure.com/training/">培训</a>中总结出来的。这里头很多技巧来源于对高效学习前沿研究做了解释的书籍。你可以在 <a target="_blank" rel="noopener" href="http://www.communitypicks.com/r/learnprogramming">Community Picks Learn Programming</a> 中找到那些书（还有其它牛x的编程书籍）。</p>
+<h2 id="持续测试自己以抵抗胜任力错觉"><a href="#持续测试自己以抵抗胜任力错觉" class="headerlink" title="持续测试自己以抵抗胜任力错觉"></a>持续测试自己以抵抗胜任力错觉</h2><p>最不济的学习方法中的一种就是重读或者重看材料。这种重复会给你一种感觉——似乎不用花什么气力，你就理解了话题所涵盖的内容。研究者们把这种现象称作胜任力错觉。</p>
+<p>更好的一种方式（你可以掌握的最佳技巧之一）则是持续地测试自己。不要重读一个函数、类或者一个对象是什么，而是让自己定义这些概念或者把它们用到短小的程序当中——强迫你用某种方式显示自己的理解。这一过程常常很不舒服的，但是对形成长期记忆非常有效。更进一步，你可以在阅读材料之前先去行测试，举个例子，尝试在阅读一个章节之前做做练习。值得一提的是，这也被证明有助于记忆的形成。</p>
+<p>测试对于学习的显著影响被称为<strong>测试效用</strong>，下面是一些具体方法可以利用：</p>
+<ul>
+<li>在阅读章节或者看视频之前，尝试猜测你将要学习的东西，并写下来。</li>
+<li>在阅读章节之前先做做这个章节的练习题。</li>
+<li>一直做练习，即使是最难的那些。暂时（永远）放弃一个练习也是可以的，不过至少要尝试一遍。（下个章节会详细谈到）</li>
+<li>阅读短小的程序并且尝试不看源码重新写一个。或者，再小一些，写个函数也行。</li>
+<li>在学习了对象、类、方法或者高阶函数等新概念之后，立即编码做示例。</li>
+<li>创建阐述这些概念的图示，以及这些概念之间的区别和联系。</li>
+<li>把你刚刚学到的概念写成博客。</li>
+<li>尝试把概念解释给非技术的朋友听。（在写《Clojure for Brave and True》的时候，我常常这么干。这样能够以外行的话阐述一个想法，进而迫使你深入理解想法本身。）</li>
+</ul>
+<p>这些技巧的大部分都要规约到编写代码上！说到编程，由于程序都是重文本和概念性的，所以很容易以为我们仅仅通过阅读（代码）就在学习。但是程序同时也是一门手艺，就像其它手艺一样你得操练才能娴熟。编码是暴露你对程序作有错误假设的最佳方式。你越快地这么做，就会越快地纠正错误和提升技能。</p>
+<p>如果你想了解更多测试效应的事情，敬请查看<a target="_blank" rel="noopener" href="http://www.communitypicks.com/r/learnprogramming/s/17592186047889-make-it-stick-the-science-of-successful-learning">坚持：成功学习的科学（make it stick： The Science of Successful Learning）</a>。</p>
+<h2 id="花时间放空自己"><a href="#花时间放空自己" class="headerlink" title="花时间放空自己"></a>花时间放空自己</h2><p>如果你纠结在一个问题上，或者对刚才读到的东西不能理解，就去散散步甚或洗个澡 —— 只要能进入一种舒缓、放空的状态就行。解除障碍的最佳方式之一就是歇一会儿，这可能听上去有点反直觉，但确实如此。</p>
+<p>问题是，当全神贯注解决问题时，我们很容易陷入思维障碍（mental blinder）。我的意思是，这差不多就是“关注”（字面上）的意思。不过，全神贯注会导致我们只能一直探索解决方案空间的一小部分。一旦放空，我们的潜意识就可以探索并联结我们经验中的广泛领域。</p>
+<p>对我来说，这就像当你试图在纸质地图上找到一个目的地（是否还记得？）。你不用刻意就确信你想抵达的城市应该就在这里！在地图的左上角的区域，所以你看了一遍又一遍，都没有成功。然后你放下地图，做了深呼吸并让目光游离了一会儿。当你重新看地图时，确切的地点立马映入眼帘。</p>
+<p>我们曾经都有过这样的经验，在洗澡的时候突发灵感。现在你对于为什么这么做有了更好的了解，那么也就能刻意地使用这个技巧。个人来讲，如果纠结在某事上，我真的会洗个澡，这个技巧的功效显著。另一方面，我又是多么干净（注：洗澡这件事）。</p>
+<p>如果你想多学一些关于思考的关注和分散模式，敬请查看<a target="_blank" rel="noopener" href="http://www.communitypicks.com/r/learnprogramming/s/17592186047884-a-mind-for-numbers-how-to-excel-at">A Mind for Numbers: How to Excel at Math and Science (Even If You FLunked Algebra)</a></p>
+<h2 id="别浪费时间沮丧"><a href="#别浪费时间沮丧" class="headerlink" title="别浪费时间沮丧"></a>别浪费时间沮丧</h2><p>和上一个章节相关：别浪费时间为代码沮丧了。沮丧会让我们做一些愚蠢的事情，比如重新编译或者重刷浏览器，期望这次会有所不同。</p>
+<p>把沮丧看作你的知识有差距的信号。一旦你意识到自己沮丧了，它可以帮你后退一步，清晰地识别问题。如果你写的代码不起作用，坦率地向自己或者别人说明你期望的结果。使用科学的方法，就非预期行为的根因提出一个假说。然后测试你的假说。再次试验后，如果依然解决不了，就把这个问题放到一边，待会儿回来。</p>
+<p>在一些似乎没法解决的问题上，我不知有多少次恼怒地扔掉了自己的笔记本电脑。隔天再看，一个显而易见的解决方案立马跳入脑海。甚至上周就发生过。</p>
+<h2 id="确认你正在处理语言的哪个方面"><a href="#确认你正在处理语言的哪个方面" class="headerlink" title="确认你正在处理语言的哪个方面"></a>确认你正在处理语言的哪个方面</h2><p>个人观点，我觉得记住这些是有用的——当学习一门编程语言的时候，你实际上正在学四件事情。</p>
+<ul>
+<li>怎么写代码：语法、语义以及资源管理</li>
+<li>语言的范式：面向对象，函数式，逻辑等</li>
+<li>产出物的生态圈：如何构建、运行可执行文件以及如何使用库</li>
+<li>工具：编辑器，编译器，调试器，代码质量检测器（linter）</li>
+</ul>
+<p>这四项很容易搞混，不幸的结果是，当你遇到问题最终完全找错了地方。</p>
+<p>举个例子，某些完全的编程新手，可能准备开始构建iOS应用。他们可能会试着让自己的应用在朋友的手机上运行，只看得到有关需要开发人员证书或其他信息的消息。这是产出物生态圈的一部分，不过小白可能将此视为编写代码的问题。他们可能会浏览自己写的每行代码来尝试解决问题，尽管问题和代码没有半毛钱关系。</p>
+<p>如果我系统地处理这些方面，我会发现学习一种语言会更加容易。我将在其它的博客文章中罗列一些待回答的宽泛问题的列表，应该能帮助你学习任何语言。</p>
+<h2 id="明确目的，外部模型，内部模型"><a href="#明确目的，外部模型，内部模型" class="headerlink" title="明确目的，外部模型，内部模型"></a>明确目的，外部模型，内部模型</h2><p>任何时候你学习使用新工具，明确学习的目的，外部模型和内部模型都是十分有用的。</p>
+<p>当你了解了工具的目的时，你的大脑会加载有用的上下文细节，使你更容易吸收新知识。这就好比拼图：当你看到完整拼图之后，更容易把各部件拼到一起。这个道理适用于语言本身以及语言库。</p>
+<p>工具的外部模型就是它呈现出来的接口以及它想让你思考问题解决的方式。Clojure 的外部模型就是一个 Lisp，它想让你把编程当做大部分以数据为中心，不可变的转换过程。Ansible 希望你把服务器的整备工作想成定义最终状态，而不是定义抵达那种状态所要采取的步骤。</p>
+<p>工具的内部模型就是如何将输入到其接口转换成一些底层的抽象。Clojure 把 Lisp 转换成 JVM 的字节码。Ansible 把任务定义转换成了 shell 命令。在一个理想国中，你不需要理解工具的内部模型，但事实上，理解内部模型总是有用的，因为在某些看上去迷惑或者矛盾的部分，它可以让你有个统一视图。举个例子，当 DNA 双螺旋模型被发现的时候，它帮助科学家们了解更高层次的现象。从我的角度来讲，当然，这篇博文也是历来所有伟大科学成就之一。</p>
+<p>很多教程经常混淆工具的外部和内部模型，使学习者感到困惑。意识到这点可以帮你轻松辨别何时你会感到沮丧。</p>
+<h2 id="间隔重复帮助记忆"><a href="#间隔重复帮助记忆" class="headerlink" title="间隔重复帮助记忆"></a>间隔重复帮助记忆</h2><p>间隔重复被证明是长期记忆中新信息编码的最佳方法之一。 这个想法是以不断增加的时间间隔来测验自己，使用最少重复次数来最小化记忆衰减。 卫报写了一篇<a target="_blank" rel="noopener" href="https://www.theguardian.com/education/2016/jan/23/spaced-repetition-a-hack-to-make-your-brain-store-information">很好的介绍性文章</a>。</p>
+<h2 id="睡眠和练习"><a href="#睡眠和练习" class="headerlink" title="睡眠和练习"></a>睡眠和练习</h2><p>保重身体！身体可不仅仅是你脑袋的载体。如果你想保持专注和高效的学习，就要足够的睡眠和练习，而不是（原文：beats the pants off）狂饮咖啡因和能量饮料。</p>
+<h2 id="更多小贴士"><a href="#更多小贴士" class="headerlink" title="更多小贴士"></a>更多小贴士</h2><p>如果你还有其它有用的技巧，请不吝评论！如果你想知道更多关于学习编程的优质资源，敬请查看<a target="_blank" rel="noopener" href="http://www.communitypicks.com/r/learnprogramming">Community Picks: Learn Programming</a>，这是一个社区策划编程学习书籍的收集活动，内容广泛，包含入门编程，工艺以及关于软技能和面试方面的书籍。</p>
+<hr>
+<p>原文链接<br>[1] <a target="_blank" rel="noopener" href="http://www.flyingmachinestudios.com/programming/learn-programming-languages-efficiently/">Techniques for Efficiently Learning Programming Languages</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/thinking/" rel="tag"># thinking</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2017/03/01/Pipleline-as-Code/" rel="prev" title="Pipleline as Code">
+                  <i class="fa fa-angle-left"></i> Pipleline as Code
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2017/04/27/How-to-active-different-profiles-in-SpringBootTest/" rel="next" title="如何在SpringBootTest中启用不同的profiles">
+                  如何在SpringBootTest中启用不同的profiles <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">lambeta</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

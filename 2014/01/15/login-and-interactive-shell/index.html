@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.2.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"qianyan.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="###Bash - login-sh &amp; interactive-sh login shell what is login shell?12echo $0&gt; -bash (prefix should be &#x27;-&#x27;, this mean bash is login shell)  interactive shell what is interactive shell">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Login shell vs Interactive Shell">
+<meta property="og:url" content="https://qianyan.github.io/2014/01/15/login-and-interactive-shell/index.html">
+<meta property="og:site_name" content="λ">
+<meta property="og:description" content="###Bash - login-sh &amp; interactive-sh login shell what is login shell?12echo $0&gt; -bash (prefix should be &#x27;-&#x27;, this mean bash is login shell)  interactive shell what is interactive shell">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2014-01-14T16:17:17.000Z">
+<meta property="article:modified_time" content="2016-09-06T14:57:37.000Z">
+<meta property="article:author" content="lambeta">
+<meta property="article:tag" content="shell">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://qianyan.github.io/2014/01/15/login-and-interactive-shell/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://qianyan.github.io/2014/01/15/login-and-interactive-shell/","path":"2014/01/15/login-and-interactive-shell/","title":"Login shell vs Interactive Shell"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Login shell vs Interactive Shell | λ</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">λ</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">(conj clojurians me)</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#login-shell"><span class="nav-number">1.</span> <span class="nav-text">login shell</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#interactive-shell"><span class="nav-number">2.</span> <span class="nav-text">interactive shell</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#the-defference-between-the-two-shells"><span class="nav-number">3.</span> <span class="nav-text">the defference between the two shells?</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#why-can-I-load-bashrc-on-Ubuntu-linux"><span class="nav-number">4.</span> <span class="nav-text">why can I load .bashrc on Ubuntu linux?</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#what-kind-of-shell-is-neither-login-sh-nor-interactive-sh"><span class="nav-number">5.</span> <span class="nav-text">what kind of shell is neither login-sh nor interactive-sh</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">lambeta</p>
+  <div class="site-description" itemprop="description">Elegance and familiarity are orthogonal</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">76</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">41</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://qianyan.github.io/2014/01/15/login-and-interactive-shell/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="lambeta">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="λ">
+      <meta itemprop="description" content="Elegance and familiarity are orthogonal">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Login shell vs Interactive Shell | λ">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Login shell vs Interactive Shell
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2014-01-15 00:17:17" itemprop="dateCreated datePublished" datetime="2014-01-15T00:17:17+08:00">2014-01-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2016-09-06 22:57:37" itemprop="dateModified" datetime="2016-09-06T22:57:37+08:00">2016-09-06</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%8A%80%E6%9C%AF/" itemprop="url" rel="index"><span itemprop="name">技术</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>###Bash - login-sh &amp; interactive-sh</p>
+<h4 id="login-shell"><a href="#login-shell" class="headerlink" title="login shell"></a>login shell</h4><ul>
+<li>what is login shell?<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">echo $0</span><br><span class="line">&gt; -bash (prefix should be &#x27;-&#x27;, this mean bash is login shell)</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="interactive-shell"><a href="#interactive-shell" class="headerlink" title="interactive shell"></a>interactive shell</h4><ul>
+<li>what is interactive shell?<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">echo $-</span><br><span class="line">&gt; 569JNRTXZghilms (you can see &#x27;i&#x27;, that means it is interactive shell)</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="the-defference-between-the-two-shells"><a href="#the-defference-between-the-two-shells" class="headerlink" title="the defference between the two shells?"></a>the defference between the two shells?</h4><p>the order of loading profile</p>
+<ul>
+<li>login shell<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">/etc/profile</span><br><span class="line">~/.bash_profile</span><br><span class="line">~/.profile</span><br></pre></td></tr></table></figure></li>
+<li>interactive shell<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/etc/bash.bashrc</span><br><span class="line">~/.bashrc</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="why-can-I-load-bashrc-on-Ubuntu-linux"><a href="#why-can-I-load-bashrc-on-Ubuntu-linux" class="headerlink" title="why can I load .bashrc on Ubuntu linux?"></a>why can I load .bashrc on Ubuntu linux?</h4><p><em>because</em> in ~&#x2F;.profile also <em>source</em> the .bashrc</p>
+<h4 id="what-kind-of-shell-is-neither-login-sh-nor-interactive-sh"><a href="#what-kind-of-shell-is-neither-login-sh-nor-interactive-sh" class="headerlink" title="what kind of shell is neither login-sh nor interactive-sh"></a>what kind of shell is neither login-sh nor interactive-sh</h4><p>shell run in the command scripts.</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/shell/" rel="tag"># shell</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2014/01/04/clojure-basic-kownladge/" rel="prev" title="Basic clojure knowledge">
+                  <i class="fa fa-angle-left"></i> Basic clojure knowledge
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2014/02/06/usable-shell-knowledge/" rel="next" title="Shell技巧">
+                  Shell技巧 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">lambeta</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

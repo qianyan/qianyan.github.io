@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.2.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"qianyan.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="2016年11月份的技术雷达中给出了一个简明的定义：流水线即代码 (Pipeline as Code) 通过编码而非配置持续集成&#x2F;持续交付 (CI&#x2F;CD) 运行工具的方式定义部署流水线。其实早在2015年11月份的技术雷达当中就已经有了类似的概念：  The way to avoid programming in your CI&#x2F;CD tool is to extra">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Pipleline as Code">
+<meta property="og:url" content="https://qianyan.github.io/2017/03/01/Pipleline-as-Code/index.html">
+<meta property="og:site_name" content="λ">
+<meta property="og:description" content="2016年11月份的技术雷达中给出了一个简明的定义：流水线即代码 (Pipeline as Code) 通过编码而非配置持续集成&#x2F;持续交付 (CI&#x2F;CD) 运行工具的方式定义部署流水线。其实早在2015年11月份的技术雷达当中就已经有了类似的概念：  The way to avoid programming in your CI&#x2F;CD tool is to extra">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/217988-e8d3fcb49a100197.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/217988-250bc1dc50e3bdd8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/217988-8b29a42d225edebf.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/217988-85057d2c87c41ab1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="article:published_time" content="2017-03-01T02:19:13.000Z">
+<meta property="article:modified_time" content="2017-03-01T02:52:12.000Z">
+<meta property="article:author" content="lambeta">
+<meta property="article:tag" content="thinking">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/217988-e8d3fcb49a100197.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+
+<link rel="canonical" href="https://qianyan.github.io/2017/03/01/Pipleline-as-Code/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://qianyan.github.io/2017/03/01/Pipleline-as-Code/","path":"2017/03/01/Pipleline-as-Code/","title":"Pipleline as Code"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Pipleline as Code | λ</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">λ</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">(conj clojurians me)</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E8%B7%B5%E4%B8%AD%E7%9A%84%E7%97%9B%E7%82%B9"><span class="nav-number">1.</span> <span class="nav-text">实践中的痛点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3"><span class="nav-number">2.</span> <span class="nav-text">如何解决</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B0%8F%E7%BB%93"><span class="nav-number">3.</span> <span class="nav-text">小结</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">lambeta</p>
+  <div class="site-description" itemprop="description">Elegance and familiarity are orthogonal</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">76</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">41</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://qianyan.github.io/2017/03/01/Pipleline-as-Code/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="lambeta">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="λ">
+      <meta itemprop="description" content="Elegance and familiarity are orthogonal">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Pipleline as Code | λ">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Pipleline as Code
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2017-03-01 10:19:13 / 修改时间：10:52:12" itemprop="dateCreated datePublished" datetime="2017-03-01T10:19:13+08:00">2017-03-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%8A%80%E6%9C%AF/" itemprop="url" rel="index"><span itemprop="name">技术</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>2016年11月份的技术雷达中给出了一个简明的定义：流水线即代码 (Pipeline as Code) 通过编码而非配置持续集成&#x2F;持续交付 (CI&#x2F;CD) 运行工具的方式定义部署流水线。<br>其实早在2015年11月份的技术雷达当中就已经有了类似的概念：</p>
+<blockquote>
+<p>The way to avoid programming in your CI&#x2F;CD tool is to extract the complexities of the build process from the guts of the tool and into a simple script which can be invoked by a single command. This script can then be executed on any developer workstation and therefore eliminates the privileged&#x2F;singular status of the build environment<br>大意是将复杂的构建流程纳入一个简单的脚本文件，然后用一条命令调用。这样，任意的开发者都能在自己的工作区中执行脚本重建一套一模一样的构建环境，从而消除 CI&#x2F;CD 环境由于散乱配置腐化而成的特异性。这么做的原因很好理解，使用 CI&#x2F;CD 工具是为了暴露产品代码中的问题的，如果它们自身已经复杂到不稳定的地步，我们还使用它就是自找麻烦。</p>
+</blockquote>
+<p>从某种程度上看，实施流水线即代码是不证自明的。在 CI&#x2F;CD 的时间过程中，凡是可以被编码的东西都已经被代码化了，比如：构建、测试、数据库迁移、部署和基础设施&#x2F;环境配置 (Infrastruture as Code) 等。说得烂俗点，流水线已经是 CI&#x2F;CD 实践过程中的“最后一公里”，让流水线变成软件开发中的“一等公民”（即代码）是大势所趋、民心所向。不过，这种论断毕竟欠缺说服力，我们接着从实践的痛点出发总结当前流水线遇到的问题。</p>
+<h2 id="实践中的痛点"><a href="#实践中的痛点" class="headerlink" title="实践中的痛点"></a>实践中的痛点</h2><p>我给客户搭建和配置过不少 CI&#x2F;CD 流水线（被同事戏谑地称为“CI&#x2F;CD搭建兽”），最大的痛苦莫过于每次都得从头来过，即便大部分情况下所用的工具和配置都大同小异。其次是手工操作产生的配置漂移 (configuration drift) 。以 Jenkins 为例，先不谈 1.0 版本不支持流水线这一概念的问题，我们为了解决遇到的构建、测试和部署等问题，一般会在多个文本框中粘贴大量 shell&#x2F;batch 脚本；甚至会通过这些文本框安装各种插件或者依赖包、设置环境变量等等。久而久之（实际上不需要多久），这台 Jenkins 服务器就变得不可替代（特异化）了，因为没人清楚到底对它做了哪些更改以及这些更改对承载它的系统产生哪些影响，这时 Jenkins 服务器俨然腐化成了老马所说的雪花服务器 (snowflake server)。雪花服务器有两点显著的特征：</p>
+<ol>
+<li>特别难以复现</li>
+<li>几乎无法理解</li>
+</ol>
+<p>第一点是由于以往所做的更改并没有被记录下来，所以做过的操作都是七零八落的，没有办法复现同样的操作，也无法复制一个同样的系统。<br>第二点则是由于绝大部分情况下散乱的配置是没有文档描述的，哪部分是重要的已经无从知晓，改动的风险很大。</p>
+<p>这些问题会在流水线的演化过程中恶化得越来越严重。一般来讲，除非不再使用，否则流水线不会保持一成不变。具体实施过程中，考虑到项目，尤其是遗留项目当前的特点和团队成员的“产能”，我们会先将构建和部署自动化；部署节奏稳定后，开始将单元测试和代码分析自动化；接着可以指导测试人员将验收测试自动化；然后尝试将发布自动化。在这之后，就要开始持续优化流水线，包括 CI 的速度和稳定性等。换句话说，流水线的演化其实是和项目的当前进展密切相关的，保证这样的对应关系有时是有必要的，比如：在版本控制下，多发布分支所需流水线和主干分支会存在不同。发布分支是主干分支某个时刻分出去的，它需要在那时的流水线上才能正常工作。由于前面所说雪花服务器的特征，重建这样一条流水线并不是一件容易的事情。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/217988-e8d3fcb49a100197.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="演进式的持续集成"></p>
+<h2 id="如何解决"><a href="#如何解决" class="headerlink" title="如何解决"></a>如何解决</h2><p>其实，流水线即代码本身已经回答这个问题了。当前实现了这一概念的工具大体遵循了两种模式：</p>
+<ol>
+<li>版本控制</li>
+<li>DSL（领域特定语言）</li>
+</ol>
+<p>对于特别难以复现、没有保证对应关系的痛点，我们就把流水线写成代码放到版本控制工具中管理起来。这样一来，每一次更改都能被记录下来，而且它会始终和此时的项目进展保持同步。</p>
+<p>对于几乎无法理解、没有文档支持的痛点，我们就选用领域特定语言描述整条流水线。举个 Jenkins 2.0 例子，它允许我们在项目的特定目录下放置一个 Jenkinsfile 的文件，内容大致如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">node(&#x27;master&#x27;) &#123;</span><br><span class="line">	stage(&#x27;Checkout&#x27;) &#123;…&#125;</span><br><span class="line">	stage(&#x27;Code Analysis&#x27;) &#123;…&#125;</span><br><span class="line">	stage(&#x27;Unit Test&#x27;) &#123;…&#125;</span><br><span class="line">	stage(&#x27;Packing&#x27;) &#123;…&#125;</span><br><span class="line">	stage(&#x27;Archive&#x27;) &#123;…&#125;</span><br><span class="line">	stage(&#x27;DEV&#x27;) &#123;…&#125;</span><br><span class="line">&#125;</span><br><span class="line">stage(&#x27;SIT&#x27;) &#123;</span><br><span class="line">	timeout(time:4, unit:&#x27;HOURS&#x27;) &#123;</span><br><span class="line">		input &quot;Deploy to SIT?&quot;</span><br><span class="line">	&#125;</span><br><span class="line">	node(&#x27;master&#x27;) &#123;…&#125;</span><br><span class="line">&#125;</span><br><span class="line">stage(&#x27;Acceptance Test&#x27;) &#123;</span><br><span class="line">	node(&#x27;slave&#x27;) &#123;…&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Jenkins 2.0 使用Groovy实现了一套描述流水线的DSL，即便不了解Groovy语言，只要对流水线稍微熟悉，就能按照<a target="_blank" rel="noopener" href="https://github.com/jenkinsci/pipeline-plugin/blob/master/TUTORIAL.md">例子和文档</a>编写出符合要求的代码。</p>
+<p>类似的工具还有Concourse.ci、λCD (LambdaCD) 等。<br>Concourse.ci 使用了 yaml 实现了DSL，独立抽象出Resource（外部依赖，如：git repo）、Job（函数， get 和 put Resource ）和 Task（纯函数，必须明确定义 Input 和 Output ）模型。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/217988-250bc1dc50e3bdd8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Concousre.ci"></p>
+<p>而 λCD 则使用 Clojure 语言实现了 DSL，抽象出 Pipeline 和 Step 模型，使用了Lisp特有的宏 (macro) 和普通函数，编写起来简单明了。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/217988-8b29a42d225edebf.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="λCD"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">(def pipeline-def</span><br><span class="line">  `(</span><br><span class="line">    (either</span><br><span class="line">     manualtrigger/wait-for-manual-trigger</span><br><span class="line">     wait-for-repo)</span><br><span class="line"></span><br><span class="line">    (with-workspace</span><br><span class="line">      clone</span><br><span class="line">      (in-parallel</span><br><span class="line">       run-some-tests</span><br><span class="line">       run-smokeing-tests)</span><br><span class="line"></span><br><span class="line">      run-package</span><br><span class="line">      deploy)))</span><br></pre></td></tr></table></figure>
+<p>上述的pipeline-def就是这条流水线的定义，极为优雅得是，它的代码和UI事实上构成了一一映射的关系，简单到极致。</p>
+<p>值得一提的是，λCD 有别于其它同类型的工具，它本身就是一份用 Clojure 写就的微服务。换句话说，其它的工具可能需要借助基础设施即代码完成自身的安装，但λCD不用，它完全可以采用其它微服务的部署方式，比如用 λCD 部署它自己，类似于编译器的自举 (bootstraping)。这个时候，我们就需要两套 λCD 服务，一套用于部署自身，另一套部署开发中的工程。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/217988-85057d2c87c41ab1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="流水线自举"></p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>流水线即代码是个新概念，也就意味着我们还需要花时间去探索与之相关的实践，比如，调试和测试（既然是代码就需要测试）。一旦有了这些实践，我们就可以把流水线本身作为产品放到流水线上运作起来，那时将会看到一种很好玩的现象——旧的流水线会构建并部署新流水线，完成流水线的自举 (pipeline bootstrap) 。此外，当流水线成为代码，它在最终的交付物中必然占据一席之地，其潜在的价值还等待我们挖掘，至少从精益的角度，流水线能做的事情还有很多。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/thinking/" rel="tag"># thinking</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2017/01/01/Emacs-configs-for-a-clojurian/" rel="prev" title="Emacs configs for a clojurian">
+                  <i class="fa fa-angle-left"></i> Emacs configs for a clojurian
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2017/04/18/Techniques-for-Efficiently-Learning-Programming-Languages/" rel="next" title="如何高效地学习编程语言">
+                  如何高效地学习编程语言 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">lambeta</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

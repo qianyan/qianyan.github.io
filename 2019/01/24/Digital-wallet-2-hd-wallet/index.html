@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.2.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"qianyan.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="BIP 全称是 Bitcoin Improvement Proposals，相当于互联网中RFC (Request for Comments)，它是用来记录草案或者标准的。 BIP32解释定义BIP32定义了Hierarchical deterministic wallets (HD Wallets)，HD指出了这类钱包的两大特征。 第一点特征是层级结构，钱包一般会存储一组key-pair对，这组">
+<meta property="og:type" content="article">
+<meta property="og:title" content="创建数字钱包（二）HD Wallet">
+<meta property="og:url" content="https://qianyan.github.io/2019/01/24/Digital-wallet-2-hd-wallet/index.html">
+<meta property="og:site_name" content="λ">
+<meta property="og:description" content="BIP 全称是 Bitcoin Improvement Proposals，相当于互联网中RFC (Request for Comments)，它是用来记录草案或者标准的。 BIP32解释定义BIP32定义了Hierarchical deterministic wallets (HD Wallets)，HD指出了这类钱包的两大特征。 第一点特征是层级结构，钱包一般会存储一组key-pair对，这组">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/217988-02f038826fdc3e69.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="article:published_time" content="2019-01-24T14:37:28.000Z">
+<meta property="article:modified_time" content="2019-05-07T14:47:54.000Z">
+<meta property="article:author" content="lambeta">
+<meta property="article:tag" content="digital-wallet">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/217988-02f038826fdc3e69.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+
+<link rel="canonical" href="https://qianyan.github.io/2019/01/24/Digital-wallet-2-hd-wallet/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://qianyan.github.io/2019/01/24/Digital-wallet-2-hd-wallet/","path":"2019/01/24/Digital-wallet-2-hd-wallet/","title":"创建数字钱包（二）HD Wallet"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>创建数字钱包（二）HD Wallet | λ</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">λ</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">(conj clojurians me)</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#BIP32%E8%A7%A3%E9%87%8A"><span class="nav-number">1.</span> <span class="nav-text">BIP32解释</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9A%E4%B9%89"><span class="nav-number">1.1.</span> <span class="nav-text">定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BB%E8%A6%81%E6%A6%82%E5%BF%B5"><span class="nav-number">1.2.</span> <span class="nav-text">主要概念</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%BB%E5%AF%86%E9%92%A5%E5%8F%8A%E5%85%B6%E7%94%9F%E6%88%90"><span class="nav-number">1.2.1.</span> <span class="nav-text">主密钥及其生成</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%A2%9D%E5%A4%96%E7%9A%84%E7%86%B5-Chain-Code"><span class="nav-number">1.2.2.</span> <span class="nav-text">额外的熵 Chain Code</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%89%A9%E5%B1%95%E5%AF%86%E9%92%A5-Extended-Key"><span class="nav-number">1.2.3.</span> <span class="nav-text">扩展密钥 Extended Key</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E8%A7%A3%E9%87%8A"><span class="nav-number">2.</span> <span class="nav-text">代码解释</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%BB%E5%AF%86%E9%92%A5%E5%8F%8A%E5%85%B6%E7%94%9F%E6%88%90-1"><span class="nav-number">2.0.1.</span> <span class="nav-text">主密钥及其生成</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Chain-code"><span class="nav-number">2.0.2.</span> <span class="nav-text">Chain code</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Extended-key"><span class="nav-number">2.1.</span> <span class="nav-text">Extended key</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#BIP44%E8%A7%A3%E9%87%8A"><span class="nav-number">3.</span> <span class="nav-text">BIP44解释</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9A%E4%B9%89-1"><span class="nav-number">3.1.</span> <span class="nav-text">定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BB%E8%A6%81%E6%A6%82%E5%BF%B5-1"><span class="nav-number">3.2.</span> <span class="nav-text">主要概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E8%A7%A3%E9%87%8A-1"><span class="nav-number">3.3.</span> <span class="nav-text">代码解释</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">lambeta</p>
+  <div class="site-description" itemprop="description">Elegance and familiarity are orthogonal</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">76</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">41</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://qianyan.github.io/2019/01/24/Digital-wallet-2-hd-wallet/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="lambeta">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="λ">
+      <meta itemprop="description" content="Elegance and familiarity are orthogonal">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="创建数字钱包（二）HD Wallet | λ">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          创建数字钱包（二）HD Wallet
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-01-24 22:37:28" itemprop="dateCreated datePublished" datetime="2019-01-24T22:37:28+08:00">2019-01-24</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2019-05-07 22:47:54" itemprop="dateModified" datetime="2019-05-07T22:47:54+08:00">2019-05-07</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Blockchain/" itemprop="url" rel="index"><span itemprop="name">Blockchain</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>BIP 全称是 Bitcoin Improvement Proposals，相当于互联网中RFC (Request for Comments)，它是用来记录草案或者标准的。</p>
+<h2 id="BIP32解释"><a href="#BIP32解释" class="headerlink" title="BIP32解释"></a>BIP32解释</h2><h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p>BIP32定义了Hierarchical deterministic wallets (HD Wallets)，HD指出了这类钱包的两大特征。</p>
+<p>第一点特征是层级结构，钱包一般会存储一组key-pair对，这组key-pair对是链状存储，但是HD钱包是树状存储，也就是说它的结构中有根节点，根节点会派生出子节点，子节点又可以派生出子节点。这样做的优势是它可以有选择的把某个层级的一组key-pair对分配出去，这样就可以和组织结构匹配，比如：总部保留根密钥，其它分部用总部派生的密钥；也可以和用途匹配，比如：花钱的和收钱的地址可以分开。</p>
+<p>第二点特征是确定性，因为所有的key-pair对都是从同一个根派生出来的，所以只要妥善保管好根（主密钥）就可以在其它的系统中快速地恢复钱包。</p>
+<p>层级结构和确定性如下图示：<br><img src="https://upload-images.jianshu.io/upload_images/217988-02f038826fdc3e69.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="HD Wallets"></p>
+<h3 id="主要概念"><a href="#主要概念" class="headerlink" title="主要概念"></a>主要概念</h3><ol>
+<li>Master key</li>
+<li>Chain Code</li>
+<li>Extended key</li>
+</ol>
+<h4 id="主密钥及其生成"><a href="#主密钥及其生成" class="headerlink" title="主密钥及其生成"></a>主密钥及其生成</h4><p>主密钥是从一串长度在128到256位的比特序列（种子）中生成的，然后使用HMAC-SHA512计算出64字节序列（称为I），左边32字节（称为IL）作为主私钥，右边32字节（称为IR）作为主Chain Code。</p>
+<p>大致步骤如下：</p>
+<ol>
+<li>生成熵为128 - 256bit 的种子</li>
+<li>I &#x3D; HMAC-SHA512(key&#x3D;”Bitcoin seed”, data &#x3D; seed)</li>
+<li>&lt;&lt;IL :: bytes(32), LR :: bytes(32) &gt;&gt; &#x3D; I</li>
+<li>MasterSecretKey &#x3D; IL &amp; MasterChainCode &#x3D; IR</li>
+</ol>
+<p>这里有个问题值得探讨，这样生成的 MasterSecretKey 是符合 secp256k1 定义的利用ECDSA算法生成的私钥吗？我们可以利用secp256k1.privateKeyVerify(…)方法验证，结果是正确的。</p>
+<h4 id="额外的熵-Chain-Code"><a href="#额外的熵-Chain-Code" class="headerlink" title="额外的熵 Chain Code"></a>额外的熵 Chain Code</h4><p>因为每个父密钥都可以派生出很多子密钥，所以为了避免子密钥直接依赖父密钥，需要引入额外的熵（chain code）去增强父密钥，这个额外的熵，或者说，随机的256位的比特序列就是 Chain Code。</p>
+<h4 id="扩展密钥-Extended-Key"><a href="#扩展密钥-Extended-Key" class="headerlink" title="扩展密钥 Extended Key"></a>扩展密钥 Extended Key</h4><p>根据定义，父密钥和Chain Code的组合 (k, c) 就是扩展私钥，而扩展公钥则是 (K, c)，其中的 K 是通过 secp256k1 计算私钥 k 得到的。</p>
+<p>Extended Key 在序列化的地方也值得关注，具体的规则，可以细读BIP32。</p>
+<p>举个例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">// publicKey</span><br><span class="line">03795fd38bbffdddb24b72af417cf3fa540db8f60783dd32f61f0ca5af464fd492</span><br><span class="line">// ExtendedPublicKey</span><br><span class="line">xpub6GmbjntbdLF4JNhBxwoRBrdw2BBujvJ514tRHFMQaoFA5eSRaWwr6CQSGq1HtirLGSTT8SHqMGWQk4rbZLJsVFA4NLZZYUR25ZEdhnGJ7R1</span><br></pre></td></tr></table></figure>
+<p>序列化之后的publicKey的首部4比特是版本号，比如此处的xpub就是mainnet的意思。</p>
+<p>每个扩展密钥都有$2^{31}$个普通子密钥和$2^{31}$个Hardened子密钥，一般会用i+$2^{31}$表示Hardened子密钥，记为$I_H$。</p>
+<h2 id="代码解释"><a href="#代码解释" class="headerlink" title="代码解释"></a>代码解释</h2><p>这里，我们使用hdkey[^1]进行代码解释。</p>
+<h4 id="主密钥及其生成-1"><a href="#主密钥及其生成-1" class="headerlink" title="主密钥及其生成"></a>主密钥及其生成</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> <span class="variable constant_">MASTER_SECRET</span> = <span class="title class_">Buffer</span>.<span class="title function_">from</span>(<span class="string">&#x27;Bitcoin seed&#x27;</span>, <span class="string">&#x27;utf8&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="title class_">HDKey</span>.<span class="property">fromMasterSeed</span> = <span class="keyword">function</span> (<span class="params">seedBuffer, versions</span>) &#123;</span><br><span class="line">  <span class="keyword">var</span> I = crypto.<span class="title function_">createHmac</span>(<span class="string">&#x27;sha512&#x27;</span>, <span class="variable constant_">MASTER_SECRET</span>).<span class="title function_">update</span>(seedBuffer).<span class="title function_">digest</span>()</span><br><span class="line">  <span class="keyword">var</span> <span class="variable constant_">IL</span> = I.<span class="title function_">slice</span>(<span class="number">0</span>, <span class="number">32</span>)</span><br><span class="line">  <span class="keyword">var</span> <span class="variable constant_">IR</span> = I.<span class="title function_">slice</span>(<span class="number">32</span>)</span><br><span class="line"></span><br><span class="line">  <span class="keyword">var</span> hdkey = <span class="keyword">new</span> <span class="title class_">HDKey</span>(versions)</span><br><span class="line">  hdkey.<span class="property">chainCode</span> = <span class="variable constant_">IR</span></span><br><span class="line">  hdkey.<span class="property">privateKey</span> = <span class="variable constant_">IL</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> hdkey</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>seedBuffer是128-256bit的随机序列作为种子，然后利用HMAC-SHA512生成I值，分割出的IL和IR分别赋值给privateKey和chainCode。</p>
+<h4 id="Chain-code"><a href="#Chain-code" class="headerlink" title="Chain code"></a>Chain code</h4><p>Chain code 会在派生子密钥的时候起作用，derive(path) -&gt; deriveChild(index) 是派生子密钥的过程：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> data = <span class="title class_">Buffer</span>.<span class="title function_">concat</span>([<span class="variable language_">this</span>.<span class="property">publicKey</span>, indexBuffer])</span><br><span class="line"><span class="keyword">var</span> I = crypto.<span class="title function_">createHmac</span>(<span class="string">&#x27;sha512&#x27;</span>, <span class="variable language_">this</span>.<span class="property">chainCode</span>).<span class="title function_">update</span>(data).<span class="title function_">digest</span>()</span><br><span class="line"><span class="keyword">var</span> <span class="variable constant_">IL</span> = I.<span class="title function_">slice</span>(<span class="number">0</span>, <span class="number">32</span>)</span><br><span class="line"><span class="keyword">var</span> <span class="variable constant_">IR</span> = I.<span class="title function_">slice</span>(<span class="number">32</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> hd = <span class="keyword">new</span> <span class="title class_">HDKey</span>(<span class="variable language_">this</span>.<span class="property">versions</span>)</span><br><span class="line"><span class="comment">// Private parent key -&gt; private child key</span></span><br><span class="line"><span class="comment">// ki = parse256(IL) + kpar (mod n)</span></span><br><span class="line">hd.<span class="property">privateKey</span> = secp256k1.<span class="title function_">privateKeyTweakAdd</span>(<span class="variable language_">this</span>.<span class="property">privateKey</span>, <span class="variable constant_">IL</span>)</span><br></pre></td></tr></table></figure>
+<p>从上面的代码可以看到，chainCode用来作为HMAC-SHA512的密钥对data进行了哈希处理。最终子密钥privateKey通过secp256k1.privateKeyTweakAdd(…)生成，这个函数来自secp256k1[^2]库，主要功能是拼接，如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">exports</span>.<span class="property">privateKeyTweakAdd</span> = <span class="keyword">function</span> (<span class="params">privateKey, tweak</span>) &#123;</span><br><span class="line">  <span class="keyword">var</span> bn = <span class="variable constant_">BN</span>.<span class="title function_">fromBuffer</span>(tweak)</span><br><span class="line">  <span class="keyword">if</span> (bn.<span class="title function_">isOverflow</span>()) <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">Error</span>(messages.<span class="property">EC_PRIVATE_KEY_TWEAK_ADD_FAIL</span>)</span><br><span class="line"></span><br><span class="line">  bn.<span class="title function_">iadd</span>(<span class="variable constant_">BN</span>.<span class="title function_">fromBuffer</span>(privateKey))</span><br><span class="line">  <span class="keyword">if</span> (bn.<span class="title function_">isOverflow</span>()) bn.<span class="title function_">isub</span>(<span class="variable constant_">BN</span>.<span class="property">n</span>)</span><br><span class="line">  <span class="keyword">if</span> (bn.<span class="title function_">isZero</span>()) <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">Error</span>(messages.<span class="property">EC_PRIVATE_KEY_TWEAK_ADD_FAIL</span>)</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> bn.<span class="title function_">toBuffer</span>()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>值得一提的是，在derive(path)函数中，我们会看到Hardened判断的条件是是否带有单引号，例如：<code>44&#39;</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">var hardened = (c.length &gt; 1) &amp;&amp; (c[c.length - 1] === &quot;&#x27;&quot;)</span><br><span class="line">var childIndex = parseInt(c, 10) // &amp; (HARDENED_OFFSET - 1)</span><br><span class="line">assert(childIndex &lt; HARDENED_OFFSET, &#x27;Invalid index&#x27;)</span><br><span class="line">if (hardened) childIndex += HARDENED_OFFSET</span><br><span class="line"></span><br><span class="line">hdkey = hdkey.deriveChild(childIndex)</span><br></pre></td></tr></table></figure>
+<p>在后续介绍BIP44的过程中，我们会明白这样处理的含义，Path为<code>m/44&#39;/60&#39;/0&#39;/0/0</code>在BIP44中有特定的含义，这种表示法和BIP32的结合点就在这里。</p>
+<h3 id="Extended-key"><a href="#Extended-key" class="headerlink" title="Extended key"></a>Extended key</h3><p>Extended key 可以分为 privateExtendedKey 和 publicExtendedKey，这里以 privateExtendedKey 为例：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cs.<span class="title function_">encode</span>(<span class="title function_">serialize</span>(<span class="variable language_">this</span>, <span class="variable language_">this</span>.<span class="property">versions</span>.<span class="property">private</span>, <span class="title class_">Buffer</span>.<span class="title function_">concat</span>([<span class="title class_">Buffer</span>.<span class="title function_">alloc</span>(<span class="number">1</span>, <span class="number">0</span>), <span class="variable language_">this</span>.<span class="property">privateKey</span>])))</span><br></pre></td></tr></table></figure>
+<p>其中versionls.private，默认值是0x0488ADE4，encode操作可以忽略，具体的序列化逻辑发生在serialize中。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">serialize</span> (hdkey, version, key) &#123;</span><br><span class="line">  <span class="comment">// =&gt; version(4) || depth(1) || fingerprint(4) || index(4) || chain(32) || key(33)</span></span><br><span class="line">  <span class="keyword">var</span> buffer = <span class="title class_">Buffer</span>.<span class="title function_">allocUnsafe</span>(<span class="variable constant_">LEN</span>)</span><br><span class="line"></span><br><span class="line">  buffer.<span class="title function_">writeUInt32BE</span>(version, <span class="number">0</span>)</span><br><span class="line">  buffer.<span class="title function_">writeUInt8</span>(hdkey.<span class="property">depth</span>, <span class="number">4</span>)</span><br><span class="line"></span><br><span class="line">  <span class="keyword">var</span> fingerprint = hdkey.<span class="property">depth</span> ? hdkey.<span class="property">parentFingerprint</span> : <span class="number">0x00000000</span></span><br><span class="line">  buffer.<span class="title function_">writeUInt32BE</span>(fingerprint, <span class="number">5</span>)</span><br><span class="line">  buffer.<span class="title function_">writeUInt32BE</span>(hdkey.<span class="property">index</span>, <span class="number">9</span>)</span><br><span class="line"></span><br><span class="line">  hdkey.<span class="property">chainCode</span>.<span class="title function_">copy</span>(buffer, <span class="number">13</span>)</span><br><span class="line">  key.<span class="title function_">copy</span>(buffer, <span class="number">45</span>)</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> buffer</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>常量<code>LEN</code>为78，这就是序列化的结构大小。需要注意的点是，按照定义这里的字节序都是大端（Big Endian，也成为网络字节序）。</p>
+<h2 id="BIP44解释"><a href="#BIP44解释" class="headerlink" title="BIP44解释"></a>BIP44解释</h2><h3 id="定义-1"><a href="#定义-1" class="headerlink" title="定义"></a>定义</h3><p>BIP44 定义了逻辑上的层级结构，所谓逻辑，就是人为赋予意义。BIP44综合了BIP32的HD Wallet设计和BIP43[^3]的Purpose约定，使得HD Wallet能够表达多币种，多账号，账号的外部或内部key-pair对构成的组，外部指的是地址对外可见，专门用来接收或发送数字货币的地址；而内部则是对外不可见，多用来表达找零 (change) 的概念。</p>
+<h3 id="主要概念-1"><a href="#主要概念-1" class="headerlink" title="主要概念"></a>主要概念</h3><p>BIP44在BIP32的路径中定义了5个层级：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">m / purpose&#x27; / coin_type&#x27; / account&#x27; / change / address_index</span><br></pre></td></tr></table></figure>
+<ul>
+<li>Purpose: <code>44&#39;</code>or 0x8000002C 这表明后面的子密钥都遵从BIP44的约定</li>
+<li>Coin type: <code>0&#39;</code> 代表比特币，<code>60&#39;</code> 代表以太币</li>
+<li>Account: 代表不同的用户身份，比如：储蓄或者收款账户，以及各种开支账户</li>
+<li>Change: 0 表示外部key-pair组；1 代表内部key-pair组，比如专门用来找零的地址</li>
+<li>Address_index: 根据BIP32，地址会生成多个，可以从0开始索引</li>
+</ul>
+<p>Purpose, Coin type以及Account都有单引号，意味着它们都是Hardened密钥，而Change和Address_index则是Normal的密钥。这样做是为了安全，BIP32中提到了一个事实，如果知道了父级的ExtendedPublicKey及其派生出来的Non-hardened private key，就等于知道了父级的ExtendedPrivateKey，这就是Hardened密钥存在的理由。引文如下：</p>
+<blockquote>
+<p>One weakness that may not be immediately obvious, is that knowledge of a parent extended public key plus any non-hardened private key descending from it is equivalent to knowing the parent extended private key (and thus every private and public key descending from it). This means that extended public keys must be treated more carefully than regular public keys. It is also the reason for the existence of hardened keys, and why they are used for the account level in the tree. This way, a leak of account-specific (or below) private key never risks compromising the master or other accounts.</p>
+</blockquote>
+<h3 id="代码解释-1"><a href="#代码解释-1" class="headerlink" title="代码解释"></a>代码解释</h3><p>继续使用hdkey[^1]来解释</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">let hdWallet = hdkey.fromMasterSeed(seed)</span><br><span class="line">let key = hdWallet.derivePath(&quot;m/44&#x27;/60&#x27;/0&#x27;/0/0&quot;)</span><br><span class="line">console.log(&quot;publicKey:&quot;, key1._hdkey._publicKey.toString(&quot;hex&quot;), &quot;\nextendPublicKey:&quot;, key1.publicExtendedKey())</span><br><span class="line">-&gt;</span><br><span class="line">publicKey: 03795fd38bbffdddb24b72af417cf3fa540db8f60783dd32f61f0ca5af464fd492 </span><br><span class="line">extendPublicKey: xpub6GmbjntbdLF4JNhBxwoRBrdw2BBujvJ514tRHFMQaoFA5eSRaWwr6CQSGq1HtirLGSTT8SHqMGWQk4rbZLJsVFA4NLZZYUR25ZEdhnGJ7R1</span><br></pre></td></tr></table></figure>
+<p>依据前面提到的定义，通过路径<code>m/44&#39;/60&#39;/0&#39;/0/0</code>派生出了以太坊某个外部账户下的第一个地址。</p>
+<p>[^1]: <a target="_blank" rel="noopener" href="https://github.com/cryptocoinjs/hdkey">NodeJS - hdkey</a></p>
+<p>[^2]: <a target="_blank" rel="noopener" href="https://github.com/cryptocoinjs/secp256k1-node">NodeJS - secp256k1</a></p>
+<p>[^3]: <a target="_blank" rel="noopener" href="https://github.com/bitcoin/bips/blob/master/bip-0043.mediawiki">BIP43 - Purpose scheme</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/digital-wallet/" rel="tag"># digital-wallet</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2019/01/23/Digital-wallet-1-generate-accounts/" rel="prev" title="创建数字钱包（一）账号生成">
+                  <i class="fa fa-angle-left"></i> 创建数字钱包（一）账号生成
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2019/01/24/Digital-wallet-3-mnemonic-sentence/" rel="next" title="创建数字钱包（三）助记词">
+                  创建数字钱包（三）助记词 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">lambeta</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

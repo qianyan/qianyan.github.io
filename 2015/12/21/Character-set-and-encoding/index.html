@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.2.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"qianyan.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="什么是字符集ASCII(American Standard Code for Information Interchange)12man ascii0 ~ 2^7 &#x3D; 128 欧洲语系 ISO8859 ISO8859-1英语、法语、德语；ISO8859-5 俄语  中国的GB2312和GBK，以及中国台湾的Big5多语系 Unicode 最初的目的是把世界各地的语言都映射到16位空间 8位转换为1">
+<meta property="og:type" content="article">
+<meta property="og:title" content="字符集和字符编码">
+<meta property="og:url" content="https://qianyan.github.io/2015/12/21/Character-set-and-encoding/index.html">
+<meta property="og:site_name" content="λ">
+<meta property="og:description" content="什么是字符集ASCII(American Standard Code for Information Interchange)12man ascii0 ~ 2^7 &#x3D; 128 欧洲语系 ISO8859 ISO8859-1英语、法语、德语；ISO8859-5 俄语  中国的GB2312和GBK，以及中国台湾的Big5多语系 Unicode 最初的目的是把世界各地的语言都映射到16位空间 8位转换为1">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2015-12-21T13:40:57.000Z">
+<meta property="article:modified_time" content="2019-01-20T08:37:40.000Z">
+<meta property="article:author" content="lambeta">
+<meta property="article:tag" content="thinking">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://qianyan.github.io/2015/12/21/Character-set-and-encoding/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://qianyan.github.io/2015/12/21/Character-set-and-encoding/","path":"2015/12/21/Character-set-and-encoding/","title":"字符集和字符编码"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>字符集和字符编码 | λ</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">λ</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">(conj clojurians me)</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E5%AD%97%E7%AC%A6%E9%9B%86"><span class="nav-number">1.</span> <span class="nav-text">什么是字符集</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ASCII-American-Standard-Code-for-Information-Interchange"><span class="nav-number">1.1.</span> <span class="nav-text">ASCII(American Standard Code for Information Interchange)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AC%A7%E6%B4%B2%E8%AF%AD%E7%B3%BB-ISO8859"><span class="nav-number">1.2.</span> <span class="nav-text">欧洲语系 ISO8859</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%AD%E5%9B%BD%E7%9A%84GB2312%E5%92%8CGBK%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%B8%AD%E5%9B%BD%E5%8F%B0%E6%B9%BE%E7%9A%84Big5"><span class="nav-number">1.3.</span> <span class="nav-text">中国的GB2312和GBK，以及中国台湾的Big5</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E8%AF%AD%E7%B3%BB-Unicode"><span class="nav-number">1.4.</span> <span class="nav-text">多语系 Unicode</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E7%BC%96%E7%A0%81%E6%96%B9%E5%BC%8F"><span class="nav-number">2.</span> <span class="nav-text">什么是编码方式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%96%E2%80%9C%E9%84%A2%E2%80%9D%E8%BF%99%E4%B8%AA%E5%AD%97%E7%9A%84Unicode%E7%BC%96%E7%A0%81"><span class="nav-number">2.1.</span> <span class="nav-text">取“鄢”这个字的Unicode编码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E6%AE%B5%E6%9F%A5%E7%9C%8B%E6%B1%89%E5%AD%97%E7%BC%96%E7%A0%81%E7%9A%84Java%E4%BB%A3%E7%A0%81"><span class="nav-number">2.2.</span> <span class="nav-text">一段查看汉字编码的Java代码</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UTF-8%E5%8F%98%E9%95%BF%E7%BC%96%E7%A0%81%E6%96%B9%E5%BC%8F"><span class="nav-number">3.</span> <span class="nav-text">UTF-8变长编码方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%A7%E7%AB%AF%E5%AD%97%E8%8A%82%E5%BA%8F%E5%92%8C%E5%B0%8F%E7%AB%AF%E5%AD%97%E8%8A%82%E5%BA%8F-%E7%BD%91%E7%BB%9C%E5%AD%97%E8%8A%82%E5%BA%8F%E5%92%8C%E4%B8%BB%E6%9C%BA%E5%AD%97%E8%8A%82%E5%BA%8F"><span class="nav-number">4.</span> <span class="nav-text">大端字节序和小端字节序(网络字节序和主机字节序)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UTF-16%E4%B8%8D%E8%B6%B3%E4%BB%A5%E8%A1%A8%E7%A4%BA%E4%B8%96%E7%95%8C%E6%89%80%E6%9C%89%E7%9A%84%E5%AD%97%E7%AC%A6"><span class="nav-number">5.</span> <span class="nav-text">UTF-16不足以表示世界所有的字符</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UCS%E5%92%8CCSI"><span class="nav-number">6.</span> <span class="nav-text">UCS和CSI</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%93%E8%AE%BA"><span class="nav-number">7.</span> <span class="nav-text">结论</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">lambeta</p>
+  <div class="site-description" itemprop="description">Elegance and familiarity are orthogonal</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">76</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">41</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://qianyan.github.io/2015/12/21/Character-set-and-encoding/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="lambeta">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="λ">
+      <meta itemprop="description" content="Elegance and familiarity are orthogonal">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="字符集和字符编码 | λ">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          字符集和字符编码
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2015-12-21 21:40:57" itemprop="dateCreated datePublished" datetime="2015-12-21T21:40:57+08:00">2015-12-21</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2019-01-20 16:37:40" itemprop="dateModified" datetime="2019-01-20T16:37:40+08:00">2019-01-20</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%8A%80%E6%9C%AF/" itemprop="url" rel="index"><span itemprop="name">技术</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="什么是字符集"><a href="#什么是字符集" class="headerlink" title="什么是字符集"></a>什么是字符集</h2><h3 id="ASCII-American-Standard-Code-for-Information-Interchange"><a href="#ASCII-American-Standard-Code-for-Information-Interchange" class="headerlink" title="ASCII(American Standard Code for Information Interchange)"></a>ASCII(American Standard Code for Information Interchange)</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">man ascii</span><br><span class="line">0 ~ 2^7 = 128</span><br></pre></td></tr></table></figure>
+<h3 id="欧洲语系-ISO8859"><a href="#欧洲语系-ISO8859" class="headerlink" title="欧洲语系 ISO8859"></a>欧洲语系 ISO8859</h3><ul>
+<li>ISO8859-1英语、法语、德语；ISO8859-5 俄语</li>
+</ul>
+<h3 id="中国的GB2312和GBK，以及中国台湾的Big5"><a href="#中国的GB2312和GBK，以及中国台湾的Big5" class="headerlink" title="中国的GB2312和GBK，以及中国台湾的Big5"></a>中国的GB2312和GBK，以及中国台湾的Big5</h3><h3 id="多语系-Unicode"><a href="#多语系-Unicode" class="headerlink" title="多语系 Unicode"></a>多语系 Unicode</h3><ul>
+<li>最初的目的是把世界各地的语言都映射到16位空间</li>
+<li>8位转换为16位，称为UCS-2 (2 byte Universal Character Set), 也叫做Basic Multilingual Plane (BMP)</li>
+<li>16位到21位，有效编码区间0 ~ 0x10ffff<blockquote>
+<p>The Unicode standard describes how characters are represented by code point</p>
+</blockquote>
+</li>
+</ul>
+<h2 id="什么是编码方式"><a href="#什么是编码方式" class="headerlink" title="什么是编码方式"></a>什么是编码方式</h2><h3 id="取“鄢”这个字的Unicode编码"><a href="#取“鄢”这个字的Unicode编码" class="headerlink" title="取“鄢”这个字的Unicode编码"></a>取“鄢”这个字的Unicode编码</h3><hr>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">echo &quot;鄢&quot; | native2ascii -encoding utf8</span><br><span class="line">;; \u9122 这个是 code point</span><br></pre></td></tr></table></figure>
+<h3 id="一段查看汉字编码的Java代码"><a href="#一段查看汉字编码的Java代码" class="headerlink" title="一段查看汉字编码的Java代码"></a>一段查看汉字编码的Java代码</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.nio.charset.Charset;</span><br><span class="line"><span class="keyword">import</span> java.util.Arrays;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Main</span> &#123;</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">      unicode(<span class="string">&quot;鄢&quot;</span>, <span class="string">&quot;utf8&quot;</span>);</span><br><span class="line">      <span class="comment">// How many bytes: 3 What are they: [-23, -124, -94]</span></span><br><span class="line"></span><br><span class="line">      unicode(<span class="string">&quot;鄢&quot;</span>, <span class="string">&quot;utf16&quot;</span>);</span><br><span class="line">      <span class="comment">// How many bytes: 4 What are they: [-2, -1, -111, 34]</span></span><br><span class="line"></span><br><span class="line">      unicode(<span class="string">&quot;鄢&quot;</span>, <span class="string">&quot;utf-16BE&quot;</span>);</span><br><span class="line">      <span class="comment">// How many bytes: 2 What are they: [-111, 34]</span></span><br><span class="line"></span><br><span class="line">      unicode(<span class="string">&quot;🐶&quot;</span>, <span class="string">&quot;utf-16BE&quot;</span>);</span><br><span class="line">      <span class="comment">// How many bytes: 4 What are they: [-40, 61, -36, 54]</span></span><br><span class="line"></span><br><span class="line">      p(<span class="string">&quot;🐶&quot;</span>.length());</span><br><span class="line">      <span class="comment">// 2</span></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">unicode</span><span class="params">(String s, String encoding)</span>&#123;</span><br><span class="line">		p(<span class="string">&quot;How many bytes: &quot;</span> + s.getBytes(Charset.forName(encoding)).length);</span><br><span class="line">		p(<span class="string">&quot;What are they: &quot;</span> + Arrays.toString(s.getBytes(Charset.forName(encoding))));</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">p</span><span class="params">(Object s)</span> &#123;</span><br><span class="line">		System.out.println(s);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="UTF-8变长编码方式"><a href="#UTF-8变长编码方式" class="headerlink" title="UTF-8变长编码方式"></a>UTF-8变长编码方式</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">\u9122</span><br><span class="line">1110xxxx 10xxxxxx 10xxxxxx</span><br><span class="line"></span><br><span class="line">9 -&gt; 1001</span><br><span class="line">1 -&gt; 0001</span><br><span class="line">2 -&gt; 0010</span><br><span class="line">2 -&gt; 0010</span><br><span class="line"></span><br><span class="line">10010001 00100010</span><br><span class="line"></span><br><span class="line">原码</span><br><span class="line">11101001 10000100  10100010</span><br><span class="line"></span><br><span class="line">取反</span><br><span class="line">10010110 11111011 11011101</span><br><span class="line"></span><br><span class="line">补码</span><br><span class="line">10010111 11111100 11011110</span><br><span class="line">16+4+2+1=23 127-3=124 64+16+8+4+2=94</span><br><span class="line">[-23, -124, -94]</span><br></pre></td></tr></table></figure>
+<ul>
+<li>从程序运行的结果来看，<code>UTF-8</code>中，“鄢”占据了3个字节，且在计算机中的补码表示分别为<code>-23, -124, -94</code>；</li>
+<li><code>\u9122</code>占据2个字节，但是带入<code>UTF-8</code>编码提供的<code>1110xxxx 10xxxxxx 10xxxxxx</code>模板中就变成了3个字节，我们是从低位带入模板的，<code>x</code>的个数刚好是16位、2个字节；</li>
+<li><code>UTF-8</code>编码除了和ASCII码兼容部分(以0开头，<code>0xxxxxxx</code>)，其余都遵循一个简单的标准：<ul>
+<li>其模板遵循<code>110xxxxx 10xxxxxx</code>，高位1的个数即是总的字节数，这里<code>110xxxxx</code>中11表示总共有两个字节；</li>
+<li>低位的<code>10xxxxxx</code>始终以10开头；</li>
+<li>这样的编码方式，使得程序清楚知道那个地方是字符开始的地方，所以才说<code>UTF-8</code>的单字节的编码方式。</li>
+</ul>
+</li>
+</ul>
+<p>但是UTF-8也有自己的缺点</p>
+<ul>
+<li>浪费内存，几乎所有的汉字都占三个字节</li>
+<li>随机访问，同字符串的长度成正比</li>
+</ul>
+<p><strong>Tips</strong>:</p>
+<blockquote>
+<p>正数的补码就是其本身<br>负数的补码是在其原码的基础上, 符号位不变, 其余各位取反, 最后+1</p>
+</blockquote>
+<h2 id="大端字节序和小端字节序-网络字节序和主机字节序"><a href="#大端字节序和小端字节序-网络字节序和主机字节序" class="headerlink" title="大端字节序和小端字节序(网络字节序和主机字节序)"></a>大端字节序和小端字节序(网络字节序和主机字节序)</h2><p>我们知道<code>UTF-16</code>的目的和Unicode本来的目的是一致的 —— “把世界各地的语言都映射到16位空间”。<br>以<code>\u9122</code>为例，我们运行程序的结果应该是2个字节，但是事实上是4个字节（*How many bytes: 4 What are they: [-2, -1, -111, 34]*），这多出来的2个字节是怎么回事？<br>这里就是<a target="_blank" rel="noopener" href="http://www.ruanyifeng.com/blog/2016/11/byte-order.html">字节序</a>在作祟。在内存存储时，如果最低有效位在最高有效位的前面，则称小端序；反之则称大端序。大端字节序又称网络字节序。<br>举个例子</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">\u9122 ;;;-&gt;鄢</span><br><span class="line">91是最高有效位</span><br><span class="line">22是最低有效位</span><br></pre></td></tr></table></figure>
+<p>我们观察一下返回的4个字节中的前两个字节<code>-2, -1</code>，它们其实不是字符“鄢”的一部分，它们是Unicode中的大端字节序的标识BOM(Bytes Order Marks)</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">0xfeff</span><br><span class="line">11111110 11111111</span><br><span class="line">反码</span><br><span class="line">10000001 10000000</span><br><span class="line">补码</span><br><span class="line">10000010 10000001</span><br><span class="line">-2 -1</span><br></pre></td></tr></table></figure>
+<p>Unicode在对待字节序时，采取了大端和小端序共存的方式。<code>0xfeff</code>这个编码在对调字节序后得到的<code>0xfffe</code>在Unicode不存在，Unicode借助这个特点来判断读入的字符到底是大端序还是小端序。<br>另外，从程序中可知，Java会默认将读入的字符串当做大端序处理；所以当我们明确指定<code>UTF-16BE</code>后，程序就会返回2个字节的结果了。</p>
+<h2 id="UTF-16不足以表示世界所有的字符"><a href="#UTF-16不足以表示世界所有的字符" class="headerlink" title="UTF-16不足以表示世界所有的字符"></a>UTF-16不足以表示世界所有的字符</h2><p>正如前面提及的UCS-2 (2 byte Universal Character Set)不足以表示世界上所有的字符，比如“🐶”这种emoji的字符需要4个字节才能表示，两个字节的<code>UTF-16</code>就无能为力了。<br>Java默认采用了<code>UTF-16</code>编码，结果导致<code>&quot;🐶&quot;.length()</code>不是返回1，而是2。不得已，Java引入了codePoint这种处理方式，有点无奈。</p>
+<h2 id="UCS和CSI"><a href="#UCS和CSI" class="headerlink" title="UCS和CSI"></a>UCS和CSI</h2><p>我们计算机的程序会采用两种方式来处理不同的字符集</p>
+<ul>
+<li><p>UCS：（Universal Character Set，泛用字符集）程序输入输出的时候，需要将文本数据变成UCS，统一处理。</p>
+</li>
+<li><p>CSI：（Character Set Independent 字符集独立），不对文字集做变换，直接处理。</p>
+</li>
+</ul>
+<h2 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h2><ul>
+<li>积极采用UTF-8。</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/thinking/" rel="tag"># thinking</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2015/11/26/Why-are-we-learning-Clojure/" rel="prev" title="Why we are learning Clojure">
+                  <i class="fa fa-angle-left"></i> Why we are learning Clojure
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2016/01/01/the-real-enthusiasm/" rel="next" title="真正的热情">
+                  真正的热情 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">lambeta</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

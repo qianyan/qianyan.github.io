@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.2.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"qianyan.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="解题思路 利用递归，将目录转换成 &#123;:name: &quot;.&quot;, :children: []&#125; 结构 对于第一层目录名，前缀装饰成 T_branch &#x3D; &quot;├── &quot; 或者 L_branch &#x3D; &quot;└── &quot; 对于子目录，前缀装饰成 I_branch &#x3D; &quot;│   &quot;或者SPACER   &#x3D; &quot;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Tree command 的多重实现">
+<meta property="og:url" content="https://qianyan.github.io/2018/04/29/multiple-implements-of-tree-command/index.html">
+<meta property="og:site_name" content="λ">
+<meta property="og:description" content="解题思路 利用递归，将目录转换成 &#123;:name: &quot;.&quot;, :children: []&#125; 结构 对于第一层目录名，前缀装饰成 T_branch &#x3D; &quot;├── &quot; 或者 L_branch &#x3D; &quot;└── &quot; 对于子目录，前缀装饰成 I_branch &#x3D; &quot;│   &quot;或者SPACER   &#x3D; &quot;">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2018-04-29T13:41:27.000Z">
+<meta property="article:modified_time" content="2018-07-04T00:04:05.000Z">
+<meta property="article:author" content="lambeta">
+<meta property="article:tag" content="code">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://qianyan.github.io/2018/04/29/multiple-implements-of-tree-command/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://qianyan.github.io/2018/04/29/multiple-implements-of-tree-command/","path":"2018/04/29/multiple-implements-of-tree-command/","title":"Tree command 的多重实现"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Tree command 的多重实现 | λ</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">λ</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">(conj clojurians me)</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E9%A2%98%E6%80%9D%E8%B7%AF"><span class="nav-number">1.</span> <span class="nav-text">解题思路</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#python-%E5%AE%9E%E7%8E%B0"><span class="nav-number">2.</span> <span class="nav-text">python 实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Clojure-%E5%AE%9E%E7%8E%B0"><span class="nav-number">3.</span> <span class="nav-text">Clojure 实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Golang-%E5%AE%9E%E7%8E%B0"><span class="nav-number">4.</span> <span class="nav-text">Golang 实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#NodeJS-%E5%AE%9E%E7%8E%B0"><span class="nav-number">5.</span> <span class="nav-text">NodeJS 实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Kotlin-script"><span class="nav-number">6.</span> <span class="nav-text">Kotlin script</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Scala"><span class="nav-number">7.</span> <span class="nav-text">Scala</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Elixir"><span class="nav-number">8.</span> <span class="nav-text">Elixir</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">lambeta</p>
+  <div class="site-description" itemprop="description">Elegance and familiarity are orthogonal</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">76</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">41</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://qianyan.github.io/2018/04/29/multiple-implements-of-tree-command/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="lambeta">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="λ">
+      <meta itemprop="description" content="Elegance and familiarity are orthogonal">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Tree command 的多重实现 | λ">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Tree command 的多重实现
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2018-04-29 21:41:27" itemprop="dateCreated datePublished" datetime="2018-04-29T21:41:27+08:00">2018-04-29</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2018-07-04 08:04:05" itemprop="dateModified" datetime="2018-07-04T08:04:05+08:00">2018-07-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%8A%80%E6%9C%AF/" itemprop="url" rel="index"><span itemprop="name">技术</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><ol>
+<li>利用递归，将目录转换成 <code>&#123;:name: &quot;.&quot;, :children: []&#125;</code> 结构</li>
+<li>对于第一层目录名，前缀装饰成 <code>T_branch = &quot;├── &quot; </code>或者 <code>L_branch = &quot;└── &quot;</code></li>
+<li>对于子目录，前缀装饰成 <code>I_branch = &quot;│   &quot;</code>或者<code>SPACER   = &quot;    &quot;</code><br>举例如下：<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">.</span><br><span class="line">├── tree.py  # 不是最后一项，所以使用 T_branch 前缀</span><br><span class="line">├── files.py</span><br><span class="line">├── lists.py</span><br><span class="line">├── tuples.py</span><br><span class="line">├── resources</span><br><span class="line">│   └── README.md # 由于其父亲不是最后一项，所以使用 I_branch 前缀</span><br><span class="line">├── recursion.py</span><br><span class="line">└── data    # 是最后一项，所以使用 L_branch 前缀</span><br><span class="line">    ├── output.txt # 由于其父亲是最后一项，所以使用 SPACE 前缀</span><br><span class="line">    └── data.txt</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h2 id="python-实现"><a href="#python-实现" class="headerlink" title="python 实现"></a>python 实现</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/local/bin/python</span></span><br><span class="line"><span class="comment"># -*- coding: UTF-8 -*-</span></span><br><span class="line"></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">list a directory in tree way.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">children(path):</span></span><br><span class="line"><span class="string">    map(lambda name: tree(path, name), listdir(path))</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">tree(parent, dir_name):</span></span><br><span class="line"><span class="string">    if is_file(parent, dir_name):</span></span><br><span class="line"><span class="string">        return &#123;&#x27;name&#x27;: dir_name, &#x27;children&#x27;: []&#125;</span></span><br><span class="line"><span class="string">    else:</span></span><br><span class="line"><span class="string">        children = children(join(parent, dir_name))</span></span><br><span class="line"><span class="string">        return &#123;&#x27;name&#x27;: dir_name, &#x27;children&#x27;: children&#125;</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> functools <span class="keyword">as</span> fp</span><br><span class="line"></span><br><span class="line">I_branch = <span class="string">&quot;│   &quot;</span></span><br><span class="line">T_branch = <span class="string">&quot;├── &quot;</span></span><br><span class="line">L_branch = <span class="string">&quot;└── &quot;</span></span><br><span class="line">SPACER = <span class="string">&quot;    &quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">_children</span>(<span class="params">path</span>):</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">map</span>(<span class="keyword">lambda</span> filename: tree_format(path, filename), os.listdir(path))</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">tree_format</span>(<span class="params">parent, dir_name</span>):</span><br><span class="line">    path = os.path.join(parent, dir_name)</span><br><span class="line">    is_file = os.path.isfile(path)</span><br><span class="line">    children = [] <span class="keyword">if</span> is_file <span class="keyword">else</span> _children(path)</span><br><span class="line">    <span class="keyword">return</span> &#123;<span class="string">&#x27;name&#x27;</span>: dir_name, <span class="string">&#x27;children&#x27;</span>: <span class="built_in">list</span>(children)&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">render_tree</span>(<span class="params">tr</span>):</span><br><span class="line">    name = tr[<span class="string">&#x27;name&#x27;</span>]</span><br><span class="line">    children = tr[<span class="string">&#x27;children&#x27;</span>]</span><br><span class="line">    <span class="keyword">return</span> [name] + fp.reduce(<span class="keyword">lambda</span> l, r: l + r,</span><br><span class="line">                              <span class="built_in">map</span>(<span class="keyword">lambda</span> arg: render(<span class="built_in">len</span>(children))(*arg),</span><br><span class="line">                                  <span class="built_in">enumerate</span>(children)),</span><br><span class="line">                              [])</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">render</span>(<span class="params">length</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">prefix</span>(<span class="params">index, child</span>):</span><br><span class="line">        is_last = (index == length - <span class="number">1</span>)</span><br><span class="line">        prefix_first = L_branch <span class="keyword">if</span> is_last <span class="keyword">else</span> T_branch</span><br><span class="line">        prefix_rest = SPACER <span class="keyword">if</span> is_last <span class="keyword">else</span> I_branch</span><br><span class="line">        tr = render_tree(child)</span><br><span class="line">        head = prefix_first + tr[<span class="number">0</span>]</span><br><span class="line">        tail = [prefix_rest + t <span class="keyword">for</span> t <span class="keyword">in</span> tr[<span class="number">1</span>:]]</span><br><span class="line">        <span class="keyword">return</span> [head] + tail</span><br><span class="line">    <span class="keyword">return</span> prefix</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    <span class="built_in">print</span> <span class="string">&#x27;\n&#x27;</span>.join(render_tree(tree(<span class="string">&#x27;&#x27;</span>, sys.argv[<span class="number">1</span>])))</span><br><span class="line"></span><br><span class="line">$ python3 tree.py . <span class="comment">#打印当前的目录的所有文件及子目录</span></span><br><span class="line">.</span><br><span class="line">├── tree.py</span><br><span class="line">├── files.py</span><br><span class="line">├── lists.py</span><br><span class="line">├── tuples.py</span><br><span class="line">├── resources</span><br><span class="line">│   └── README.md</span><br><span class="line">├── recursion.py</span><br><span class="line">└── data</span><br><span class="line">    ├── output.txt</span><br><span class="line">    └── data.txt</span><br></pre></td></tr></table></figure>
+<h2 id="Clojure-实现"><a href="#Clojure-实现" class="headerlink" title="Clojure 实现"></a>Clojure 实现</h2><figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="built_in">ns</span></span> tree</span><br><span class="line">  (<span class="symbol">:require</span> [clojure.java.io <span class="symbol">:as</span> io]</span><br><span class="line">            [clojure.string <span class="symbol">:as</span> str]))</span><br><span class="line">(<span class="keyword">def</span> <span class="title">L-branch</span> <span class="string">&quot;└── &quot;</span>)</span><br><span class="line">(<span class="keyword">def</span> <span class="title">T-branch</span> <span class="string">&quot;├── &quot;</span>)</span><br><span class="line">(<span class="keyword">def</span> <span class="title">I-branch</span> <span class="string">&quot;│   &quot;</span>)</span><br><span class="line">(<span class="keyword">def</span> <span class="title">SPACE</span>    <span class="string">&quot;    &quot;</span>)</span><br><span class="line"></span><br><span class="line">(<span class="name"><span class="built_in">declare</span></span> tree)</span><br><span class="line"></span><br><span class="line">(<span class="keyword">defn</span> <span class="title">children</span> [path]</span><br><span class="line">  (<span class="name"><span class="built_in">map</span></span> #(<span class="name">tree</span> %) (<span class="name">.listFiles</span> path)))</span><br><span class="line"></span><br><span class="line">(<span class="keyword">defn</span> <span class="title">tree</span> [dir-name]</span><br><span class="line">  (<span class="name"><span class="built_in">let</span></span> [path (<span class="name">io/file</span> dir-name)</span><br><span class="line">        dir? (<span class="name">.isDirectory</span> path)]</span><br><span class="line">    &#123;<span class="symbol">:name</span> (<span class="name">.getName</span> path)</span><br><span class="line">     <span class="symbol">:children</span> (<span class="name"><span class="built_in">if</span></span> dir? (<span class="name">children</span> path))&#125;))</span><br><span class="line"></span><br><span class="line">(<span class="keyword">defn</span> <span class="title">render-tree</span> [&#123;name <span class="symbol">:name</span> children <span class="symbol">:children</span>&#125;]</span><br><span class="line">  (<span class="name"><span class="built_in">cons</span></span> name</span><br><span class="line">        (<span class="name"><span class="built_in">mapcat</span></span> (<span class="name"><span class="built_in">fn</span></span> [child index]</span><br><span class="line">                  (<span class="name"><span class="built_in">let</span></span> [last? (<span class="name"><span class="built_in">=</span></span> index (<span class="name"><span class="built_in">dec</span></span> (<span class="name"><span class="built_in">count</span></span> children)))</span><br><span class="line">                        prefix-first (<span class="name"><span class="built_in">if</span></span> last? L-branch T-branch)</span><br><span class="line">                        prefix-rest (<span class="name"><span class="built_in">if</span></span> last? SPACE I-branch)</span><br><span class="line">                        sub-tree (<span class="name">render-tree</span> child)]</span><br><span class="line">                    (<span class="name"><span class="built_in">cons</span></span> (<span class="name"><span class="built_in">str</span></span> prefix-first (<span class="name"><span class="built_in">first</span></span> sub-tree))</span><br><span class="line">                          (<span class="name"><span class="built_in">map</span></span> #(<span class="name"><span class="built_in">str</span></span> prefix-rest %) (<span class="name"><span class="built_in">rest</span></span> sub-tree)))))</span><br><span class="line">                children</span><br><span class="line">                (<span class="name"><span class="built_in">range</span></span>))))</span><br><span class="line"></span><br><span class="line">(<span class="keyword">defn</span> <span class="title">-main</span> [&amp; args]</span><br><span class="line">  (<span class="name"><span class="built_in">-&gt;&gt;</span></span> </span><br><span class="line">      (<span class="name">tree</span> (<span class="name"><span class="built_in">first</span></span> args))</span><br><span class="line">      (<span class="name">render-tree</span>)</span><br><span class="line">      (<span class="name">str/join</span> <span class="string">&quot;\n&quot;</span>)</span><br><span class="line">      (<span class="name">println</span>)))</span><br><span class="line">$ lein run -m tree .</span><br><span class="line">.</span><br><span class="line">├── tree.py</span><br><span class="line">├── files.py</span><br><span class="line">├── lists.py</span><br><span class="line">├── tuples.py</span><br><span class="line">├── resources</span><br><span class="line">│   └── README.md</span><br><span class="line">├── recursion.py</span><br><span class="line">└── data</span><br><span class="line">    ├── output.txt</span><br><span class="line">    └── data.txt</span><br></pre></td></tr></table></figure>
+<h2 id="Golang-实现"><a href="#Golang-实现" class="headerlink" title="Golang 实现"></a>Golang 实现</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br></pre></td><td class="code"><pre><span class="line">package main</span><br><span class="line"></span><br><span class="line">import (</span><br><span class="line">	&quot;fmt&quot;</span><br><span class="line">	&quot;io/ioutil&quot;</span><br><span class="line">	&quot;os&quot;</span><br><span class="line">	&quot;path&quot;</span><br><span class="line">	&quot;strings&quot;</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">const (</span><br><span class="line">	I_branch = &quot;│   &quot;</span><br><span class="line">	T_branch = &quot;├── &quot;</span><br><span class="line">	L_branch = &quot;└── &quot;</span><br><span class="line">	SPACER   = &quot;    &quot;</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">type entry struct &#123;</span><br><span class="line">	name     string</span><br><span class="line">	children []entry</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">func (e entry) String() string &#123;</span><br><span class="line">	if len(e.children) == 0 &#123;</span><br><span class="line">		return e.name</span><br><span class="line">	&#125; else &#123;</span><br><span class="line">		s := e.name</span><br><span class="line">		for _, child := range e.children &#123;</span><br><span class="line">			s += child.String()</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		return s</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">func Children(path string) []entry &#123;</span><br><span class="line">	result := []entry&#123;&#125;</span><br><span class="line">	files, _ := ioutil.ReadDir(path)</span><br><span class="line">	for _, f := range files &#123;</span><br><span class="line">		result = append(result, Tree(path, f.Name()))</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	return result</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">func Tree(parent, dirName string) entry &#123;</span><br><span class="line">	realPath := path.Join(parent, dirName)</span><br><span class="line">	theChildren := []entry&#123;&#125;</span><br><span class="line">	if f, ok := os.Stat(realPath); ok == nil &#123;</span><br><span class="line">		if f.IsDir() &#123;</span><br><span class="line">			theChildren = Children(realPath)</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	return entry&#123;name: dirName, children: theChildren&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">func RenderTree(e entry) []string &#123;</span><br><span class="line">	name := e.name</span><br><span class="line">	children := e.children</span><br><span class="line">	result := []string&#123;name&#125;</span><br><span class="line"></span><br><span class="line">	for index, child := range children &#123;</span><br><span class="line">		subTree := RenderTree(child)</span><br><span class="line">		prefixFirst := T_branch</span><br><span class="line">		prefixRest := I_branch</span><br><span class="line">		if index == len(children)-1 &#123;</span><br><span class="line">			prefixFirst = L_branch</span><br><span class="line">			prefixRest = SPACER</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		result = append(result, prefixFirst+subTree[0])</span><br><span class="line"></span><br><span class="line">		for _, sub := range subTree[1:] &#123;</span><br><span class="line">			result = append(result, prefixRest+sub)</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	return result</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">func main() &#123;</span><br><span class="line">	fmt.Println(strings.Join(RenderTree(Tree(&quot;&quot;, os.Args[1])), &quot;\n&quot;))</span><br><span class="line">&#125;</span><br><span class="line">$ go run tree.go .</span><br><span class="line">.</span><br><span class="line">├── data</span><br><span class="line">│   ├── data.txt</span><br><span class="line">│   └── output.txt</span><br><span class="line">├── files.py</span><br><span class="line">├── lists.py</span><br><span class="line">├── recursion.py</span><br><span class="line">├── resources</span><br><span class="line">│   └── README.md</span><br><span class="line">├── tree.py</span><br><span class="line">└── tuples.py</span><br></pre></td></tr></table></figure>
+<h2 id="NodeJS-实现"><a href="#NodeJS-实现" class="headerlink" title="NodeJS 实现"></a>NodeJS 实现</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line">const path = require(&#x27;path&#x27;)</span><br><span class="line">const fs = require(&#x27;fs&#x27;)</span><br><span class="line">const I_branch = &#x27;│   &#x27;</span><br><span class="line">const T_branch = &#x27;├── &#x27;</span><br><span class="line">const L_branch = &#x27;└── &#x27;</span><br><span class="line">const SPACER   = &#x27;    &#x27;</span><br><span class="line"></span><br><span class="line">function children(path) &#123;</span><br><span class="line">    return fs.readdirSync(path).map(filename =&gt; tree(path, filename))</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function tree(parentDir, dirName) &#123;</span><br><span class="line">    let realPath = path.join(parentDir, dirName)</span><br><span class="line">    let isDir = fs.statSync(realPath).isDirectory()</span><br><span class="line">    return &#123;name: dirName, children: isDir ? children(realPath) : []&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function prefix(len) &#123;</span><br><span class="line">    return (tr, index) =&gt; &#123;</span><br><span class="line">        let isLast = len == index + 1</span><br><span class="line">        let prefixFirst = isLast ? L_branch : T_branch</span><br><span class="line">        let prefixRest = isLast ? SPACER : I_branch</span><br><span class="line">        let [head, ...tail]= renderTree(tr)</span><br><span class="line"></span><br><span class="line">        return [prefixFirst + head].concat(tail.map(name =&gt; prefixRest + name))</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function renderTree(&#123;name: name, children: children&#125;) &#123;</span><br><span class="line">    return [name]</span><br><span class="line">        .concat(children</span><br><span class="line">            .map(prefix(children.length))</span><br><span class="line">            .reduce((l, r) =&gt; l.concat(r), []))</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">console.log(renderTree(tree(&#x27;&#x27;, process.argv[2])).join(&#x27;\n&#x27;))</span><br><span class="line"></span><br><span class="line">$ node tree.js .</span><br><span class="line">.</span><br><span class="line">├── data</span><br><span class="line">│   ├── data.txt</span><br><span class="line">│   └── output.txt</span><br><span class="line">├── files.py</span><br><span class="line">├── lists.py</span><br><span class="line">├── recursion.py</span><br><span class="line">├── resources</span><br><span class="line">│   └── README.md</span><br><span class="line">├── tree.py</span><br><span class="line">└── tuples.py</span><br></pre></td></tr></table></figure>
+<h2 id="Kotlin-script"><a href="#Kotlin-script" class="headerlink" title="Kotlin script"></a>Kotlin script</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line">import java.io.File</span><br><span class="line"></span><br><span class="line">val I_branch = &quot;│   &quot;</span><br><span class="line">val T_branch = &quot;├── &quot;</span><br><span class="line">val L_branch = &quot;└── &quot;</span><br><span class="line">val SPACER   = &quot;    &quot;</span><br><span class="line"></span><br><span class="line">data class Entry (val name: String, val children: List&lt;Entry&gt;)</span><br><span class="line"></span><br><span class="line">fun children(path: File): List&lt;Entry&gt; &#123;</span><br><span class="line">    return path.listFiles().map &#123;tree(it)&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">fun tree(path: File): Entry &#123;</span><br><span class="line">    val isDir = path.isDirectory()</span><br><span class="line">    return Entry(path.getName(), if(isDir) children(path) else listOf&lt;Entry&gt;())</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">fun renderTree(tree: Entry): List&lt;String&gt; &#123;</span><br><span class="line">    val name = tree.name</span><br><span class="line">    val children = tree.children</span><br><span class="line"></span><br><span class="line">    return listOf(name) + children.mapIndexed &#123; i, e -&gt; prefix(children.size)(i, e) &#125;.fold(listOf&lt;String&gt;()) &#123;l, r -&gt; l + r&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">fun prefix(size: Int): (Int, Entry) -&gt; List&lt;String&gt; &#123;</span><br><span class="line">    return &#123;index, entry -&gt;</span><br><span class="line">        val isLast = index + 1 == size</span><br><span class="line">        val prefixFirst = if(isLast) L_branch else T_branch</span><br><span class="line">        val prefixRest = if(isLast) SPACER else I_branch</span><br><span class="line">        val subTree = renderTree(entry)</span><br><span class="line"></span><br><span class="line">        listOf(prefixFirst + subTree.first()) + subTree.drop(1).map &#123;t -&gt; prefixRest + t&#125;</span><br><span class="line">    &#125; </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">println(renderTree(tree(File(args[0]))).joinToString(&quot;\n&quot;))</span><br><span class="line"></span><br><span class="line">$ kotlinc -script tree.kts .</span><br><span class="line">.</span><br><span class="line">├── tree.py</span><br><span class="line">├── files.py</span><br><span class="line">├── lists.py</span><br><span class="line">├── tuples.py</span><br><span class="line">├── resources</span><br><span class="line">│   └── README.md</span><br><span class="line">├── recursion.py</span><br><span class="line">└── data</span><br><span class="line">    ├── output.txt</span><br><span class="line">    └── data.txt</span><br></pre></td></tr></table></figure>
+<h2 id="Scala"><a href="#Scala" class="headerlink" title="Scala"></a>Scala</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">import java.io._</span><br><span class="line">val I_branch = &quot;│   &quot;</span><br><span class="line">val T_branch = &quot;├── &quot;</span><br><span class="line">val L_branch = &quot;└── &quot;</span><br><span class="line">val SPACER   = &quot;    &quot;</span><br><span class="line"></span><br><span class="line">case class Entry(name: String, children: List[Entry])</span><br><span class="line"></span><br><span class="line">def children(path: File): List[Entry] = path.listFiles().toList.map((it: File) =&gt; tree(it))</span><br><span class="line"></span><br><span class="line">def tree(path: File): Entry = Entry(path.getName(), if(path.isDirectory()) children(path) else List[Entry]())</span><br><span class="line"></span><br><span class="line">def prefix(size: Int) = (index: Int, entry: Entry) =&gt; &#123;</span><br><span class="line">    val isLast = index + 1 == size</span><br><span class="line">    val prefixFirst = if(isLast) L_branch else T_branch</span><br><span class="line">    val prefixRest = if(isLast) SPACER else I_branch</span><br><span class="line">    val subTree = renderTree(entry)</span><br><span class="line">    List(prefixFirst + subTree.head) ++ subTree.tail.map(t =&gt; prefixRest + t)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">def renderTree(tree: Entry): List[String] = &#123;</span><br><span class="line">    val name = tree.name</span><br><span class="line">    val children = tree.children</span><br><span class="line"></span><br><span class="line">    return List(name) ++ children</span><br><span class="line">      .zipWithIndex</span><br><span class="line">      .map(&#123;case (e: Entry, i: Int) =&gt; prefix(children.size)(i, e)&#125;)</span><br><span class="line">      .fold(List[String]())((l, r) =&gt; l ++ r)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">println(renderTree(tree(new File(args(0)))).mkString(&quot;\n&quot;))</span><br><span class="line"></span><br><span class="line">$ scala tree.scala .</span><br><span class="line">.</span><br><span class="line">├── tree.py</span><br><span class="line">├── files.py</span><br><span class="line">├── lists.py</span><br><span class="line">├── tuples.py</span><br><span class="line">├── resources</span><br><span class="line">│   └── README.md</span><br><span class="line">├── recursion.py</span><br><span class="line">└── data</span><br><span class="line">    ├── output.txt</span><br><span class="line">    └── data.txt</span><br></pre></td></tr></table></figure>
+<h2 id="Elixir"><a href="#Elixir" class="headerlink" title="Elixir"></a>Elixir</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/env elixir</span><br><span class="line"></span><br><span class="line">defmodule Tree do</span><br><span class="line">  def main([dir | _]) do</span><br><span class="line">    dir |&gt; tree_format |&gt; render_tree |&gt; Enum.join(&quot;\n&quot;) |&gt; IO.puts</span><br><span class="line">  end</span><br><span class="line"></span><br><span class="line">  defp children(path) do</span><br><span class="line">    if (path |&gt; File.dir?) do</span><br><span class="line">      File.ls!(path) |&gt; Enum.map(fn f -&gt; tree_format(path, f) end)</span><br><span class="line">    else</span><br><span class="line">      []</span><br><span class="line">    end</span><br><span class="line">  end</span><br><span class="line"></span><br><span class="line">  defp tree_format(parent_dir \\ &quot;.&quot;, dir_name) do</span><br><span class="line">    %&#123;:name =&gt; dir_name, :children =&gt; Path.join(parent_dir, dir_name) |&gt; children&#125;</span><br><span class="line">  end</span><br><span class="line"></span><br><span class="line">  defp decorate(is_last?, [parent | children]) do</span><br><span class="line">    prefix_first = (if (is_last?), do: &quot;└── &quot;, else: &quot;├── &quot;)</span><br><span class="line">    prefix_rest = (if (is_last?), do: &quot;    &quot;, else: &quot;│   &quot;)</span><br><span class="line">    [prefix_first &lt;&gt; parent | children |&gt; Enum.map(fn child -&gt; prefix_rest &lt;&gt; child end)]</span><br><span class="line">  end</span><br><span class="line"></span><br><span class="line">  defp render_tree(%&#123;name: dir_name, children: children&#125;) do</span><br><span class="line">    [dir_name </span><br><span class="line">     | children </span><br><span class="line">     |&gt; Enum.with_index(1)</span><br><span class="line">     |&gt; Enum.map(fn &#123;child, index&#125; -&gt; decorate(length(children) == index, render_tree(child)) end) </span><br><span class="line">     |&gt; List.flatten]</span><br><span class="line">  end</span><br><span class="line"></span><br><span class="line">end</span><br><span class="line"></span><br><span class="line">Tree.main(System.argv)</span><br><span class="line"></span><br><span class="line">$ elixir tree.exs .</span><br><span class="line">.</span><br><span class="line">├── tree.py</span><br><span class="line">├── files.py</span><br><span class="line">├── lists.py</span><br><span class="line">├── tuples.py</span><br><span class="line">├── resources</span><br><span class="line">│   └── README.md</span><br><span class="line">├── recursion.py</span><br><span class="line">└── data</span><br><span class="line">    ├── output.txt</span><br><span class="line">    └── data.txt</span><br></pre></td></tr></table></figure>
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/code/" rel="tag"># code</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2018/02/17/The-Simple-Summary-of-FP/" rel="prev" title="函数式编程简介">
+                  <i class="fa fa-angle-left"></i> 函数式编程简介
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2018/05/01/ruling-the-waves/" rel="next" title="技术简史">
+                  技术简史 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">lambeta</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>
