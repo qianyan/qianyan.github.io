@@ -4799,4 +4799,76 @@ InputFile这是Sonar定义的合法的待扫描文件。举个例子：我们定
         <tag>devOps</tag>
       </tags>
   </entry>
+  <entry>
+    <title>多方安全计算的原理解释和代码说明</title>
+    <url>/2024/06/14/mpc-explained/</url>
+    <content><![CDATA[<h1 id="姚期智的百万富翁问题"><a href="#姚期智的百万富翁问题" class="headerlink" title="姚期智的百万富翁问题"></a>姚期智的百万富翁问题</h1><blockquote>
+<p>Two millionaires wish to know who is richer; however, they do not want to find out inadvertently any additional information about each other’s weath. How can they carry out such a conversation?</p>
+</blockquote>
+<p> 假如有两位富翁想知道他俩谁更有钱，但是又不愿意暴露自己有多少钱，那么是否存在一种沟通方式完成这件事呢？这个问题就是著名的姚的百万富翁问题。1982年，在加州伯克利分校任教的姚期智发布了一篇题为《安全计算的协议》（Protocols for Secure Computations）论文[1]，不仅解决了这个问题，同时还开创了密码学的崭新领域，多方安全计算（Secure Multiple-Party Computation），简称为 MPC 或 SMC。</p>
+<p> 两位富翁分别叫 Alice 和 Bob，Alice 有 i 百万元，Bob 有 j 百万元，假设 A 和 B 的资产都在一百万到一千万之间，也就是 0 &lt; i, j &lt; 10。</p>
+<p> 要解决这个问题，我们可以用一个名为带锁的建议箱的隐喻。富翁 Alice 有10只带锁的箱子并且她有一枚解锁的钥匙，并且 Bob 没有钥匙。Alice 将箱子从左到右依次排列。假设她有 6 百万财富值，即 i &#x3D; 6，于是她从左往右数到第 6 号箱子，并且往第 6 号箱子之前的所有箱子，即 1-5 号箱子，放入标记为 0 的纸条，从第 6 号开始放入标记为 1 的纸条。然后全部上锁离开。这时，Bob 过来看箱子，由于他没有钥匙，所以对箱子中的纸条上的信息一无所知。假设他有 4 百万财富值，即 j &#x3D; 5，他唯一能做的就是从左往右数到第 4 号箱子，同时将剩下的 9 只箱子全部焚毁。接下来，他将这只箱子交给 Alice，因为 Alice 有钥匙，所以她可以打开箱子。打开箱子后有两种纸条，相应地对应着两种结果。如果纸条是 0 ，那说明 Alice 比 Bob 有钱。反之，若纸条是 1，那说明 Bob 要么比 Alice 有钱，要么和 Alice 一样有钱。在我们的假设中，Alice 打开箱子之后，纸条上标记的是 0，所以 Alice 比 Bob 有钱，而事实确实如此，因为 Alice 有 6 百万元，而 Bob 只有 4 百万元。通过使用这种方法，Alice 和 Bob 除了获得谁更有钱的信息之外，都不知道对方财富值。这种让两方或者多方在保证输入私密的情况下计算某个函数的方法被称为多方安全计算。</p>
+<p> 当然，我们稍微花费点心思不难发现这个例子中存在泄露秘密的风险。如果 Alice 放入箱子中的是标记 1 - 10 的纸条，那么 Bob 的资产数量就被 Alice 知晓了。这是 MPC 研究的 honest 问题，暂不讨论。</p>
+<p> 实际中，这个解法具体是怎么工作的？在密码学中，钥匙和带锁的建议箱对应就是非对称密码学体系。Alice 有钥匙，即 Alice 拥有私钥。</p>
+<p> 对于 Bob 来说，他没有私钥，但是可以使用公钥，他进行下列计算<br>Bob 选择一个大数 x，并且加密 E(x) &#x3D; k。<br>计算 k-j+1 &#x3D; m，其中 j 是 Bob 的资产<br>Bob 公开 m 给 Alice，并且告知 m 包含自己的财富值</p>
+<p>对于 Alice 来说，她有私钥，需要进行下列计算<br>计算 m, m+1, m+2, m+3, …, m+j-1&#x3D;k, …, m+9<br>也即计算 k-j+1, k-j+2, k-j+3, …, k-j+j, …, k-j+10<br>使用私钥解密 y[u] &#x3D; D(k-j+u), 有 y[j] &#x3D; D(k) &#x3D; x<br>求模 z[u] &#x3D; y[u] mod P，P是质数<br>z[i] 之前的 z[u] 不变，之后的 z[u] 都+1<br>Alice 公开所有的 z[u] 给 Bob</p>
+<p>Bob 进行检验<br>若 x mod P  &#x3D; z[j]，那么说明没有进行+1的操作，j &lt;&#x3D; i<br>若 x mod P !&#x3D; z[j]，那么说明进行了+1的操作，j &gt; i</p>
+<h1 id="社会主义百万富翁问题-2"><a href="#社会主义百万富翁问题-2" class="headerlink" title="社会主义百万富翁问题[2]"></a>社会主义百万富翁问题[2]</h1><p>两位员工，名叫 Alice 和 Bob。他们做着同样水平的工作，但是怀疑老板优待他们其中一位，所以想知道自己的薪水是否公平。他们不想暴露自己的工资，也不信任第三方机构，那么他们该如何知道自己是否被公平地对待呢？</p>
+<p>假设 Alice 和 bob 的薪水在 10, 20, 30, 40 时薪范围内。我们假设 Alice 的时薪是 30 元，Bob 则是 20 元。我们依然使用带锁建议箱的隐喻打比方。</p>
+<p>首先，Alice 拿到 4 只带锁的箱子，每个箱子的钥匙都不同。他依次将箱子排开，从左到右的位置表示时薪，即1号箱对应10元时薪，以此类推。然后，Alice 把第 3 号箱子的钥匙保留，代表她的时薪是 30 元，其余的钥匙全部销毁。然后她把打开的箱子交给 Bob。Bob 依次在箱子里放入标记 0 或 1 的纸条。0 代表不是自己的时薪，1 代表是自己的时薪。结果就是他在第 2 号箱子中放入了标记为 1 的纸条，其余的纸条都是 0。然后他把上锁的箱子交给 Alice。Alice 用唯一的钥匙打开了第 3 号箱子，发现里面的纸条是 0。所以她知道了他们两人的时薪并不公平。但是除了这个信息之外，他们对彼此的时薪究竟是多少一无所知。</p>
+<p>实际上，这个解法在密码学中被称为不经意传输（Oblivious Transfer，简称 OT）。Bob 给 Alice 发送了多条关于自己时薪是多少的信息，但是 Bob 只能打开那条和自己时薪相关的信息。与此同时，Bob 并没有意识到（Oblivious） Alice 到底想要哪条信息。更一般的定义，不经意传输是一种密码学协议，发送者传输多条消息给接收方，其中只有一条是潜在的消息，但是发送者没法知晓传达到的是哪条消息。不经意传输是由 Maichael O. Robin 在 1981 年首次提出来的。</p>
+<p>密码学家 Kilian[3] 已经证明，MPC 和 OT 在理论层面是等价的：给定 OT，可以在不引入其它任何额外假设的条件下构造 MPC，类似地，可以直接应用 MPC 构造 OT。</p>
+<h1 id="基本原语"><a href="#基本原语" class="headerlink" title="基本原语"></a>基本原语</h1><p>密码学原语是密码学已经广泛认可的低级别的加密算法，比如单向哈希函数和对称加密、非对称加密和数字签名等。这些原语会时常被用于构建加密协议。 比如说，对称加密和哈希函数就能组成消息验证码这种既保密又完整的协议。</p>
+<p>MPC 有个基本原语，秘密分享（secret sharing），秘密分享是很多 MPC 协议的核心构造块。</p>
+<p>我们在电影中经常看到这样的场景，若想要开启银行保险柜，需要几个人同时按下指纹。这里所有指纹组成一把开门的钥匙，而每个指纹就是这把钥匙的分片，我们把这种手段叫做密钥分割，秘密分享就可以实现密钥分割。秘密分享简单定义：一个 (t, n) 的秘密分享协议可以将秘密值 s 分成 n 个份额，通过任意 t 个秘密份额都可以完整重建出秘密值 s。少于 t 个秘密份额都无法得到和 s 相关的任何信息。前面提到的银行的例子中 t 就等于 n。秘密分享是 Adi Shamir（RSA 中的 S ） 和 George Blakley 于 1979 年独立发明出来的。</p>
+<p>一个关于秘密分享隐喻是带锁的嵌套箱子。假设有 5 只带锁的箱子，分别对应不同的钥匙，分属于 5 个人。他们要分享一条消息 X，于是把消息放进最小的箱子里锁起来，然后把小箱子放到大箱子里依次锁起来。最终得到一个加了 5 把锁的嵌套箱子。如果想要获取 X，就必须一层一层地从外层开始解锁，只有 5 个人的钥匙都用上了全部的箱子才能打开。这样的手段就是一种安全的秘密分享。</p>
+<p>实际中，这个问题的解法之一是 Shamir 算法。这个算法用到了 (t-1) 次多项式需要 t 个点的坐标才能求解的特性。举个例子，一次多项式 y(x) &#x3D; kx+b，这个函数代表一条直线，我们都知道两点确定一条直线，只有知道了两个点的坐标才能求解。于是，我们可以令秘密 s 为 b，假设为 5。然后选定斜率为 1。那么这条直线的方程就是 x + 5，此时任取直线上的两个坐标点 (1, 6), (2, 7) 分别给两个人 Alice 和 Bob。Alice 和 Bob 各自拿着坐标点，无法单独推断出方程，所以也就不能获取 s。而只有将两个点合并列方程一起计算，才能得到 s 的值：<br>k+b&#x3D;6<br>2k+b&#x3D;7<br>得到，k &#x3D; 1, b &#x3D; 5，而 b 就是秘密 s。如果是分享给 3 个人，那么只要在该直线上任意找 3 个点就可以完成任何两方都能获取秘密的计算。</p>
+<p>推而广之，(t, n) 的秘密共享，那么就需要 t-1 次的多项式。也就是说，为了满足任意三人能够获取秘密，则需要一条抛物线方程（二次方程）。</p>
+<h1 id="安全计算"><a href="#安全计算" class="headerlink" title="安全计算"></a>安全计算</h1><p>其实，秘密分享完成了多方安全计算的一部分重要的工作，即保证输入的隐秘性。也就是说，Alice 可以将自己的输入参数以秘密分享的方式分享给 Bob，此时 Bob 只是拿到了 Alice 输入参数的一个份额并不知道原始输入是什么。同理，Bob 也可以将自己的输入一秘密分享的方式公布给 Alice。如果想要完成安全计算，那么还剩下一个问题：如何将这些份额组合起来并运行一个函数，最终得出结果。</p>
+<h2 id="加法门"><a href="#加法门" class="headerlink" title="加法门"></a>加法门</h2><p>以加法为例。假设 Alice 的隐私输入是 5，Bob 的隐私输入是 8，我们首先将 5 和 8 分别进行秘密分享。为了方便计算，我们将直线的斜率都设为 -1。也就是说，Alice 的直线为 y&#x3D;5-x, Bob 的直线为 y&#x3D;8-x，因此只需要分别给出两处纵坐标即可。即 Alice 的秘密值 5 可以分成 (2, 3) 和 (3, 2) 简写成纵坐标 3 和 2，而 Bob 的秘密值 8 可以分成 9 和 -1。然后他们之间交换份额，得到：<br>Alice：a[0] &#x3D; 3, b[0] &#x3D; 9<br>Bob：a[1] &#x3D; 2, b[1] &#x3D; -1<br>此时，Alice 拥有了 Bob 的份额 b[0]&#x3D;9，Bob 也有了 Alice 的份额 a[1]&#x3D;2。</p>
+<p>直线的加法比较简单，计算过程可以描述成如下形式：<br>a+b &#x3D; (a[0]+a[1]) + (b[0]+b[1])<br>由于满足加法的结合律，故有 a+b&#x3D;(a[0]+b[0]) + (a[1]+b[1])&#x3D;12+1&#x3D;13。<br>其实，Alice 和 Bob 的直线方程相加之后得到 y&#x3D;13-2x，13 就是秘密值 5 和 8 相加的结果。</p>
+<h2 id="乘法门"><a href="#乘法门" class="headerlink" title="乘法门"></a>乘法门</h2><p>乘法相对而言比较复杂，原因在于计算的过程中，需要获取对方保留在本地不对外公布的份额，这就违背了安全计算的定义。如下：<br>a <em>b &#x3D; (a[0] + a[1])</em> (b[0] + b[1]) &#x3D; (a[0] <em>b[0]) + (a[0]</em> b[1]) + (a[1] <em>b[0]) + (a[1]</em> b[1])<br>其中， (a[0] <em>b[0]) 和 (a[1]</em> b[1]) 都可以顺利在 Alice 和 Bob 本地完成，但是 (a[0] <em>b[1]) 和 (a[1]</em> b[0]) 会要求对方保留的份额，而这部分是不能够共享的，否则就会暴露各自的输入。</p>
+<p>为了应对这个问题，我们需要进行遮掩（Masking）处理。此时，需要引入一个第三方来生成一组数用于遮掩彼此不想分享的数据。对于 Alice 而言，就得遮掩 b[1]，对于 Bob 而言，就得遮掩 a[1]。</p>
+<p>第三方首先生成一个三元组(s, t, st)，其中 st&#x3D;s*t。例如：s&#x3D;7, t&#x3D;11, st&#x3D;77。然后分别将这三个元素进行秘密分享。<br>对于 s，我们有 s[0]&#x3D;4, s[1]&#x3D;3；对于 t，t[0]&#x3D;5, t[1]&#x3D;6；而 st，则有 st[0]&#x3D;44, st[1]&#x3D;33。接下来，第三方将 s[0] 和 t[0] 发送给 Alice，而将 s[1] 和 t[1] 发送给 Bob。<br>Alice 需要计算一个算式，我们记为 z[0]：</p>
+<p>z[0] &#x3D; st[0] + (s[0] <em>beta) + (alpha</em> t[0]) + (alpha <em>beta)<br>Bob 需要计算另一个算式，记为 z[1]：<br>z[1] &#x3D; st[1] + (s[1]</em> beta) + (alpha * t[1])</p>
+<p>其中，最为有意思的事情发生了，<br>alpha &#x3D; (a[0]-s[0]) + (a[1]-s[1])<br>beta &#x3D; (b[0]-t[0]) + (b[1]-t[1])<br>由于，Alice 只有 s[0] 和 t[0]，所以她可以计算 alpha 和 beta 式子左边的算式。同理，Bob 可以计算右边的算式。之后，他们双方可以分享这个各自的结果，注意此过程中，a 和 b 的任何信息都没有暴露。在本例中，alpha &#x3D; -2, beta&#x3D;-3.</p>
+<p>我们开始计算 z[0] 和 z[1]<br>z[0] &#x3D; st[0] + (s[0] <em>beta) + (alpha</em> t[0]) + (alpha <em>beta) &#x3D; 44 + (4</em> -3) + (-2 <em>5) + (-2</em> -3) &#x3D; 28<br>z[1] &#x3D; st[1] + (s[1] <em>beta) + (alpha</em> t[1]) &#x3D; 33 + (3*-3)+(-2*6)&#x3D;12</p>
+<p>最终的结果就是 z[0]+z[1] &#x3D; 40。也就是我们想计算 5 * 8 的结果。这种乘法也被叫做 Beaver 乘法。</p>
+<h2 id="代码演示"><a href="#代码演示" class="headerlink" title="代码演示"></a>代码演示</h2><p>我们使用 HoneyBadgerMPC 的 Python 代码来实现乘法。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">beaver_multiply</span>(<span class="params">ctx, x: Share, y: Share</span>):</span><br><span class="line">  <span class="string">&quot;&quot;&quot;The hello world of MPC: beaver multiplication  </span></span><br><span class="line"><span class="string">Linear operations on Share objects are easy</span></span><br><span class="line"><span class="string">Shares of random values are available from preprocessing</span></span><br><span class="line"><span class="string">Opening a Share returns a GFElementFuture</span></span><br><span class="line"><span class="string">  </span></span><br><span class="line"><span class="string">  &quot;&quot;&quot;</span>  </span><br><span class="line">  </span><br><span class="line">  s, t, st = ctx.preproc.get_triples(ctx)  </span><br><span class="line">  </span><br><span class="line">  Alpha = <span class="keyword">await</span> (x - s).<span class="built_in">open</span>()  </span><br><span class="line">  </span><br><span class="line">  Beta = <span class="keyword">await</span> (y - t).<span class="built_in">open</span>()  </span><br><span class="line"><span class="comment"># Alpha*Beta is multiplying GFElements</span></span><br><span class="line"><span class="comment"># Alpha*t, Beta*s are multiplying GFElement x Share -&gt; Share</span></span><br><span class="line"><span class="comment"># st is a Share</span></span><br><span class="line"><span class="comment"># overall the sum is a Share</span></span><br><span class="line">  </span><br><span class="line">  xy = (Alpha * Beta) + (Alpha * t) + (Beta * s) + st  </span><br><span class="line">  </span><br><span class="line">  <span class="keyword">return</span> xy</span><br></pre></td></tr></table></figure>
+
+<p>调用的代码如下所示：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">x = ctx.Share(<span class="number">5</span>) + ctx.preproc.get_zero(ctx)</span><br><span class="line">y = ctx.Share(<span class="number">7</span>) + ctx.preproc.get_zero(ctx)</span><br><span class="line"></span><br><span class="line">xy = <span class="keyword">await</span> beaver_multiply(ctx, x, y)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Check openings of the multiplied values</span></span><br><span class="line"></span><br><span class="line">X = <span class="keyword">await</span> x.<span class="built_in">open</span>()</span><br><span class="line"></span><br><span class="line">Y = <span class="keyword">await</span> y.<span class="built_in">open</span>()</span><br><span class="line"></span><br><span class="line">XY = <span class="keyword">await</span> xy.<span class="built_in">open</span>()</span><br><span class="line"></span><br><span class="line"><span class="keyword">assert</span> XY == X * Y</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;[<span class="subst">&#123;ctx.myid&#125;</span>] Beaver Multiplication OK&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>beaver_multiply 函数中进行了封装，我们可以拆解还原计算过程。<br><code>s, t, st = ctx.preproc.get_triples(ctx)</code><br>这里就是获取 s, t 和 st 的步骤，代码中省略了初始化三元组的过程。<br><code>Alpha = await (x - s).open()</code><br>对应上面说到的算式</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">alpha = (a[0]-s[0]) + (a[1]-s[1])</span><br></pre></td></tr></table></figure>
+
+<p>需要注意的是，(a[1]-s[1]) 来自 Bob，所以需要异步通信获取 Bob 计算的结果，即 await..open.<br><code>Beta = await (y - t).open()</code><br>对应的算式是</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">beta = (b[0]-t[0]) + (b[1]-t[1])</span><br></pre></td></tr></table></figure>
+
+<p>计算过程同 alpha 一致。</p>
+<p>接着我们观察乘法门中算式：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">z[0]+z[1] = st[0] + (s[0] * beta) + (alpha* t[0]) + (alpha * beta) + st[1] + (s[1] * beta) + (alpha * t[1])</span><br></pre></td></tr></table></figure>
+
+<p>然后对比代码中的算式<br><code>(Alpha * Beta) + (Alpha * t) + (Beta * s) + st</code><br>不难发现，(Alpha <em>t) 对应了(alpha</em> t[0]) + (alpha <em>t[1]) 的算式，而 (Beta</em> s) 对应了算式 (s[0] <em>beta) + (s[1]</em> beta) 的结果，而 st 则是 st[0] + st[1] 的结果。顺便计算下这里面到底沟通了多少次?</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">x: 1</span><br><span class="line">y: 1</span><br><span class="line">s: 2</span><br><span class="line">t: 2</span><br><span class="line">st: 2</span><br><span class="line">Alpha: 1</span><br><span class="line">Beta: 1</span><br><span class="line">(Alpha * Beta): 1</span><br><span class="line">(Alpha * t): 1</span><br><span class="line">(Beta * s): 1</span><br><span class="line">st: 1</span><br></pre></td></tr></table></figure>
+
+<p>总计有 14 次来自三方的通信。不过，至此我们理解了 beaver_multiply 和我们在乘法门中分析的算法一致。</p>
+<h1 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h1><p>MPC 的基本原语除了秘密分享之外，还有随机预言机（Random Oracle，简称RO）以及混淆（乱码 Garbled Circuit）电路。另外，构造 MPC 协议的功能函数还有几种广泛的应用，例如前文提及的不经意传输和零知识证明等。严格意义上讲，零知识证明并不是 MPC 的必要组成成分，加密学中将零知识证明划归为外包计算（Outsourced Computation），原因是相较于 MPC，因为零知识证明只需要一方提供加密数据，而另一方进行计算，最后将计算的结果返回给数据所有方，而 MPC 则要求多方输入数据，协同完成计算。不过全同态加密依然可以用来实现 MPC。</p>
+<h1 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h1><ol>
+<li><a href="http://research.cs.wisc.edu/areas/sec/yao1982-ocr.pdf">Protocols for Secure Computation</a></li>
+<li><a href="http://twistedoakstudios.com/blog/Post3724_explain-it-like-im-five-the-socialist-millionaire-problem-and-secure-multi-party-computation">Socialist millionaires’ Problem</a></li>
+<li><a href="https://link.springer.com/content/pdf/10.1007/978-3-540-85174-5_32.pdf">Kilian, J. 1988 Founding Cryptography on Oblivious Transfer</a></li>
+<li><a href="https://www.wikiwand.com/en/Secret_sharing">Secret sharing</a></li>
+<li><a href="https://github.com/initc3/HoneyBadgerMPC">HoneyBadgerMPC</a></li>
+</ol>
+]]></content>
+      <categories>
+        <category>Blockchain</category>
+      </categories>
+      <tags>
+        <tag>mpc</tag>
+        <tag>web3</tag>
+      </tags>
+  </entry>
 </search>

@@ -149,7 +149,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">76</span>
+          <span class="site-state-item-count">77</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -160,7 +160,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">41</span>
+        <span class="site-state-item-count">43</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -218,6 +218,221 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://qianyan.github.io/2016/09/04/Reading-and-Writing-Files/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="lambeta">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="λ">
+      <meta itemprop="description" content="Elegance and familiarity are orthogonal">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | λ">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2016/09/04/Reading-and-Writing-Files/" class="post-title-link" itemprop="url">Reading and Writing Files</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2016-09-04 10:10:44" itemprop="dateCreated datePublished" datetime="2016-09-04T10:10:44+08:00">2016-09-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2016-09-07 16:49:21" itemprop="dateModified" datetime="2016-09-07T16:49:21+08:00">2016-09-07</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Clojure/" itemprop="url" rel="index"><span itemprop="name">Clojure</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="读取和写入文件"><a href="#读取和写入文件" class="headerlink" title="读取和写入文件"></a>读取和写入文件</h2><p>数据一般都是存储在纯文本文件当中，存储的形式多种多样。本文，我会介绍如何在Clojure中读取和写入这些数据。</p>
+<h3 id="1-打开文件"><a href="#1-打开文件" class="headerlink" title="1. 打开文件"></a>1. 打开文件</h3><p>新建文件<em>hello.txt</em>，放到<em>resources</em>目录，内容如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hello world!</span><br><span class="line">hello lambeta!</span><br><span class="line">hello life!</span><br></pre></td></tr></table></figure>
+<p>新建<em>4io.clj</em>，输入程序：</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="built_in">ns</span></span> the-way-to-clojure.4io</span><br><span class="line">  (<span class="symbol">:require</span> [clojure.java.io <span class="symbol">:as</span> io]</span><br><span class="line">            [clojure.string <span class="symbol">:as</span> str]))</span><br><span class="line"></span><br><span class="line">(<span class="keyword">def</span> <span class="title">data-file</span> (<span class="name">io/resource</span> <span class="string">&quot;hello.txt&quot;</span>))</span><br><span class="line">(<span class="name"><span class="built_in">slurp</span></span> data-file) </span><br></pre></td></tr></table></figure>
+<p>运行程序，输出如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&quot;hello world! \nhello lambeta!\nhello life!\n&quot;</span><br></pre></td></tr></table></figure>
+<h4 id="读取所有行"><a href="#读取所有行" class="headerlink" title="读取所有行"></a>读取所有行</h4><figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="built_in">line-seq</span></span> (<span class="name">io/reader</span> data-file))</span><br><span class="line"><span class="comment">;;=&gt; (&quot;hello world!&quot; &quot;hello lambeta!&quot; &quot;hello life!&quot;)</span></span><br></pre></td></tr></table></figure>
+<h4 id="with-open宏"><a href="#with-open宏" class="headerlink" title="with-open宏"></a>with-open宏</h4><p>with-open宏用于自动关闭打开的文件。</p>
+<p>1.1 读取一行，如下：</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="built_in">with-open</span></span> [rdr (<span class="name">io/reader</span> data-file)]</span><br><span class="line">  (<span class="name"><span class="built_in">when-let</span></span> [line (<span class="name">.readLine</span> rdr)]</span><br><span class="line">    (<span class="name">println</span> line)))</span><br></pre></td></tr></table></figure>
+
+<p>1.2 读取多行，如下：</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">;;; read multiple lines</span></span><br><span class="line">(<span class="name"><span class="built_in">with-open</span></span> [rdr (<span class="name">io/reader</span> data-file)]</span><br><span class="line">  (<span class="name"><span class="built_in">loop</span></span> [line (<span class="name">.readLine</span> rdr)]</span><br><span class="line">    (<span class="name"><span class="built_in">when</span></span> line</span><br><span class="line">      (<span class="name">println</span> line)</span><br><span class="line">      (<span class="name"><span class="built_in">recur</span></span> (<span class="name">.readLine</span> rdr)))))</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-读取文件的技巧"><a href="#2-读取文件的技巧" class="headerlink" title="2. 读取文件的技巧"></a>2. 读取文件的技巧</h3><p>想想读取文件可能有哪些场景？</p>
+<ul>
+<li>读取整个文本</li>
+</ul>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="built_in">slurp</span></span> data-file)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>读取一行</li>
+</ul>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="built_in">with-open</span></span> [rdr (<span class="name">io/reader</span> data-file)]</span><br><span class="line">  (<span class="name"><span class="built_in">first</span></span> (<span class="name"><span class="built_in">line-seq</span></span> rdr)))</span><br><span class="line"><span class="comment">;; 或者</span></span><br><span class="line">(<span class="name"><span class="built_in">with-open</span></span> [rdr (<span class="name">io/reader</span> data-file)]</span><br><span class="line">  (<span class="name"><span class="built_in">take</span></span> <span class="number">1</span> (<span class="name"><span class="built_in">line-seq</span></span> rdr)))</span><br><span class="line">-&gt; <span class="string">&quot;hello world!&quot;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>读取前n行</li>
+</ul>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="built_in">with-open</span></span> [rdr (<span class="name">io/reader</span> data-file)]</span><br><span class="line">  (<span class="name"><span class="built_in">doall</span></span> (<span class="name"><span class="built_in">take</span></span> <span class="number">2</span> (<span class="name"><span class="built_in">line-seq</span></span> rdr))))</span><br><span class="line">-&gt; (<span class="string">&quot;hello world!&quot;</span> <span class="string">&quot;hello lambeta!&quot;</span>)</span><br></pre></td></tr></table></figure>
+<p>这里使用了<code>(doall )</code>方法，如果不用这个方法，在repl中求值的时候会表达式导致抛出<code>Unhandled java.io.IOException  Stream closed</code>异常。究其缘由是<code>(take 2 )</code>返回了一个惰性序列，详细解释参见文末备注。</p>
+<ul>
+<li>读取前n个字符</li>
+</ul>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">with-open [rdr (<span class="name">io/reader</span> data-file)]</span><br><span class="line">  (<span class="name"><span class="built_in">loop</span></span> [ch (<span class="name">.read</span> rdr) len <span class="number">20</span>]</span><br><span class="line">    (<span class="name"><span class="built_in">when-not</span></span> (<span class="name"><span class="built_in">or</span></span> (<span class="name"><span class="built_in">=</span></span> <span class="number">-1</span> ch) (<span class="name"><span class="built_in">zero?</span></span> len))</span><br><span class="line">      (<span class="name">println</span> (<span class="name">char</span> ch))</span><br><span class="line">      (<span class="name"><span class="built_in">recur</span></span> (<span class="name">.read</span> rdr) (<span class="name"><span class="built_in">dec</span></span> len)))))</span><br><span class="line">| h</span><br><span class="line">| e</span><br><span class="line">| ...</span><br><span class="line">-&gt; <span class="literal">nil</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>跳过特定的行</li>
+</ul>
+<p>在<em>resources</em>目录下，新建<em>records.txt</em>，内容即代码注释所示：</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">(<span class="keyword">defn</span> <span class="title">read-records</span> [input-file]</span><br><span class="line">  <span class="string">&quot;Coloured fox fur production, HOPEDALE, Labrador, 1834-1842</span></span><br><span class="line"><span class="string">  #Source: C. Elton (1942) \&quot;Voles, Mice and Lemmings\&quot;, Oxford Univ. Press</span></span><br><span class="line"><span class="string">  #Table 17, p.265--266</span></span><br><span class="line"><span class="string">  22</span></span><br><span class="line"><span class="string">  29</span></span><br><span class="line"><span class="string">  2</span></span><br><span class="line"><span class="string">  16</span></span><br><span class="line"><span class="string">  12</span></span><br><span class="line"><span class="string">  35</span></span><br><span class="line"><span class="string">  8</span></span><br><span class="line"><span class="string">  83</span></span><br><span class="line"><span class="string">  166&quot;</span></span><br><span class="line">  (<span class="name"><span class="built_in">letfn</span></span> [(<span class="name">skip</span> [lines]</span><br><span class="line">            (<span class="name"><span class="built_in">next</span></span> lines))]</span><br><span class="line">         (<span class="name"><span class="built_in">with-open</span></span> [rdr ((<span class="name"><span class="built_in">comp</span></span> io/reader io/resource) input-file)]</span><br><span class="line">           (<span class="name"><span class="built_in">-&gt;&gt;</span></span></span><br><span class="line">            (<span class="name"><span class="built_in">for</span></span> [line (<span class="name">skip</span> (<span class="name"><span class="built_in">line-seq</span></span> rdr))</span><br><span class="line">                  <span class="symbol">:when</span> (<span class="name"><span class="built_in">not</span></span> (<span class="name">.startsWith</span> line <span class="string">&quot;#&quot;</span>))]</span><br><span class="line">              (<span class="name">read-string</span> line))</span><br><span class="line">            (<span class="name"><span class="built_in">apply</span></span> +)))))</span><br><span class="line"></span><br><span class="line">(<span class="name">read-records</span> <span class="string">&quot;records.txt&quot;</span>)</span><br><span class="line">-&gt; <span class="number">373</span></span><br></pre></td></tr></table></figure>
+
+<p>我们在<code>read-records</code>内部新建一个<code>skip</code>方法，顾名思义，跳过第一个元素，然后返回后面的列表。这里旨在跳过文本的声明头。<code>:when (not ...)</code>过滤了文本的注释部分（以#开头的行），并使用<code>read-string</code>转换字符串到数字类型，<code>(for )</code>求值完成后返回只包含数字的列表。最后，我们对列表做了一次累加操作。</p>
+<p>我们试试非过滤而是跳过（删除）以”#”开头行的方式获取数字列表，这样更符合要求。重写<em>with-open</em>部分，如下：</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="built_in">with-open</span></span> [rdr ((<span class="name"><span class="built_in">comp</span></span> io/reader io/resource) input-file)]</span><br><span class="line">      (<span class="name"><span class="built_in">apply</span></span> +</span><br><span class="line">             (<span class="name"><span class="built_in">let</span></span> [lines (<span class="name">skip</span> (<span class="name"><span class="built_in">line-seq</span></span> rdr))]</span><br><span class="line">               (<span class="name"><span class="built_in">-&gt;&gt;</span></span> lines</span><br><span class="line">                    (<span class="name"><span class="built_in">remove</span></span> (<span class="name">set</span> (<span class="name"><span class="built_in">for</span></span> [line lines <span class="symbol">:while</span> (<span class="name">.startsWith</span> line <span class="string">&quot;#&quot;</span>)] line)))</span><br><span class="line">                    (<span class="name"><span class="built_in">map</span></span> read-string)))))</span><br></pre></td></tr></table></figure>
+<p>或者</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="built_in">with-open</span></span> [rdr ((<span class="name"><span class="built_in">comp</span></span> io/reader io/resource) input-file)]</span><br><span class="line">      (<span class="name"><span class="built_in">apply</span></span> +</span><br><span class="line">             (<span class="name"><span class="built_in">let</span></span> [lines (<span class="name">skip</span> (<span class="name"><span class="built_in">line-seq</span></span> rdr))]</span><br><span class="line">               (<span class="name"><span class="built_in">-&gt;&gt;</span></span> lines</span><br><span class="line">                    (<span class="name"><span class="built_in">drop</span></span> (<span class="name"><span class="built_in">count</span></span> (<span class="name"><span class="built_in">for</span></span> [line lines <span class="symbol">:while</span> (<span class="name">.startsWith</span> line <span class="string">&quot;#&quot;</span>)] line)))</span><br><span class="line">                    (<span class="name"><span class="built_in">map</span></span> read-string)))))</span><br></pre></td></tr></table></figure>
+<h3 id="3-读取网络文件"><a href="#3-读取网络文件" class="headerlink" title="3. 读取网络文件"></a>3. 读取网络文件</h3><p>通过slurp读取字符串</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(slurp &quot;http://robjhyndman.com/tsdldata/ecology1/hopedale.dat&quot; :encoding &quot;utf-8&quot;)</span><br><span class="line"></span><br><span class="line">-&gt; &quot;Coloured fox fur production, HOPEDALE, Labrador,, 1834-1925\n#Source: C. Elton (1942) \&quot;Voles, Mice and Lemmings\&quot;, Oxford Univ. Press\n#Table 17, p.265--266\n      22   \n...</span><br></pre></td></tr></table></figure>
+<p>注意，这个网页上的数据是用UTF-8编码的，所以解码读取时，也应该使用UTF-8。</p>
+<h3 id="4-写入文件"><a href="#4-写入文件" class="headerlink" title="4. 写入文件"></a>4. 写入文件</h3><ul>
+<li>使用spit方法</li>
+</ul>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">spit</span> <span class="string">&quot;world.txt&quot;</span> <span class="string">&quot;Hello, lambeta!&quot;</span> <span class="symbol">:append</span> <span class="literal">true</span>)</span><br></pre></td></tr></table></figure>
+<p>运行程序之后，项目的根目录下会生成<em>world.txt</em>文件，内容是<em>Hello, lambeta</em>。spit方法其实就是向Java的BufferedWriter中写入内容。</p>
+<ul>
+<li>使用clojure.java.io&#x2F;writer</li>
+</ul>
+<p>我们在项目的根目录新建<em>numbers.txt</em>，内容是多行的数字对，如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1.3 2.7</span><br><span class="line">10000 1</span><br><span class="line">-1 1</span><br></pre></td></tr></table></figure>
+
+<p>我们需要把每行两个数字，和它们相加的结果写入到<em>sum-of_numbers.txt</em>文件中。也就是注释中的描述。</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">(<span class="keyword">defn</span> <span class="title">sum-number-pairs</span> [input-file output-file]</span><br><span class="line">  <span class="string">&quot;Read the data from input-file, which contains two floats per line</span></span><br><span class="line"><span class="string">   separated by a space.  Open file named output-file and, for each line in</span></span><br><span class="line"><span class="string">   input-file, write a line to the output file that contains the two floats</span></span><br><span class="line"><span class="string">   from the corresponding line of input-file plus a space and the sum of the</span></span><br><span class="line"><span class="string">   two floats.&quot;</span></span><br><span class="line">(<span class="name"><span class="built_in">with-open</span></span> [rdr (<span class="name">io/reader</span> input-file) wtr (<span class="name">io/writer</span> output-file <span class="symbol">:append</span> <span class="literal">true</span>)]</span><br><span class="line">    (<span class="name"><span class="built_in">loop</span></span> [line (<span class="name">.readLine</span> rdr)]</span><br><span class="line">      (<span class="name"><span class="built_in">when</span></span> line</span><br><span class="line">        (<span class="name"><span class="built_in">let</span></span> [pair (<span class="name"><span class="built_in">map</span></span> read-string</span><br><span class="line">                        (<span class="name">str/split</span> line <span class="regex">#&quot;\s&quot;</span>))</span><br><span class="line">              first (<span class="name"><span class="built_in">first</span></span> pair)</span><br><span class="line">              second (<span class="name"><span class="built_in">second</span></span> pair)</span><br><span class="line">              sum (<span class="name"><span class="built_in">+</span></span> first second)]</span><br><span class="line">          (<span class="name">.write</span> wtr (<span class="name"><span class="built_in">str</span></span> first <span class="string">&quot; &quot;</span> second <span class="string">&quot; &quot;</span> sum <span class="string">&quot;\n&quot;</span>)))</span><br><span class="line">        (<span class="name"><span class="built_in">recur</span></span> (<span class="name">.readLine</span> rdr))))))</span><br><span class="line"></span><br><span class="line">(<span class="name">sum-number-pairs</span> <span class="string">&quot;numbers.txt&quot;</span> <span class="string">&quot;sum-of-numbers.txt&quot;</span>)</span><br></pre></td></tr></table></figure>
+<p>with-open同时打开了一个用于读取、名为<em>input-file</em>的文件以及一个用于写入、名为<em>output-file</em>的文件，写入方式是追加<code>:append true</code>。随后循环读取<em>input-file</em>中的每行内容。若<em>line</em>不是nil（即存在），那么用空格分隔这行内容，得到一个数组，如：”1.3 2.7” -&gt; [“1.3” “2.7”]。此时数组的元素类型还不是数字（Number），我们使用<code>(map read-string )</code>将元素转换为对应的数字类型，如：[“1.3” “2.7”] -&gt; [1.3 2.7]。之后，分别提取数组的第一、二个元素以及两者的和。最后，写入到wtr中。</p>
+<hr>
+<p><strong>注意</strong>：程序中的<em>str&#x2F;split</em>是通过<code>(:require [clojure.string :as str])</code>方式引入<em>str</em>命名空间的。</p>
+<hr>
+<p>运行程序之后，<em>sum-of-numbers.txt</em>中的内容如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1.3 2.7 4.0</span><br><span class="line">10000 1 10001</span><br><span class="line">-1 1 0</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-多行记录"><a href="#5-多行记录" class="headerlink" title="5. 多行记录"></a>5. 多行记录</h3><h4 id="5-1-有结束标识"><a href="#5-1-有结束标识" class="headerlink" title="5.1 有结束标识"></a>5.1 有结束标识</h4><p>有时候，记录并不是以一行一行的方式存储在文件当中的，而是以多行数据描述一条记录。比如下面的蛋白质数据：<br><strong>清单 5.1</strong> <em>multimol.pdb</em></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">COMPND      AMMONIA</span><br><span class="line">ATOM      1  N  0.257  -0.363   0.000</span><br><span class="line">ATOM      2  H  0.257   0.727   0.000</span><br><span class="line">ATOM      3  H  0.771  -0.727   0.890</span><br><span class="line">ATOM      4  H  0.771  -0.727  -0.890</span><br><span class="line">END</span><br><span class="line">COMPND      METHANOL</span><br><span class="line">ATOM      1  C  -0.748  -0.015   0.024</span><br><span class="line">ATOM      2  O  0.558   0.420  -0.278</span><br><span class="line">ATOM      3  H  -1.293  -0.202  -0.901</span><br><span class="line">ATOM      4  H  -1.263   0.754   0.600</span><br><span class="line">ATOM      5  H  -0.699  -0.934   0.609</span><br><span class="line">ATOM      6  H  0.716   1.404   0.137</span><br><span class="line">END</span><br></pre></td></tr></table></figure>
+<p>第一行描述的是分子的名字，接下来到END为止的每行代表原子的ID、类型以及在分子中分布的[x y z]坐标。<br>我们需要一个函数，将数据读取出来并且以规定的格式输出，格式如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">((&quot;AMMONIA&quot; </span><br><span class="line">    (&quot;N&quot; &quot;0.257&quot; &quot;-0.363&quot; &quot;0.000&quot;)</span><br><span class="line">    (&quot;H&quot; &quot;0.257&quot; &quot;0.727&quot; &quot;0.000&quot;)</span><br><span class="line">    (&quot;H&quot; &quot;0.771&quot; &quot;-0.727&quot; &quot;0.890&quot;)</span><br><span class="line">    (&quot;H&quot; &quot;0.771&quot; &quot;-0.727&quot; &quot;-0.890&quot;)) </span><br><span class="line"> (&quot;METHANOL&quot; </span><br><span class="line">    (&quot;C&quot; &quot;-0.748&quot; &quot;-0.015&quot; &quot;0.024&quot;)</span><br><span class="line">    (&quot;O&quot; &quot;0.558&quot; &quot;0.420&quot; &quot;-0.278&quot;)</span><br><span class="line">    (&quot;H&quot; &quot;-1.293&quot; &quot;-0.202&quot; &quot;-0.901&quot;)</span><br><span class="line">    (&quot;H&quot; &quot;-1.263&quot; &quot;0.754&quot; &quot;0.600&quot;)</span><br><span class="line">    (&quot;H&quot; &quot;-0.699&quot; &quot;-0.934&quot; &quot;0.609&quot;)</span><br><span class="line">    (&quot;H&quot; &quot;0.716&quot; &quot;1.404&quot; &quot;0.137&quot;)))</span><br></pre></td></tr></table></figure>
+<p>也就是说，我们需要把每条记录读入单个列表中，每个列表由分子的名称和多个<code>(Type X Y Z)</code>的原子列表组成。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">(defn read-all-molecules [input-file]</span><br><span class="line">  (map (fn [molecules]</span><br><span class="line">         (let [[_ name] (str/split (first molecules) #&quot;\s+&quot;)</span><br><span class="line">               atoms (map (comp #(drop 2 %) #(str/split % #&quot;\s+&quot;))</span><br><span class="line">                          (rest molecules))]</span><br><span class="line">           (concat [name] atoms)))</span><br><span class="line">       ;; 分割成多条记录</span><br><span class="line">       (remove #(= % [&quot;END&quot;]) </span><br><span class="line">               (partition-by #(= % &quot;END&quot;) (line-seq (io/reader input-file))))))</span><br><span class="line"></span><br><span class="line">(read-all-molecules &quot;multimol.pdb&quot;)</span><br></pre></td></tr></table></figure>
+<p><code>(remove #(= % [&quot;END&quot;]) (partition-by #(= % &quot;END&quot;) (line-seq (io/reader input-file))))</code>这行代码做的事情就是把文件读取出来变成一个<code>lazy-seq</code>，然后使用<code>parttition-by</code>以<em>END</em>进行分组，最后使用<code>remove</code>方法剔除掉*[“END”]*这样的分组，得到如下中间结果：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">((&quot;COMPND      AMMONIA&quot; </span><br><span class="line">  &quot;ATOM      1  N  0.257  -0.363   0.000&quot;</span><br><span class="line">  &quot;ATOM      2  H  0.257   0.727   0.000&quot;</span><br><span class="line">  &quot;ATOM      3  H  0.771  -0.727   0.890&quot;</span><br><span class="line">  &quot;ATOM      4  H  0.771  -0.727  -0.890&quot;) </span><br><span class="line"> (&quot;COMPND      METHANOL&quot; </span><br><span class="line">  &quot;ATOM      1  C  -0.748  -0.015   0.024&quot;</span><br><span class="line">  &quot;ATOM      2  O  0.558   0.420  -0.278&quot;</span><br><span class="line">  &quot;ATOM      3  H  -1.293  -0.202  -0.901&quot; </span><br><span class="line">  &quot;ATOM      4  H  -1.263   0.754   0.600&quot;</span><br><span class="line">  &quot;ATOM      5  H  -0.699  -0.934   0.609&quot; </span><br><span class="line">  &quot;ATOM      6  H  0.716   1.404   0.137&quot;))</span><br></pre></td></tr></table></figure>
+<p>这样离我们的目标已经很近了。观察上述结果，不难发现分子的名称处于列表的第一个<code>(first )</code>，而原子列表可以使用<code>(rest )</code>获取。然后，借助<code>(map )</code>函数遍历所有的记录。</p>
+<p><code>(let )</code>中的第一个binding是<code>[_ name] (str/split (first molecules) #&quot;\s+&quot;)</code>，首先用<code>(split )</code>函数分割，再使用了解构提取出分子的名称；第二个binding是原子列表的提取，我们在<code>(split )</code>的基础之上，使用<code>(drop 2 )</code>函数剔除了不用的字段，如：ATOM和1。最后使用<code>(concat )</code>函数将名称和原子列表的列表拼接到一起。</p>
+<h4 id="5-2-无结束标识"><a href="#5-2-无结束标识" class="headerlink" title="5.2 无结束标识"></a>5.2 无结束标识</h4><p>5.1中的记录项通过<em>END</em>标识分隔，但是事实上这是一个多余的字段，记录项可以更简练，如下：<br><strong>清单 5.2</strong> <em>multimol-without-end-marker.pdb</em></p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">COMPND      AMMONIA</span><br><span class="line">ATOM      <span class="number">1</span>  N  <span class="number">0.257</span>  <span class="number">-0.363</span>   <span class="number">0.000</span></span><br><span class="line">ATOM      <span class="number">2</span>  H  <span class="number">0.257</span>   <span class="number">0.727</span>   <span class="number">0.000</span></span><br><span class="line">ATOM      <span class="number">3</span>  H  <span class="number">0.771</span>  <span class="number">-0.727</span>   <span class="number">0.890</span></span><br><span class="line">ATOM      <span class="number">4</span>  H  <span class="number">0.771</span>  <span class="number">-0.727</span>  <span class="number">-0.890</span></span><br><span class="line">COMPND      METHANOL</span><br><span class="line">ATOM      <span class="number">1</span>  C  <span class="number">-0.748</span>  <span class="number">-0.015</span>   <span class="number">0.024</span></span><br><span class="line">ATOM      <span class="number">2</span>  O  <span class="number">0.558</span>   <span class="number">0.420</span>  <span class="number">-0.278</span></span><br><span class="line">ATOM      <span class="number">3</span>  H  <span class="number">-1.293</span>  <span class="number">-0.202</span>  <span class="number">-0.901</span></span><br><span class="line">ATOM      <span class="number">4</span>  H  <span class="number">-1.263</span>   <span class="number">0.754</span>   <span class="number">0.600</span></span><br><span class="line">ATOM      <span class="number">5</span>  H  <span class="number">-0.699</span>  <span class="number">-0.934</span>   <span class="number">0.609</span></span><br><span class="line">ATOM      <span class="number">6</span>  H  <span class="number">0.716</span>   <span class="number">1.404</span>   <span class="number">0.137</span></span><br></pre></td></tr></table></figure>
+<p>现在的问题变成了没有<em>END</em>标识符，如何进行分组？观察不难发现以<em>COMPND</em>开头的数据行可以作为记录的分隔符。<br>使用<code>(partition-by #(.startsWith % &quot;COMPND&quot;) (line-seq (io/reader input-file)))</code>进行分组，得到的结果如下：</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">((<span class="string">&quot;COMPND      AMMONIA&quot;</span>) </span><br><span class="line">  (<span class="string">&quot;ATOM      1  N  0.257  -0.363   0.000&quot;</span> </span><br><span class="line">   <span class="string">&quot;ATOM      2  H  0.257   0.727   0.000&quot;</span> </span><br><span class="line">   <span class="string">&quot;ATOM      3  H  0.771  -0.727   0.890&quot;</span></span><br><span class="line">   <span class="string">&quot;ATOM      4  H  0.771  -0.727  -0.890&quot;</span>) </span><br><span class="line"> (<span class="string">&quot;COMPND      METHANOL&quot;</span>) </span><br><span class="line">  (<span class="string">&quot;ATOM      1  C  -0.748  -0.015   0.024&quot;</span> </span><br><span class="line">   <span class="string">&quot;ATOM      2  O  0.558   0.420  -0.278&quot;</span> </span><br><span class="line">   <span class="string">&quot;ATOM      3  H  -1.293  -0.202  -0.901&quot;</span></span><br><span class="line">   <span class="string">&quot;ATOM      4  H  -1.263   0.754   0.600&quot;</span></span><br><span class="line">   <span class="string">&quot;ATOM      5  H  -0.699  -0.934   0.609&quot;</span></span><br><span class="line">   <span class="string">&quot;ATOM      6  H  0.716   1.404   0.137&quot;</span>))</span><br></pre></td></tr></table></figure>
+<p>此时，我们对比5.1中中间结果，会发现它们极为相似。也就是说，我们稍加转换就能让两者一致，而一致的好处就是可以复用原来<code>(map )</code>中的逻辑。</p>
+<p>稍稍修改原来的分组逻辑，如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(map (fn [[name atoms]] (concat name atoms))</span><br><span class="line">       (partition 2</span><br><span class="line">                  (partition-by</span><br><span class="line">                   #(.startsWith % &quot;COMPND&quot;)</span><br><span class="line">                   (line-seq (io/reader input-file)))))</span><br></pre></td></tr></table></figure>
+<p>我们先使用<code>(partition 2 )</code>将第一步得到的列表每隔两个元素划为一组，如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">(((&quot;COMPND      AMMONIA&quot;) </span><br><span class="line">  (&quot;ATOM      1  N  0.257  -0.363   0.000&quot; </span><br><span class="line">   &quot;ATOM      2  H  0.257   0.727   0.000&quot; </span><br><span class="line">   &quot;ATOM      3  H  0.771  -0.727   0.890&quot;</span><br><span class="line">   &quot;ATOM      4  H  0.771  -0.727  -0.890&quot;)) ; 多出一对括号</span><br><span class="line"> ((&quot;COMPND      METHANOL&quot;) </span><br><span class="line">  (&quot;ATOM      1  C  -0.748  -0.015   0.024&quot; </span><br><span class="line">   &quot;ATOM      2  O  0.558   0.420  -0.278&quot; </span><br><span class="line">   &quot;ATOM      3  H  -1.293  -0.202  -0.901&quot;</span><br><span class="line">   &quot;ATOM      4  H  -1.263   0.754   0.600&quot;</span><br><span class="line">   &quot;ATOM      5  H  -0.699  -0.934   0.609&quot;</span><br><span class="line">   &quot;ATOM      6  H  0.716   1.404   0.137&quot;)))</span><br></pre></td></tr></table></figure>
+<p>然后使用<code>(map (fn [[name atoms]] ...)</code>将每组里面的两个列表合成为一个列表，这样就得到和原来5.1一模一样的中间结果。</p>
+<p>接下来，我们把转换的逻辑从<code>(read-all-molecules )</code>中提取出来，以便复用。改造如下：</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">(<span class="keyword">defn</span> <span class="title">read-all-molecules</span> [f input-file]</span><br><span class="line">  (<span class="name"><span class="built_in">let</span></span> [data (<span class="name">f</span> input-file)]</span><br><span class="line">    (<span class="name"><span class="built_in">map</span></span> (<span class="name"><span class="built_in">fn</span></span> [molecules]</span><br><span class="line">           (<span class="name"><span class="built_in">let</span></span> [[_ name] (<span class="name">str/split</span> (<span class="name"><span class="built_in">first</span></span> molecules) <span class="regex">#&quot;\s+&quot;</span>)</span><br><span class="line">                 atoms (<span class="name"><span class="built_in">map</span></span> (<span class="name"><span class="built_in">comp</span></span> #(<span class="name"><span class="built_in">drop</span></span> <span class="number">2</span> %) #(<span class="name">str/split</span> % <span class="regex">#&quot;\s+&quot;</span>))</span><br><span class="line">                            (<span class="name"><span class="built_in">rest</span></span> molecules))]</span><br><span class="line">             (<span class="name"><span class="built_in">concat</span></span> [name] atoms))) data)))</span><br></pre></td></tr></table></figure>
+<p>定义转换逻辑，如下：</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">(<span class="keyword">defn</span> <span class="title">file-without-markers-&gt;multi-records</span> [input-file]</span><br><span class="line">  (<span class="name"><span class="built_in">map</span></span> (<span class="name"><span class="built_in">fn</span></span> [[name atoms]] (<span class="name"><span class="built_in">concat</span></span> name atoms))</span><br><span class="line">       (<span class="name"><span class="built_in">partition</span></span> <span class="number">2</span></span><br><span class="line">                  (<span class="name">partition-by</span></span><br><span class="line">                   #(<span class="name">.startsWith</span> % <span class="string">&quot;COMPND&quot;</span>)</span><br><span class="line">                   (<span class="name"><span class="built_in">line-seq</span></span> (<span class="name">io/reader</span> input-file))))))</span><br></pre></td></tr></table></figure>
+<p>最后，我们来调用的改造之后的方法：</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">read-all-molecules</span> </span><br><span class="line">        file-without-markers-&gt;multi-records <span class="string">&quot;multimol-without-end-marker.pdb&quot;</span>)</span><br></pre></td></tr></table></figure>
+<p>此时，5.1中的转换逻辑也可以提取出一个函数：</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="keyword">defn</span> <span class="title">file-&gt;multi-records</span></span><br><span class="line">  (<span class="name"><span class="built_in">remove</span></span> #(<span class="name"><span class="built_in">=</span></span> % [<span class="string">&quot;END&quot;</span>]) </span><br><span class="line">               (<span class="name">partition-by</span> #(<span class="name"><span class="built_in">=</span></span> % <span class="string">&quot;END&quot;</span>) (<span class="name"><span class="built_in">line-seq</span></span> (<span class="name">io/reader</span> input-file)))))</span><br></pre></td></tr></table></figure>
+<p>原来的程序就重构成了如下的模样：</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">read-all-molecules</span> file-&gt;multi-records <span class="string">&quot;multimol.pdb&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+
+<hr>
+<p><strong>备注</strong></p>
+<p>为了清楚定位这个问题，我们需要提前了解两个知识点</p>
+<ol>
+<li>什么是惰性序列？</li>
+<li>惰性序列在repl中什么时候变现（realizes）？</li>
+</ol>
+<p>惰性序列是用<code>(lazy-seq [&amp; body] )</code>宏创建出来的。<code>lazy-seq</code>仅在需要的时候才会去调用它的body。<br>当repl尝试<code>pretty-print</code>惰性序列的结果时，才会进行变现操作。</p>
+<p>有了上面的知识点，我们来考察<code>with-open</code>和<code>(take 2 (line-seq ))</code>的关系。<code>with-open</code>是宏，我们使用<code>clojure.walk/macroexpand-all</code>展开下：</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">clojure.walk/macroexpand-all</span> </span><br><span class="line">    &#x27;(<span class="name"><span class="built_in">with-open</span></span> [rdr (<span class="name">io/reader</span> data-file)]</span><br><span class="line">                      (<span class="name"><span class="built_in">take</span></span> <span class="number">2</span> (<span class="name"><span class="built_in">line-seq</span></span> rdr))))</span><br><span class="line">                      </span><br><span class="line">-&gt; (<span class="name">let*</span> [rdr (<span class="name">io/reader</span> data-file)] </span><br><span class="line">        (<span class="name"><span class="built_in">try</span></span> (<span class="name"><span class="built_in">do</span></span> </span><br><span class="line">                (<span class="name"><span class="built_in">take</span></span> <span class="number">2</span> (<span class="name"><span class="built_in">line-seq</span></span> rdr))) </span><br><span class="line">        (<span class="name">finally</span> (<span class="name"><span class="built_in">.</span></span> rdr clojure.core/close))))                      </span><br></pre></td></tr></table></figure>
+<p>使用<code>(doc line-seq)</code>查看文档，得到</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">clojure.core/line-seq</span><br><span class="line"> [rdr]</span><br><span class="line">Added in 1.0</span><br><span class="line">  Returns the lines of text from rdr as a lazy sequence of strings.</span><br><span class="line">  rdr must implement java.io.BufferedReader.</span><br></pre></td></tr></table></figure>
+<p>可以确认<code>line-seq</code>返回一个惰性的字符串序列。<br>再看看<code>(doc take)</code>的文档，得到</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">clojure.core/take</span><br><span class="line"> [n]</span><br><span class="line"> [n coll]</span><br><span class="line">Added in 1.0</span><br><span class="line">  Returns a lazy sequence of the first n items in coll, or all items if</span><br><span class="line">  there are fewer than n.  Returns a stateful transducer when</span><br><span class="line">  no collection is provided.</span><br></pre></td></tr></table></figure>
+<p>所以<code>take</code>返回的也是一个惰性序列，那么<code>(do (take 2 (line-seq rdr)))</code>（等价于<code>(take 2 (line-seq rdr))</code>）整个返回的就是一个惰性序列。</p>
+<p>当我们通过repl求值<code>with-open</code>时，它并没有真的变现<code>(take 2 (line-seq rdr))</code>，而是在运行完<code>try...finally</code>之后，直接返回这个惰性序列作为结果。此时，repl开始尝试pretty-print <code>(take 2 (line-seq rdr))</code>，变现发生，但是rdr已经被关闭了，所以抛出<em>Stream closed</em>异常。</p>
+<p>到这里，解决了一大半问题，但是还有一个逻辑上解释不过去的点，就是</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(with-open [rdr (io/reader data-file)]</span><br><span class="line">  (take 1 (line-seq rdr)))</span><br></pre></td></tr></table></figure>
+<p>当我们尝试<code>(take 1 )</code>时并不会抛出异常！也就是说<code>(take 1 )</code>和<code>(take 2 )</code>的行为不同，但是<code>(take )</code>明明都是返回惰性序列啊？</p>
+<p>带着这个疑惑，看看<code>line-seq</code>的源代码</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(when-let [line (.readLine rdr)]</span><br><span class="line">    (cons line (lazy-seq (line-seq rdr)))))</span><br></pre></td></tr></table></figure>
+<p>是不是有种豁然开朗的感觉？没有也没关系，我来解释一下。<br><code>line-seq</code>的<code>when-let</code>语句并没有包在<code>(lazy-seq )</code>（这点可以和<code>take</code>的源码比较）中，这说明<code>[line (.readline rdr)]</code>是需要立即求值的。也就是说，我们在求值<code>with-open</code>时，rdr中第一行的内容会被<code>(line-seq )</code>给抓住了。那么当<code>try...finally</code>运行结束之后，pretty-print变现惰性序列时，发现第一行根本不需要从rdr中读，当然就不会抛出异常了。</p>
+<p>明确这几点之后，我们看看<code>(doall )</code>为何能解决惰性序列延迟求值的问题？<code>(doall )</code>其实强制变现了整个惰性序列（不断调用序列的<code>next</code>方法），所以并不会等到<code>with-open</code>求值完成之后才求值。</p>
+<p>换个角度，我们知道之所以抛出异常，是因为repl对返回的惰性序列求值了。那么如果我们不在repl中求值，程序还会抛出异常吗？</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="built_in">ns</span></span> the-way-to-clojure.core</span><br><span class="line">  (<span class="symbol">:require</span> [clojure.java.io <span class="symbol">:as</span> io])</span><br><span class="line">  (<span class="symbol">:gen-class</span>))</span><br><span class="line"></span><br><span class="line">(<span class="keyword">defn</span> <span class="title">-main</span> [&amp; args]</span><br><span class="line">  (<span class="name"><span class="built_in">with-open</span></span> [rdr (<span class="name">io/reader</span> <span class="string">&quot;hello.txt&quot;</span>)]</span><br><span class="line">    (<span class="name"><span class="built_in">take</span></span> <span class="number">100</span> (<span class="name"><span class="built_in">line-seq</span></span> rdr))))</span><br></pre></td></tr></table></figure>
+<p>接着，我们使用<code>lein run</code>来运行<code>main</code>方法。程序运行良好，因为根本没有人用到返回的惰性序列。</p>
+<p>如果我们加一句打印语句如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(defn -main [&amp; args]</span><br><span class="line">  (println          ; 变现</span><br><span class="line">      (with-open [rdr (io/reader &quot;hello.txt&quot;)]</span><br><span class="line">        (take 100 (line-seq rdr)))))</span><br></pre></td></tr></table></figure>
+<p>再用<code>lein run</code>跑一个<code>main</code>方法，异常又不期而遇了。因为此处的<code>println</code>等价于<code>repl</code>的<code>pretty print</code>。</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1634,112 +1849,6 @@ InputFile这是Sonar定义的合法的待扫描文件。举个例子：我们定
 <li><a target="_blank" rel="noopener" href="http://hongjiang.info/understand-monad-5-what-is-endofunctor/">我所理解的monad</a></li>
 <li><a target="_blank" rel="noopener" href="http://homepages.inf.ed.ac.uk/wadler/papers/marktoberdorf/baastad.pdf">Monads for functional programming</a></li>
 </ol>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://qianyan.github.io/2015/07/26/aggregation-composition-IoC/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="lambeta">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="λ">
-      <meta itemprop="description" content="Elegance and familiarity are orthogonal">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | λ">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2015/07/26/aggregation-composition-IoC/" class="post-title-link" itemprop="url">聚合，组合与IoC</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2015-07-26 22:12:44" itemprop="dateCreated datePublished" datetime="2015-07-26T22:12:44+08:00">2015-07-26</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2016-09-06 22:58:50" itemprop="dateModified" datetime="2016-09-06T22:58:50+08:00">2016-09-06</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E6%8A%80%E6%9C%AF/" itemprop="url" rel="index"><span itemprop="name">技术</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h4 id="为什么我们说多用组合，少用继承？"><a href="#为什么我们说多用组合，少用继承？" class="headerlink" title="为什么我们说多用组合，少用继承？"></a>为什么我们说多用组合，少用继承？</h4><hr>
-<p>继承具有强耦合(strog coupling)特点。根据里氏替换原则(Liskov Substitution Principle LSP)，基类出现的地方，子类一定能透明地替代。本质上来讲，LSP的这种特性致使基类具有很强的病毒蔓延性(invasive)，因为如何基类设计的不好，会侵蚀所有的子类。举个例子，基类是鸟，同时具有<code>fly</code>这样的方法，子类中如果有鸵鸟或企鹅，就必须继承<code>fly</code>方法，然而这显然是没有意义的。</p>
-<p>继承因为强耦合，所以不好测试。举个例子，有一个<code>RemoteXMLFile&lt;Res&gt;</code>基类，它内部有个<code>Res to()</code>方法，旨在把远程的XML文件转换成具体的Response。在我们准备测试<code>to</code>方法的转换逻辑的时候，每个对应子类的测试类里都不得不准备丑陋冗余的<code>XML</code>字面值字符串，尤其是在Java里。之所以这样，是因为无法隔离出一个专门读取<code>XML</code>的抽象屏障，然后使用Mock隔离这层抽象。</p>
-<p>组合的好处自然是松耦合(loose coupling)。如果严格遵循依赖倒置原则(Dependency Inversion Principle),那么类本身一定是高能聚，类之间是松耦合的。除此之外，测试起来，各层之间的逻辑清晰明了，易于隔离开来做单元测试(Unit test)。</p>
-<h4 id="谈谈聚合和组合的区别"><a href="#谈谈聚合和组合的区别" class="headerlink" title="谈谈聚合和组合的区别"></a>谈谈聚合和组合的区别</h4><hr>
-<p>UML里有很多表示关联的线段，有两个关系十分相近，它们是聚合(aggregation)和组合(composition)</p>
-<blockquote>
-<p>聚合：表示两个对象之间是整体和部分的弱（弱拥有）关系，部分的生命周期可以超越整体。如电脑和鼠标。</p>
-</blockquote>
-<blockquote>
-<p>组合：表示两个对象之间是整体和部分的强（强拥有）关系，部分的生命周期不能超越整体，或者说不能脱离整体而存在。组合关系的“部分”，是不能在整体之间进行共享的。</p>
-</blockquote>
-<p>以上是网络上的标准解释，应该是没错。但是实践中依然让人困惑不已。汽车和引擎，这个还比较好理解，汽车报废了，引擎还是可以换给别的汽车用的嘛。这就实现了整体之间的共享——聚合无疑。但是值得注意的一点是：从未说过部分的生命周期小于整体，也就是一定是大于或者等于整体的生命周期的。所以千万别和别人争论，引擎报废了，汽车就没用了，因为在程序中一定是某个第三方供应商维护引擎的生命周期，所以引擎和汽车没有相互维持对方生命周期的联系。</p>
-<p>但是比较困惑就是这个生命周期理论！IoC容器提供给我们使用的注入方法无非3种，接口注入、构造函数注入、setter方法注入。每一种无不是聚合，因为产生和管理对象的控制权移交到IoC容器了。那我们口口声声的说组合优于继承其实一直都是聚合优于继承。</p>
-<p>那是不是说，有了IoC之后，组合就应该消失呢，当然不是的。例如，某个场景里，一个类确实需要分离出一部分职责交给另外一个类，比如Builder，这部分构建实例的职责就可以通过<code>new Builder()</code>的方式组合应用起来。</p>
-<figure class="highlight java"><figcaption><span>Builder_Pattern</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Person</span> &#123;</span><br><span class="line">	<span class="keyword">private</span> String name;</span><br><span class="line">	<span class="keyword">private</span> <span class="type">int</span> age;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="title function_">builder</span><span class="params">()</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Builder</span>();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> Builder &#123;</span><br><span class="line">		<span class="keyword">private</span> String name;</span><br><span class="line">		<span class="keyword">private</span> <span class="type">int</span> age;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">public</span> Builder <span class="title function_">withName</span><span class="params">(String name)</span> &#123;</span><br><span class="line">			<span class="built_in">this</span>.name = name;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">public</span> Builder <span class="title function_">withAge</span><span class="params">(<span class="type">int</span> age)</span> &#123;</span><br><span class="line">			<span class="built_in">this</span>.age = age;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">public</span> Person <span class="title function_">build</span><span class="params">()</span>&#123;</span><br><span class="line">			<span class="type">Person</span> <span class="variable">person</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Person</span>();</span><br><span class="line">			person.name = name;</span><br><span class="line">			person.age = age;</span><br><span class="line">			<span class="keyword">return</span> person;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"><span class="type">Person</span> <span class="variable">person</span> <span class="operator">=</span> Person.builder().withName(<span class="string">&#x27;Ryan&#x27;</span>).withAge(<span class="number">18</span>).build();</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<h4 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h4><hr>
-<ul>
-<li>组合优于继承</li>
-<li>因为IoC的存在，上句话得改成聚合优于继承</li>
-</ul>
 
       
     </div>

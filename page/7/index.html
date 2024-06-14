@@ -149,7 +149,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">76</span>
+          <span class="site-state-item-count">77</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -160,7 +160,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">41</span>
+        <span class="site-state-item-count">43</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -218,6 +218,128 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://qianyan.github.io/2014/09/22/cong-oodao-aopzai-dao-fp/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="lambeta">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="λ">
+      <meta itemprop="description" content="Elegance and familiarity are orthogonal">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | λ">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2014/09/22/cong-oodao-aopzai-dao-fp/" class="post-title-link" itemprop="url">从OO到AOP再到FP</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2014-09-22 00:22:39" itemprop="dateCreated datePublished" datetime="2014-09-22T00:22:39+08:00">2014-09-22</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2016-09-06 22:38:46" itemprop="dateModified" datetime="2016-09-06T22:38:46+08:00">2016-09-06</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%8A%80%E6%9C%AF/" itemprop="url" rel="index"><span itemprop="name">技术</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h3 id="我的疑问"><a href="#我的疑问" class="headerlink" title="我的疑问"></a>我的疑问</h3><hr>
+<h4 id="面向对象编程和函数式编程的最大不同点在什么地方？"><a href="#面向对象编程和函数式编程的最大不同点在什么地方？" class="headerlink" title="面向对象编程和函数式编程的最大不同点在什么地方？"></a>面向对象编程和函数式编程的最大不同点在什么地方？</h4><ul>
+<li><p>数据从何而来？面向对象编程中的数据都是对象本身产生的，也就是说对象的基础建立在它本身的属性上，没有属性，那么这个对象什么都不能做。函数式（闭包）的过程数据来自于外部，也就是说闭包本身是不维护数据的。这样的好处是只管逻辑，而不用维护数据本身复杂的状态。</p>
+</li>
+<li><p>数据的状态如何？面向对象编程中数据（也就是属性）是可以改变的，而函数式中数据是不可以改变的。</p>
+</li>
+<li><p>没有属性的对象，还是面向对象嘛？我认为controller, service, DAO(repository)其实都是没有数据的对象！也就是说这些分层结构其实都是函数式编程可以应用的地方。有人会说奇怪了，controller中明明有service属性，service中明明有DAO属性啊，怎么能说没有数据呢？其实，这个只是调用链（我喜欢把它们看作是filter），真正的数据（大概被称为model）是被一层层传递下去的。可能又有人会反驳，函数式中最大的特点就是数据不可变，这些真正的数据（model）在传递过程中其实是会被改变的，所以怎么能说这些地方可以应用函数式编程？我认为，这些数据在各个层上应该是不同类的。展现给view的，和存储到database中的model是很难相同的，所以也就存在一种模型之间转化的可能，一个模型变成另一个新的模型，模型本身是不会变的。</p>
+</li>
+<li><p>没有方法的值对象呢？就是数据吧。</p>
+</li>
+</ul>
+<h4 id="AOP和函数式编程有没有关系？"><a href="#AOP和函数式编程有没有关系？" class="headerlink" title="AOP和函数式编程有没有关系？"></a>AOP和函数式编程有没有关系？</h4><hr>
+<h5 id="AOP是什么？"><a href="#AOP是什么？" class="headerlink" title="AOP是什么？"></a>AOP是什么？</h5><blockquote>
+<p>AOP是面向切面编程。我们平时编写web程序的时候，通常都会使用controller-&gt;service-&gt;dao这样的层次结构的调用链。事实上，有些逻辑不是纵向延伸的，对于单个的层级，如service，一个典型的应用就是Log处理：我们需要对service中涉及写入数据库的操作进行记录，这样的逻辑对于service上的所有需要log记录的方法而言是通用的。所以没有必要在各个不同的services上手工记录log，我们只需要将这部分log的逻辑抽出来作为独立的方法，然后很形象地表述成在services上的方法打上一个个洞，将这部分独立的方法像插槽（阀门）一样插入这些洞里，流过services上这些被记录的方法上的数据及其本身就会被完整的记录下来。</p>
+</blockquote>
+<blockquote>
+<p>AOP的概念也很有趣。事实上，AOP中的Joinpoint,Pointcut,Advice可以分别类比为钩子，晾衣杆和晾衣服这个动作。Joinpoint就是要拿来鼓捣的方法，Pointcut则是将这些方法串起来，Advice是统一处理这些方法的逻辑操作，同时也包括了它自身的执行时机，是在Pointcut之前、之后或是其中，当然更有甚者，是在方法返回之后，还是抛出异常之后呢？</p>
+</blockquote>
+<blockquote>
+<p>那么接下来，我们来看看AOP和函数式编程到底有没有关系。第一个方面，AOP其实是间接地拿函数作为自己的参数了。举个例子，拦截controller的方法：</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">@AfterReturning(value = &quot;execution(* controller.*.*(..)) &amp;&amp; args(customer)&quot;,</span><br><span class="line">        returning = &quot;result&quot;)</span><br><span class="line">public void aMethod(Customer customer, String result) &#123;</span><br><span class="line">    System.out.println(&quot;before&quot;);</span><br><span class="line">    System.out.println(result);</span><br><span class="line">    System.out.println(&quot;after&quot;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>其实这样的方式——既拿到了输入参数，又拿到了输出参数，就等于已经拿到了整个方法，何况还有牛掰的@Around，直接拿人家的方法到自己的方法体里执行。而函数式第一要点就是函数是一等公民，函数可以作为参数传递。所以说从获取参数这个层面说，两者实在太相像了。</p>
+</blockquote>
+<blockquote>
+<p>第二个方面，抽取共有逻辑。函数式中有惰性求值，假设我们在函数式中预留一个Function作为钩子，任何想使用这部分函数逻辑的在需要的时候，通过某种机制传递真正的Function到我们的预留参数中，是不是也能实现抽取共有逻辑呢？还有，我们之所以有很多services，是因为model（domain）存在差异，假设函数式中没有OO的概念，model似乎就趋同了，那么或许我们根本不需要services。所以函数式是可以抽取共有逻辑的，或者说这部分逻辑本来就不应该分散到各个services中。</p>
+</blockquote>
+<blockquote>
+<p>结论处，我大胆地猜测：AOP其实就是OO被掣肘之后，利用函数式缝补自身的妥协方案。AOP本来就是Functional programming.</p>
+</blockquote>
+<h4 id="Functional-Programming的要点"><a href="#Functional-Programming的要点" class="headerlink" title="Functional Programming的要点"></a>Functional Programming的要点</h4><hr>
+<ul>
+<li>声明式编程</li>
+<li>不变量</li>
+<li>无副作用的函数</li>
+<li>不会依附于任何类或者对象，这点“functional programming for java developer”中有清楚描述。在java中写的大部分函数式代码都是静态的，但逻辑上，它不属于这个类。</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1170,129 +1292,6 @@ eg:
 <li>op set<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(def set0 #&#123;5 7 2 6&#125;)</span><br><span class="line">(count set0) ;=&gt; 4</span><br><span class="line">(set0  2) ;=&gt; 2</span><br></pre></td></tr></table></figure></li>
 <li>op map<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">(def map0 &#123;:one 1, :two 2, :three 3&#125;)</span><br><span class="line">(map0 :one) ;=&gt; 1</span><br><span class="line">(:one map0) ;=&gt; 1</span><br><span class="line">(merge &#123;:four 4&#125; map0) ;=&gt; &#123;:two 2, :three 3, :one 1, :four 4&#125;</span><br><span class="line"></span><br><span class="line">(def map1 (sorted-map 2 :two 1 :one)) ;=&gt; &#123;1 :one, 2 :two&#125;</span><br></pre></td></tr></table></figure></li>
 </ul>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://qianyan.github.io/2014/01/02/gradle-gen-project/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="lambeta">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="λ">
-      <meta itemprop="description" content="Elegance and familiarity are orthogonal">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | λ">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2014/01/02/gradle-gen-project/" class="post-title-link" itemprop="url">Gradle auto-generate java project</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2014-01-02 00:00:20" itemprop="dateCreated datePublished" datetime="2014-01-02T00:00:20+08:00">2014-01-02</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2016-09-06 22:37:29" itemprop="dateModified" datetime="2016-09-06T22:37:29+08:00">2016-09-06</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E6%8A%80%E6%9C%AF/" itemprop="url" rel="index"><span itemprop="name">技术</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>##How to generate java project with gradle</p>
-<h3 id="gradle1-7"><a href="#gradle1-7" class="headerlink" title="gradle1.7"></a>gradle1.7</h3><p>Contains the build-setup plugin, supports declaring project type when setting up a build.</p>
-<ul>
-<li><strong>task-type</strong><ul>
-<li>SetupBuild</li>
-</ul>
-</li>
-<li><strong>plugin</strong><ul>
-<li>build-setup</li>
-</ul>
-</li>
-<li><strong>task</strong><ul>
-<li>buildSetup</li>
-</ul>
-</li>
-</ul>
-<p>so, you can type</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gradle setupBuild --type java-library</span><br></pre></td></tr></table></figure>
-
-<h3 id="gradle1-9"><a href="#gradle1-9" class="headerlink" title="gradle1.9"></a>gradle1.9</h3><ul>
-<li><p><strong>task-type</strong></p>
-<ul>
-<li>SetupBuild -&gt; InitBuild</li>
-</ul>
-</li>
-<li><p><strong>plugin</strong></p>
-<ul>
-<li>build-setup -&gt; build-init</li>
-</ul>
-</li>
-<li><p><strong>task</strong></p>
-<ul>
-<li>buildSetup -&gt; init</li>
-</ul>
-</li>
-</ul>
-<h3 id="init-project-on-gradle-1-9-or-more-greater"><a href="#init-project-on-gradle-1-9-or-more-greater" class="headerlink" title="init project on gradle 1.9 or more greater"></a>init project on gradle 1.9 or more greater</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">gradle init --type [java-library | scala-library | groovy-library | basic | pom]</span><br><span class="line">gradle1.10 support *gradle help --task init* to show task usage details</span><br></pre></td></tr></table></figure>
-
-<p><img src="http://img.blog.csdn.net/20140101234320859" alt="skeleton of java project" title="java project skeleton"></p>
 
       
     </div>

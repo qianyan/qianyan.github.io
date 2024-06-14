@@ -149,7 +149,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">76</span>
+          <span class="site-state-item-count">77</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -160,7 +160,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">41</span>
+        <span class="site-state-item-count">43</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -218,6 +218,199 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://qianyan.github.io/2018/09/18/the-generic-programming/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="lambeta">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="λ">
+      <meta itemprop="description" content="Elegance and familiarity are orthogonal">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | λ">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2018/09/18/the-generic-programming/" class="post-title-link" itemprop="url">泛型编程</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2018-09-18 16:31:58 / 修改时间：16:34:46" itemprop="dateCreated datePublished" datetime="2018-09-18T16:31:58+08:00">2018-09-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%8A%80%E6%9C%AF/" itemprop="url" rel="index"><span itemprop="name">技术</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="起源"><a href="#起源" class="headerlink" title="起源"></a>起源</h2><p>泛型编程是一种编程风格，其中算法以尽可能抽象的方式编写，而不依赖于将在其上执行这些算法的数据形式。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/217988-2bfc87e93ae5b6c6.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="泛型编程的提出者"></p>
+<p>泛型这个词并不是通用的，在不同的语言实现中，具有不同的命名。在Java&#x2F;Kotlin&#x2F;C#中称为泛型（Generics），在ML&#x2F;Scala&#x2F;Haskell中称为Parametric Polymorphism，而在C++中被叫做模板（Template），比如最负盛名的C++中的STL。任何编程方法的发展一定是有其目的，泛型也不例外。泛型的主要目的是加强类型安全和减少强制转换的次数。</p>
+<h2 id="Java中的泛型编程"><a href="#Java中的泛型编程" class="headerlink" title="Java中的泛型编程"></a>Java中的泛型编程</h2><p>在Java中有泛型类和泛型方法之分，这些都是表现形式的改变，实质还是将算法尽可能地抽象化，不依赖具体的类型。</p>
+<blockquote>
+<p>generics add a way to specify concrete types to general purposes classes and methods that operated on Object before</p>
+</blockquote>
+<p>通用的类和方法，具有代表性的就是集合类。在Java1.5之前，Java中的泛型都是通过单根继承的方式实现的。比如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">public class ArrayList // before  Java SE 5.0</span><br><span class="line">&#123;</span><br><span class="line">    public Object get(int i)</span><br><span class="line">    public void add(Object o)</span><br><span class="line">    public boolean contains(Object o);</span><br><span class="line">    private Object[] elementData;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>虽然算法足够通用了，但是这样会带来两个问题。一个是类型不安全，还有一个是每次使用时都得强制转化。减少类型转换次数比较容易理解，在没有泛型（参数化类型）的时候，装进容器的数据，其类型信息丢失了，所以取出来的时候需要进行类型转换。<br>例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">List list = new ArrayList();</span><br><span class="line">list.add(1);</span><br><span class="line"></span><br><span class="line">assertThat(list.get(0), instanceOf(Integer.TYPE));</span><br><span class="line">assertThat((Integer)list.get(0), is(1)); //存在强制转换</span><br></pre></td></tr></table></figure>
+<p>因为这个类里只有Object的声明，所以任意类型的对象都可以加入到这个集合当中，在使用过程中就会存在强制到具体的类型失败的问题，这将丧失编译器检查的好处。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">List list = new ArrayList();</span><br><span class="line">list.add(1);</span><br><span class="line">list.add(&quot;any type&quot;);</span><br><span class="line"></span><br><span class="line">assertThat(list.get(1), instanceOf(String.class));</span><br><span class="line">assertThat((Integer) list.get(1), is(1));//-&gt; java.lang.ClassCastException: java.lang.String cannot be cast to java.lang.Integer</span><br></pre></td></tr></table></figure>
+<p>2005 Java SE 5引入了泛型，不仅有效地提高了算法的通用程度，同时也保留强类型语言在编译期检查的好处。</p>
+<blockquote>
+<p>Generics This long-awaited enhancement to the type system allows a type or method to operate on objects of various types while providing compile-time type safety. It adds compile-time type safety to the Collections Framework and eliminates the drudgery of casting.</p>
+</blockquote>
+<p>所以上述的程序会写成这样：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">List&lt;Integer&gt; list = new ArrayList&lt;Integer&gt;();</span><br><span class="line">list.add(1);</span><br><span class="line">// list.add(&quot;no way&quot;); 编译出错</span><br><span class="line">assertThat(list.get(0), instanceOf(Integer.TYPE));</span><br><span class="line">assertThat(list.get(0), is(1)); // 不需要强制转换</span><br></pre></td></tr></table></figure>
+<h2 id="类型安全"><a href="#类型安全" class="headerlink" title="类型安全"></a>类型安全</h2><p>在静态强类型语言中，编译期间的检查非常重要，因为它可以有效地避免低级错误。这些低级错误就是类型安全解决的问题。类型安全包含了赋值安全和调用安全。其底层实质上就是在某块内存中，始终存在被同种类型的指针指向。</p>
+<ol>
+<li>类型赋值检查<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">long l_num = 1L;</span><br><span class="line">int i_num = l_num; // 编译错误</span><br></pre></td></tr></table></figure>
+在强类型的语言当中，类型不一致是无法互相赋值的。</li>
+</ol>
+<p>2. 类型调用检查<br> Clojure就是一门强类型语言，而且还是一门函数式语言，所以重新赋值不被允许，它的类型安全表现在针对类型的调用安全。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">user=&gt; (+ &quot;&quot; 1)</span><br><span class="line">...</span><br><span class="line">java.lang.ClassCastException: java.lang.String cannot be cast to java.lang.Number</span><br></pre></td></tr></table></figure>
+<p>这里存在一个隐式类型转化的过程，但是由于String无法转化成Number，所以方法调用失败。由于Clojure是动态语言，所以只有在运行时才会抛出错误。</p>
+<p>另一个简单的例子，如果一个类型不存在某个方法，那就没法去调用它。在动态强类型语言中，运行时一定会报错。其实质是类型是内存堆上的一块区域，如果该区域之上没有想要调用的方法，那么调用在编译期或者运行期间一定会出错。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">new Object().sayNothing() // 编译出错</span><br></pre></td></tr></table></figure>
+<p>为什么说类型安全对于开发人员友好，这个特性对于编程语言很重要？其实这可以追溯到三次编程范式解决的根本问题上。Clean Architecture（架构整洁之道）一书中，对结构化，面向对象和函数式编程语言做了很透彻的分析。</p>
+<p>首先我们得明确一点，这些范式从来没有扩展编程语言的能力，而是在不同方面对编程语言的能力进行了约束。</p>
+<ol>
+<li>结构化编程<br>对程序的直接控制进行约束和规范，goto considered harmful.</li>
+<li>面向对象编程<br>对程序的间接控制进行约束和规范，pointer considered harmful.</li>
+<li>函数式编程<br>对程序的赋值进行约束和规范，mutability considered harmful.</li>
+</ol>
+<p>按照这样的思路，泛型编程无非是对既有的范式做了进一步的约束。泛型编程旨在对程序的间接控制进一步进行约束和规范。它把类型安全放在第一位，而将类型转化限制在编译期间。</p>
+<p>我们甚至可以遵循前面的定义方式，说：<br>2.1 泛型编程<br>对程序的间接控制<strong>进一步</strong>进行约束和规范，type casting considered harmful.</p>
+<h2 id="Kotlin中的泛型编程"><a href="#Kotlin中的泛型编程" class="headerlink" title="Kotlin中的泛型编程"></a>Kotlin中的泛型编程</h2><p><img src="https://upload-images.jianshu.io/upload_images/217988-6d226cf160f832ba.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="variance - 变化"><br>和Java泛型中的泛型方法和泛型类概念类似，Kotlin将对应的概念称为参数化函数和参数化类型。</p>
+<h3 id="parameterized-function-参数化函数"><a href="#parameterized-function-参数化函数" class="headerlink" title="parameterized function 参数化函数"></a>parameterized function 参数化函数</h3><p>假设我们要返回三个对象中任一一个对象，同时保证类型一致。参数化函数是很恰当的选择。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fun &lt;T&gt; random(one: T, two: T, three: T): T</span><br></pre></td></tr></table></figure>
+<h3 id="parameterized-type-参数化类型"><a href="#parameterized-type-参数化类型" class="headerlink" title="parameterized type 参数化类型"></a>parameterized type 参数化类型</h3><p>除了参数化函数，类型本身也可以定义自己的参数化类型。比如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">class Dictionary&lt;K, V&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="bounded-polymorphism-限定参数化类型"><a href="#bounded-polymorphism-限定参数化类型" class="headerlink" title="bounded polymorphism 限定参数化类型"></a>bounded polymorphism 限定参数化类型</h3><p>大部分情况下，参数化类型不会是无限抽象的，无限抽象往往不利于语言的表达性。所以限定的参数化类型应运而生。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">fun &lt;T : Comparable&lt;T&gt;&gt; min(first: T, second: T): T &#123;</span><br><span class="line">    val k = first.compareTo(second)</span><br><span class="line">    return if (k &lt;= 0) first else second</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果需要用多个边界来限定类型，则需要用到<code>where</code>语句，表达<code>T</code>被多个边界类或者接口限制。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">class MultipleBoundedClass&lt;T&gt; where T : Comparable&lt;T&gt;, T : Serializable</span><br></pre></td></tr></table></figure>
+<h3 id="invariance-不变"><a href="#invariance-不变" class="headerlink" title="invariance 不变"></a>invariance 不变</h3><p><img src="https://upload-images.jianshu.io/upload_images/217988-df2dfb855f6f9755.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="invariance 不变"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">open class Animal</span><br><span class="line">class Dog : Animal()</span><br><span class="line">class Cat : Animal()</span><br><span class="line">class Box&lt;T&gt;(val elements: MutableList&lt;T&gt;) &#123;</span><br><span class="line">    fun add(t: T) = elements.add(t)</span><br><span class="line">    fun last(): T = elements.last()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">fun foo(box: Box&lt;Animal&gt;)&#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">val box = Box(mutableListOf(Dog()))</span><br><span class="line">// -&gt; val box: Box&lt;Dog&gt; = Box(mutableListOf(Dog()))</span><br><span class="line">box.add(Dog()) // ok</span><br><span class="line">box.add(Cat()) // 编译错误</span><br></pre></td></tr></table></figure>
+<p>这里出现的编译错误，原因是box的真实类型是<code>Box&lt;Dog&gt;</code>，所以尝试向<code>Box&lt;Dog&gt;</code>中添加<code>Cat</code>对象是不会成功的。这样总能保证类型安全。</p>
+<p><code>Dog</code>是<code>Animal</code>的子类型，那么编译器是否承认<code>Box&lt;Dog&gt;</code>是<code>Box&lt;Animal&gt;</code>的子类型，在使用时进行隐式转换呢？</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">val box: Box&lt;Animal&gt; = Box(mutableListOf(Dog())) // type inference failed. Expected type mismatch.</span><br></pre></td></tr></table></figure>
+<p>编译器是不会允许这样行为发生。原因就是这样做会导致类型不安全。<br>我们试想一下，假如这种转换是允许的，那么我们就可以继续添加其它继承了<code>Animal</code>的子类对象，比如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">val box: Box&lt;Animal&gt; = Box(mutableListOf(Dog())</span><br><span class="line">box.add(Cat())</span><br></pre></td></tr></table></figure>
+<p>这样就导致<code>Box&lt;Animal&gt;</code>里面同时保存了<code>Dog</code>和<code>Cat</code>的对象，正如前面提到的，在运行时，调用可能就会抛出<code>ClassCastException</code>，所以这是非类型安全的。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">val box = Box(mutableListOf(Dog()))</span><br><span class="line">// val box: Box&lt;Dog&gt; = Box(mutableListOf(Dog()))</span><br><span class="line">val animalBox: Box&lt;Animal&gt; = box // 编译错误</span><br></pre></td></tr></table></figure>
+
+<h3 id="covariance-协变"><a href="#covariance-协变" class="headerlink" title="covariance 协变"></a>covariance 协变</h3><p><img src="https://upload-images.jianshu.io/upload_images/217988-87c0b29318f7589d.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="covariance 协变"></p>
+<p>但是这种限制太过于严苛了，如果我们只需要从这个box读取元素，而不需要往里面添加，那么这种转换就是类型安全的。具体原因稍后再说。</p>
+<p>当<code>Dog</code>是<code>Animal</code>的子类型，那么<code>Box&lt;Dog&gt;</code>也是<code>Box&lt;Animal&gt;</code>的子类型，这种继承关系就是协变。在Kotlin中，我们需要使用<code>out</code>关键字表示这种关系。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">class CovarianceBox&lt;out T : Animal&gt;(val elements: MutableList&lt;out T&gt;) &#123;</span><br><span class="line">    fun add(t: T) = elements.add(t) //编译错误</span><br><span class="line">    fun last(): T = elements.last()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>基于这种协变关系，我们可以这样调用</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">val dogs: CovarianceBox&lt;Dog&gt; = CovarianceBox(mutableListOf(Dog(), Dog()))</span><br><span class="line">val animals: CovarianceBox&lt;Animal&gt; = dogs</span><br><span class="line">print(animals.last())</span><br></pre></td></tr></table></figure>
+<p>我们注意上面的<code>CovarianceBox</code>的<code>add</code>方法出现了编译错误，原因就是在协变关系中，泛型参数只能作为输出参数，而不能作为输入参数。因为在拒绝了输入泛型参数的前提下，协变发生的时候，才不会出现强制转化的错误。举个例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">val dogs: CovarianceBox&lt;Dog&gt; = CovarianceBox(mutableListOf(Dog(), Dog()))</span><br><span class="line">val animals: CovarianceBox&lt;Animal&gt; = dogs</span><br><span class="line">dogs.add(Cat()) // add在这里禁止了</span><br></pre></td></tr></table></figure>
+<p>如果<code>CovarianceBox</code>允许<code>add</code>方法，那么box里面就会同时存在多个子类型的实例，这样就会导致类型不安全，所以<code>out</code>修饰的参数化类型，只能在函数的返回值上出现。</p>
+<p>不过，这种解决方式也不是万能的，属于杀敌一千，自损八百的战术。因为对于<code>Collection</code>而言，不可能做到任何泛型参数都不会出现在入参的位置上。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">public interface Collection&lt;out E&gt; : Iterable&lt;E&gt; &#123;</span><br><span class="line">    public operator fun contains(element: @UnsafeVariance E): Boolean</span><br><span class="line">    public fun containsAll(elements: Collection&lt;@UnsafeVariance E&gt;): Boolean</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>所以，针对这种情况，我们知道某些方法其实并不会有添加的操作，可以在入参的位置上加上<code>@UnsafeVariance</code>，以此消除掉编译器的错误。</p>
+<h3 id="contravariance-逆变"><a href="#contravariance-逆变" class="headerlink" title="contravariance 逆变"></a>contravariance 逆变</h3><p><img src="https://upload-images.jianshu.io/upload_images/217988-837beeffe65375fc.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="contravariance 逆变"></p>
+<p>当<code>Dog</code>是<code>Animal</code>的子类型，那么<code>Box&lt;Animal&gt;</code>也是<code>Box&lt;Dog&gt;</code>的子类型，这种继承关系就是逆变。在Kotlin中，我们需要使用<code>in</code>关键字表示这种关系。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">class ContravarianceBox&lt;in T&gt;(val elements: MutableList&lt;in T&gt;) &#123;</span><br><span class="line">    fun add(t: T) = elements.add(t)</span><br><span class="line">    fun first(): T = elements.first() // 编译错误</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>基于这种逆变关系，我们可以这样调用</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">val animals = ContravarianceBox(mutableListOf(Animal()))</span><br><span class="line">val dogs: ContravarianceBox&lt;Dog&gt; = animals</span><br><span class="line">dogs.add(Dog())</span><br></pre></td></tr></table></figure>
+<p>这个时候，类型始终是安全的。但是我们也注意到<code>ContravarianceBox</code>的<code>first</code>方法出现了编译错误，原因就是在逆变关系中，泛型参数只能作为输入参数，而不能作为输出参数。在拒绝了输出参数的前提下，逆变发生的时候，才不会出现强制转换的错误。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">val animals = ContravarianceBox(mutableListOf(Animal()))</span><br><span class="line">val dogs: ContravarianceBox&lt;Dog&gt; = animals</span><br><span class="line">dogs.add(Dog())</span><br><span class="line">val dog: Dog = dogs.first() // 编译错误</span><br></pre></td></tr></table></figure>
+
+<h3 id="reification-变现"><a href="#reification-变现" class="headerlink" title="reification 变现"></a>reification 变现</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reify is To convert mentally into a thing; to materialize.</span><br></pre></td></tr></table></figure>
+<p>Kotlin中的Reification的实现使用的是inline模式，就是在编译期间将类型进行原地替换。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">// 定义</span><br><span class="line">inline fun &lt;reified T : Any&gt; loggerFor(): Logger = LoggerFactory.getLogger(T::class.java)</span><br><span class="line">// 使用</span><br><span class="line">private val logger = loggerFor&lt;AgreementFactory&gt;()</span><br></pre></td></tr></table></figure>
+<p>因此，所以原来调用处的代码会在编译期间展开成如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">private val logger = LoggerFactory.getLogger(AgreementFactory::class.java)</span><br></pre></td></tr></table></figure>
+<p>使用<code>reification</code>操作，可以精简掉很多模板代码。</p>
+<h3 id="type-projection-类型投影"><a href="#type-projection-类型投影" class="headerlink" title="type projection 类型投影"></a>type projection 类型投影</h3><p><img src="https://upload-images.jianshu.io/upload_images/217988-ee46241507e001e0.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="type projection 类型投影"></p>
+<p>上述过程中，我们看到协变和逆变都是针对可以编辑的类。但是如果遇到已经存在的类，这件事就得运用类型投影技术。拿<code>Class</code>这个类举例：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">val dog = Dog::class.java</span><br><span class="line">val animal: Class&lt;Animal&gt; = dog //编译不通过</span><br></pre></td></tr></table></figure>
+<p>Kotlin中的type projection就是为了解决这个问题的。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">val dog = Dog::class.java</span><br><span class="line">val animal: Class&lt;out Animal&gt; = dog</span><br></pre></td></tr></table></figure>
+<p>同理，</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">val animal = Animal::class.java</span><br><span class="line">val dog: Class&lt;in Dog&gt; = animal</span><br></pre></td></tr></table></figure>
+<p>我们来看一个真实的场景</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">val agreementClass: Class&lt;RentalAgreement&gt; = RentalAgreement::class.java</span><br><span class="line"></span><br><span class="line">private val virtualTable = mapOf(RentalPayload.type to RentalAgreement::class.java)</span><br><span class="line">private fun dispatch(type: String): Class&lt;out Agreement&lt;Payload&gt;&gt; &#123;</span><br><span class="line">    return virtualTable[type]</span><br><span class="line">            ?: throw RuntimeException(&quot;No suitable Agreement of this type found, please check your type: $type&quot;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>只有这样，我们才能将具体的<code>Class&lt;RentalAgreement&gt;</code>投射到<code>Class&lt;out Agreement&lt;Payload&gt;&gt;</code>父类型之上，后续通过某种方式，实例化出<code>RentalAgreement</code>的实例，其继承自<code>Agreement&lt;Payload&gt;</code>。</p>
+<h2 id="泛型编程的思考"><a href="#泛型编程的思考" class="headerlink" title="泛型编程的思考"></a>泛型编程的思考</h2><p><img src="https://upload-images.jianshu.io/upload_images/217988-2ae56647d7c62079.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="过程式代码 vs. 面向对象"><br>Bob 大叔的 Clean Code 一书的第六章《对象和数据结构》中提到了一个很有意思的现象：数据、对象的反对称性。在这里，数据结构暴露数据，没有提供有意义的函数；对象把数据隐藏起来，暴露操作数据的函数。</p>
+<p>过程式代码会基于数据结构进行操作。例如：首先会定义好数据结构<code>Square</code>, <code>Circle</code>和<code>Triangle</code>，然后统一在<code>area(shape: Any)</code>的函数中求shape数据的面积，如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">fun area(shape: Any): Double &#123;</span><br><span class="line">    return when(shape) &#123;</span><br><span class="line">      is Square -&gt; return shape.side * shape.side</span><br><span class="line">      else -&gt; 0.0</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>而面向对象拥趸一定会嗤之以鼻——显然应该抽象出一个shape类包含<code>area</code>方法，让其它的形状类继承。如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">interface Shape &#123;</span><br><span class="line">    fun area(): Double</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class Square(val side: Double) : Shape &#123;</span><br><span class="line">    override fun area(): Double &#123;</span><br><span class="line">        return side * side</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在添加新的形状的要求下，面向对象的代码是优于过程式的，因为面向对象对类型的扩展开放了。而过程式代码却不得不修改原来<code>area</code>方法的实现。</p>
+<p>但是，如果此时需要添加一个求周长<code>primeter</code>的函数。相对于面向对象代码，过程式代码由于无需修改原来的实现，反而更加容易扩展。反观面向对象的代码，在接口<code>Shape</code>中添加一个<code>primeter</code>会导致所有的子类都得发生修改。</p>
+<p>这就是数据和类型的反对称性。在变化方向不同的时候，它们面临的阻力也是不一样的。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/217988-cd7abfea6d757a50.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="隔离阻抗"><br>我们既想要过程式对方法扩展的优点，又执着面向对象自然的类型扩展的好处，该怎么办呢？可以考虑结合起来使用。</p>
+<p>这样的结合不是说原有的双向阻力消失了，而是在不同的层次上应用各自的优点。也就是说，<code>Shape</code>需要求面积、周长，同时也要支持类型扩展，这种要求之下，基本不可能调解出一种符合开闭原则的方案。不过，如果对于所有<code>Shape</code>类，都需要统一进行某些操作，例如：集合的排序，过滤等等。那么合并两者的好处就变得可行了。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/217988-1baedd1173c5c2ad.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="泛型补充"><br>基于最先分析的通过继承的方式进行泛型编程的缺点：</p>
+<ol>
+<li>太多强制转换</li>
+<li>非类型安全。<br>恰当地引入了泛型<code>T</code>，以期编译期的占位和运行时的替换。</li>
+</ol>
+<p><img src="https://upload-images.jianshu.io/upload_images/217988-2a674d8478f7884d.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="泛型限定"><br>不过没有限定的泛型大部分情况下是没有用处的，因为无限的抽象没有意义，所以需要更加精准的泛型限定。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/217988-9bc98f8e10201115.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="依赖倒置"><br>在我们做完这一切以后，会惊喜地发现依赖倒置（DIP）原则贯穿始终。不论是继承体系，还是改善之后的泛型继承体系。它们秉持的原则就是在编译期，始终朝着稳定、抽象的方向移动，而且不断在易变、具体的方向延迟决策，直到运行时方能确定。</p>
+<h2 id="书籍推荐"><a href="#书籍推荐" class="headerlink" title="书籍推荐"></a>书籍推荐</h2><p><img src="https://upload-images.jianshu.io/upload_images/217988-613c079cce8d4fa5.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="书籍推荐"></p>
+<h2 id="脑图"><a href="#脑图" class="headerlink" title="脑图"></a>脑图</h2><p><img src="https://upload-images.jianshu.io/upload_images/217988-8f2ce836e7ea45a1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="知识梳理"></p>
+<hr>
+<p>参考链接<br><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/64b2d11decbc">泛型 一个会写诗的程序员</a></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1454,302 +1647,6 @@
 <h2 id="警告"><a href="#警告" class="headerlink" title="警告"></a>警告</h2><p>验收条件并不是唯一澄清和约束用户故事的方式！任何可以提升理解和降低沟通成本的方式方法都值得尝试。比如：用户偏好 —— 希望使用下拉框而不是复选框，往往可以通过添加一条记录在故事中补充这部分信息。另外，一个完整的故事最好能附上线框图，一图胜千言。</p>
 <hr>
 <p>进一步阅读<br>[1] <a href="/2017/09/19/agile-team-workflow/">敏捷团队工作流</a></p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://qianyan.github.io/2017/09/19/agile-team-workflow/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="lambeta">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="λ">
-      <meta itemprop="description" content="Elegance and familiarity are orthogonal">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | λ">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2017/09/19/agile-team-workflow/" class="post-title-link" itemprop="url">敏捷团队工作流</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2017-09-19 23:07:17" itemprop="dateCreated datePublished" datetime="2017-09-19T23:07:17+08:00">2017-09-19</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2018-09-24 21:13:05" itemprop="dateModified" datetime="2018-09-24T21:13:05+08:00">2018-09-24</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E6%8A%80%E6%9C%AF/" itemprop="url" rel="index"><span itemprop="name">技术</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="站会"><a href="#站会" class="headerlink" title="站会"></a>站会</h2><p>站会中的内容是每天工作的开始，也是对昨天工作的回顾。一般会由团队的某位成员主持，这位主持人有责任让电子系统上的story卡片和看板上的保持一致。站会上，大家依看板从右至左依次更新自己负责story的状态，如果遇到阻碍，应该在站会上及时提出，团队之中的成员如果能提供帮助，应该在站会之后，组织解决方案的讨论。</p>
-<h3 id="站会反模式"><a href="#站会反模式" class="headerlink" title="站会反模式"></a>站会反模式</h3><ol>
-<li>站会上由组长一人发言、分配任务；</li>
-<li>一人长篇阔论占据大半时间（合理的发言时间为1-2分钟，总的时间控制在15分钟左右）；</li>
-<li>站会上谈论和story卡片无关的内容。</li>
-</ol>
-<h2 id="迭代计划会议-IPM"><a href="#迭代计划会议-IPM" class="headerlink" title="迭代计划会议 (IPM)"></a>迭代计划会议 (IPM)</h2><p>迭代计划会议是项目组成员在每一个迭代开始时，聚到一起共同决定这个迭代的 backlog (代办事项) 需要交付的故事卡。<br>这个会议的产出物包含：</p>
-<ol>
-<li>迭代的 backlog 和用户故事的验收条件</li>
-<li>这个迭代的总体业务目标</li>
-<li>故事点数，也即开发测试人员对用户故事的评估及承诺</li>
-</ol>
-<p>参与者包含：</p>
-<ol>
-<li>Product Owner</li>
-<li>Scrum Master</li>
-<li>开发团队</li>
-<li>其他干系人</li>
-</ol>
-<p>日程：</p>
-<ol>
-<li>团队确立这个迭代可以完成的工作量（以点数计），一般从历史迭代中获取</li>
-<li>团队根据定义的顺序讨论故事卡，对于每一张故事卡，需要讨论的内容包含：<ol>
-<li>衡量故事的相对大小（以点数计），可能会进行故事卡的拆分</li>
-<li>沟通验收条件</li>
-<li>根据已经讨论出来故事卡的价值、时间和风险，PO重新确定故事卡的优先级</li>
-<li>一旦预先设定的工作量到达，就停止本轮迭代会议</li>
-</ol>
-</li>
-<li>团队就迭代的业务目标达成共识</li>
-</ol>
-<h2 id="用户故事-kickoff-会议"><a href="#用户故事-kickoff-会议" class="headerlink" title="用户故事 kickoff 会议"></a>用户故事 kickoff 会议</h2><p>Story kick off，指的是启动一个 Stroy 进入开发阶段。Story kick off的时候，通常需要三种角色参与：BA、QA 以及开发 Story 的 Dev。</p>
-<p>会议内容：</p>
-<ul>
-<li>DEV 自己先完整地过一遍 Story 的描述；</li>
-<li>DEV 给 BA 和 QA 去讲这个 Story 的功能以及 AC；</li>
-<li>要能够清晰的讲出来，并且三者达成一致，如果有疑惑，需要当场得到解决；</li>
-<li>DEV 开始开发 Story，并自行将 Story 拆分成多个子任务列表，开工。</li>
-</ul>
-<p><a target="_blank" rel="noopener" href="http://www.infoq.com/cn/articles/my-agile-practice-in-thoughtworks">我在ThoughtWorks中的敏捷实践</a></p>
-<h2 id="Desk-Check-Shoulder-Check"><a href="#Desk-Check-Shoulder-Check" class="headerlink" title="Desk Check &#x2F; Shoulder Check"></a>Desk Check &#x2F; Shoulder Check</h2><p>Desk Check 发生在开发人员确信自己已经完成了故事卡，需要另外的人（BA、QA、Dev）坐到旁边一起帮忙验证是否确实完成。</p>
-<p>Desk checklist:<br>参与者：BA、QA、Dev 或者其他感兴趣的人</p>
-<ul>
-<li>故事卡测试覆盖率够吗？</li>
-<li>自己本地测过功能么？</li>
-<li>自己本地跑过全量的测试么？</li>
-<li>所有的 AC 是否都满足了？</li>
-<li>做故事卡的过程中是否遇到了理解上的问题？</li>
-</ul>
-<p><a target="_blank" rel="noopener" href="https://www.thoughtworks.com/insights/blog/defect-prevention-using-agile-techniques">Defect Prevention Using Agile Techniques</a></p>
-<h2 id="Tech-Huddle"><a href="#Tech-Huddle" class="headerlink" title="Tech Huddle"></a>Tech Huddle</h2><p>开发人员聚到一起就项目中遇到的技术展开讨论<br>前提条件：<br>会议之前确定并逐条列出会议讨论的技术主题<br>产出物：</p>
-<ol>
-<li>一个或多个行动方案，合并到用户故事</li>
-<li>方案的优缺点</li>
-<li>方案的责任人</li>
-</ol>
-<h2 id="迭代回顾会议"><a href="#迭代回顾会议" class="headerlink" title="迭代回顾会议"></a>迭代回顾会议</h2><p>在每个迭代结束时，Scrum Master会主持该会议，目的是为了确定哪些改变可以提升下个迭代的生产效率。在这个会议当中，每个人都可以开诚布公地提出自己的建议，有利于管理者从反馈中获取团队的现状。</p>
-<p>最高指导原则 (Prime Directive)：</p>
-<blockquote>
-<p>Regardless of what we discover, we understand and truly believe that everyone did the best job he or she could, given what was known at the time, his or her skills and abilities, the resources available, and the situation at hand.<br>无论我们发现了什么，考虑到当时的已知情况、个人的技术水平和能力、可用的资源，以及手上的状况，我们理解并坚信：每个人对自己的工作都已全力以赴。</p>
-</blockquote>
-<p>内容包含：</p>
-<ul>
-<li>上个迭代中做的好的有哪些？</li>
-<li>上个迭代中做的不好的有哪些？</li>
-<li>我们可以做些什么改善哪些不好的地方？（改善建议）</li>
-</ul>
-<p>参与者包含：</p>
-<ol>
-<li>Product Owner</li>
-<li>Scrum Master</li>
-<li>开发团队</li>
-<li>其他干系人</li>
-</ol>
-<p><a target="_blank" rel="noopener" href="https://insights.thoughtworks.cn/7-step-agenda-effective-retrospective/">高效回顾会议的七步议程</a></p>
-<h2 id="迭代review会议-Showcase"><a href="#迭代review会议-Showcase" class="headerlink" title="迭代review会议 (Showcase)"></a>迭代review会议 (Showcase)</h2><p>Showcase 就是开发团队把开发好的功能给客户的 Product Owner（以下简称PO）等业务相关人员演示，以获取他们对所开发系统的反馈，是敏捷开发流程中的一个实践，一般的频率是一个迭代一次，也可以根据项目具体情况做调整。</p>
-<p>内容包含：</p>
-<p><a target="_blank" rel="noopener" href="https://insights.thoughtworks.cn/agile-showcase-se7en/">敏捷实践Showcase的七宗罪</a><br><a target="_blank" rel="noopener" href="http://www.funretrospectives.com/category/energizer/">Retro 破冰游戏</a></p>
-<h2 id="用户故事"><a href="#用户故事" class="headerlink" title="用户故事"></a>用户故事</h2><h2 id="故事基础"><a href="#故事基础" class="headerlink" title="故事基础"></a>故事基础</h2><p>用户故事是指在软件开发和项目管理中用日常语言或商务用语写成的句子。这个句子反映一个用户在其工作职责的范围内要达到的某个目的, 以及此目的所需要的功能。</p>
-<h3 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h3><blockquote>
-<p>为了避免遗漏附件延误工作<br>作为邮件发送者<br>我希望邮件系统能够在我忘记带附件的时候提醒我</p>
-</blockquote>
-<h3 id="格式"><a href="#格式" class="headerlink" title="格式"></a>格式</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">为了&lt;某个目的或价值&gt;, 作为&lt;某类利益相关者&gt;, 我想要&lt;某个功能&gt;</span><br><span class="line">作为&lt;某类利益相关者&gt;, 我想要&lt;某个功能&gt;, 以便&lt;达到某个目的或获得某种价值&gt;</span><br></pre></td></tr></table></figure>
-
-<h3 id="要点"><a href="#要点" class="headerlink" title="要点"></a>要点</h3><h4 id="重点描述商业的价值不只是功能"><a href="#重点描述商业的价值不只是功能" class="headerlink" title="重点描述商业的价值不只是功能"></a>重点描述商业的价值不只是功能</h4><ul>
-<li>帮助团队了解需求背后的意图，利于开发团队协同客户、业务部门设计出更好的解决方案</li>
-</ul>
-<h4 id="用业务语言描述"><a href="#用业务语言描述" class="headerlink" title="用业务语言描述"></a>用业务语言描述</h4><ul>
-<li>利于客户、业务部门理解并区分优先级</li>
-</ul>
-<h4 id="利益相关者不仅包含用户"><a href="#利益相关者不仅包含用户" class="headerlink" title="利益相关者不仅包含用户"></a>利益相关者不仅包含用户</h4><ul>
-<li>系统拥有者的角度也是需求的重要来源</li>
-</ul>
-<h2 id="CCC-组件-The-three-‘C’s"><a href="#CCC-组件-The-three-‘C’s" class="headerlink" title="CCC 组件 (The three ‘C’s)"></a>CCC 组件 (The three ‘C’s)</h2><h3 id="Card-卡片"><a href="#Card-卡片" class="headerlink" title="Card (卡片)"></a>Card (卡片)</h3><ul>
-<li>业务价值 remainder</li>
-<li>做计划和沟通业务时的 token</li>
-</ul>
-<h3 id="Conversation-交流"><a href="#Conversation-交流" class="headerlink" title="Conversation (交流)"></a>Conversation (交流)</h3><ul>
-<li>用于在做计划和沟通业务时引发沟通，制造共同话题（收敛）</li>
-<li>需求文档的生成方式</li>
-</ul>
-<h3 id="Confirmation-确认"><a href="#Confirmation-确认" class="headerlink" title="Confirmation (确认)"></a>Confirmation (确认)</h3><ul>
-<li>将细节以验收测试的方式检测功能的完整性和准确性</li>
-</ul>
-<h2 id="划分原则-INVEST"><a href="#划分原则-INVEST" class="headerlink" title="划分原则 INVEST"></a>划分原则 INVEST</h2><h3 id="Independent-独立性"><a href="#Independent-独立性" class="headerlink" title="Independent (独立性)"></a>Independent (独立性)</h3><p>故事和故事之间尽量保持独立，互相依赖的故事对于估算工作量、确定优先级和安排计划都带来很多不便。通常我们可以通过组合和拆分的方式减少依赖性（去除重复）。<br>独立性更多的指的是实现要完整。前后端拆分通常不是很好的拆分方法</p>
-<h3 id="Negotiated-可协商的"><a href="#Negotiated-可协商的" class="headerlink" title="Negotiated (可协商的)"></a>Negotiated (可协商的)</h3><p>一个故事是可以协商的，故事卡不是合同，它只是包含对一个需求的简短描述。具体的细节在沟通阶段产出，以验收测试的方式。如果带有太多的细节，反而限制了和用户的沟通。</p>
-<h3 id="Valuable-有价值的"><a href="#Valuable-有价值的" class="headerlink" title="Valuable (有价值的)"></a>Valuable (有价值的)</h3><p>每个故事都必须对客户有价值（无论是用户还是客户）。一个让用户故事有价值的好办法就是客户写下它们。</p>
-<h3 id="Estimable-可评估的"><a href="#Estimable-可评估的" class="headerlink" title="Estimable (可评估的)"></a>Estimable (可评估的)</h3><p>开发团队需要去估计一个用户故事以便确定优先级，工作量，安排计划。如果难以估计故事的时间, 意味着:</p>
-<ul>
-<li>领域知识的缺乏: 这种情况下需要更多的沟通</li>
-<li>技术实现的模糊: 这种情况下要做试验, 做原型</li>
-<li>或者故事太大了: 这时需要把故事切分成小些的</li>
-<li>还有对其它团队的依赖…</li>
-</ul>
-<h3 id="Small-短小的"><a href="#Small-短小的" class="headerlink" title="Small (短小的)"></a>Small (短小的)</h3><p>一个好的故事在工作量上应该是尽量短小的，至少确保能在一个迭代或 Sprint 中能够完成。用户故事越大，在估算、计划安排等方面的风险就越大。</p>
-<h3 id="Testable-可测试的"><a href="#Testable-可测试的" class="headerlink" title="Testable (可测试的)"></a>Testable (可测试的)</h3><p>一个用户的故事必须是可被测试的，以便它是可以完成的。如果一个故事无法测试，那么就无法知道它何时可以完成。一个不可测试的例子：为了节省时间，作为用户，我希望软件是易用的。</p>
-<h3 id="判断标准-经验准则"><a href="#判断标准-经验准则" class="headerlink" title="判断标准 (经验准则)"></a>判断标准 (经验准则)</h3><ul>
-<li>可以写在 Release Notes 里</li>
-<li>值得讲给其它行业的人听</li>
-<li>可以写在市场宣传材料中</li>
-</ul>
-<h2 id="验收条件"><a href="#验收条件" class="headerlink" title="验收条件"></a>验收条件</h2><h3 id="捕获预期的行为"><a href="#捕获预期的行为" class="headerlink" title="捕获预期的行为"></a>捕获预期的行为</h3><p>一般验收条件都会在开发之前准备好，用于捕获预期的系统行为，同时作为故事卡业务描述的一部分，定义了故事卡的 DoD（Definition of Done）。</p>
-<h3 id="格式-1"><a href="#格式-1" class="headerlink" title="格式"></a>格式</h3><ul>
-<li><strong>Given</strong> 前置条件，告诉我们在进行操作之前，需要设置和完成什么；</li>
-<li><strong>When</strong> 触发结果的操作</li>
-<li><strong>Then</strong> 操作之后的预期结果</li>
-</ul>
-<h3 id="最佳实践模式"><a href="#最佳实践模式" class="headerlink" title="最佳实践模式"></a>最佳实践模式</h3><h4 id="1-可读的"><a href="#1-可读的" class="headerlink" title="1. 可读的"></a>1. 可读的</h4><p>我们希望业务人员审阅和修正验收条件，如果写的内容只有开发人员能懂，我们就失去了获得反馈的机会。使用上述书写格式，可以提高可读性。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Given: that my mobile phone is switched on</span><br><span class="line"></span><br><span class="line">And: I have sufficient signal to make a call</span><br><span class="line"></span><br><span class="line">When: I dial a number</span><br><span class="line"></span><br><span class="line">Then: I am connected to the person I want to talk to</span><br><span class="line"></span><br><span class="line">And: incoming calls are diverted to my voicemail</span><br></pre></td></tr></table></figure>
-
-<h4 id="2-可测试的"><a href="#2-可测试的" class="headerlink" title="2. 可测试的"></a>2. 可测试的</h4><h5 id="反模式1-模棱两可的陈述"><a href="#反模式1-模棱两可的陈述" class="headerlink" title="反模式1 - 模棱两可的陈述"></a>反模式1 - 模棱两可的陈述</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Given: that I have the search page loaded</span><br><span class="line"></span><br><span class="line">When: I perform a search</span><br><span class="line"></span><br><span class="line">Then: the search results come back within a reasonable period of time</span><br></pre></td></tr></table></figure>
-<p>这里的 reasonable period of time 就是不可测试的，因为没有人可以决定什么才是 reasonable.</p>
-<p>合理的改法是:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Given: that I have the search page loaded</span><br><span class="line"></span><br><span class="line">When: I perform a search</span><br><span class="line"></span><br><span class="line">Then: the search results come back within 5ms</span><br></pre></td></tr></table></figure>
-<p>5ms 之内，这是一个标量，完全可以衡量。</p>
-<h5 id="反模式2-非系统输出"><a href="#反模式2-非系统输出" class="headerlink" title="反模式2 - 非系统输出"></a>反模式2 - 非系统输出</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Given: that I am on the home page</span><br><span class="line"></span><br><span class="line">And: I am logged in</span><br><span class="line"></span><br><span class="line">When: I navigate to account preferences</span><br><span class="line"></span><br><span class="line">Then: I can see my account preferences</span><br></pre></td></tr></table></figure>
-<p>这里的 I can see my account preferences 是无法进行断言的，因为这是系统无关的，说得极端些，假如用户闭上眼睛，这个功能就没法通过验收了。</p>
-<p>合理的改法是：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Given: that I am on the home page</span><br><span class="line"></span><br><span class="line">And: I am logged in</span><br><span class="line"></span><br><span class="line">When: I navigate to account preferences</span><br><span class="line"></span><br><span class="line">Then: my account preferences are displayed</span><br></pre></td></tr></table></figure>
-<p>这个时候，我可以检查系统展示了我的用户页面。</p>
-<h5 id="反模式3-when-隐藏到-given"><a href="#反模式3-when-隐藏到-given" class="headerlink" title="反模式3 - when 隐藏到 given"></a>反模式3 - when 隐藏到 given</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Given: that I am on the homepage</span><br><span class="line"></span><br><span class="line">And: I navigate to the search</span><br><span class="line"></span><br><span class="line">When: I look at the page</span><br><span class="line"></span><br><span class="line">Then: the search options are displayed</span><br></pre></td></tr></table></figure>
-<p>基本上，这是团队编写 AC 时最容易犯的错误，操作出现在前置条件中，<em>when</em> 反而不是系统行为了。</p>
-<p>合理的改法是：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Given: that I am on the homepage</span><br><span class="line"></span><br><span class="line">When: I navigate to the search</span><br><span class="line"></span><br><span class="line">Then: the search options are displayed</span><br></pre></td></tr></table></figure>
-
-<h4 id="3-实现无关的"><a href="#3-实现无关的" class="headerlink" title="3. 实现无关的"></a>3. 实现无关的</h4><p>验收条件应该是实现无关的，它和用户故事一样，是给业务和开发人员提供交流凭证的一种工具，所以它应该聚焦于功能，而不是功能的展现形式。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">Given: that I am on the home page</span><br><span class="line"></span><br><span class="line">And: I am logged in</span><br><span class="line"></span><br><span class="line">When: I navigate to advanced search</span><br><span class="line"></span><br><span class="line">Then: the advanced search web page must be displayed</span><br><span class="line"></span><br><span class="line">And: a text box labelled &quot;Name&quot; is displayed</span><br><span class="line"></span><br><span class="line">And: a text box labelled &quot;Description&quot; is displayed</span><br><span class="line"></span><br><span class="line">And: a command button named &quot;Search&quot; is displayed</span><br></pre></td></tr></table></figure>
-<p>这里已经框死了必须要使用 text box 实现展示功能，而实际上其背后真正的意图是通过属性字段进行搜索，隐藏了业务含义的验收条件是不可取的。</p>
-<p>合理的改法是：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">Given: that I am on the home page</span><br><span class="line"></span><br><span class="line">And: I am logged in</span><br><span class="line"></span><br><span class="line">When: I navigate to advanced search</span><br><span class="line"></span><br><span class="line">Then: the advanced search is displayed</span><br><span class="line"></span><br><span class="line">And: an option to search by name is displayed</span><br><span class="line"></span><br><span class="line">And: an option search by description is displayed</span><br><span class="line"></span><br><span class="line">And: the advanced search is displayed in accordance with the attached wireframe</span><br></pre></td></tr></table></figure>
-<p>换句话说，验收条件本身不应该关注于展现形式，当然，为了便于理解，wireframe 是提供直观素材的更好的方式。</p>
-<h2 id="代码评审"><a href="#代码评审" class="headerlink" title="代码评审"></a>代码评审</h2><p>代码评审是团队针对今天一天<strong>提交过的</strong>代码的评审会议。这样做的目的是去除代码的坏味道，减少累积的技术债。</p>
-<p>团队成员使用版本控制工具，轮流展示自己一天的编码成果并且说明代码的用途。这期间，其他的成员不仅要评审代码的逻辑是否正确（满足验收条件），还必须思考是否有更优雅的方式实现这段功能。大家可以随意表达自己对这些代码的好恶，代码所有者也可以据理力争，所有者一旦被说服就必须无条件地按意见修改。为防止遗忘，可以使用便笺纸记录下来。</p>
-<h2 id="结对编程"><a href="#结对编程" class="headerlink" title="结对编程"></a>结对编程</h2><p>通俗地讲，结对编程就是两个人同时工作在同一个 Story 上，一起讨论 Story 的解决方案，并编写代码实现功能，一个人敲键盘，一个人看屏幕，穿插着进行。Pair的双方在快速敲击键盘的时候会伴随一些交流。能力相当的两人，可以一人写测试，一人写实现代码。</p>
-<h2 id="测试驱动开发-TDD"><a href="#测试驱动开发-TDD" class="headerlink" title="测试驱动开发 (TDD)"></a>测试驱动开发 (TDD)</h2><p>TDD，即测试驱动开发，强调的是测试先行，跟我们先实现功能代码后添加测试的过程恰恰相反。测试驱动开发是一种驱动代码实现和设计的过程。我们说要先有测试，再去实现；保证实现功能的前提下，重构代码以达到较好的设计。整个过程就好比演绎推理，测试就是其中的证明步骤，而最终实现的功能则是证明的结果。</p>
-<p>实践方法：</p>
-<ul>
-<li>Given：初始状态或前置条件</li>
-<li>When：行为发生</li>
-<li>Then：断言结果</li>
-</ul>
-<h2 id="单元测试和测试驱动开发"><a href="#单元测试和测试驱动开发" class="headerlink" title="单元测试和测试驱动开发"></a>单元测试和测试驱动开发</h2><p>测试的价值表现在两个方面：</p>
-<ol>
-<li>防止已有的功能被破坏</li>
-<li>驱动出功能实现</li>
-</ol>
-<p>从测试金字塔描述的层级来看，单元测试是基座。这类测试数量应该是非常多的，而且还有一个显著特征——运行速度特别快。一般违反快速这个标准的，基本上可以肯定这不是单元测试。</p>
-<p>基于以往带团队的经验，我给出一些写单元测试时常犯的错误和好的实践：</p>
-<h3 id="常犯的错误"><a href="#常犯的错误" class="headerlink" title="常犯的错误"></a>常犯的错误</h3><ol>
-<li>覆盖率100%，却没有任何断言</li>
-<li>使用Java反射setAccessible(true)访问私有属性</li>
-<li>依赖某些地方产生的数据才能运行</li>
-<li>单元测试运行速度超级慢</li>
-<li>开始测试之前，准备巨量的数据</li>
-<li>测试之间必须以特定顺序运行</li>
-<li>上帝类（God Object）导致数以千行的测试代码</li>
-</ol>
-<h3 id="好的实践"><a href="#好的实践" class="headerlink" title="好的实践"></a>好的实践</h3><ol>
-<li>绝对不测试私有的方法</li>
-<li>当方法没有返回值，可以通过测试异常或者其委托对象的方式<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">1. @Test(expected = RuntimeException.class) </span><br><span class="line">2. Mockito.verify(mockObj).doSomething(args…)</span><br></pre></td></tr></table></figure>
-3. 静态方法调用是强耦合的信号。需要重构待测类依赖新接口，新接口定义的方法由子类实现，实现方法中包装这些静态方法。</li>
-</ol>
-<h3 id="什么时候写单元测试？"><a href="#什么时候写单元测试？" class="headerlink" title="什么时候写单元测试？"></a>什么时候写单元测试？</h3><ol>
-<li>新的需求，首先写单元测试（保证功能实现）</li>
-<li>已经存在的代码，补充单元测试 （保证功能不被破坏）</li>
-<li>发现Bug，首先加测试（保证缺陷不再出现）</li>
-</ol>
-<h2 id="自动化测试"><a href="#自动化测试" class="headerlink" title="自动化测试"></a>自动化测试</h2><p>测试金字塔和 <a target="_blank" rel="noopener" href="http://fabiopereira.me/blog/2012/03/18/introducing-depth-of-test-dot/">DOT</a>（Depth of Test)</p>
-<h2 id="持续集成-持续交付"><a href="#持续集成-持续交付" class="headerlink" title="持续集成&#x2F;持续交付"></a>持续集成&#x2F;持续交付</h2><p><strong>再次强调一下，持续集成是一项团队务必遵守的实践。</strong></p>
-<p>开发过程中，我们鼓励小步提交的代码控制方式。即当开发人员对story的部分功能编码完成之后，如果<strong>确认</strong>可以提交到代码仓库（如果是分布式的Git，可以考虑提交到本地仓库），应该尽早提交。开发人员的每日工作可以遵循7步提交法，如下：</p>
-<ol>
-<li>更新代码；</li>
-<li>本地编码；</li>
-<li>本地构建（使用<code>mvn test</code>）；</li>
-<li>再次更新代码；</li>
-<li>本地构建；</li>
-<li>提交到代码仓库；</li>
-<li>CI上构建。</li>
-</ol>
-<p>既然是实践（规矩），就有几项有效的纪律需要遵守：</p>
-<ul>
-<li>CI红的时候不能提交代码</li>
-<li>CI红着不能过夜（不能等到第二天才去修复）</li>
-<li>任何人提交后CI失败，无论原因，都有责任跟进修复</li>
-<li>在提交代码前运行所有测试</li>
-<li>不注释掉或删除失败的测试</li>
-</ul>
-<p>这也就意味着开发人员需要密切关注CI的状态。CI持续反馈着软件的可工作状态，所以团队应该把CI的健康状况列为项目的最高优先级，甚至高于开发新特性。</p>
-<hr>
-<h2 id="友情链接"><a href="#友情链接" class="headerlink" title="友情链接"></a>友情链接</h2><ol>
-<li><a target="_blank" rel="noopener" href="https://insights.thoughtworks.cn/thoughtworks-agile/">ThoughtWorks的敏捷开发-XR</a>)</li>
-</ol>
 
       
     </div>
