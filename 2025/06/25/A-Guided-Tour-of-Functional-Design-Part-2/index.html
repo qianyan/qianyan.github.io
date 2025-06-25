@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.2.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+  <link rel="mask-icon" href="/images/favicon.ico" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"qianyan.github.io","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="有限与无限的游戏美国哲学家詹姆斯·卡斯写过一本书《有限与无限的游戏》，向我们展示了世界上至少有两种类型的“游戏”。有限的游戏，具有明确的开始和结束，其目的在于赢得胜利；无限的游戏，没有固定的开始和结束，旨在让游戏永远进行下去。有限的游戏在边界内玩，无限的游戏玩的就是边界。 Bob 大叔在解释函数式的惰性时，翻出了那款经典的保龄球游戏。今时不同往日，他玩起了无限的游戏。 我们先把保龄球的游戏规则过目">
+<meta property="og:type" content="article">
+<meta property="og:title" content="A Guided Tour of Functional Design (Part 2)">
+<meta property="og:url" content="https://qianyan.github.io/2025/06/25/A-Guided-Tour-of-Functional-Design-Part-2/index.html">
+<meta property="og:site_name" content="λ">
+<meta property="og:description" content="有限与无限的游戏美国哲学家詹姆斯·卡斯写过一本书《有限与无限的游戏》，向我们展示了世界上至少有两种类型的“游戏”。有限的游戏，具有明确的开始和结束，其目的在于赢得胜利；无限的游戏，没有固定的开始和结束，旨在让游戏永远进行下去。有限的游戏在边界内玩，无限的游戏玩的就是边界。 Bob 大叔在解释函数式的惰性时，翻出了那款经典的保龄球游戏。今时不同往日，他玩起了无限的游戏。 我们先把保龄球的游戏规则过目">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://qianyan.github.io/images/BowlingGameJava_1724129511036_0.png">
+<meta property="og:image" content="https://qianyan.github.io/images/BowlingGameRefactorJava_1724135770353_0.png">
+<meta property="og:image" content="https://qianyan.github.io/images/BowlingGameRefactorClj_1724135788478_0.png">
+<meta property="og:image" content="https://qianyan.github.io/images/BowlingGameFramesClj_1724136529276_0.png">
+<meta property="og:image" content="https://qianyan.github.io/images/BowlingGameClj_1724137596098_0.png">
+<meta property="article:published_time" content="2025-06-25T03:49:39.000Z">
+<meta property="article:modified_time" content="2025-06-25T03:55:01.136Z">
+<meta property="article:author" content="lambeta">
+<meta property="article:tag" content="FP">
+<meta property="article:tag" content="emacs">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://qianyan.github.io/images/BowlingGameJava_1724129511036_0.png">
+
+
+<link rel="canonical" href="https://qianyan.github.io/2025/06/25/A-Guided-Tour-of-Functional-Design-Part-2/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://qianyan.github.io/2025/06/25/A-Guided-Tour-of-Functional-Design-Part-2/","path":"2025/06/25/A-Guided-Tour-of-Functional-Design-Part-2/","title":"A Guided Tour of Functional Design (Part 2)"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>A Guided Tour of Functional Design (Part 2) | λ</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">λ</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">(conj clojurians me)</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%89%E9%99%90%E4%B8%8E%E6%97%A0%E9%99%90%E7%9A%84%E6%B8%B8%E6%88%8F"><span class="nav-number">1.</span> <span class="nav-text">有限与无限的游戏</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%83%B0%E6%80%A7%EF%BC%8C%E6%97%A0%E9%99%90%E5%8F%AF%E8%83%BD%EF%BC%81"><span class="nav-number">2.</span> <span class="nav-text">惰性，无限可能！</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">lambeta</p>
+  <div class="site-description" itemprop="description">Elegance and familiarity are orthogonal</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">80</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">44</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/qianyan" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;qianyan" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:qianyan.lambda@gmail.com" title="E-Mail → mailto:qianyan.lambda@gmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="http://weibo.com/3672207020" title="Weibo → http:&#x2F;&#x2F;weibo.com&#x2F;3672207020" rel="noopener me" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://x.com/_qian_yan" title="Twitter → https:&#x2F;&#x2F;x.com&#x2F;_qian_yan" rel="noopener me" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+    <div class="sidebar-inner sidebar-blogroll">
+      <div class="links-of-blogroll animated">
+        <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+          链接
+        </div>
+        <ul class="links-of-blogroll-list">
+            <li class="links-of-blogroll-item">
+              <a href="http://blog.jayfields.com/" title="http:&#x2F;&#x2F;blog.jayfields.com&#x2F;" rel="noopener" target="_blank">Jay Fields</a>
+            </li>
+            <li class="links-of-blogroll-item">
+              <a href="https://aphyr.com/" title="https:&#x2F;&#x2F;aphyr.com" rel="noopener" target="_blank">Aphyr</a>
+            </li>
+            <li class="links-of-blogroll-item">
+              <a href="http://bucharestfp.ro/" title="http:&#x2F;&#x2F;bucharestfp.ro" rel="noopener" target="_blank">Bucharest FP</a>
+            </li>
+            <li class="links-of-blogroll-item">
+              <a href="http://www.yinwang.org/" title="http:&#x2F;&#x2F;www.yinwang.org" rel="noopener" target="_blank">Wangyin</a>
+            </li>
+            <li class="links-of-blogroll-item">
+              <a href="http://blog.rlmflores.me/" title="http:&#x2F;&#x2F;blog.rlmflores.me&#x2F;" rel="noopener" target="_blank">Rodrigo Flores</a>
+            </li>
+            <li class="links-of-blogroll-item">
+              <a href="https://seancorfield.github.io/" title="https:&#x2F;&#x2F;seancorfield.github.io&#x2F;" rel="noopener" target="_blank">Seancorfield</a>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://qianyan.github.io/2025/06/25/A-Guided-Tour-of-Functional-Design-Part-2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="lambeta">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="λ">
+      <meta itemprop="description" content="Elegance and familiarity are orthogonal">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="A Guided Tour of Functional Design (Part 2) | λ">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          A Guided Tour of Functional Design (Part 2)
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2025-06-25 11:49:39 / 修改时间：11:55:01" itemprop="dateCreated datePublished" datetime="2025-06-25T11:49:39+08:00">2025-06-25</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Clojure/" itemprop="url" rel="index"><span itemprop="name">Clojure</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="有限与无限的游戏"><a href="#有限与无限的游戏" class="headerlink" title="有限与无限的游戏"></a>有限与无限的游戏</h2><p>美国哲学家詹姆斯·卡斯写过一本书《有限与无限的游戏》，向我们展示了世界上至少有两种类型的“游戏”。有限的游戏，具有明确的开始和结束，其目的在于赢得胜利；无限的游戏，没有固定的开始和结束，旨在让游戏永远进行下去。有限的游戏在边界内玩，无限的游戏玩的就是边界。</p>
+<p>Bob 大叔在解释函数式的惰性时，翻出了那款经典的保龄球游戏。今时不同往日，他玩起了无限的游戏。</p>
+<p>我们先把保龄球的游戏规则过目一遍，头脑中有个怎么玩的印象就好。</p>
+<blockquote>
+<p>保龄球每个玩家每局有 10 个计分格(frame)。每个计分格玩家最多有 2 次投球(roll)机会，但第 10 个计分格最多有 3 次投球机会。每个计分格的得分，是击倒的球瓶总数，再加上全中(strike)或补中(spare)的奖励分。全中，指第一球就击倒了所有 10 个球瓶；得分为 10 分，再加上接下来的 2 次投球（属于下一个或之后的计分格）所击倒的球瓶数。补中，指在一个计分格中，用两次投球才击倒所有 10 个球瓶；得分为 10 分，再加上接下来的 1次投球（属于下一个计分格）所击倒的球瓶数。第 10 个计分格有点不同。如果在第 10 个计分格投出全中或补中，则能获得额外的投球机会来完成这个计分格；如果是全中，能获得 2 次额外投球；如果是补中，则能获得 1 次额外投球。这些额外的投球，只用于计算第 10 个计分格的得分。</p>
+</blockquote>
+<p><img src="/images/BowlingGameJava_1724129511036_0.png" alt="BowlingGameJava.png"></p>
+<p>在上面 Java 版本的代码中，几乎是无意识地，我们把得分计算 <code>score +=</code>和投球的次序 <code>frameIndex++</code>揉到了一处。这是自然思考的结果，因为累积 <code>frameIndex</code> 就重现了投球的时序，得分跟着时序在规则（isStrike, isSpare?）的安排下一步步累加。但是事实上，因为不得不识别出影响每个计分格的所有投球，真正时序耦合的是 frameIndex 和当前计分格的得分计算，而不是总得分。所以，这段代码可以重构下，将总得分的计算放到了最后。</p>
+<p><img src="/images/BowlingGameRefactorJava_1724135770353_0.png" alt="BowlingGameRefactorJava.png"></p>
+<p>重构方式很简单，新增一个 scoresInEachFrame 列表，把每一个计分格的得分加进去，最后做求和。</p>
+<p>这样的代码几乎可以很容易地写成像下面一样 Clojure 的 <code>loop...recur</code> 形式。</p>
+<p><img src="/images/BowlingGameRefactorClj_1724135788478_0.png" alt="BowlingGameRefactorClj.png"></p>
+<p>转换成这种形式之后，我们至少能知道两件事情。第一，frameIndex 这类索引让代码显得很难读；第二，frame 这是个控制量，它不参与实际的计分运算。</p>
+<p>对于第一种坏味道，我们可以用列表的解构来解决。这里面凸显一种思想，新的列表是从旧的列表演变出来的，正如 map 函数所做的那样。</p>
+<p><img src="/images/BowlingGameFramesClj_1724136529276_0.png" alt="BowlingGameFramesClj.png">{:height 437, :width 476}</p>
+<p>代码中 <code>(loop [remaining-rolls frames]...)</code>正是这种思想的延续，在每次递归调用中，remaining-rolls 减少了，而 frames 增加了，它们之间的演化（映射）逻辑就是游戏的计分规则（Strike等）。当然，这段代码和上面的代码并不等价，原因是它没有提前计算每个计分格的得分，而是保留下所有计分格，例如在 Stirke 情况下，frame 是 [10 X Y] 这种形状。</p>
+<p>对于第二个问题，既然不参与计分格的计算，最好是忘得越远越好。也就是说，假如我们想永远玩下去，那么这种程序最好也能正确计算出得分，直到我们想终止为止。</p>
+<p><img src="/images/BowlingGameClj_1724137596098_0.png" alt="BowlingGameClj.png"></p>
+<p>在无限游戏的场景下，rolls 可以无限投掷，我们就可以无限地推迟从计分格中获得总分的决定。遗憾的是，保龄球游戏中有一条定胜负的终止规则，每局只有 10 个计分格，所以它不是无限游戏。在程序计算总分的最后，取出了 10 个计分格。</p>
+<h2 id="惰性，无限可能！"><a href="#惰性，无限可能！" class="headerlink" title="惰性，无限可能！"></a>惰性，无限可能！</h2><p>Bob 大叔分析说惰性之所以需要，是因为这样做可以把需要做的事情和需要做的量分离开来。延迟需要多少量这个决定到最终用户的手上。</p>
+<p>惰性是实现无限游戏的手段，而无限是帮我们扫清聚焦计算（厌恶那些 indexes 吧）障碍的思维方式。试想，列表元素都无限多了，你还会思考越界吗？你只会想我该怎么这个游戏一直玩下去。</p>
+<p>惰性列表时一个知道如何计算下一个值的对象。惰性列表是伪装成列表的迭代器。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/FP/" rel="tag"># FP</a>
+              <a href="/tags/emacs/" rel="tag"># emacs</a>
+          </div>
+
+        
+  <div class="social-like a2a_kit a2a_kit_size_32 a2a_default_style">
+    <a class="a2a_dd" target="_blank" rel="noopener" href="https://www.addtoany.com/share"></a>
+      <a class="a2a_button_facebook"></a>
+      <a class="a2a_button_twitter"></a>
+  </div>
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2024/08/19/A-Guided-Tour-of-Functional-Design-Part-1/" rel="prev" title="函数式设计导读系列（一）">
+                  <i class="fa fa-angle-left"></i> 函数式设计导读系列（一）
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">lambeta</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+  <script src="/js/third-party/addtoany.js"></script>
+
+  
+
+
+
+
+
+</body>
+</html>

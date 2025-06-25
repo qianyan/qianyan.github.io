@@ -149,7 +149,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">79</span>
+          <span class="site-state-item-count">80</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -218,6 +218,107 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://qianyan.github.io/2015/02/01/Testable-Javascript/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="lambeta">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="λ">
+      <meta itemprop="description" content="Elegance and familiarity are orthogonal">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | λ">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2015/02/01/Testable-Javascript/" class="post-title-link" itemprop="url">Testable Javascript</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2015-02-01 15:56:47" itemprop="dateCreated datePublished" datetime="2015-02-01T15:56:47+08:00">2015-02-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2016-09-06 22:58:22" itemprop="dateModified" datetime="2016-09-06T22:58:22+08:00">2016-09-06</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%8A%80%E6%9C%AF/" itemprop="url" rel="index"><span itemprop="name">技术</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <blockquote>
+<p>singletons suffer state pollution between tests</p>
+</blockquote>
+<figure class="highlight javascript"><figcaption><span>singletons.js</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">module</span>.<span class="property">exports</span> = &#123;</span><br><span class="line">	<span class="attr">counter</span>: <span class="number">0</span>,</span><br><span class="line">	<span class="attr">inc</span>: <span class="keyword">function</span>(<span class="params"></span>) &#123;</span><br><span class="line">		<span class="keyword">return</span> ++<span class="variable language_">this</span>.<span class="property">counter</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><figcaption><span>test.js</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> singleton = <span class="built_in">require</span>(<span class="string">&#x27;singletons&#x27;</span>);</span><br><span class="line"><span class="variable language_">module</span>.<span class="property">exports</span> = <span class="title function_">testCase</span>(&#123;</span><br><span class="line">    <span class="string">&quot;should equal one after calling inc&quot;</span>: <span class="keyword">function</span> (<span class="params">test</span>) &#123;</span><br><span class="line">        test.<span class="title function_">equal</span>(<span class="number">1</span>, singleton.<span class="title function_">inc</span>());</span><br><span class="line">        test.<span class="title function_">done</span>();</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="string">&quot;should get one after calling inc&quot;</span>: <span class="keyword">function</span>(<span class="params">test</span>) &#123;</span><br><span class="line">    	test.<span class="title function_">equal</span>(<span class="number">1</span>, singleton.<span class="title function_">inc</span>());</span><br><span class="line">    	test.<span class="title function_">done</span>();</span><br><span class="line">    &#125;</span><br><span class="line"> &#125;);</span><br></pre></td></tr></table></figure>
+<p>结果第二个测试会失败，但是从测试本身是看不出为什么第一个可以通过，而第二个则相反。当然，我们可以通过<code>setUp</code>或<code>tearDown</code>方法来重置对象的状态，但是这无疑增加了维护测试的成本，你得记着重置对象这件事本身就是负担。</p>
+<p>下面就是解决方案</p>
+<figure class="highlight javascript"><figcaption><span>singletons_impr.js</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">module</span>.<span class="property">exports</span> = <span class="keyword">function</span>(<span class="params"></span>) &#123;</span><br><span class="line">	<span class="keyword">return</span> &#123;</span><br><span class="line">		<span class="attr">counter</span>: <span class="number">0</span>,</span><br><span class="line">		<span class="attr">inc</span>: <span class="keyword">function</span>(<span class="params"></span>) &#123;</span><br><span class="line">			<span class="keyword">return</span> ++<span class="variable language_">this</span>.<span class="property">counter</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>再看我们的测试</p>
+<figure class="highlight javascript"><figcaption><span>test.js</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> singleton = <span class="built_in">require</span>(<span class="string">&#x27;singletons_impr&#x27;</span>);</span><br><span class="line"><span class="variable language_">module</span>.<span class="property">exports</span> = <span class="title function_">testCase</span>(&#123;</span><br><span class="line">    <span class="string">&quot;should equal one after calling inc&quot;</span>: <span class="keyword">function</span> (<span class="params">test</span>) &#123;</span><br><span class="line">        test.<span class="title function_">equal</span>(<span class="number">1</span>, <span class="title function_">singleton</span>().<span class="title function_">inc</span>());</span><br><span class="line">        test.<span class="title function_">done</span>();</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="string">&quot;should get one after calling inc&quot;</span>: <span class="keyword">function</span>(<span class="params">test</span>) &#123;</span><br><span class="line">    	test.<span class="title function_">equal</span>(<span class="number">1</span>, <span class="title function_">singleton</span>().<span class="title function_">inc</span>());</span><br><span class="line">    	test.<span class="title function_">done</span>();</span><br><span class="line">    &#125;</span><br><span class="line"> &#125;);</span><br></pre></td></tr></table></figure>
+<p>这样两次返回的对象都是全新的，测试通过。</p>
+<p>不过，似乎这样让测试变得更加麻烦了，好处不明显。但是结合这篇文章<a target="_blank" rel="noopener" href="http://yanqian.me/2015/01/27/Javascript-Modularize-2nd/">[Javascript Modularize 2nd]</a>，就会巧妙地解决多个模块依赖某一个模块，某个模块修改被传染至其他模块的问题。因为每个被引入的模块都将被重新执行生成一遍，成为独立的对象。</p>
+<h3 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h3><ul>
+<li><code>module.exports</code>最好使用<code>function</code>方式导出。</li>
+</ul>
+<p>参考链接<br>[1]  <a target="_blank" rel="noopener" href="http://www.adequatelygood.com/Writing-Testable-JavaScript.html">Writing Testable JavaScript</a></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1217,117 +1318,6 @@
 <li>IoC不等于DI；</li>
 <li>IoC不是对象的专利，方法级别一样适用。</li>
 </ul>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://qianyan.github.io/2014/10/30/vim-in-practice/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="lambeta">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="λ">
-      <meta itemprop="description" content="Elegance and familiarity are orthogonal">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | λ">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2014/10/30/vim-in-practice/" class="post-title-link" itemprop="url">vim in practice (1)</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2014-10-30 23:08:38" itemprop="dateCreated datePublished" datetime="2014-10-30T23:08:38+08:00">2014-10-30</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2016-09-06 22:39:12" itemprop="dateModified" datetime="2016-09-06T22:39:12+08:00">2016-09-06</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E6%8A%80%E6%9C%AF/" itemprop="url" rel="index"><span itemprop="name">技术</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="Vim-Practice"><a href="#Vim-Practice" class="headerlink" title="Vim Practice"></a>Vim Practice</h2><h3 id=""><a href="#" class="headerlink" title="&lt;leader&gt;"></a>&lt;leader&gt;</h3><blockquote>
-<p>Vim have a extra key to activate mappings, and call this “prefix” key the “leader”.</p>
-<blockquote>
-<p>*Mapping keys is one of the places where Vim comments does’t work. </p>
-</blockquote>
-</blockquote>
-<blockquote>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">let mapleader=&#x27;,&#x27;</span><br><span class="line">nnoremap &lt;leader&gt;ev :vsplit $MYVIMRC&lt;cr&gt;</span><br><span class="line">nnoremap &lt;leader&gt;sv :source $MYVIMRC&lt;cr&gt;</span><br></pre></td></tr></table></figure>
-</blockquote>
-<h3 id="Abbrevation"><a href="#Abbrevation" class="headerlink" title="Abbrevation"></a>Abbrevation</h3><blockquote>
-<p>Vim has a feature called “abbreviations” that feel similar to mappings but are meant for use in insert, replace, and command modes. </p>
-</blockquote>
-<blockquote>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">iabbrev what what</span><br><span class="line">when you type *what&lt;space&gt;*</span><br><span class="line">were substituted with *what&lt;space&gt;*</span><br></pre></td></tr></table></figure>
-</blockquote>
-<h3 id="Disable-old-keys"><a href="#Disable-old-keys" class="headerlink" title="Disable old keys"></a>Disable old keys</h3><blockquote>
-<p>This effectively disables the escape key in insert mode by telling Vim to perform <nop> (no operation) instead.</p>
-</blockquote>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">inoremap &lt;esc&gt; &lt;nop&gt; &quot;no operation</span><br></pre></td></tr></table></figure>
-
-<h3 id="Autocommands"><a href="#Autocommands" class="headerlink" title="Autocommands"></a>Autocommands</h3><blockquote>
-<p>Autocommands are the way to tell Vim to run commands whenever certain events happen.</p>
-</blockquote>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">:autocmd BufNewFile * :write</span><br><span class="line">         ^          ^ ^</span><br><span class="line">         |          | |</span><br><span class="line">         |          | The command to run.</span><br><span class="line">         |          |</span><br><span class="line">         |          A &quot;pattern&quot; to filter the event.</span><br><span class="line">         |</span><br><span class="line">         The &quot;event&quot; to watch for.</span><br><span class="line"></span><br><span class="line">:autocmd BufWritePre,BufRead *.html :normal gg=G</span><br><span class="line">:help autocmd-events</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<h3 id="System-clipboard"><a href="#System-clipboard" class="headerlink" title="System clipboard"></a>System clipboard</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">BundleInstall fakeclip</span><br><span class="line">1. Normal mode</span><br><span class="line">&quot;+Y or &quot;+yy (use system register&lt;+&gt; to copy)</span><br><span class="line">2. Visual mode</span><br><span class="line">&quot;+Y</span><br></pre></td></tr></table></figure>
-
 
       
     </div>

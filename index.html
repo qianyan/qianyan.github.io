@@ -149,7 +149,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">79</span>
+          <span class="site-state-item-count">80</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -227,6 +227,106 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://qianyan.github.io/2025/06/25/A-Guided-Tour-of-Functional-Design-Part-2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="lambeta">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="λ">
+      <meta itemprop="description" content="Elegance and familiarity are orthogonal">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | λ">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/06/25/A-Guided-Tour-of-Functional-Design-Part-2/" class="post-title-link" itemprop="url">A Guided Tour of Functional Design (Part 2)</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2025-06-25 11:49:39 / 修改时间：11:55:01" itemprop="dateCreated datePublished" datetime="2025-06-25T11:49:39+08:00">2025-06-25</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Clojure/" itemprop="url" rel="index"><span itemprop="name">Clojure</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="有限与无限的游戏"><a href="#有限与无限的游戏" class="headerlink" title="有限与无限的游戏"></a>有限与无限的游戏</h2><p>美国哲学家詹姆斯·卡斯写过一本书《有限与无限的游戏》，向我们展示了世界上至少有两种类型的“游戏”。有限的游戏，具有明确的开始和结束，其目的在于赢得胜利；无限的游戏，没有固定的开始和结束，旨在让游戏永远进行下去。有限的游戏在边界内玩，无限的游戏玩的就是边界。</p>
+<p>Bob 大叔在解释函数式的惰性时，翻出了那款经典的保龄球游戏。今时不同往日，他玩起了无限的游戏。</p>
+<p>我们先把保龄球的游戏规则过目一遍，头脑中有个怎么玩的印象就好。</p>
+<blockquote>
+<p>保龄球每个玩家每局有 10 个计分格(frame)。每个计分格玩家最多有 2 次投球(roll)机会，但第 10 个计分格最多有 3 次投球机会。每个计分格的得分，是击倒的球瓶总数，再加上全中(strike)或补中(spare)的奖励分。全中，指第一球就击倒了所有 10 个球瓶；得分为 10 分，再加上接下来的 2 次投球（属于下一个或之后的计分格）所击倒的球瓶数。补中，指在一个计分格中，用两次投球才击倒所有 10 个球瓶；得分为 10 分，再加上接下来的 1次投球（属于下一个计分格）所击倒的球瓶数。第 10 个计分格有点不同。如果在第 10 个计分格投出全中或补中，则能获得额外的投球机会来完成这个计分格；如果是全中，能获得 2 次额外投球；如果是补中，则能获得 1 次额外投球。这些额外的投球，只用于计算第 10 个计分格的得分。</p>
+</blockquote>
+<p><img src="/images/BowlingGameJava_1724129511036_0.png" alt="BowlingGameJava.png"></p>
+<p>在上面 Java 版本的代码中，几乎是无意识地，我们把得分计算 <code>score +=</code>和投球的次序 <code>frameIndex++</code>揉到了一处。这是自然思考的结果，因为累积 <code>frameIndex</code> 就重现了投球的时序，得分跟着时序在规则（isStrike, isSpare?）的安排下一步步累加。但是事实上，因为不得不识别出影响每个计分格的所有投球，真正时序耦合的是 frameIndex 和当前计分格的得分计算，而不是总得分。所以，这段代码可以重构下，将总得分的计算放到了最后。</p>
+<p><img src="/images/BowlingGameRefactorJava_1724135770353_0.png" alt="BowlingGameRefactorJava.png"></p>
+<p>重构方式很简单，新增一个 scoresInEachFrame 列表，把每一个计分格的得分加进去，最后做求和。</p>
+<p>这样的代码几乎可以很容易地写成像下面一样 Clojure 的 <code>loop...recur</code> 形式。</p>
+<p><img src="/images/BowlingGameRefactorClj_1724135788478_0.png" alt="BowlingGameRefactorClj.png"></p>
+<p>转换成这种形式之后，我们至少能知道两件事情。第一，frameIndex 这类索引让代码显得很难读；第二，frame 这是个控制量，它不参与实际的计分运算。</p>
+<p>对于第一种坏味道，我们可以用列表的解构来解决。这里面凸显一种思想，新的列表是从旧的列表演变出来的，正如 map 函数所做的那样。</p>
+<p><img src="/images/BowlingGameFramesClj_1724136529276_0.png" alt="BowlingGameFramesClj.png">{:height 437, :width 476}</p>
+<p>代码中 <code>(loop [remaining-rolls frames]...)</code>正是这种思想的延续，在每次递归调用中，remaining-rolls 减少了，而 frames 增加了，它们之间的演化（映射）逻辑就是游戏的计分规则（Strike等）。当然，这段代码和上面的代码并不等价，原因是它没有提前计算每个计分格的得分，而是保留下所有计分格，例如在 Stirke 情况下，frame 是 [10 X Y] 这种形状。</p>
+<p>对于第二个问题，既然不参与计分格的计算，最好是忘得越远越好。也就是说，假如我们想永远玩下去，那么这种程序最好也能正确计算出得分，直到我们想终止为止。</p>
+<p><img src="/images/BowlingGameClj_1724137596098_0.png" alt="BowlingGameClj.png"></p>
+<p>在无限游戏的场景下，rolls 可以无限投掷，我们就可以无限地推迟从计分格中获得总分的决定。遗憾的是，保龄球游戏中有一条定胜负的终止规则，每局只有 10 个计分格，所以它不是无限游戏。在程序计算总分的最后，取出了 10 个计分格。</p>
+<h2 id="惰性，无限可能！"><a href="#惰性，无限可能！" class="headerlink" title="惰性，无限可能！"></a>惰性，无限可能！</h2><p>Bob 大叔分析说惰性之所以需要，是因为这样做可以把需要做的事情和需要做的量分离开来。延迟需要多少量这个决定到最终用户的手上。</p>
+<p>惰性是实现无限游戏的手段，而无限是帮我们扫清聚焦计算（厌恶那些 indexes 吧）障碍的思维方式。试想，列表元素都无限多了，你还会思考越界吗？你只会想我该怎么这个游戏一直玩下去。</p>
+<p>惰性列表时一个知道如何计算下一个值的对象。惰性列表是伪装成列表的迭代器。</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
     <link itemprop="mainEntityOfPage" href="https://qianyan.github.io/2024/08/19/A-Guided-Tour-of-Functional-Design-Part-1/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -263,7 +363,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-06-25 11:40:49" itemprop="dateModified" datetime="2025-06-25T11:40:49+08:00">2025-06-25</time>
+      <time title="修改时间：2025-06-25 11:49:11" itemprop="dateModified" datetime="2025-06-25T11:49:11+08:00">2025-06-25</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -304,7 +404,7 @@
 <p><img src="/images/sumFirstTenSquareHelper-CljRecursive_1723976829928_0.png" alt="sumFirstTenSquareHelper-CljRecursive.png"></p>
 <p>递归有代价，尾递归来优化。我们把上面的程序略作修改，把内部的函数调用名改成 recur，重新求值，再来观察一下调用栈。你会惊喜地发现，深深的栈不见了，尾递归优化（TCO）复用了栈桢，以此达到了循环的目的。所以，你会在这本书的多数程序中发现这样的结构 <code>(loop...recur)</code>。</p>
 <p><img src="/images/sum-first-ten-squares-helper-tco-clj_1723976955296_0.png" alt="sum-first-ten-squares-helper-tco-clj.png"></p>
-<p><img src="/images/sum-first-ten-squares-helper-tco-stack-clj_1723976968464_0.png" alt="sum-first-ten-squares-helper-tco-stack-clj.png">{:height 438, :width 780}</p>
+<p><img src="/images/sum-first-ten-squares-helper-tco-stack-clj_1723976968464_0.png" alt="sum-first-ten-squares-helper-tco-stack-clj.png"></p>
 <p>我们用两段伪代码来通观下刚刚到底发生了什么事情。对，我们用尾递归去掉了循环赋值。我们回过头来看看。 尾递归看上去很复杂，但其实很简单。上面程序展示了过程式代码改造成函数式尾递归的过程，其中最大的差异点就是消除了变量的赋值。 其实，搞了这么多新奇的手法，又是尾递归优化又是持久性数据，那都是因为计算机的开山老祖是图灵的图灵机而不是阿隆佐·邱奇的 lambda 演算，我们一直在用图灵机的实现模拟 lambda 演算。所以，总结下来就是持久性数据 (persistent data) 在递归参数中的复制以代替赋值，用 TCO 减少栈桢增长。</p>
 <p><img src="/images/state-updates-java_1723977516519_0.png" alt="state-updates-java.png"></p>
 <p><img src="/images/state-updates-fp_1723977527346_0.png" alt="state-updates-fp.png"></p>
@@ -510,7 +610,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-06-25 11:19:04" itemprop="dateModified" datetime="2025-06-25T11:19:04+08:00">2025-06-25</time>
+      <time title="修改时间：2025-06-25 11:24:12" itemprop="dateModified" datetime="2025-06-25T11:24:12+08:00">2025-06-25</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1415,166 +1515,6 @@
 <h2 id="术语"><a href="#术语" class="headerlink" title="术语"></a>术语</h2><p><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Password">Password</a><br>密码就是用于证明身份，获取和身份相称的访问权限。</p>
 <p><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Passphrase">Passphase</a><br>用于用户认证或者加密程序的操作步骤，特别是KDF算法就是从passphrase中派生出来的。</p>
 <p>[^1]: <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Key_stretching">Key stretching</a></p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://qianyan.github.io/2019/01/17/Guide-to-Clean-Architecture-2-more/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="lambeta">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="λ">
-      <meta itemprop="description" content="Elegance and familiarity are orthogonal">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | λ">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2019/01/17/Guide-to-Clean-Architecture-2-more/" class="post-title-link" itemprop="url">架构整洁之道导读（二）续 组件聚合张力图</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2019-01-17 15:16:04 / 修改时间：15:23:15" itemprop="dateCreated datePublished" datetime="2019-01-17T15:16:04+08:00">2019-01-17</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E6%8A%80%E6%9C%AF/" itemprop="url" rel="index"><span itemprop="name">技术</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="关于组件聚合张力图的讨论"><a href="#关于组件聚合张力图的讨论" class="headerlink" title="关于组件聚合张力图的讨论"></a>关于组件聚合张力图的讨论</h2><p>周三的午休时间，我在ThoughtWorks北京办公室分享了一场《架构整洁之道导读》。当谈到分享组件聚合原则的时候，很多同事表示难以理解。究其缘由，是我们无法将组件违反原则的后果对应到真实项目的问题上，这就导致原则和实践之间的不一致。讨论的过程异常激烈，但是很遗憾地最终并没有得到一个服众的结论。所以为了进一步澄清这些争议点，我决定专门组织一场针对组件聚合原则张力图的讨论会。在<a target="_blank" rel="noopener" href="https://www.jianshu.com/u/49ddfba9ae88">吴大师</a>的鼓动下，时间定在下周四晚上的8点半，与会人员大多是咨询团队的技术教练，也有我们项目上的客户。</p>
-<p>在这场长达两个半小时的讨论会上，没想到首先出现争议的点居然是组件的定义。</p>
-<blockquote>
-<p>组件是软件部署的最小单元，是整个软件系统在部署过程中可以独立完成部署的最小实体。</p>
-</blockquote>
-<p>对于这样的定义，<a target="_blank" rel="noopener" href="https://www.zhihu.com/people/nuo-tie">大魔头</a>提出了质疑：library（库）并不能独立部署。但凡出现明显的逻辑漏洞的时候，我们最好的方式是抛开译文回去看原文。</p>
-<blockquote>
-<p>Components are the units of deployment. They are the smallest entities that can be deployed as part of a system.</p>
-</blockquote>
-<p>阅读原文之后，我们发现“组件是软件部署的最小单元。”这句话翻译得并没有太大问题，但是第二句就有损原意了，原意是说<strong>可以作为系统的一部分被部署的最小实体</strong>，而没有强调部署过程这种动态的概念，否则就和前一句是同义反复。所以这个定义里面并没有说组件可以独立部署。后面提到组件可以被链接到一个独立可执行文件或者归档文件，又或者，可以被打包成.jar、.dll或者.exe文件，并以动态加载的插件形式实现<strong>独立部署</strong>。</p>
-<h3 id="解读组件的定义"><a href="#解读组件的定义" class="headerlink" title="解读组件的定义"></a>解读组件的定义</h3><p>来自原文：</p>
-<blockquote>
-<p>Components can be linked together into a single executable. Or they can be aggregated together into a single archive, such as a .war file. Or they can be independently deployed as separate dynamically loaded plugins, such as.jar or .dll or .exe files.</p>
-</blockquote>
-<p>来自讨论：</p>
-<blockquote>
-<p>20:56:56	 From tianjie : These dynamically linked files, which can be plugged together at runtime, are the software components of our architectures.</p>
-</blockquote>
-<p>联系上下文理解之后，我们知道：组件可以被设计成独立部署的，但是并不是所有的组件都是可以独立部署的。这是要澄清的，不然讨论聚合原则的时候容易出现偏差。</p>
-<p>吴大师接着解释说，组件应该是个逻辑单元，而不是物理单元。强制某个代码模块就是一个物理的部署单元是不合适的。另外，鲍勃大叔在介绍架构边界时，也表明了一样的观点：架构的边界并不是服务的边界。</p>
-<h3 id="解读REP原则"><a href="#解读REP原则" class="headerlink" title="解读REP原则"></a>解读REP原则</h3><p>我按照自己的思路解释过REP、CCP和CRP原则[^1]之后，讨论的焦点很快聚集到REP原则的解读和实践意义上。</p>
-<p><a target="_blank" rel="noopener" href="https://www.zhihu.com/people/wu-xue-feng/">吴大师</a>认为REP原则如果简单解读成没有发布过程就不能复用，它就和CCP、CRP原则的排斥力量不均衡，无法形成稳定的三角关系，那么这个张力图就显得有点鸡肋。</p>
-<p><a target="_blank" rel="noopener" href="https://www.thoughtworks.com/cn/profiles/liu-shangqi">尚奇</a>受到CAP（分布式系统基本原理，一致性，可用性和分区容错性）原则的启发提出了另一个解读方向。他说，CAP原则在分布式系统的实践里，都会先站住P原则，然后在C和A中权衡。那么在REP、CCP和CRP三角关系里，REP原则就相当于这里的P原则，必须先满足然后再去取舍CCP和CRP。</p>
-<p>大魔头理解REP的意思是可复用性就是组件是独立可复用的。假如回到没有Maven这些工具，没有依赖管理的年代，如果我们所依赖的包还依赖其它第三方包，那么这个包就不能叫做独立可复用。</p>
-<blockquote>
-<p>21:13:04	 From YangYun : 我倒是理解REP的意思是你发布出来的一个可重用的包就是独立可重用的，你不能让我必须带着别的jar包才能用它。<br>21:14:04	 From YangYun : The granule of reuse is the granule of release</p>
-</blockquote>
-<p>他接着说，假如有两个提供同样功能的包，其中一个没有第三方的依赖，而另一个有，那我当然选择前者。</p>
-<p>技术教练Sara举出了一个相对复杂但是很有启发性的例子。</p>
-<blockquote>
-<p>21:46:35	 From Qian Ping : 假设项目包含sub module ABC<br> - 如果ABC单纯sub module没有打成jar，又互相直接复用了，就是违反了REP<br> - 如果每个sub module，打成jar，互相复用的时候是通过对方特定版本的jar（如snapshot版本），就是符合REP<br> - 如果符合REP了，而所有sub module是跟随整个项目一起升级版本，就是符合CCP因为他们是一体一起发布的<br> - 这时假如A依赖B和C，我这次单纯想改C，他们一起升版本了。但其实B的Jar完全没有变化，这个对B来说就是一个不必要的发布，B又貌似应该分离出去，但如果它分离出去了，就又离REP和CCP远了</p>
-</blockquote>
-<p>对于最后一句的表述，她澄清道：</p>
-<blockquote>
-<p>之前有遇到一个情况，比如组件A，然后它里面需要用到一个common library, lib里面其实包含了比如3个sub module（1&#x2F;2&#x2F;3），全部都是A需要复用的, 这时候如果要改1&#x2F;2&#x2F;3里面任意的东西，都会一起升级lib，然后在A里面对应升级版本。</p>
-</blockquote>
-<blockquote>
-<p>后来，有一些新组件B，它只需要用到common lib里面的3，不需要1&#x2F;2，于是3一直被改和打包版本。 此时1&#x2F;2会跟着升版本号，但其实1&#x2F;2内容本身是完全没有变化的，只是版本号升了。</p>
-</blockquote>
-<p>这个场景中引入了两个组件A和B分别依赖common library的某些模块。在我们讨论一个组件依赖时，面临的约束要简单很多，但是复用的初衷就是给多个组件去依赖，所以这个假设是很有价值。</p>
-<p>Sara分析的思路如下：</p>
-<blockquote>
-<p>如果分离出去，等于我有两个common lib（1&#x2F;2 和 3）, 对于B来说，B只需要3这么一个lib是比较完美的，反正改了3再改B就好了。</p>
-</blockquote>
-<blockquote>
-<p>但对于A来说，它就需要同时升级1&#x2F;2的lib和3的lib，等于要3个发布，而它原来只需要2个发布（1&#x2F;2&#x2F;3 + A），所以离CRP远了，同时它也要分别维护两个lib分别的版本升级，所以CCP也比原来差了。</p>
-</blockquote>
-<p>在她的分析下，我们发现CRP和CCP不单是互相排斥的，还有可能两者都无法满足。造成这种结果的原因在于1&#x2F;2&#x2F;3模块形成的这个common library对于A组件而言都符合CCP和CRP原则，但是对于B组件而言，是不满足REP和CRP原则的，因为每次想要依赖3模块，就得全部依赖1&#x2F;2&#x2F;3整个common library（复用困难）。反之，如果我们将3从1&#x2F;2&#x2F;3中拆出来成为独立的组件，那就几乎宣告对于A组件而言势必违反CCP和CRP原则，但是B组件却获得了符合REP和CRP原则的好处。</p>
-<p>她接着补充道：</p>
-<blockquote>
-<p>其实后来说起对应微服务的时候有另外一个想法，就是比如说我系统里面多个组件需要用计提（Mark to market[^2]）这么一个功能，说白了就是一条公式，那通常可以有几个做法</p>
-<ul>
-<li>直接把这个公式复制到要用的组件，code level的复用，没有版本 -&gt; REP bad, CCP bad, but CRP not bad (因为要更改时候发布次数还是一样的）</li>
-<li>把公式写到一个common lib里面再进行复用 -&gt; REP good, CCP good, CRP bad(多发布一次）</li>
-<li>把公式放在一个独立service -&gt; REP good, CCP bad(因为要维护多一个服务）, CRP good</li>
-</ul>
-</blockquote>
-<p>这个观点就上升到不同层次的复用性上，可以算是对组件聚合原则的普适性的探索。</p>
-<p>当话题再次被聚焦到复用性时，技术教练<a target="_blank" rel="noopener" href="https://litongxin.github.io/">MoMo</a>提出一个观点：我们现在讨论就是可复用组件应该遵循的原则，而REP是对复用粒度的定义。至于那些那些常年采用SNAPSHOT（Java项目里Maven常用的开发版本号），没有发布概念的组件，就不该纳入复用的考虑范围内，那些也就不是REP的反模式。</p>
-<p>与此同时，<a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/YkKz4lknR2fqbSgv4JL9Lw">阎王</a>指出了一个翻译上的失误。组件粘合张力图中REP原则的简短描述是“为复用性而组合”，而原文其实是”Group for reusers”，翻译过来应该是为了复用者而组合，复用性的英文是 Reusability。所以为了复用者发布，考虑的就是对外部的承诺。</p>
-<p><img src="https://upload-images.jianshu.io/upload_images/217988-97f1eb1dfe9e1314.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="tension diagram"></p>
-<h3 id="外部资料"><a href="#外部资料" class="headerlink" title="外部资料"></a>外部资料</h3><p>大魔头在加班写方案和讨论的间隙，快速查阅了一些资料，比如wiki上对于REP原则的定义：</p>
-<blockquote>
-<p>21:45:05 From YangYun : Reuse-release Equivalence Principle (REP)<br>REP essentially means that the package must be created with reusable classes – “Either all of the classes inside the package are reusable, or none of them are”. The classes must also be of the same family. Classes that are unrelated to the purpose of the package should not be included. A package constructed as a family of reusable classes tends to be most useful and reusable. - wiki百科里</p>
-</blockquote>
-<p>在wiki的定义里，可以看到REP原则包含CRP和CCP原则的成分，如此看来，这三大原则并不符合<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/MECE_principle">MCME</a>分类原则，就连鲍勃大叔在书中也是模棱两可的态度——REP维护共同的大主题，组件中的类和模块也必须紧密相关，这基本是CCP和CRP的简版描述。</p>
-<p>然后大魔头查找到“粒度”这个词在软件设计中详细定义，这是对REP原则定义（软件复用的最小粒度等同于其发布的最小粒度）的分解和再认知。</p>
-<blockquote>
-<p>21:57:03	 From YangYun : <a target="_blank" rel="noopener" href="http://condor.depaul.edu/dmumaugh/OOT/Design-Principles/granularity.pdf">http://condor.depaul.edu/dmumaugh/OOT/Design-Principles/granularity.pdf</a></p>
-</blockquote>
-<p><img src="https://upload-images.jianshu.io/upload_images/217988-31f16cf3b2bb8922.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="granularity"></p>
-<blockquote>
-<p>21:58:29	 From YangYun : <a target="_blank" rel="noopener" href="https://fi.ort.edu.uy/innovaportal/file/2032/1/design_principles.pdf">https://fi.ort.edu.uy/innovaportal/file/2032/1/design_principles.pdf</a></p>
-</blockquote>
-<p><img src="https://upload-images.jianshu.io/upload_images/217988-c3db0f42dde964ae.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="design principles"></p>
-<p>这些观点和学术建议很有代表性，值得大家反复揣摩和思考。</p>
-<h3 id="反模式"><a href="#反模式" class="headerlink" title="反模式"></a>反模式</h3><p>软件工程师一般有个“正难则反”的习惯。原则较抽象，但是模式很具体，反模式更能指导实践。接下来，大家开始讨论哪些是违反了REP原则的反模式。</p>
-<p>首当其冲的就是<code>git submodule</code>，在某些项目中，这种通过源代码划分模块并共享的方式还是挺常见的。因为共享的是代码，所以每次共享代码更新，势必要让依赖方重新编译，发布和部署。这种做法对于复用是痛苦的。</p>
-<p>其次是常年使用SNAPSHOT版本的某些项目。这些项目的特点一般都是某个产品团队底下，内部团队之间有复用的要求。缺点其实也很明显，常年SNAPSHOT等于没有版本和发布的流程。使用者并不知道SNAPSHOT中哪些是稳定的，哪些是修改的，拿到的版本到底是最新的还是遗留的，我需要的功能在这个功能有包含，还是你包含了太多我不需要的升级。这种也是复用痛苦的。</p>
-<h3 id="REP原则小结"><a href="#REP原则小结" class="headerlink" title="REP原则小结"></a>REP原则小结</h3><p>综合以上两个例子以及其它讨论，我们得出了一个好玩的结论：软件工程发展到现在，REP原则已经是基本的要求，它的存在有可能是鲍勃大叔年代感<del>老了</del>的体现。</p>
-<p>[^1]: <a target="_blank" rel="noopener" href="https://www.jianshu.com/p/96e2d580374f">架构整洁之道导读（二）组件聚合</a> <a target="_blank" rel="noopener" href="https://www.jianshu.com/p/d651c9fb1755#fnref1"></a><br>[^2]: <a target="_blank" rel="noopener" href="https://www.investopedia.com/terms/m/marktomarket.asp">Mark to market 按市值计价</a></p>
-<p>[1] <a href="/2018/10/28/Guide-to-Clean-Architecture-1/">架构整洁之道导读（一）编程范式</a><br>[2] <a href="/2019/01/17/Guide-to-Clean-Architecture-2/">架构整洁之道导读（二）组件聚合</a><br>于 2018-11-12</p>
 
       
     </div>

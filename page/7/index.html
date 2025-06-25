@@ -149,7 +149,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">79</span>
+          <span class="site-state-item-count">80</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -218,6 +218,117 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://qianyan.github.io/2014/10/30/vim-in-practice/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="lambeta">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="λ">
+      <meta itemprop="description" content="Elegance and familiarity are orthogonal">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | λ">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2014/10/30/vim-in-practice/" class="post-title-link" itemprop="url">vim in practice (1)</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2014-10-30 23:08:38" itemprop="dateCreated datePublished" datetime="2014-10-30T23:08:38+08:00">2014-10-30</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2016-09-06 22:39:12" itemprop="dateModified" datetime="2016-09-06T22:39:12+08:00">2016-09-06</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%8A%80%E6%9C%AF/" itemprop="url" rel="index"><span itemprop="name">技术</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="Vim-Practice"><a href="#Vim-Practice" class="headerlink" title="Vim Practice"></a>Vim Practice</h2><h3 id=""><a href="#" class="headerlink" title="&lt;leader&gt;"></a>&lt;leader&gt;</h3><blockquote>
+<p>Vim have a extra key to activate mappings, and call this “prefix” key the “leader”.</p>
+<blockquote>
+<p>*Mapping keys is one of the places where Vim comments does’t work. </p>
+</blockquote>
+</blockquote>
+<blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">let mapleader=&#x27;,&#x27;</span><br><span class="line">nnoremap &lt;leader&gt;ev :vsplit $MYVIMRC&lt;cr&gt;</span><br><span class="line">nnoremap &lt;leader&gt;sv :source $MYVIMRC&lt;cr&gt;</span><br></pre></td></tr></table></figure>
+</blockquote>
+<h3 id="Abbrevation"><a href="#Abbrevation" class="headerlink" title="Abbrevation"></a>Abbrevation</h3><blockquote>
+<p>Vim has a feature called “abbreviations” that feel similar to mappings but are meant for use in insert, replace, and command modes. </p>
+</blockquote>
+<blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">iabbrev what what</span><br><span class="line">when you type *what&lt;space&gt;*</span><br><span class="line">were substituted with *what&lt;space&gt;*</span><br></pre></td></tr></table></figure>
+</blockquote>
+<h3 id="Disable-old-keys"><a href="#Disable-old-keys" class="headerlink" title="Disable old keys"></a>Disable old keys</h3><blockquote>
+<p>This effectively disables the escape key in insert mode by telling Vim to perform <nop> (no operation) instead.</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">inoremap &lt;esc&gt; &lt;nop&gt; &quot;no operation</span><br></pre></td></tr></table></figure>
+
+<h3 id="Autocommands"><a href="#Autocommands" class="headerlink" title="Autocommands"></a>Autocommands</h3><blockquote>
+<p>Autocommands are the way to tell Vim to run commands whenever certain events happen.</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">:autocmd BufNewFile * :write</span><br><span class="line">         ^          ^ ^</span><br><span class="line">         |          | |</span><br><span class="line">         |          | The command to run.</span><br><span class="line">         |          |</span><br><span class="line">         |          A &quot;pattern&quot; to filter the event.</span><br><span class="line">         |</span><br><span class="line">         The &quot;event&quot; to watch for.</span><br><span class="line"></span><br><span class="line">:autocmd BufWritePre,BufRead *.html :normal gg=G</span><br><span class="line">:help autocmd-events</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="System-clipboard"><a href="#System-clipboard" class="headerlink" title="System clipboard"></a>System clipboard</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">BundleInstall fakeclip</span><br><span class="line">1. Normal mode</span><br><span class="line">&quot;+Y or &quot;+yy (use system register&lt;+&gt; to copy)</span><br><span class="line">2. Visual mode</span><br><span class="line">&quot;+Y</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1205,123 +1316,6 @@
           <p>灯火比白昼柔和</p>
 <p>我的影子比夜长</p>
 <p>也比夜凉</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://qianyan.github.io/2014/02/06/usable-shell-knowledge/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="lambeta">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="λ">
-      <meta itemprop="description" content="Elegance and familiarity are orthogonal">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | λ">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2014/02/06/usable-shell-knowledge/" class="post-title-link" itemprop="url">Shell技巧</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2014-02-06 22:04:06" itemprop="dateCreated datePublished" datetime="2014-02-06T22:04:06+08:00">2014-02-06</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2016-09-06 22:37:46" itemprop="dateModified" datetime="2016-09-06T22:37:46+08:00">2016-09-06</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E6%8A%80%E6%9C%AF/" itemprop="url" rel="index"><span itemprop="name">技术</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="Shell-Skills"><a href="#Shell-Skills" class="headerlink" title="Shell Skills"></a>Shell Skills</h1><h4 id="sudo"><a href="#sudo" class="headerlink" title="sudo !!"></a>sudo !!</h4><pre><code>以root的身份执行上一条命令 。
-场景举例：比如Ubuntu里用apt-get安装软件包的时候是需要root身份的，我们经常会忘记在apt-get前加sudo。每次不得不加上sudo再重新键入这行命令，这时可以很方便的用sudo !!完事。
-（在shell下，有时候你会输入很长的命令，你可以使用!xxx来重复最近的一次命令，比如，你以前输入过，vi /where/the/file/is, 下次你可以使用 !vi 重得上次最近一次的vi命令。）
-</code></pre>
-<h4 id="cd"><a href="#cd" class="headerlink" title="cd -"></a>cd -</h4><pre><code>回到上一次的目录 。
-场景举例：当前目录为/home/a，用cd ../b切换到/home/b。这时可以通过反复执行cd -命令在/home/a和/home/b之间来回方便的切换。
-（cd ~ 是回到自己的Home目录，cd ~username，是进入某个用户的Home目录）
-</code></pre>
-<h4 id="‘ALT-’-or-‘-’"><a href="#‘ALT-’-or-‘-’" class="headerlink" title="‘ALT+.’ or ‘ .’"></a>‘ALT+.’ or ‘<ESC> .’</h4><pre><code>热建alt+. 或 esc+. 可以把上次命令行的参数重复出来,有点像!$，但是它只会在当前行出现，而不会想!$在下一行将命令展开以补全。
-</code></pre>
-<h4 id="old-new"><a href="#old-new" class="headerlink" title="^old^new"></a>^old^new</h4><pre><code>替换前一条命令里的部分字符串。
-场景：echo &quot;wanderful&quot;，其实是想输出echo &quot;wonderful&quot;。只需要^a^o就行了，对很长的命令的错误拼写有很大的帮助。（陈皓注：也可以使用 !!:gs/old/new）
-eg:
-&gt; echo &quot;wanderful&quot;
-&gt; ^a^o
-&gt; echo &quot;wonderful&quot; (*auto popup*)
-</code></pre>
-<h4 id="w-sudo-tee"><a href="#w-sudo-tee" class="headerlink" title="w !sudo tee %"></a>w !sudo tee %</h4><pre><code>在vi中保存一个只有root可以写的文件
-</code></pre>
-<h4 id="file-txt"><a href="#file-txt" class="headerlink" title="&gt; file.txt"></a>&gt; file.txt</h4><pre><code>创建一个空文件，比touch短。
-</code></pre>
-<h4 id="ps-aux-sort-nk-4-tail"><a href="#ps-aux-sort-nk-4-tail" class="headerlink" title="ps aux | sort -nk +4 | tail"></a>ps aux | sort -nk +4 | tail</h4><pre><code>列出头十个最耗内存的进程
-</code></pre>
-<h4 id="ctrl-x-e"><a href="#ctrl-x-e" class="headerlink" title="ctrl-x e"></a>ctrl-x e</h4><pre><code>快速启动你的默认编辑器（由变量$EDITOR设置）。
-</code></pre>
-<h4 id="python-m-SimpleHTTPServer"><a href="#python-m-SimpleHTTPServer" class="headerlink" title="python -m SimpleHTTPServer"></a>python -m SimpleHTTPServer</h4><pre><code>一句话实现一个HTTP服务，把当前目录设为HTTP服务目录，可以通过http://localhost:8000访问 这也许是这个星球上最简单的HTTP服务器的实现了。
-</code></pre>
-<h4 id="man-ascii"><a href="#man-ascii" class="headerlink" title="man ascii"></a>man ascii</h4><pre><code>显示ascii码表。
-</code></pre>
-<h4 id="ssh-user-server-bash-path-to-local-script-sh"><a href="#ssh-user-server-bash-path-to-local-script-sh" class="headerlink" title="ssh user@server bash &lt; &#x2F;path&#x2F;to&#x2F;local&#x2F;script.sh"></a>ssh user@server bash &lt; &#x2F;path&#x2F;to&#x2F;local&#x2F;script.sh</h4><pre><code>在远程机器上运行一段脚本。这条命令最大的好处就是不用把脚本拷到远程机器上。
-</code></pre>
-<h4 id="du-s-sort-n-tail"><a href="#du-s-sort-n-tail" class="headerlink" title="du -s * | sort -n | tail"></a>du -s * | sort -n | tail</h4><pre><code>列出当前目录里最大的10个文件。
-</code></pre>
 
       
     </div>
