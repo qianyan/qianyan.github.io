@@ -149,7 +149,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">77</span>
+          <span class="site-state-item-count">78</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -160,7 +160,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">43</span>
+        <span class="site-state-item-count">44</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -218,6 +218,108 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://qianyan.github.io/2014/01/04/clojure-basic-kownladge/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="lambeta">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="λ">
+      <meta itemprop="description" content="Elegance and familiarity are orthogonal">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | λ">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2014/01/04/clojure-basic-kownladge/" class="post-title-link" itemprop="url">Basic clojure knowledge</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2014-01-04 23:38:43" itemprop="dateCreated datePublished" datetime="2014-01-04T23:38:43+08:00">2014-01-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2016-09-06 22:57:30" itemprop="dateModified" datetime="2016-09-06T22:57:30+08:00">2016-09-06</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Clojure/" itemprop="url" rel="index"><span itemprop="name">Clojure</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="Basic-Knowledeg"><a href="#Basic-Knowledeg" class="headerlink" title=" Basic Knowledeg"></a> Basic Knowledeg</h1><h3 id="1-prefix-notation"><a href="#1-prefix-notation" class="headerlink" title="1. prefix notation"></a>1. prefix notation</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(- 3 2 1) ; =&gt; 0</span><br><span class="line">(+ 1 2 3) ; =&gt; 6</span><br><span class="line">(&lt; 1 2 3) ; =&gt; true</span><br><span class="line">(&lt; 1 4 2) ; =&gt; false</span><br></pre></td></tr></table></figure>
+<h3 id="2-data-type"><a href="#2-data-type" class="headerlink" title="2. data type"></a>2. data type</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">(class 1) ;=&gt; java.lang.Long</span><br><span class="line">(class 1.0) ;=&gt; java.lang.Double</span><br><span class="line">(class true) ;=&gt; java.lang.Boolean</span><br><span class="line">(class &quot;str&quot;) ;=&gt; java.lang.String</span><br><span class="line"></span><br><span class="line">(class (byte 1)) ;=&gt; java.lang.Byte</span><br><span class="line">(class (short 1)) ;=&gt; java.lang.Short</span><br><span class="line">(class (int 1)) ;=&gt; java.lang.Integer</span><br><span class="line">(class (float 1.0)) ;=&gt; java.lang.Float</span><br><span class="line">(class (char &#x27;a&#x27;)) or (class \a) ;=&gt; java.lang.Character</span><br><span class="line"></span><br><span class="line">(class (/ 1 3)) ;=&gt; clojure.lang.Ratio, support lazy evaluating.</span><br><span class="line"></span><br><span class="line">(class 36786883868216818816N) ;=&gt; clojure.lang.BigInt</span><br><span class="line">(class 3.14159265358M) ;=&gt; java.math.BigDecimal</span><br></pre></td></tr></table></figure>
+<h3 id="3-expression"><a href="#3-expression" class="headerlink" title="3. expression"></a>3. expression</h3><ul>
+<li>if [else]<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">(if (&lt; 1 2)</span><br><span class="line">	(println &quot;it is true&quot;)</span><br><span class="line">	(println &quot;it is false&quot;)</span><br><span class="line">) ;=&gt; it is true</span><br><span class="line"></span><br><span class="line">(if &quot;&quot;</span><br><span class="line">	(prn &quot;it is true&quot;)) ;=&gt; it is true</span><br><span class="line"></span><br><span class="line">(if 0</span><br><span class="line">	(prn &quot;it is true&quot;)) ;=&gt; it is true</span><br><span class="line"></span><br><span class="line">(if nil</span><br><span class="line">	(prn &quot;it is true&quot;)) ;=&gt; nil!!</span><br></pre></td></tr></table></figure></li>
+<li>or&#x2F;and<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(prn (or true false)) ;=&gt; true</span><br><span class="line">(prn (and true false)) ;=&gt; false</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="4-data-structures"><a href="#4-data-structures" class="headerlink" title="4. data structures"></a>4. data structures</h3><ul>
+<li>list<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(list 1 2 3)</span><br><span class="line">`(1 2 3)</span><br><span class="line">;=&gt; (1 2 3)</span><br></pre></td></tr></table></figure></li>
+<li>vector<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[1 2 3] ;=&gt; [1 2 3]</span><br></pre></td></tr></table></figure></li>
+<li>set<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#&#123;1 2 3&#125; ;=&gt; #&#123;1 2 3&#125;</span><br></pre></td></tr></table></figure></li>
+<li>map<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;:one 1,</span><br><span class="line">:two 2,</span><br><span class="line">:three 3&#125; ;=&gt; &#123;:one 1, :three 3, :two 2&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="5-operation-on-data-structures"><a href="#5-operation-on-data-structures" class="headerlink" title="5. operation on data structures"></a>5. operation on data structures</h3><ul>
+<li>op list (seq access)<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(def list0 `(1 2 3))</span><br><span class="line">(first list0) ;=&gt; 1</span><br><span class="line">(rest list0) ;=&gt; (2 3)</span><br><span class="line">(last list0) ;=&gt; 3</span><br><span class="line">(cons 0 list0) ;=&gt; (0 1 2 3)</span><br></pre></td></tr></table></figure></li>
+<li>op vector (rand access)<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(def vec0 [4 5 6])</span><br><span class="line">(nth vec0 2) ;=&gt; 6</span><br><span class="line">(vec0 2) ;=&gt; 6, with index.</span><br><span class="line">(concat [1 2 3] vec0) ;=&gt; (1 2 3 4 5 6), it called sequence.</span><br></pre></td></tr></table></figure></li>
+<li>op set<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(def set0 #&#123;5 7 2 6&#125;)</span><br><span class="line">(count set0) ;=&gt; 4</span><br><span class="line">(set0  2) ;=&gt; 2</span><br></pre></td></tr></table></figure></li>
+<li>op map<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">(def map0 &#123;:one 1, :two 2, :three 3&#125;)</span><br><span class="line">(map0 :one) ;=&gt; 1</span><br><span class="line">(:one map0) ;=&gt; 1</span><br><span class="line">(merge &#123;:four 4&#125; map0) ;=&gt; &#123;:two 2, :three 3, :one 1, :four 4&#125;</span><br><span class="line"></span><br><span class="line">(def map1 (sorted-map 2 :two 1 :one)) ;=&gt; &#123;1 :one, 2 :two&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1138,7 +1240,7 @@ F and T → like f and t but backward.
 
   <div class="copyright">
     &copy; 
-    <span itemprop="copyrightYear">2024</span>
+    <span itemprop="copyrightYear">2025</span>
     <span class="with-love">
       <i class="fa fa-heart"></i>
     </span>

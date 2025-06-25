@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.2.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+  <link rel="mask-icon" href="/images/favicon.ico" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"qianyan.github.io","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="前言技术塑造了我们现在的生活，那么又是什么在塑造技术自身呢？很多人会联想到程序员在其中起到的作用。但是，如果我们把人从技术的整体里分离出来，去探究技术内生的秩序或规律，或许答案就不那么直观了。而且从长远来看，这种方法比争论是人主导技术还是技术主导人更能增强个体的主体意识，因为排除个性的技术能帮我们避免陷入权威和神性的陷阱。 什么是技术在谈论什么塑造了技术之前，我们不得不回答一个前置问题：技术是什么">
+<meta property="og:type" content="article">
+<meta property="og:title" content="工程师的使命感从何而来？">
+<meta property="og:url" content="https://qianyan.github.io/2022/01/16/What-drives-an-engineer%E2%80%99s-sense-of-mission/index.html">
+<meta property="og:site_name" content="λ">
+<meta property="og:description" content="前言技术塑造了我们现在的生活，那么又是什么在塑造技术自身呢？很多人会联想到程序员在其中起到的作用。但是，如果我们把人从技术的整体里分离出来，去探究技术内生的秩序或规律，或许答案就不那么直观了。而且从长远来看，这种方法比争论是人主导技术还是技术主导人更能增强个体的主体意识，因为排除个性的技术能帮我们避免陷入权威和神性的陷阱。 什么是技术在谈论什么塑造了技术之前，我们不得不回答一个前置问题：技术是什么">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://qianyan.github.io/images/SICP.png">
+<meta property="og:image" content="https://qianyan.github.io/images/Pyramid_of_engineers.png">
+<meta property="article:published_time" content="2022-01-16T03:11:51.000Z">
+<meta property="article:modified_time" content="2025-06-25T03:19:04.385Z">
+<meta property="article:author" content="lambeta">
+<meta property="article:tag" content="mission">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://qianyan.github.io/images/SICP.png">
+
+
+<link rel="canonical" href="https://qianyan.github.io/2022/01/16/What-drives-an-engineer%E2%80%99s-sense-of-mission/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://qianyan.github.io/2022/01/16/What-drives-an-engineer%E2%80%99s-sense-of-mission/","path":"2022/01/16/What-drives-an-engineer’s-sense-of-mission/","title":"工程师的使命感从何而来？"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>工程师的使命感从何而来？ | λ</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">λ</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">(conj clojurians me)</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E6%8A%80%E6%9C%AF"><span class="nav-number">2.</span> <span class="nav-text">什么是技术</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8A%80%E6%9C%AF%E9%9D%A9%E5%91%BD%E7%BB%93%E6%9E%84%E9%87%8C%E7%9A%84%E5%8D%B1%E6%9C%BA"><span class="nav-number">3.</span> <span class="nav-text">技术革命结构里的危机</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8A%80%E6%9C%AF%E5%8F%91%E5%B1%95%E7%9A%84-Z-%E5%AD%97%E6%A8%A1%E5%9E%8B"><span class="nav-number">4.</span> <span class="nav-text">技术发展的 Z 字模型</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B7%A5%E7%A8%8B%E5%B8%88%E7%9A%84%E4%BA%94%E4%B8%AA%E7%AD%89%E7%BA%A7"><span class="nav-number">5.</span> <span class="nav-text">工程师的五个等级</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8A%80%E6%9C%AF%E7%9A%84%E5%8A%A9%E4%BA%A7%E5%A9%86"><span class="nav-number">6.</span> <span class="nav-text">技术的助产婆</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">lambeta</p>
+  <div class="site-description" itemprop="description">Elegance and familiarity are orthogonal</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">78</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">44</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/qianyan" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;qianyan" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:qianyan.lambda@gmail.com" title="E-Mail → mailto:qianyan.lambda@gmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="http://weibo.com/3672207020" title="Weibo → http:&#x2F;&#x2F;weibo.com&#x2F;3672207020" rel="noopener me" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://x.com/_qian_yan" title="Twitter → https:&#x2F;&#x2F;x.com&#x2F;_qian_yan" rel="noopener me" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+    <div class="sidebar-inner sidebar-blogroll">
+      <div class="links-of-blogroll animated">
+        <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+          链接
+        </div>
+        <ul class="links-of-blogroll-list">
+            <li class="links-of-blogroll-item">
+              <a href="http://blog.jayfields.com/" title="http:&#x2F;&#x2F;blog.jayfields.com&#x2F;" rel="noopener" target="_blank">Jay Fields</a>
+            </li>
+            <li class="links-of-blogroll-item">
+              <a href="https://aphyr.com/" title="https:&#x2F;&#x2F;aphyr.com" rel="noopener" target="_blank">Aphyr</a>
+            </li>
+            <li class="links-of-blogroll-item">
+              <a href="http://bucharestfp.ro/" title="http:&#x2F;&#x2F;bucharestfp.ro" rel="noopener" target="_blank">Bucharest FP</a>
+            </li>
+            <li class="links-of-blogroll-item">
+              <a href="http://www.yinwang.org/" title="http:&#x2F;&#x2F;www.yinwang.org" rel="noopener" target="_blank">Wangyin</a>
+            </li>
+            <li class="links-of-blogroll-item">
+              <a href="http://blog.rlmflores.me/" title="http:&#x2F;&#x2F;blog.rlmflores.me&#x2F;" rel="noopener" target="_blank">Rodrigo Flores</a>
+            </li>
+            <li class="links-of-blogroll-item">
+              <a href="https://seancorfield.github.io/" title="https:&#x2F;&#x2F;seancorfield.github.io&#x2F;" rel="noopener" target="_blank">Seancorfield</a>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://qianyan.github.io/2022/01/16/What-drives-an-engineer%E2%80%99s-sense-of-mission/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="lambeta">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="λ">
+      <meta itemprop="description" content="Elegance and familiarity are orthogonal">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="工程师的使命感从何而来？ | λ">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          工程师的使命感从何而来？
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-01-16 11:11:51" itemprop="dateCreated datePublished" datetime="2022-01-16T11:11:51+08:00">2022-01-16</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-06-25 11:19:04" itemprop="dateModified" datetime="2025-06-25T11:19:04+08:00">2025-06-25</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%8A%80%E6%9C%AF/" itemprop="url" rel="index"><span itemprop="name">技术</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>技术塑造了我们现在的生活，那么又是什么在塑造技术自身呢？很多人会联想到程序员在其中起到的作用。但是，如果我们把人从技术的整体里分离出来，去探究技术内生的秩序或规律，或许答案就不那么直观了。而且从长远来看，这种方法比争论是人主导技术还是技术主导人更能增强个体的主体意识，因为排除个性的技术能帮我们避免陷入权威和神性的陷阱。</p>
+<h1 id="什么是技术"><a href="#什么是技术" class="headerlink" title="什么是技术"></a>什么是技术</h1><p>在谈论什么塑造了技术之前，我们不得不回答一个前置问题：技术是什么？布兰恩·阿瑟的《技术的本质》中给出了一个我认为比较合理的定义。</p>
+<ol>
+<li>技术都是由已有的系统组件组合而成的</li>
+<li>技术的每个组件自身也是微缩的技术</li>
+<li>所有的技术都会利用或开发某种效应</li>
+</ol>
+<p>第一点，技术是由已有的系统组件组合而成的，这话不难理解，我们做软件项目也会引用很多外部组件。那么组件又是什么呢？所以他紧接着给出了第二点解释，技术的每个组件自身也是微缩的技术。这才是该定义最有趣的地方——递归解释。我们知道凡是递归总得有个出口，所以他最后给出了第三点解释，所有的技术都会利用或开发某种效应。也就是说，每一个技术都能发挥某种功能。</p>
+<p>听完这番解释，是否有一种不明觉厉，又有一种听君一席话如听一席话的感觉？是的话，咱也先别急着否定。看看下面的这张图，它是著名的计算机科学的入门书《计算机程序的构造和解释》，简称SICP，关于解释器工作原理的图示。解释器就是利用 Eval 和 Apply 两个函数相互递归解释的。在软件的世界里，类似的例子还有很多。例如，编译器实现自举——利用老的语言写新的编译器，再用新的编译器编译出新的语言。</p>
+<p><img src="/images/SICP.png" alt="Eval_Apply"></p>
+<p>如果从软件的规模这个角度来考察这个定义，我们就会发现软件可以无限庞大下去。基于这样的假设，我们可以推论出软件并不是一种物理现象。1972年，荷兰计算机科学家迪杰斯特拉（Edsger W. Dijkstra）将软件描述为“分层系统”，因为我们需要用分层来解释和实现我们所构造的现象，而不是经由物理规律来考验这些现象。所以 SICP 一书中将软件称为“程序认知论”（阿贝尔森和萨斯曼）就非常有道理了。</p>
+<p>软件工程师常常把分层系统看做是解决某些复杂软件问题的良药，然而事实上，软件其实就是分层系统，基于 OSI(Open System Interconnection) 模型的技术栈就是一种典型的例子。在 OSI 出现之前，曾经有项目尝试适配各种主机以完成各种异构网络之间的联通，但是均以失败告终。而 OSI 引领的标准让世界各地的工程师们协作起来逐步推进了网络技术栈的发展。现如今，我们操作图片时，已经完全无法想象它和比特之间的关联，因为它们已经相差得太远了。远到我们无需考虑有比特这么回事，更不用说底层的半导体控制的电流开关。</p>
+<h1 id="技术革命结构里的危机"><a href="#技术革命结构里的危机" class="headerlink" title="技术革命结构里的危机"></a>技术革命结构里的危机</h1><p>1962年，美国著名科学哲学家库恩在《科学革命的结构》提到是范式危机引发了科学革命，例如海森堡的测不准原理对物理学的冲击，在经典物理学无法解释微观现象时科学革命发生了。我们承认自工业革命以来，技术发生了巨大的变化。如果假定技术的发展也存在范式革命，那么其中的危机是什么呢？爱德华·阿什福德·李的《柏拉图与技术呆子》一书给出了两点总结，他认为软件日益增加的复杂性和意想不到的功能是技术革命中的危险和机遇。</p>
+<p>复杂性体现在以前可以工作良好的工具和模型，在更复杂的情况下，不能很好地工作，甚至崩溃。比如应付几十人并发的系统在面对上万人的并发时很容易就崩溃了。另一个表现则是项目失败的可能性增加了。比如，用瀑布过程开发大型系统，这种管理复杂性的方式会导致在需求设计阶段的异想天开，更可能招致错误和失败。</p>
+<p>至于意想不到的功能，就是想常人不敢想、做常人不敢做的事情。2007年，苹果公司推出的苹果手机。它的创新性在于突破了手机是用来打电话的惯性思维，原来手机可以当电脑使用，反而原来打电话的功能才是附加功能。事实上，苹果手机最具革命性的一点是引入了应用程序的开发平台，这就让全球数百万富有创造力的程序员能够为苹果手机开发各种应用程序。程序员、苹果公司的应用商店和用户就形成了良性的服务网络，从此开启了移动互联网的时代。与苹果手机相近的创新就要数区块链网络了。它的意想不到之处在于货币居然可以由个人发行。区块链网络自带生态快速形成了以开发者、投资（ji）者和矿（Miner）工为一体的服务网络。</p>
+<p>危机是技术革命结构重要的组成部分，但是如何清晰、准确和精准地界定危机依然是个麻烦的问题。当事物发展到复杂难懂的地步时，我们应当回到最初的基本假设上重新思考，这个过程也被称为第一性原理思维。在信息技术的历史学脉络中，我们能迅速地把握到几个关键的定律。</p>
+<p>首先是摩尔定律。1965年，八叛徒之一、英特尔的联合创始人戈登、摩尔做出一个著名的预测，集成电路中的元件的数量将在未来每18个月翻一番。这一定律就一直是半导体行业的指导原则，而且延续至今。不过，大家有没有思考过一个问题，那就是既然摩尔定律一直起作用，那么要么硬件逐渐便宜下去，我们怎么还没有实现硬件自由呢？</p>
+<p>因此，我们不得不提到另一个安迪-比尔定律。这个定律的原话是安迪所给的，比尔全都拿走。其中的安迪就是今天全球最大的个人计算机零件和CPU制造商英特尔公司的创始人兼当时的 CEO 安迪·格鲁夫，而比尔就是比尔盖茨。这条定律的意思是微软等软件公司的新软件总是比从前的软件更加耗费资源，以至于完全抵消了英特尔等硬件公司带来的性能提升。我们的切身体验也是，你拿着老旧的手机去运行现在的软件会感觉慢得不要不要的。</p>
+<p>摩尔定律和安迪-比尔定律带来的最直接影响就是在产业上规定了技术的发展会越来越复杂。</p>
+<p>另一个比较关键的定律就是梅特卡夫定律。 1980年，3com公司的联合创始人罗伯特·梅特卡夫提出一个现在被称为梅特卡夫的定律，该定律认为，网络的价值与网络上兼容的通信设备的数量的平方成正比。如果单台设备的价格为1块钱，那么一个连接10台设备的网络的价值就是 100 块，100台就是1w块，以此类推。</p>
+<p>梅特卡夫定律在经济层面上肯定了网络的规模效应，互联网或区块链行业都是这一定律的实践者。</p>
+<h1 id="技术发展的-Z-字模型"><a href="#技术发展的-Z-字模型" class="headerlink" title="技术发展的 Z 字模型"></a>技术发展的 Z 字模型</h1><p>如图所示。Z 字模型，其上层是技术革命的危与机，下层是技术发展的基本定律，而中间这条线就是从基础规律寻求技术革命的攀爬梯。如果把技术发展比作修仙小说，底下三条定律就是筑基，上面那条线就是羽化成仙，也就是凡人的终极目标。</p>
+<p>在 Z 字模型中，危机并不是一蹴而就的，虽然三条基本定律告诉我们危机迟早会发生，但是依然需要做很多的工作，而这些工作都是由工程师完成的。</p>
+<p>工程师们的日常工作到底是什么呢？我知道有人会说写代码，但更为清晰的描述是《技术的本质》中的标准工程：</p>
+<blockquote>
+<p>标准执行一个新项目时，在已知可接受的原则下聚集方法和设备的过程，是对已有技术的新的计划、试制和集成过程。</p>
+</blockquote>
+<p>这个描述比较拗口，我实例化一下。以敏捷软件工程为例，我们在执行一个新项目时，在时间、资源和成本的约束原则之下，通过 Discovery、Inception 等方法快速识别问题并启动项目，购买云服务资源，整备环境，管理和配置持续集成服务器，使用 DDD 建模，TDD 持续交付可工作的软件。整个过程中，我们会评估和选择满足功能及跨功能需求依赖的技术组件，试验和探究新的技术组件，并且集成遗留的系统、多个代码分支、多套测试和发布环境。</p>
+<p>根据康威定律，当项目较大时，标准工程就演变成了一种企业组织形式，此时项目的成败会更加依赖围绕其周遭的利益关系网：技术团队、业务部门、财务预算、部门领导以及其他利益相关者。</p>
+<p>总而言之，技术发展要求工程师处理的事务更加多元化，也更加复杂。优秀的工程师是什么样的呢？这就不得不提《浪潮之巅》的作者吴军划分出的工程师的五个等级说。</p>
+<h1 id="工程师的五个等级"><a href="#工程师的五个等级" class="headerlink" title="工程师的五个等级"></a>工程师的五个等级</h1><p><img src="/images/Pyramid_of_engineers.png" alt="Pyramid Of Engineers"></p>
+<p>吴军借鉴了前苏联著名物理学家朗道提出来的朗道等级。朗道曾经根据物理学家的贡献把他们分成了五级，每一级之间的贡献相差一个数量级。对于工程师，也可以做同样的划分。</p>
+<ol>
+<li>第五等工程师，能够独立设计和实现一项功能的人。如果需要别人告诉他怎么做，最多算是助理工程师或者技工，不在工程师之列。</li>
+<li>第四等工程师，需要产品头脑，也就是说他们在做一件事之前，要知道所做出来的东西是否有用、易用，是否便于维护，是否性能稳定，等等。除了要具备产品设计方面的基本知识，还要具有一定的领导才能，能在整个产品的生命周期从头到尾讲一个产品负责到底。</li>
+<li>第三等工程师，可以做出行业里最好的产品。他们与第四等工程师有着质的差别，这不仅反映在技术水平、对市场的了解、对用户心理的了解以及组织能力等诸多方面，而且也反映在悟性的差异上。</li>
+<li>第二等工程师，是那些可以给世界带来惊喜的人。比如：第一台实用化个人电脑的实现者沃兹尼亚克，他们和第三四五等工程师的差别在于其工作的原创性以及对世界的影响力。不过，他们的工作不同于科学研究。</li>
+<li>第一等工程师，是开创一个全新行业的人，历史上有爱迪生、特斯拉、福特，二战后有保时捷（Ferdinand Porsche，1875-1951）博士，本田宗一郎（1906-1991）和硅谷的诺伊斯等人。这些工程师不仅在技术和产品等各个方向上与第二等的工程师有了质的差别，而且在经验和管理上也是好手，他们通常是企业家，并通过自己的产品改变了世界。</li>
+</ol>
+<p>从这个等级阶梯上，我们看得出来，成为拔尖的工程师有多难。每个等级的工程师之间的差距是数十倍的。好的企业想要获得第二等甚至第一等的工程师，就需要一个由工程师构建的完整金字塔：要想出几个第一等的工程师，就需要有足够数量的第二等工程师，以此类推。</p>
+<h1 id="技术的助产婆"><a href="#技术的助产婆" class="headerlink" title="技术的助产婆"></a>技术的助产婆</h1><p>苏格拉底曾经说过“我是思想的助产婆”，他说的是自己能够通过苏格拉底似的提问引发别人积极思考。那么，工程师们则可以理直气壮地说“我们是技术的助产婆”，工程师必须学会迎接软件复杂性的挑战，坚定地不放过任何细小的机遇荡起的涟漪。在标准工程的日常工作中，一脚把新生的技术踹出去。</p>
+<p>所以，自信点，我们工程师的使命无上光荣。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/mission/" rel="tag"># mission</a>
+          </div>
+
+        
+  <div class="social-like a2a_kit a2a_kit_size_32 a2a_default_style">
+    <a class="a2a_dd" target="_blank" rel="noopener" href="https://www.addtoany.com/share"></a>
+      <a class="a2a_button_facebook"></a>
+      <a class="a2a_button_twitter"></a>
+  </div>
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2019/09/23/Rust-rocks/" rel="prev" title="Rust 入门（Rust rocks）">
+                  <i class="fa fa-angle-left"></i> Rust 入门（Rust rocks）
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2024/06/14/mpc-explained/" rel="next" title="多方安全计算的原理解释和代码说明">
+                  多方安全计算的原理解释和代码说明 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">lambeta</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+  <script src="/js/third-party/addtoany.js"></script>
+
+  
+
+
+
+
+
+</body>
+</html>

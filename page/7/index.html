@@ -149,7 +149,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">77</span>
+          <span class="site-state-item-count">78</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -160,7 +160,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">43</span>
+        <span class="site-state-item-count">44</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -218,6 +218,116 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://qianyan.github.io/2014/09/25/a-way-to-handle-angularjs-components-problem/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="lambeta">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="λ">
+      <meta itemprop="description" content="Elegance and familiarity are orthogonal">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | λ">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2014/09/25/a-way-to-handle-angularjs-components-problem/" class="post-title-link" itemprop="url">AngularJS components</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2014-09-25 00:08:02" itemprop="dateCreated datePublished" datetime="2014-09-25T00:08:02+08:00">2014-09-25</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2017-01-01 17:19:50" itemprop="dateModified" datetime="2017-01-01T17:19:50+08:00">2017-01-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%8A%80%E6%9C%AF/" itemprop="url" rel="index"><span itemprop="name">技术</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><hr>
+<p>假设某种Web App的业务场景是这样的：每个页面仅仅只有简单的表单，包括文字提醒label, 单选radio button, 问题列表dropdown menu, 处理页面前后跳转的button, 复杂一点的如价格输入input，时间选择date picker。而且这些可以独立展现业务价值，也就是说任何一个或者多个这样的页面元素可以经过简单组合，甚至无需组合就能反映一个独立的业务提问（具备评估填写人能力的价值），那么我们就可以将这些页面元素及其简单的组合体作为一个独立的component。这些component最大的好处就是恰如其分地反映了它本身的业务，但是这也不能成为封装成component的理由——因为我们完全可以通过一个良好名称的id来反映。独立出来的好处无非两个：可插拔，能复用。</p>
+<p>首先，来讨论一下可插拔这个问题。假如BA美女告诉说某个业务提问T不应该再出现在A页面了，它应该出现在B页面。若不是component，问题来了：我们需要删掉本页面的T，连带着需要删除分散的js和css文件。麻烦！若是独立一个component，简单了先解除该页面对T的使用（在AngularJS中是删除对应的指令），然后在B页面导入进来。因为是component，且每个页面的结构都是表单，代码结构也类似，所以改动的量少。方便！</p>
+<p>再来讨论一下能复用这个问题。我刚才提到过，因为是反映一个独立的业务提问，所以很可能在其他同类的产品上，这东西也是存在的，可能唯一不同的就是问法不同，以及提示信息有别。换句话说这些问句和提示是可编辑的。有人说那简单呐，component的所有提问和提示信息弄成可编辑的不就行了？component是可变的（可编辑），但是具体在哪个页面给出什么提问和提示总是不变的吧。我原来也是这样想的，但是仔细想想我发现这里有一个矛盾之处：我们想复用业务，而不是组件！这世界上最不可信的就是业务，最可能变的也是业务，但我们还异想天开地复用业务。任何一个独立的component，在具体的业务上，都很可能不是简单地替换显示文本，它完全会增加一小条额外的询问条目！那么原来的component就只能乖乖地被copy&#x2F;paste成另一个可怜的component——因为它们是不同的业务啊！BA如是说。作为程序员，我讨厌重复的代码，这也是我们不断使用重构的原因。但是就因为业务不同，哪怕代码相似度是99%，我也得重新创建一个，这个实在不值得！</p>
+<p>而且，更奇葩地是这些可编辑信息居然被写入了后端的properties文件当中，使用Java这样静态的语言来抽象出一个给这些component提供文本信息的接口。试想一下，哪天某个BA告诉我：我想为某个业务X，添加一个subTitle。我的回答：不行呐，我们的接口只提供了一个label，而且这里已经使用了，我如果加一个新的，会影响其他的所有component的。BA：!&amp;^$%@$. 我接着说：我可以提供一个sub.label的property key，这样前端可以写成 [X.sub].label，如何？BA：呵呵……</p>
+<h3 id="探索"><a href="#探索" class="headerlink" title="探索"></a>探索</h3><hr>
+<h4 id="简单得出几个结论"><a href="#简单得出几个结论" class="headerlink" title="简单得出几个结论"></a>简单得出几个结论</h4><ul>
+<li>不用妄图复用业务，即使它们在UI表现上极其相似；</li>
+<li>业务和UI的关系，等同于饮料和瓶子的关系，瓶子一个模子就够了，饮料随便换；</li>
+<li>饮料要换个瓶模子了，那换就是，具体是从原来的模子继承，还是组合，饮料不需要关心。</li>
+</ul>
+<h4 id="如何做瓶子，如何换饮料，如何组合成卖品"><a href="#如何做瓶子，如何换饮料，如何组合成卖品" class="headerlink" title="如何做瓶子，如何换饮料，如何组合成卖品"></a>如何做瓶子，如何换饮料，如何组合成卖品</h4><p>做瓶子简单。作为程序员，我使用AngularJS的Directive构建基础的common components，如radio button, dropdown menu, search box. 这些仅仅和UI相关。当然这些还仅仅是瓶子的组成成分。</p>
+<p>那么接下来，如何换饮料呢？饮料有自己的骄傲——它不仅口味各异，还分品牌！每种品牌下的饮料自然不同。那我们只好先做一下分类。先从品牌开始，先分成X, Y, Z这几类，然后开始分口味了，又分成A, B, C这几类。这个季度，老板说我们要推出X类的A, B, C饮料！怎么做？我们把A, B, C写入配置文件(properties)，拿A举例子：A有颜色，甜度，气味三个属性，分别对应如下:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">A:</span><br><span class="line">  color: red</span><br><span class="line">  sweet: middle</span><br><span class="line">  smell: nice</span><br></pre></td></tr></table></figure>
+<p>Ok，接下来我们来构造A这款饮料的<strong>业务</strong>的directive</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">(function(global, angular)&#123;</span><br><span class="line">    &#x27;use strict&#x27;;</span><br><span class="line">    angular.module(&#x27;a.b.c&#x27;,[])</span><br><span class="line">        .directive(&#x27;A&#x27;, function()&#123;</span><br><span class="line">           return &#123;</span><br><span class="line">               restrict: &#x27;AE&#x27;,</span><br><span class="line">               templateUrl: &#x27;views/A.html&#x27;</span><br><span class="line">           &#125;;</span><br><span class="line">        &#125;);</span><br><span class="line">&#125;)(this, angular);</span><br></pre></td></tr></table></figure>
+<p>好了，我们有业务细节A了，又有业务A的directive了。我们理所应当地认为这个directive和A应该是一体的，为什么不直接将A细节写入directive的scope中呢？答案是X, Y, Z在这里是可以复用这个directive的，所以不能硬编码。不能硬编码，我首先的直觉就是变量替换，又要求复用，那么就立马想到了继承或者组合。又因为组合优于继承（更现实的是我不知道如何在AngularJS中实现继承），我决定使用组合。接下来这个过程的产出物就是我们的卖品，构造如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"># define in common module</span><br><span class="line">A:&#123;</span><br><span class="line">  color: red,</span><br><span class="line">  sweet: middle,</span><br><span class="line">  smell: nice</span><br><span class="line">&#125;</span><br><span class="line">##</span><br><span class="line"></span><br><span class="line">(function(global, angular)&#123;</span><br><span class="line">    &#x27;use strict&#x27;;</span><br><span class="line">    angular.module(&#x27;a.b.c&#x27;, [&#x27;common&#x27;])</span><br><span class="line">        .directive(&#x27;A&#x27;, [&#x27;me&#x27;, function()&#123;</span><br><span class="line">           return &#123;</span><br><span class="line">               restrict: &#x27;AE&#x27;,</span><br><span class="line">               scope: &#123;</span><br><span class="line">                  self: &#x27;=&#x27;</span><br><span class="line">               &#125;,</span><br><span class="line">               link: function($scope) &#123;</span><br><span class="line">               	   $scope.self = me;</span><br><span class="line">               &#125;,</span><br><span class="line">               templateUrl: &#x27;views/A.html&#x27;</span><br><span class="line">           &#125;;</span><br><span class="line">        &#125;]);</span><br><span class="line">&#125;)(this, angular);</span><br></pre></td></tr></table></figure>
+<p>从代码中很容易看出，我们把A这个业务，组成了一个叫做common的module，可以类比为装着众多饮料的机器，然后对准一个叫做A的瓶子注入，注意A这个瓶子用到了很多common components。这整个过程就是Angular完成这个A的directive的过程，也就是饮料和瓶子组装的过程。然后这个A的directive就是我们的卖品。</p>
+<h3 id="实际成效"><a href="#实际成效" class="headerlink" title="实际成效"></a>实际成效</h3><hr>
+<p>事实验证，上述的方式是不合理的。理由有下面三点：</p>
+<ul>
+<li>依赖过剩。我们将会有很多的components，如果每次都得手动注入common依赖的话，量实在是太大了。</li>
+<li>非独立。一个纯净的业务组件不应该有第三方的依赖，有依赖，必然导致无法独立使用。</li>
+<li>不可扩展设备。这个最大的怪兽就是我们将业务的东西全部放到了前端，如果要兼容其他设备，我们后端的这块业务功能是缺失的，不能给其他设备提供支持。</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1208,108 +1318,6 @@ eg:
 
 
 
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://qianyan.github.io/2014/01/04/clojure-basic-kownladge/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="lambeta">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="λ">
-      <meta itemprop="description" content="Elegance and familiarity are orthogonal">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | λ">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2014/01/04/clojure-basic-kownladge/" class="post-title-link" itemprop="url">Basic clojure knowledge</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2014-01-04 23:38:43" itemprop="dateCreated datePublished" datetime="2014-01-04T23:38:43+08:00">2014-01-04</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2016-09-06 22:57:30" itemprop="dateModified" datetime="2016-09-06T22:57:30+08:00">2016-09-06</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Clojure/" itemprop="url" rel="index"><span itemprop="name">Clojure</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="Basic-Knowledeg"><a href="#Basic-Knowledeg" class="headerlink" title=" Basic Knowledeg"></a> Basic Knowledeg</h1><h3 id="1-prefix-notation"><a href="#1-prefix-notation" class="headerlink" title="1. prefix notation"></a>1. prefix notation</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(- 3 2 1) ; =&gt; 0</span><br><span class="line">(+ 1 2 3) ; =&gt; 6</span><br><span class="line">(&lt; 1 2 3) ; =&gt; true</span><br><span class="line">(&lt; 1 4 2) ; =&gt; false</span><br></pre></td></tr></table></figure>
-<h3 id="2-data-type"><a href="#2-data-type" class="headerlink" title="2. data type"></a>2. data type</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">(class 1) ;=&gt; java.lang.Long</span><br><span class="line">(class 1.0) ;=&gt; java.lang.Double</span><br><span class="line">(class true) ;=&gt; java.lang.Boolean</span><br><span class="line">(class &quot;str&quot;) ;=&gt; java.lang.String</span><br><span class="line"></span><br><span class="line">(class (byte 1)) ;=&gt; java.lang.Byte</span><br><span class="line">(class (short 1)) ;=&gt; java.lang.Short</span><br><span class="line">(class (int 1)) ;=&gt; java.lang.Integer</span><br><span class="line">(class (float 1.0)) ;=&gt; java.lang.Float</span><br><span class="line">(class (char &#x27;a&#x27;)) or (class \a) ;=&gt; java.lang.Character</span><br><span class="line"></span><br><span class="line">(class (/ 1 3)) ;=&gt; clojure.lang.Ratio, support lazy evaluating.</span><br><span class="line"></span><br><span class="line">(class 36786883868216818816N) ;=&gt; clojure.lang.BigInt</span><br><span class="line">(class 3.14159265358M) ;=&gt; java.math.BigDecimal</span><br></pre></td></tr></table></figure>
-<h3 id="3-expression"><a href="#3-expression" class="headerlink" title="3. expression"></a>3. expression</h3><ul>
-<li>if [else]<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">(if (&lt; 1 2)</span><br><span class="line">	(println &quot;it is true&quot;)</span><br><span class="line">	(println &quot;it is false&quot;)</span><br><span class="line">) ;=&gt; it is true</span><br><span class="line"></span><br><span class="line">(if &quot;&quot;</span><br><span class="line">	(prn &quot;it is true&quot;)) ;=&gt; it is true</span><br><span class="line"></span><br><span class="line">(if 0</span><br><span class="line">	(prn &quot;it is true&quot;)) ;=&gt; it is true</span><br><span class="line"></span><br><span class="line">(if nil</span><br><span class="line">	(prn &quot;it is true&quot;)) ;=&gt; nil!!</span><br></pre></td></tr></table></figure></li>
-<li>or&#x2F;and<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(prn (or true false)) ;=&gt; true</span><br><span class="line">(prn (and true false)) ;=&gt; false</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h3 id="4-data-structures"><a href="#4-data-structures" class="headerlink" title="4. data structures"></a>4. data structures</h3><ul>
-<li>list<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(list 1 2 3)</span><br><span class="line">`(1 2 3)</span><br><span class="line">;=&gt; (1 2 3)</span><br></pre></td></tr></table></figure></li>
-<li>vector<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[1 2 3] ;=&gt; [1 2 3]</span><br></pre></td></tr></table></figure></li>
-<li>set<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#&#123;1 2 3&#125; ;=&gt; #&#123;1 2 3&#125;</span><br></pre></td></tr></table></figure></li>
-<li>map<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;:one 1,</span><br><span class="line">:two 2,</span><br><span class="line">:three 3&#125; ;=&gt; &#123;:one 1, :three 3, :two 2&#125;</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h3 id="5-operation-on-data-structures"><a href="#5-operation-on-data-structures" class="headerlink" title="5. operation on data structures"></a>5. operation on data structures</h3><ul>
-<li>op list (seq access)<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(def list0 `(1 2 3))</span><br><span class="line">(first list0) ;=&gt; 1</span><br><span class="line">(rest list0) ;=&gt; (2 3)</span><br><span class="line">(last list0) ;=&gt; 3</span><br><span class="line">(cons 0 list0) ;=&gt; (0 1 2 3)</span><br></pre></td></tr></table></figure></li>
-<li>op vector (rand access)<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(def vec0 [4 5 6])</span><br><span class="line">(nth vec0 2) ;=&gt; 6</span><br><span class="line">(vec0 2) ;=&gt; 6, with index.</span><br><span class="line">(concat [1 2 3] vec0) ;=&gt; (1 2 3 4 5 6), it called sequence.</span><br></pre></td></tr></table></figure></li>
-<li>op set<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(def set0 #&#123;5 7 2 6&#125;)</span><br><span class="line">(count set0) ;=&gt; 4</span><br><span class="line">(set0  2) ;=&gt; 2</span><br></pre></td></tr></table></figure></li>
-<li>op map<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">(def map0 &#123;:one 1, :two 2, :three 3&#125;)</span><br><span class="line">(map0 :one) ;=&gt; 1</span><br><span class="line">(:one map0) ;=&gt; 1</span><br><span class="line">(merge &#123;:four 4&#125; map0) ;=&gt; &#123;:two 2, :three 3, :one 1, :four 4&#125;</span><br><span class="line"></span><br><span class="line">(def map1 (sorted-map 2 :two 1 :one)) ;=&gt; &#123;1 :one, 2 :two&#125;</span><br></pre></td></tr></table></figure></li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
   <nav class="pagination">
     <a class="extend prev" rel="prev" title="上一页" aria-label="上一页" href="/page/6/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" title="下一页" aria-label="下一页" href="/page/8/"><i class="fa fa-angle-right"></i></a>
   </nav>
@@ -1322,7 +1330,7 @@ eg:
 
   <div class="copyright">
     &copy; 
-    <span itemprop="copyrightYear">2024</span>
+    <span itemprop="copyrightYear">2025</span>
     <span class="with-love">
       <i class="fa fa-heart"></i>
     </span>
