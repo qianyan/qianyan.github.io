@@ -23,7 +23,7 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="架构整洁之道导读（二）续 组件聚合张力图">
 <meta property="og:url" content="https://qianyan.github.io/2019/01/17/Guide-to-Clean-Architecture-2-more/index.html">
-<meta property="og:site_name" content="λ">
+<meta property="og:site_name" content="鄢倩">
 <meta property="og:description" content="关于组件聚合张力图的讨论周三的午休时间，我在ThoughtWorks北京办公室分享了一场《架构整洁之道导读》。当谈到分享组件聚合原则的时候，很多同事表示难以理解。究其缘由，是我们无法将组件违反原则的后果对应到真实项目的问题上，这就导致原则和实践之间的不一致。讨论的过程异常激烈，但是很遗憾地最终并没有得到一个服众的结论。所以为了进一步澄清这些争议点，我决定专门组织一场针对组件聚合原则张力图的讨论会。">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://upload-images.jianshu.io/upload_images/217988-97f1eb1dfe9e1314.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
@@ -31,7 +31,7 @@
 <meta property="og:image" content="https://upload-images.jianshu.io/upload_images/217988-c3db0f42dde964ae.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="article:published_time" content="2019-01-17T07:16:04.000Z">
 <meta property="article:modified_time" content="2019-01-17T07:23:15.000Z">
-<meta property="article:author" content="lambeta">
+<meta property="article:author" content="Ryan Qian">
 <meta property="article:tag" content="thinking">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/217988-97f1eb1dfe9e1314.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
@@ -44,7 +44,7 @@
 <script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://qianyan.github.io/2019/01/17/Guide-to-Clean-Architecture-2-more/","path":"2019/01/17/Guide-to-Clean-Architecture-2-more/","title":"架构整洁之道导读（二）续 组件聚合张力图"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>架构整洁之道导读（二）续 组件聚合张力图 | λ</title>
+<title>架构整洁之道导读（二）续 组件聚合张力图 | 鄢倩</title>
   
 
 
@@ -77,7 +77,7 @@
 
     <a href="/" class="brand" rel="start">
       <i class="logo-line"></i>
-      <p class="site-title">λ</p>
+      <p class="site-title">鄢倩</p>
       <i class="logo-line"></i>
     </a>
       <p class="site-subtitle" itemprop="description">(conj clojurians me)</p>
@@ -150,14 +150,14 @@
 
         <div class="site-overview-wrap sidebar-panel">
           <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
-  <p class="site-author-name" itemprop="name">lambeta</p>
-  <div class="site-description" itemprop="description">Elegance and familiarity are orthogonal</div>
+  <p class="site-author-name" itemprop="name">Ryan Qian</p>
+  <div class="site-description" itemprop="description">Senior Consultant | DevOps Master | Blockchain & Web3 Specialist</div>
 </div>
 <div class="site-state-wrap animated">
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">80</span>
+          <span class="site-state-item-count">81</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -200,16 +200,16 @@
         </div>
         <ul class="links-of-blogroll-list">
             <li class="links-of-blogroll-item">
-              <a href="http://blog.jayfields.com/" title="http:&#x2F;&#x2F;blog.jayfields.com&#x2F;" rel="noopener" target="_blank">Jay Fields</a>
+              <a href="https://lambdaisland.com/blog" title="https:&#x2F;&#x2F;lambdaisland.com&#x2F;blog" rel="noopener" target="_blank">Lambdaisland</a>
+            </li>
+            <li class="links-of-blogroll-item">
+              <a href="https://www.youtube.com/@SystemCrafters" title="https:&#x2F;&#x2F;www.youtube.com&#x2F;@SystemCrafters" rel="noopener" target="_blank">System Crafters</a>
             </li>
             <li class="links-of-blogroll-item">
               <a href="https://aphyr.com/" title="https:&#x2F;&#x2F;aphyr.com" rel="noopener" target="_blank">Aphyr</a>
             </li>
             <li class="links-of-blogroll-item">
               <a href="http://bucharestfp.ro/" title="http:&#x2F;&#x2F;bucharestfp.ro" rel="noopener" target="_blank">Bucharest FP</a>
-            </li>
-            <li class="links-of-blogroll-item">
-              <a href="http://www.yinwang.org/" title="http:&#x2F;&#x2F;www.yinwang.org" rel="noopener" target="_blank">Wangyin</a>
             </li>
             <li class="links-of-blogroll-item">
               <a href="http://blog.rlmflores.me/" title="http:&#x2F;&#x2F;blog.rlmflores.me&#x2F;" rel="noopener" target="_blank">Rodrigo Flores</a>
@@ -240,16 +240,16 @@
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="lambeta">
+      <meta itemprop="name" content="Ryan Qian">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="λ">
-      <meta itemprop="description" content="Elegance and familiarity are orthogonal">
+      <meta itemprop="name" content="鄢倩">
+      <meta itemprop="description" content="Senior Consultant | DevOps Master | Blockchain & Web3 Specialist">
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="架构整洁之道导读（二）续 组件聚合张力图 | λ">
+      <meta itemprop="name" content="架构整洁之道导读（二）续 组件聚合张力图 | 鄢倩">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
@@ -421,7 +421,7 @@
     <span class="with-love">
       <i class="fa fa-heart"></i>
     </span>
-    <span class="author" itemprop="copyrightHolder">lambeta</span>
+    <span class="author" itemprop="copyrightHolder">Ryan Qian</span>
   </div>
 
     </div>

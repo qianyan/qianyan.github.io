@@ -23,12 +23,12 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="创建数字钱包（零）KDF 密钥派生算法">
 <meta property="og:url" content="https://qianyan.github.io/2019/01/20/Digital-wallet-0-kdf-algorithm/index.html">
-<meta property="og:site_name" content="λ">
+<meta property="og:site_name" content="鄢倩">
 <meta property="og:description" content="KDF 的定义实现 key stretching [^1] 的方法，具体就是从一个 master key，password 或者 passphrase 派生出一个或者多个密钥，派生的过程，使用PRF（Pseudo Random Function 伪随机函数）可以是某种哈希算法。  [Key stretching]密钥延长算法（一种更慢的哈希算法），用于将初始密钥转换成增强密钥，在计算过程中刻意延长">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2019-01-20T14:31:44.000Z">
 <meta property="article:modified_time" content="2019-05-07T14:45:58.000Z">
-<meta property="article:author" content="lambeta">
+<meta property="article:author" content="Ryan Qian">
 <meta property="article:tag" content="digital-wallet">
 <meta name="twitter:card" content="summary">
 
@@ -40,7 +40,7 @@
 <script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://qianyan.github.io/2019/01/20/Digital-wallet-0-kdf-algorithm/","path":"2019/01/20/Digital-wallet-0-kdf-algorithm/","title":"创建数字钱包（零）KDF 密钥派生算法"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>创建数字钱包（零）KDF 密钥派生算法 | λ</title>
+<title>创建数字钱包（零）KDF 密钥派生算法 | 鄢倩</title>
   
 
 
@@ -73,7 +73,7 @@
 
     <a href="/" class="brand" rel="start">
       <i class="logo-line"></i>
-      <p class="site-title">λ</p>
+      <p class="site-title">鄢倩</p>
       <i class="logo-line"></i>
     </a>
       <p class="site-subtitle" itemprop="description">(conj clojurians me)</p>
@@ -146,14 +146,14 @@
 
         <div class="site-overview-wrap sidebar-panel">
           <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
-  <p class="site-author-name" itemprop="name">lambeta</p>
-  <div class="site-description" itemprop="description">Elegance and familiarity are orthogonal</div>
+  <p class="site-author-name" itemprop="name">Ryan Qian</p>
+  <div class="site-description" itemprop="description">Senior Consultant | DevOps Master | Blockchain & Web3 Specialist</div>
 </div>
 <div class="site-state-wrap animated">
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">80</span>
+          <span class="site-state-item-count">81</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -196,16 +196,16 @@
         </div>
         <ul class="links-of-blogroll-list">
             <li class="links-of-blogroll-item">
-              <a href="http://blog.jayfields.com/" title="http:&#x2F;&#x2F;blog.jayfields.com&#x2F;" rel="noopener" target="_blank">Jay Fields</a>
+              <a href="https://lambdaisland.com/blog" title="https:&#x2F;&#x2F;lambdaisland.com&#x2F;blog" rel="noopener" target="_blank">Lambdaisland</a>
+            </li>
+            <li class="links-of-blogroll-item">
+              <a href="https://www.youtube.com/@SystemCrafters" title="https:&#x2F;&#x2F;www.youtube.com&#x2F;@SystemCrafters" rel="noopener" target="_blank">System Crafters</a>
             </li>
             <li class="links-of-blogroll-item">
               <a href="https://aphyr.com/" title="https:&#x2F;&#x2F;aphyr.com" rel="noopener" target="_blank">Aphyr</a>
             </li>
             <li class="links-of-blogroll-item">
               <a href="http://bucharestfp.ro/" title="http:&#x2F;&#x2F;bucharestfp.ro" rel="noopener" target="_blank">Bucharest FP</a>
-            </li>
-            <li class="links-of-blogroll-item">
-              <a href="http://www.yinwang.org/" title="http:&#x2F;&#x2F;www.yinwang.org" rel="noopener" target="_blank">Wangyin</a>
             </li>
             <li class="links-of-blogroll-item">
               <a href="http://blog.rlmflores.me/" title="http:&#x2F;&#x2F;blog.rlmflores.me&#x2F;" rel="noopener" target="_blank">Rodrigo Flores</a>
@@ -236,16 +236,16 @@
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="lambeta">
+      <meta itemprop="name" content="Ryan Qian">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="λ">
-      <meta itemprop="description" content="Elegance and familiarity are orthogonal">
+      <meta itemprop="name" content="鄢倩">
+      <meta itemprop="description" content="Senior Consultant | DevOps Master | Blockchain & Web3 Specialist">
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="创建数字钱包（零）KDF 密钥派生算法 | λ">
+      <meta itemprop="name" content="创建数字钱包（零）KDF 密钥派生算法 | 鄢倩">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
@@ -367,7 +367,7 @@
     <span class="with-love">
       <i class="fa fa-heart"></i>
     </span>
-    <span class="author" itemprop="copyrightHolder">lambeta</span>
+    <span class="author" itemprop="copyrightHolder">Ryan Qian</span>
   </div>
 
     </div>

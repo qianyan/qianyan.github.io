@@ -21,9 +21,9 @@
 
     <meta name="description" content="有限与无限的游戏美国哲学家詹姆斯·卡斯写过一本书《有限与无限的游戏》，向我们展示了世界上至少有两种类型的“游戏”。有限的游戏，具有明确的开始和结束，其目的在于赢得胜利；无限的游戏，没有固定的开始和结束，旨在让游戏永远进行下去。有限的游戏在边界内玩，无限的游戏玩的就是边界。 Bob 大叔在解释函数式的惰性时，翻出了那款经典的保龄球游戏。今时不同往日，他玩起了无限的游戏。 我们先把保龄球的游戏规则过目">
 <meta property="og:type" content="article">
-<meta property="og:title" content="A Guided Tour of Functional Design (Part 2)">
-<meta property="og:url" content="https://qianyan.github.io/2025/06/25/A-Guided-Tour-of-Functional-Design-Part-2/index.html">
-<meta property="og:site_name" content="λ">
+<meta property="og:title" content="函数式设计导读系列（二）">
+<meta property="og:url" content="https://qianyan.github.io/2024/08/20/A-Guided-Tour-of-Functional-Design-Part-2/index.html">
+<meta property="og:site_name" content="鄢倩">
 <meta property="og:description" content="有限与无限的游戏美国哲学家詹姆斯·卡斯写过一本书《有限与无限的游戏》，向我们展示了世界上至少有两种类型的“游戏”。有限的游戏，具有明确的开始和结束，其目的在于赢得胜利；无限的游戏，没有固定的开始和结束，旨在让游戏永远进行下去。有限的游戏在边界内玩，无限的游戏玩的就是边界。 Bob 大叔在解释函数式的惰性时，翻出了那款经典的保龄球游戏。今时不同往日，他玩起了无限的游戏。 我们先把保龄球的游戏规则过目">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://qianyan.github.io/images/BowlingGameJava_1724129511036_0.png">
@@ -31,23 +31,23 @@
 <meta property="og:image" content="https://qianyan.github.io/images/BowlingGameRefactorClj_1724135788478_0.png">
 <meta property="og:image" content="https://qianyan.github.io/images/BowlingGameFramesClj_1724136529276_0.png">
 <meta property="og:image" content="https://qianyan.github.io/images/BowlingGameClj_1724137596098_0.png">
-<meta property="article:published_time" content="2025-06-25T03:49:39.000Z">
-<meta property="article:modified_time" content="2025-06-25T03:55:01.136Z">
-<meta property="article:author" content="lambeta">
+<meta property="article:published_time" content="2024-08-20T07:39:39.000Z">
+<meta property="article:modified_time" content="2025-06-25T04:11:58.675Z">
+<meta property="article:author" content="Ryan Qian">
 <meta property="article:tag" content="FP">
 <meta property="article:tag" content="emacs">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://qianyan.github.io/images/BowlingGameJava_1724129511036_0.png">
 
 
-<link rel="canonical" href="https://qianyan.github.io/2025/06/25/A-Guided-Tour-of-Functional-Design-Part-2/">
+<link rel="canonical" href="https://qianyan.github.io/2024/08/20/A-Guided-Tour-of-Functional-Design-Part-2/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://qianyan.github.io/2025/06/25/A-Guided-Tour-of-Functional-Design-Part-2/","path":"2025/06/25/A-Guided-Tour-of-Functional-Design-Part-2/","title":"A Guided Tour of Functional Design (Part 2)"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://qianyan.github.io/2024/08/20/A-Guided-Tour-of-Functional-Design-Part-2/","path":"2024/08/20/A-Guided-Tour-of-Functional-Design-Part-2/","title":"函数式设计导读系列（二）"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>A Guided Tour of Functional Design (Part 2) | λ</title>
+<title>函数式设计导读系列（二） | 鄢倩</title>
   
 
 
@@ -80,7 +80,7 @@
 
     <a href="/" class="brand" rel="start">
       <i class="logo-line"></i>
-      <p class="site-title">λ</p>
+      <p class="site-title">鄢倩</p>
       <i class="logo-line"></i>
     </a>
       <p class="site-subtitle" itemprop="description">(conj clojurians me)</p>
@@ -153,14 +153,14 @@
 
         <div class="site-overview-wrap sidebar-panel">
           <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
-  <p class="site-author-name" itemprop="name">lambeta</p>
-  <div class="site-description" itemprop="description">Elegance and familiarity are orthogonal</div>
+  <p class="site-author-name" itemprop="name">Ryan Qian</p>
+  <div class="site-description" itemprop="description">Senior Consultant | DevOps Master | Blockchain & Web3 Specialist</div>
 </div>
 <div class="site-state-wrap animated">
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">80</span>
+          <span class="site-state-item-count">81</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -203,16 +203,16 @@
         </div>
         <ul class="links-of-blogroll-list">
             <li class="links-of-blogroll-item">
-              <a href="http://blog.jayfields.com/" title="http:&#x2F;&#x2F;blog.jayfields.com&#x2F;" rel="noopener" target="_blank">Jay Fields</a>
+              <a href="https://lambdaisland.com/blog" title="https:&#x2F;&#x2F;lambdaisland.com&#x2F;blog" rel="noopener" target="_blank">Lambdaisland</a>
+            </li>
+            <li class="links-of-blogroll-item">
+              <a href="https://www.youtube.com/@SystemCrafters" title="https:&#x2F;&#x2F;www.youtube.com&#x2F;@SystemCrafters" rel="noopener" target="_blank">System Crafters</a>
             </li>
             <li class="links-of-blogroll-item">
               <a href="https://aphyr.com/" title="https:&#x2F;&#x2F;aphyr.com" rel="noopener" target="_blank">Aphyr</a>
             </li>
             <li class="links-of-blogroll-item">
               <a href="http://bucharestfp.ro/" title="http:&#x2F;&#x2F;bucharestfp.ro" rel="noopener" target="_blank">Bucharest FP</a>
-            </li>
-            <li class="links-of-blogroll-item">
-              <a href="http://www.yinwang.org/" title="http:&#x2F;&#x2F;www.yinwang.org" rel="noopener" target="_blank">Wangyin</a>
             </li>
             <li class="links-of-blogroll-item">
               <a href="http://blog.rlmflores.me/" title="http:&#x2F;&#x2F;blog.rlmflores.me&#x2F;" rel="noopener" target="_blank">Rodrigo Flores</a>
@@ -239,25 +239,25 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://qianyan.github.io/2025/06/25/A-Guided-Tour-of-Functional-Design-Part-2/">
+    <link itemprop="mainEntityOfPage" href="https://qianyan.github.io/2024/08/20/A-Guided-Tour-of-Functional-Design-Part-2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="lambeta">
+      <meta itemprop="name" content="Ryan Qian">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="λ">
-      <meta itemprop="description" content="Elegance and familiarity are orthogonal">
+      <meta itemprop="name" content="鄢倩">
+      <meta itemprop="description" content="Senior Consultant | DevOps Master | Blockchain & Web3 Specialist">
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="A Guided Tour of Functional Design (Part 2) | λ">
+      <meta itemprop="name" content="函数式设计导读系列（二） | 鄢倩">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          A Guided Tour of Functional Design (Part 2)
+          函数式设计导读系列（二）
         </h1>
 
         <div class="post-meta-container">
@@ -267,9 +267,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2025-06-25 11:49:39 / 修改时间：11:55:01" itemprop="dateCreated datePublished" datetime="2025-06-25T11:49:39+08:00">2025-06-25</time>
+      <time title="创建时间：2024-08-20 15:39:39" itemprop="dateCreated datePublished" datetime="2024-08-20T15:39:39+08:00">2024-08-20</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-06-25 12:11:58" itemprop="dateModified" datetime="2025-06-25T12:11:58+08:00">2025-06-25</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -339,6 +345,9 @@
                 </a>
             </div>
             <div class="post-nav-item">
+                <a href="/2024/09/01/A-Guided-Tour-of-Functional-Design-Part-3/" rel="next" title="函数式设计导读系列（三）">
+                  函数式设计导读系列（三） <i class="fa fa-angle-right"></i>
+                </a>
             </div>
           </div>
     </footer>
@@ -362,7 +371,7 @@
     <span class="with-love">
       <i class="fa fa-heart"></i>
     </span>
-    <span class="author" itemprop="copyrightHolder">lambeta</span>
+    <span class="author" itemprop="copyrightHolder">Ryan Qian</span>
   </div>
 
     </div>

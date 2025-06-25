@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.2.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+  <link rel="mask-icon" href="/images/favicon.ico" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"qianyan.github.io","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="前言Neal Ford 在《函数式编程思想》（Functional Thinking）中提到面向对象编程是通过封装可变因素控制复杂性（makes code understandable），而函数式编程是通过消除可变因素控制复杂性的。 封装和消除，哪种好理解？封装是为了构造抽象屏障（Abstract Barrier），到达隐藏信息的目的。任何编程范式都不会缺少封装，因为这是人类简化理解事物的方式。只">
+<meta property="og:type" content="article">
+<meta property="og:title" content="函数式设计导读系列（三）">
+<meta property="og:url" content="https://qianyan.github.io/2024/09/01/A-Guided-Tour-of-Functional-Design-Part-3/index.html">
+<meta property="og:site_name" content="鄢倩">
+<meta property="og:description" content="前言Neal Ford 在《函数式编程思想》（Functional Thinking）中提到面向对象编程是通过封装可变因素控制复杂性（makes code understandable），而函数式编程是通过消除可变因素控制复杂性的。 封装和消除，哪种好理解？封装是为了构造抽象屏障（Abstract Barrier），到达隐藏信息的目的。任何编程范式都不会缺少封装，因为这是人类简化理解事物的方式。只">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://qianyan.github.io/images/image_1725192315571_0.png">
+<meta property="og:image" content="https://qianyan.github.io/images/image_1725192327717_0.png">
+<meta property="og:image" content="https://qianyan.github.io/images/refactor-f_1725194242935_0.png">
+<meta property="og:image" content="https://qianyan.github.io/images/refactor-getInput_1725194265652_0.png">
+<meta property="og:image" content="https://qianyan.github.io/images/refactor-getInput-f_1725194285148_0.png">
+<meta property="og:image" content="https://qianyan.github.io/images/image_1725195520043_0.png">
+<meta property="og:image" content="https://qianyan.github.io/images/image_1725195834338_0.png">
+<meta property="og:image" content="https://qianyan.github.io/images/111724213567_.pic_1725196634793_0.jpg">
+<meta property="og:image" content="https://qianyan.github.io/images/FD_%E5%8F%91%E5%B8%83%E4%BC%9A_1725196725606_0.jpeg">
+<meta property="article:published_time" content="2024-09-01T13:57:56.000Z">
+<meta property="article:modified_time" content="2025-06-25T04:13:24.571Z">
+<meta property="article:author" content="Ryan Qian">
+<meta property="article:tag" content="FP">
+<meta property="article:tag" content="emacs">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://qianyan.github.io/images/image_1725192315571_0.png">
+
+
+<link rel="canonical" href="https://qianyan.github.io/2024/09/01/A-Guided-Tour-of-Functional-Design-Part-3/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://qianyan.github.io/2024/09/01/A-Guided-Tour-of-Functional-Design-Part-3/","path":"2024/09/01/A-Guided-Tour-of-Functional-Design-Part-3/","title":"函数式设计导读系列（三）"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>函数式设计导读系列（三） | 鄢倩</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">鄢倩</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">(conj clojurians me)</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B0%81%E8%A3%85%E5%92%8C%E6%B6%88%E9%99%A4%EF%BC%8C%E5%93%AA%E7%A7%8D%E5%A5%BD%E7%90%86%E8%A7%A3%EF%BC%9F"><span class="nav-number">2.</span> <span class="nav-text">封装和消除，哪种好理解？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B%E7%9A%84%E8%BF%87%E7%A8%8B%E4%B8%8E%E7%BB%93%E6%9E%84"><span class="nav-number">3.</span> <span class="nav-text">函数式编程的过程与结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8E%A7%E5%88%B6%E4%BD%8F%E5%A4%8D%E6%9D%82%E6%80%A7%EF%BC%9F"><span class="nav-number">4.</span> <span class="nav-text">控制住复杂性？</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Ryan Qian</p>
+  <div class="site-description" itemprop="description">Senior Consultant | DevOps Master | Blockchain & Web3 Specialist</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">81</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">44</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/qianyan" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;qianyan" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:qianyan.lambda@gmail.com" title="E-Mail → mailto:qianyan.lambda@gmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="http://weibo.com/3672207020" title="Weibo → http:&#x2F;&#x2F;weibo.com&#x2F;3672207020" rel="noopener me" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://x.com/_qian_yan" title="Twitter → https:&#x2F;&#x2F;x.com&#x2F;_qian_yan" rel="noopener me" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+    <div class="sidebar-inner sidebar-blogroll">
+      <div class="links-of-blogroll animated">
+        <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+          链接
+        </div>
+        <ul class="links-of-blogroll-list">
+            <li class="links-of-blogroll-item">
+              <a href="https://lambdaisland.com/blog" title="https:&#x2F;&#x2F;lambdaisland.com&#x2F;blog" rel="noopener" target="_blank">Lambdaisland</a>
+            </li>
+            <li class="links-of-blogroll-item">
+              <a href="https://www.youtube.com/@SystemCrafters" title="https:&#x2F;&#x2F;www.youtube.com&#x2F;@SystemCrafters" rel="noopener" target="_blank">System Crafters</a>
+            </li>
+            <li class="links-of-blogroll-item">
+              <a href="https://aphyr.com/" title="https:&#x2F;&#x2F;aphyr.com" rel="noopener" target="_blank">Aphyr</a>
+            </li>
+            <li class="links-of-blogroll-item">
+              <a href="http://bucharestfp.ro/" title="http:&#x2F;&#x2F;bucharestfp.ro" rel="noopener" target="_blank">Bucharest FP</a>
+            </li>
+            <li class="links-of-blogroll-item">
+              <a href="http://blog.rlmflores.me/" title="http:&#x2F;&#x2F;blog.rlmflores.me&#x2F;" rel="noopener" target="_blank">Rodrigo Flores</a>
+            </li>
+            <li class="links-of-blogroll-item">
+              <a href="https://seancorfield.github.io/" title="https:&#x2F;&#x2F;seancorfield.github.io&#x2F;" rel="noopener" target="_blank">Seancorfield</a>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://qianyan.github.io/2024/09/01/A-Guided-Tour-of-Functional-Design-Part-3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Ryan Qian">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="鄢倩">
+      <meta itemprop="description" content="Senior Consultant | DevOps Master | Blockchain & Web3 Specialist">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="函数式设计导读系列（三） | 鄢倩">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          函数式设计导读系列（三）
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-09-01 21:57:56" itemprop="dateCreated datePublished" datetime="2024-09-01T21:57:56+08:00">2024-09-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-06-25 12:13:24" itemprop="dateModified" datetime="2025-06-25T12:13:24+08:00">2025-06-25</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Clojure/" itemprop="url" rel="index"><span itemprop="name">Clojure</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>Neal Ford 在《函数式编程思想》（Functional Thinking）中提到面向对象编程是通过封装可变因素控制复杂性（makes code understandable），而函数式编程是通过消除可变因素控制复杂性的。</p>
+<h2 id="封装和消除，哪种好理解？"><a href="#封装和消除，哪种好理解？" class="headerlink" title="封装和消除，哪种好理解？"></a>封装和消除，哪种好理解？</h2><p>封装是为了构造抽象屏障（Abstract Barrier），到达隐藏信息的目的。任何编程范式都不会缺少封装，因为这是人类简化理解事物的方式。只不过在面向对象编程语言中，封装、继承和多态（polymorphism）被拔到了一种必须充分理解的高度，而 Bob 在函数式设计中挑明了态度，他认为多态比其他两者高出一筹。原因在于进行高层次策略设计时，多态是调整依赖关系行之有效的方法。我认为他说得有一定道理，但是弱化封装这个性质倒和他的中心思想相背离，因为在这本书里，面向对象的封装和函数式的消除是棋逢对手的关键性质，费点笔墨解释清楚，很有必要。</p>
+<p>Bob 大叔在第五章里列举了两段伪代码，如下。</p>
+<p><img src="/images/image_1725192315571_0.png" alt="image.png">{:height 442, :width 780}</p>
+<p><img src="/images/image_1725192327717_0.png" alt="image.png"></p>
+<p>如果你看过我之前写的文章，不难理解这里发生了什么，无非用尾递归消除了 x 的赋值。在 Bob 大叔的眼中，赋值等同于可变性。所以，函数式设计的精髓就是消除可变性。</p>
+<p>可是，除了赋值，第一段程序跟封装有什么关系呢？别急，我们稍微重构一下它。</p>
+<p><img src="/images/refactor-f_1725194242935_0.png" alt="refactor-f.png"></p>
+<p><img src="/images/refactor-getInput_1725194265652_0.png" alt="refactor-getInput.png"></p>
+<p><img src="/images/refactor-getInput-f_1725194285148_0.png" alt="refactor-getInput-f.png"></p>
+<p><code>Input x</code> 是一个对象，所以我们就把所有依赖其本身的行为通通封装进它的体内，希望你能感受到封装的力量。这里面有一点洞察，面向对象尽量会把行为放进对象体内，以符合数据内聚性的需要。也因此，对象的状态会原地改变，相当于赋值。</p>
+<p>函数式则不然，它的状态无法原地改变，也就意味着它必须以递归或管道的方式自旋或流动起来，那些状态就保持在不可变的外部数据结构当中。</p>
+<p>所以 Bob 大叔下了个结论：在状态可变的语言中，行为流过了对象；而在函数式语言中，对象流过行为。</p>
+<p>行为流过对象，指的是行为在对象中迭代发生；而对象流过行为则是说行为在对象外顺序发生。或者说面向对象中的赋值（状态变化）在对象里发生，而函数式中的状态变化在对象外发生。所以从做事的横向流程上看，函数式更加清爽明了。而纵向结构上，面向对象则更加边界清晰，粒度合适。究其原因，函数式是一种“以终为始”的思考方式，其定义的每个阶段的产物都是比较完整的；而面向对象则是子问题划分，在子问题中寻求差异化解决方案。</p>
+<h2 id="函数式编程的过程与结构"><a href="#函数式编程的过程与结构" class="headerlink" title="函数式编程的过程与结构"></a>函数式编程的过程与结构</h2><p>函数式编程是一种管道式的编程风格，Bob 大叔说它更像是铺设和修改数据流的管道，管道中的每道工序更像是包含尾递归的状态转移。</p>
+<p><img src="/images/image_1725195520043_0.png" alt="image.png"></p>
+<p>如果转化成 Clojure 代码，就像是用上了 Thread 宏的管道风格。</p>
+<p><img src="/images/image_1725195834338_0.png" alt="image.png"></p>
+<p>数据起源于物理世界，从一头流向另一头，最后汇入到有副作用的物理世界。</p>
+<h2 id="控制住复杂性？"><a href="#控制住复杂性？" class="headerlink" title="控制住复杂性？"></a>控制住复杂性？</h2><p>没有那么简单。回到最初的原则，编程范式是对编程方式的规范和约束，而方法的孰优孰劣取决于问题的规模和复杂性，也取决于方法固有的复杂性。遇到非状态机（随时序变化）的问题时，两种方法差异不大；遇到状态机的问题，就要根据规模和复杂度琢磨一下。后续，我们在深入对比分析。</p>
+<p>大家好，我是鄢倩，我是 Bob 大叔的《架构整洁之道》中文版的技术审校，也是他的扛鼎之作《敏捷软件开发：原则、模式和实践》重制版的译者。当然，再次有幸参与了大叔的新作《函数式设计》的技术审校，我非常高兴能在这里和大家分享我在审校过程中所学所想。</p>
+<p><img src="/images/111724213567_.pic_1725196634793_0.jpg" alt="111724213567_.pic.jpg"></p>
+<p><img src="/images/FD_%E5%8F%91%E5%B8%83%E4%BC%9A_1725196725606_0.jpeg" alt="FD 发布会.jpeg"></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/FP/" rel="tag"># FP</a>
+              <a href="/tags/emacs/" rel="tag"># emacs</a>
+          </div>
+
+        
+  <div class="social-like a2a_kit a2a_kit_size_32 a2a_default_style">
+    <a class="a2a_dd" target="_blank" rel="noopener" href="https://www.addtoany.com/share"></a>
+      <a class="a2a_button_facebook"></a>
+      <a class="a2a_button_twitter"></a>
+  </div>
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2024/08/20/A-Guided-Tour-of-Functional-Design-Part-2/" rel="prev" title="函数式设计导读系列（二）">
+                  <i class="fa fa-angle-left"></i> 函数式设计导读系列（二）
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Ryan Qian</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+  <script src="/js/third-party/addtoany.js"></script>
+
+  
+
+
+
+
+
+</body>
+</html>
