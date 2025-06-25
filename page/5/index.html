@@ -149,7 +149,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">78</span>
+          <span class="site-state-item-count">79</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -218,6 +218,129 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://qianyan.github.io/2015/11/26/Why-are-we-learning-Clojure/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="lambeta">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="λ">
+      <meta itemprop="description" content="Elegance and familiarity are orthogonal">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | λ">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2015/11/26/Why-are-we-learning-Clojure/" class="post-title-link" itemprop="url">Why we are learning Clojure</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2015-11-26 13:37:56" itemprop="dateCreated datePublished" datetime="2015-11-26T13:37:56+08:00">2015-11-26</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2016-09-06 22:56:24" itemprop="dateModified" datetime="2016-09-06T22:56:24+08:00">2016-09-06</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Clojure/" itemprop="url" rel="index"><span itemprop="name">Clojure</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>在Gaslight，我们广泛地在工作中使用Ruby和Rails，也充分地经历了从JQuery到Ember再到AngularJS及其他所有关于JavaScript的一切。不过有时候我们为了学习和成长，需要脱离舒适区。我们如何赶上未来的趋势和机会呢？</p>
+<p>那就是绝不停止学习。在过去的几个星期里，我们的开发团队决定作为一个小组去掌握Clojure语言。我们尝试构建了关于这门技术的主要知识点，所以当我们在一个客户项目中采用Clojure的时候，对自己技术的深度和熟悉程度很有自信。</p>
+<p>为什么我们会选择Clojure呢？</p>
+<h2 id="填补了Ruby和Rail没有顾及的空白"><a href="#填补了Ruby和Rail没有顾及的空白" class="headerlink" title="填补了Ruby和Rail没有顾及的空白"></a>填补了Ruby和Rail没有顾及的空白</h2><blockquote>
+<p>我知道我们不可能永远用Ruby编程。另一个语言和环境一定会到来并取代它。我只是希望它真的比我们现在所拥用的更好。 —— Doug Alcorn</p>
+</blockquote>
+<p>我们依然热爱Ruby，依然认为Rails通常是构建web应用的最佳方案。但是，它和其他工具一样，有长处，也有短处。</p>
+<ol>
+<li>Ruby的并发并不健壮。是的，你可以使用JRuby和Celluloid，但是可变性在根本上妨碍它走向并发。同时，很多你想要使用的库都不是线程安全的。</li>
+<li>Ruby和Rails几乎总是足够快的。几乎总是，但不尽然。</li>
+<li>对象关系映射（ORM）不总是正确的。</li>
+<li>面向对象的语言也不总是最佳的解决方案。</li>
+</ol>
+<h2 id="函数式编程是一种不同的思考方式"><a href="#函数式编程是一种不同的思考方式" class="headerlink" title="函数式编程是一种不同的思考方式"></a>函数式编程是一种不同的思考方式</h2><blockquote>
+<p>函数式编程是一种编程范式，一种构建计算机程序的结构和元素，它把计算看做数学函数的求值，同时禁止改变状态和可变的数据。——Wikipedia</p>
+</blockquote>
+<p>函数式编程语言是一种有别于我们平常在Ruby和JavaScript中编程的编程范式。学习这一范式使得我们能学习崭新且不同的技术来解决问题。这些技术可能不太容易去学习，如果我们沉浸在自己舒适的命令式和面向对象的语言范式当中。</p>
+<h2 id="Clojure运行在服务器端"><a href="#Clojure运行在服务器端" class="headerlink" title="Clojure运行在服务器端"></a>Clojure运行在服务器端</h2><blockquote>
+<p>Clojure实现它的目标，通过：拥抱一个行业标准的开放平台——Java虚拟机；现代化一门古老的语言——Lisp；树立带有不可变持久化数据结构的函数式编程；同时通过软件事务内存以及异步代理提供内建的并发支持。这一结果是健壮的，顺手的和快速的。—— Clojure.org</p>
+</blockquote>
+<p>Clojure运行在Java虚拟机（JVM）上并且利用了其提供的优势：高质量的垃圾回收，高性能的本地线程以及可扩展的移植。Clojure又在其上增加了高效的不可变持久化数据结构。Clojure带来了有趣的并发模型Core.Async。另外，这里还有很多其他有趣的库供开发，逻辑编程，模式匹配，optional typing和好多我们想要尝试并理解的东西。</p>
+<h2 id="Clojure运行在浏览器端"><a href="#Clojure运行在浏览器端" class="headerlink" title="Clojure运行在浏览器端"></a>Clojure运行在浏览器端</h2><blockquote>
+<p>一个具有扩展，移植和多供应商支持的开发平台，一场在各个新设备上实现精巧工具的优化军备竞赛以及一个对更丰富且更精巧应用的呐喊。开发者们还有什么想要的呢？一个不同的语言，这就是了。—— ClojureScript Wiki</p>
+</blockquote>
+<p>ClojureScript编译成JavaScript运行于浏览器。它提供了一种全新的方式去思考编写客户端应用程序。JavaScript并不是开发者社区里广泛青睐的语言。但是Clojure是设计良好，精密且具有很好异步支持的成熟的Lisp。它也可以和其他的JavaScript类库交互。所有这些都为我们提供了一个在客户端和服务端使用相同的语言却不需要做任何妥协的机会。</p>
+<p>管理本来就具有状态的客户端应用是件尴尬的事，不过像React和Ember这些JavaScript框架正在着手解决这个问题，我们开始猜想如果一种更加基本的改变方式值得深入研究，那么是否可能有一种更好的语言和这其中的任一已经存在的框架配合来为我们提供一种途径使得可以更好地控制复杂性呢？Clojure允许我们朝着这个问题寻找答案。</p>
+<p>我们不相信银弹，但是我们真的喜欢这样的事实，Clojure包含了客户端的需求。</p>
+<h2 id="朝冰球要去的地方滑"><a href="#朝冰球要去的地方滑" class="headerlink" title="朝冰球要去的地方滑"></a>朝冰球要去的地方滑</h2><blockquote>
+<p>我追逐冰球要去的地方，而不是它所在的地方。—— Wayne Gretzky</p>
+</blockquote>
+<p>Clojure会帮助我们填补创建特定类型的应用程序的沟壑。那些需要响应或者处理大规模数据的程序。我们已经身处多核CPU的纪元，但是传统的语言还未追赶上这些计算机的架构。函数式编程提供了一种新的编程范式允许我们更简单地使用这种架构写程序。Clojure提供允许我们高效地处理大规模数据的工具。它使得传递和转换数据接近实时。这些特性会使我们比从前更高效地解决问题。</p>
+<h2 id="不过不是Bleeding-Edge"><a href="#不过不是Bleeding-Edge" class="headerlink" title="不过不是Bleeding Edge"></a>不过不是Bleeding Edge</h2><blockquote>
+<p>“什么会被认为是bleeding-edge的技术，”sez Lucas。 “没被证实的用法，高风险，只有早期采用成瘾者才感到舒服的东西”—— Thomas Pynchon, Bleeding Edge</p>
+</blockquote>
+<p>此时，Clojure被发布超过5年之久并且似乎在开发者社区里获得了不错的想法分享。在新锐技术上掉坑的采纳曲线上这不算太早了。Clojure利用了已存在的技术如已经被开发超过15以上年头的java虚拟机（JVM）。它也可以利用很多已经存在的高质量的Java类库。</p>
+<h2 id="一些新东西让我们保持兴奋"><a href="#一些新东西让我们保持兴奋" class="headerlink" title="一些新东西让我们保持兴奋"></a>一些新东西让我们保持兴奋</h2><blockquote>
+<p>自从学Ruby以来，还没有学习一门新技术让我如此激动！ —— Michael Guterl</p>
+</blockquote>
+<p>在Gaslight，我们想在行业中吸引和保留最好的技术。为了做到这一点，我们需要给大家提供学习和提高其技能的机会。Clojure帮助我们提供了这样的机会。它是一个带有一系列工具的崭新范式。不过最重要的是，它允许我们处理新的且有趣的问题。还没有什么能比解决有意思的问题更让我们高兴的呢。</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1308,113 +1431,6 @@ The second class of approaches are synchronization-related, and are used in situ
 <li><code>module.exports</code>最好使用<code>function</code>方式导出。</li>
 </ul>
 <p>参考链接<br>[1]  <a target="_blank" rel="noopener" href="http://www.adequatelygood.com/Writing-Testable-JavaScript.html">Writing Testable JavaScript</a></p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://qianyan.github.io/2015/01/30/Javascript-Scope/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="lambeta">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="λ">
-      <meta itemprop="description" content="Elegance and familiarity are orthogonal">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | λ">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2015/01/30/Javascript-Scope/" class="post-title-link" itemprop="url">Javascript Scope</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2015-01-30 17:08:44" itemprop="dateCreated datePublished" datetime="2015-01-30T17:08:44+08:00">2015-01-30</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2016-09-06 22:58:19" itemprop="dateModified" datetime="2016-09-06T22:58:19+08:00">2016-09-06</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E6%8A%80%E6%9C%AF/" itemprop="url" rel="index"><span itemprop="name">技术</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <blockquote>
-<p>The extent of a scope refers to the lifetime of a variable (i.e., how long a variable holds a certain value)</p>
-</blockquote>
-<h3 id="Global-Scope"><a href="#Global-Scope" class="headerlink" title="Global Scope"></a>Global Scope</h3><p>Javascript中任意不使用var创建的变量具有全局作用域。</p>
-<figure class="highlight javascript"><figcaption><span>global</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">globalVariable = <span class="string">&quot;global&quot;</span>;</span><br><span class="line">(<span class="keyword">function</span>(<span class="params"></span>) &#123;</span><br><span class="line">	<span class="variable language_">console</span>.<span class="title function_">log</span>(globalVariable);</span><br><span class="line">&#125;)()</span><br><span class="line"></span><br><span class="line">-&gt; <span class="variable language_">global</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">delete</span> globalVariable;</span><br><span class="line"></span><br><span class="line">-&gt; <span class="literal">true</span></span><br></pre></td></tr></table></figure>
-<p>当然，任意定义在文件最顶层的变量，事实上，由于<a target="_blank" rel="noopener" href="http://yanqian.me/2015/01/27/Javascript-Hoisting/">Javascript Hositing</a>作用，所有定义在最外层的变量都会被提升至作用域首部，都具有全局作用域。</p>
-<p>值得注意的是使用var定义的变量是不能delete的，它不是全局变量的属性：</p>
-<figure class="highlight javascript"><figcaption><span>del_variable</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> globalVariable = <span class="string">&#x27;global&#x27;</span>;</span><br><span class="line"><span class="keyword">delete</span> globalVariable;</span><br><span class="line"></span><br><span class="line">-&gt; <span class="literal">false</span></span><br></pre></td></tr></table></figure>
-
-<p>除此之外，任意被暴露到最外层的变量，一旦被全局作用域捕获，其本身都会存在被随意修改的风险。</p>
-<h3 id="Lexical-Scope"><a href="#Lexical-Scope" class="headerlink" title="Lexical Scope"></a>Lexical Scope</h3><blockquote>
-<p>Lexical scope refers to the visibility of a variable and its value analogous to its textual representation.</p>
-</blockquote>
-<p>Javascript会从内向外寻找变量的绑定，所以变量的定义距离使用处最近，则该变量会被使用。</p>
-<figure class="highlight javascript"><figcaption><span>lexical_scope</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">lexicalScope</span>(<span class="params"></span>) &#123;</span><br><span class="line">	<span class="keyword">var</span> lexicalVariable = <span class="string">&quot;outer&quot;</span>;</span><br><span class="line">	<span class="keyword">if</span>(<span class="literal">true</span>) &#123;</span><br><span class="line">		<span class="keyword">var</span> lexicalVariable = <span class="string">&quot;inner&quot;</span>;</span><br><span class="line">		<span class="variable language_">console</span>.<span class="title function_">log</span>(lexicalVariable);</span><br><span class="line">		(<span class="keyword">function</span>(<span class="params"></span>)&#123;</span><br><span class="line">			<span class="keyword">var</span> lexicalVariable = <span class="string">&quot;innerMost&quot;</span>;</span><br><span class="line">			<span class="variable language_">console</span>.<span class="title function_">log</span>(lexicalVariable);</span><br><span class="line">		&#125;)();</span><br><span class="line">		<span class="variable language_">console</span>.<span class="title function_">log</span>(lexicalVariable);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title function_">lexicalScope</span>();</span><br><span class="line">-&gt; inner</span><br><span class="line">innerMost</span><br><span class="line">inner</span><br></pre></td></tr></table></figure>
-
-<h3 id="Dynamic-Scope"><a href="#Dynamic-Scope" class="headerlink" title="Dynamic Scope"></a>Dynamic Scope</h3><blockquote>
-<p>the value of any given binding cannot be known until the caller of any given function is known— which may be too late.</p>
-</blockquote>
-<figure class="highlight javascript"><figcaption><span>dynamic_scope</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">globalThis</span>(<span class="params"></span>) &#123; <span class="keyword">return</span> <span class="variable language_">this</span>; &#125;</span><br><span class="line"><span class="title function_">globalThis</span>();</span><br><span class="line">-&gt; some <span class="variable language_">global</span> object, probably <span class="title class_">Window</span></span><br><span class="line">globalThis.<span class="title function_">call</span>(<span class="string">&#x27;barnabas&#x27;</span>);</span><br><span class="line">-&gt; <span class="string">&#x27;barnabas&#x27;</span></span><br><span class="line">globalThis.<span class="title function_">apply</span>(<span class="string">&#x27;orsulak&#x27;</span>, [])</span><br><span class="line">-&gt; <span class="string">&#x27;orsulak&#x27;</span></span><br></pre></td></tr></table></figure>
-<p>在Javascript中，<em>this</em>所处的作用域就是动态作用域。也就是说，<em>globalThis()<em>返回值完全由调用方决定，</em>this</em>变量的对照表是不断改变的。更多参考<a target="_blank" rel="noopener" href="http://yanqian.me/2014/10/11/funcation-scope/">这里</a></p>
-<h3 id="Function-Scope"><a href="#Function-Scope" class="headerlink" title="Function Scope"></a>Function Scope</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">function strangerIdentity(n) &#123;</span><br><span class="line">	for(this[&#x27;i&#x27;] = 0; this[&#x27;i&#x27;] &lt; n; this[&#x27;i&#x27;]++);</span><br><span class="line">	return this[&#x27;i&#x27;];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">--- case 1</span><br><span class="line">strangerIdentity(100);</span><br><span class="line">-&gt; 100</span><br><span class="line">i</span><br><span class="line">-&gt; 100</span><br><span class="line"></span><br><span class="line">--- case 2</span><br><span class="line">var id = new strangerIdentity(100);</span><br><span class="line"></span><br><span class="line">id</span><br><span class="line">-&gt; strangerIdentity &#123;i: 100&#125;</span><br><span class="line">id.i</span><br><span class="line">-&gt; 100</span><br><span class="line">i</span><br><span class="line">-&gt;  Uncaught ReferenceError: i is not defined</span><br></pre></td></tr></table></figure>
-<p>在Javascript中，只有一个<strong>Function</strong>才会产生新的作用域。直接调用一个funcation，其内部的指针指向global对象。但当使用<em>new</em>后，其作用域绑定到一个<strong>Function Object</strong>上。</p>
 
       
     </div>

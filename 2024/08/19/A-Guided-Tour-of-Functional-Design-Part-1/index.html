@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.2.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+  <link rel="mask-icon" href="/images/favicon.ico" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"qianyan.github.io","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="我是 Bob 大叔的《架构整洁之道》中文版的技术审校，也是他的扛鼎之作《敏捷软件开发：原则、模式和实践》重制版的译者。当然，再次有幸参与了大叔的新作《函数式设计》的技术审校，我想谈谈过程中个人的所学所想。 浓眉大眼的 OO 叛变革命？Bob 大叔成名已久，是面向对象编程领域当之无愧的领军人物。如今，他出一本函数式编程的书籍，我想他的多数读者应该会感到疑惑：没想到你浓眉大眼的，居然也叛变了“革命”。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="函数式设计导读系列（一）">
+<meta property="og:url" content="https://qianyan.github.io/2024/08/19/A-Guided-Tour-of-Functional-Design-Part-1/index.html">
+<meta property="og:site_name" content="λ">
+<meta property="og:description" content="我是 Bob 大叔的《架构整洁之道》中文版的技术审校，也是他的扛鼎之作《敏捷软件开发：原则、模式和实践》重制版的译者。当然，再次有幸参与了大叔的新作《函数式设计》的技术审校，我想谈谈过程中个人的所学所想。 浓眉大眼的 OO 叛变革命？Bob 大叔成名已久，是面向对象编程领域当之无愧的领军人物。如今，他出一本函数式编程的书籍，我想他的多数读者应该会感到疑惑：没想到你浓眉大眼的，居然也叛变了“革命”。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://qianyan.github.io/images/sumFirstTenSquareHelperJava_1723958913624_0.png">
+<meta property="og:image" content="https://qianyan.github.io/images/sumFirstTenSquareHelperJava-Recursive_1723975974493_0.png">
+<meta property="og:image" content="https://qianyan.github.io/images/sum-first-ten-squares-helper-clj_1723976287213_0.png">
+<meta property="og:image" content="https://qianyan.github.io/images/sumFirstTenSquareHelper-CljRecursive_1723976829928_0.png">
+<meta property="og:image" content="https://qianyan.github.io/images/sum-first-ten-squares-helper-tco-clj_1723976955296_0.png">
+<meta property="og:image" content="https://qianyan.github.io/images/sum-first-ten-squares-helper-tco-stack-clj_1723976968464_0.png">
+<meta property="og:image" content="https://qianyan.github.io/images/state-updates-java_1723977516519_0.png">
+<meta property="og:image" content="https://qianyan.github.io/images/state-updates-fp_1723977527346_0.png">
+<meta property="og:image" content="https://qianyan.github.io/images/loop-recur-clj_1723980120018_0.png">
+<meta property="article:published_time" content="2024-08-19T02:07:00.000Z">
+<meta property="article:modified_time" content="2025-06-25T03:40:49.997Z">
+<meta property="article:author" content="lambeta">
+<meta property="article:tag" content="FP">
+<meta property="article:tag" content="emacs">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://qianyan.github.io/images/sumFirstTenSquareHelperJava_1723958913624_0.png">
+
+
+<link rel="canonical" href="https://qianyan.github.io/2024/08/19/A-Guided-Tour-of-Functional-Design-Part-1/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://qianyan.github.io/2024/08/19/A-Guided-Tour-of-Functional-Design-Part-1/","path":"2024/08/19/A-Guided-Tour-of-Functional-Design-Part-1/","title":"函数式设计导读系列（一）"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>函数式设计导读系列（一） | λ</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">λ</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">(conj clojurians me)</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%93%E7%9C%89%E5%A4%A7%E7%9C%BC%E7%9A%84-OO-%E5%8F%9B%E5%8F%98%E9%9D%A9%E5%91%BD%EF%BC%9F"><span class="nav-number">1.</span> <span class="nav-text">浓眉大眼的 OO 叛变革命？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E9%97%AE%E4%B8%89%E8%BF%9E%EF%BC%8C%E4%B8%80%E5%8F%91%E5%85%A5%E9%AD%82"><span class="nav-number">2.</span> <span class="nav-text">一问三连，一发入魂</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9C%9F%E7%9B%B8%E5%8F%AA%E6%9C%89%E4%B8%80%E4%B8%AA%EF%BC%81"><span class="nav-number">3.</span> <span class="nav-text">真相只有一个！</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">lambeta</p>
+  <div class="site-description" itemprop="description">Elegance and familiarity are orthogonal</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">79</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">44</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/qianyan" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;qianyan" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:qianyan.lambda@gmail.com" title="E-Mail → mailto:qianyan.lambda@gmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="http://weibo.com/3672207020" title="Weibo → http:&#x2F;&#x2F;weibo.com&#x2F;3672207020" rel="noopener me" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://x.com/_qian_yan" title="Twitter → https:&#x2F;&#x2F;x.com&#x2F;_qian_yan" rel="noopener me" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+    <div class="sidebar-inner sidebar-blogroll">
+      <div class="links-of-blogroll animated">
+        <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+          链接
+        </div>
+        <ul class="links-of-blogroll-list">
+            <li class="links-of-blogroll-item">
+              <a href="http://blog.jayfields.com/" title="http:&#x2F;&#x2F;blog.jayfields.com&#x2F;" rel="noopener" target="_blank">Jay Fields</a>
+            </li>
+            <li class="links-of-blogroll-item">
+              <a href="https://aphyr.com/" title="https:&#x2F;&#x2F;aphyr.com" rel="noopener" target="_blank">Aphyr</a>
+            </li>
+            <li class="links-of-blogroll-item">
+              <a href="http://bucharestfp.ro/" title="http:&#x2F;&#x2F;bucharestfp.ro" rel="noopener" target="_blank">Bucharest FP</a>
+            </li>
+            <li class="links-of-blogroll-item">
+              <a href="http://www.yinwang.org/" title="http:&#x2F;&#x2F;www.yinwang.org" rel="noopener" target="_blank">Wangyin</a>
+            </li>
+            <li class="links-of-blogroll-item">
+              <a href="http://blog.rlmflores.me/" title="http:&#x2F;&#x2F;blog.rlmflores.me&#x2F;" rel="noopener" target="_blank">Rodrigo Flores</a>
+            </li>
+            <li class="links-of-blogroll-item">
+              <a href="https://seancorfield.github.io/" title="https:&#x2F;&#x2F;seancorfield.github.io&#x2F;" rel="noopener" target="_blank">Seancorfield</a>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://qianyan.github.io/2024/08/19/A-Guided-Tour-of-Functional-Design-Part-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="lambeta">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="λ">
+      <meta itemprop="description" content="Elegance and familiarity are orthogonal">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="函数式设计导读系列（一） | λ">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          函数式设计导读系列（一）
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-08-19 10:07:00" itemprop="dateCreated datePublished" datetime="2024-08-19T10:07:00+08:00">2024-08-19</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-06-25 11:40:49" itemprop="dateModified" datetime="2025-06-25T11:40:49+08:00">2025-06-25</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Clojure/" itemprop="url" rel="index"><span itemprop="name">Clojure</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>我是 Bob 大叔的《架构整洁之道》中文版的技术审校，也是他的扛鼎之作《敏捷软件开发：原则、模式和实践》重制版的译者。当然，再次有幸参与了大叔的新作《函数式设计》的技术审校，我想谈谈过程中个人的所学所想。</p>
+<h2 id="浓眉大眼的-OO-叛变革命？"><a href="#浓眉大眼的-OO-叛变革命？" class="headerlink" title="浓眉大眼的 OO 叛变革命？"></a>浓眉大眼的 OO 叛变革命？</h2><p>Bob 大叔成名已久，是面向对象编程领域当之无愧的领军人物。如今，他出一本函数式编程的书籍，我想他的多数读者应该会感到疑惑：没想到你浓眉大眼的，居然也叛变了“革命”。Bob 大叔叛变了吗？他的这本书和他之前的诸多作品文脉想通，有继承也有创新，落脚点还是实用。我用电梯演讲的方式概括了这本书的内容和优势。 对于：Bob 大叔的读者多数是面向对象编程的熟练手</p>
+<h2 id="一问三连，一发入魂"><a href="#一问三连，一发入魂" class="headerlink" title="一问三连，一发入魂"></a>一问三连，一发入魂</h2><p>决定读不读一本书，最好的方式是带着疑问去检索答案。我拿到这本书，脑子中闪现的一个问题就是函数式设计是作为面向对象设计的对立面提出来的吗？当我翻开前面几页，发现 Bob 大叔居然用了 Clojure 这门 Lisp 的方言来阐述观点，不由得心头一紧，这门编程语言受众很窄，恐怕会劝退很多读者呀！写过如此之多畅销书的 Bob 大叔不会没有意识到这点，那他的目的何在？我把书从头粗粗地翻到末尾，闭目凝神，回想 2010 至 2020 年这十年间函数式编程语言红极一时又式微的过程，叠加 genAI Copilot 辅助编程的滔天巨浪，不免心有戚戚，喟然叹曰：现在再来讨论编程范式，有用吗？</p>
+<p>FD 是作为 OOD 对立面提出来的吗？</p>
+<p>Bob 大叔为什么要用 Clojure 语言，这种小众语言我又用不上，学了等于白学？</p>
+<p>如果我工作中没有用到函数式编程语言，这本书是不是对我帮助就不大了？</p>
+<h2 id="真相只有一个！"><a href="#真相只有一个！" class="headerlink" title="真相只有一个！"></a>真相只有一个！</h2><p>你觉得函数式编程的本质是什么？一切皆函数（注：纯函数）。这个回答怕是贴着面向对象编程的脸喊出来的。Bob 大叔在书中就不这么说的，他的厉害之处就在于：别整这些玄乎饶舌的概念，给我上代码，拉出来溜溜，拿捏几下，我就知道你姓甚名谁，写下来，完了还给自己的前一本书压个韵。</p>
+<p>Bob 大叔在《架构整洁之道》中提出了编程范式的真相 —— 约束程序的执行，告诉我们不能做什么。</p>
+<p>为什么要对程序的赋值操作做限制呢？原因在于赋值带来程序的时序耦合，显然时序耦合是让程序复杂（难懂）的诱因之一。我们看看一段计算前十个整数的平方和的 Java 程序，这段程序中包含了两个变量并且都有赋值。仔细看这三段注释的 log 函数，其中第二个记录的 sum 和 i 并不是这轮循环的最终状态（sum累加之后，i 必须自增）。具体来说，调用 sumFirstTenSquareHelper(0, 1)，正确的 [sum, i] 状态对是 [0, 1], [1, 2], [5, 3] … [385, 11]，但是第二处记录却是错误的状态对，如 [1, 1]。也就是说，赋值的操作给了时间顺序这个坏蛋以可乘之机，让本应是原子化的变量状态出现不一致。假设放到更加混乱的多线程环境中，这段程序时不时会出现错误，这也被称为竞态条件。竞态条件是指多个线程在访问共享资源时，其执行顺序可能导致结果的不确定性或错误。</p>
+<p><img src="/images/sumFirstTenSquareHelperJava_1723958913624_0.png" alt="sumFirstTenSquareHelperJava.png"></p>
+<p>既然赋值或称对变量的改变是时序耦合的罪魁祸首，那么明智的做法自然是干掉它。我们解析下赋值的目标是什么？没错，状态的变化。完成状态的变化，通常有两种做法。第一种简单粗暴，用新的直接干掉旧的，让旧的消失于无形，俗称破坏性创新。第二种优雅得多，符合重构（refactoring）十六字心法“旧的不变，新的创建，一键切换，旧的再见”。前者是赋值，后者是替换。说白了，替换不是抹去前任痕迹，而是让旧的依然如故，以旧换新而已。</p>
+<p>那么到底该怎么做呢？函数式编程中有两大武器，可以实现以旧换新的便宜操作。第一件是递归函数调用（recursive function call），第二件是持久性数据（persistent data）。我们知道，递归函数调用如果未到达递归出口（一般是 if 条件），那么它的栈桢就会不断累积下去，每一层栈桢都可以看作是一次以旧换新；而持久性数据是一种支持多版本的数据结构，它会尽可能地共享数据结构来避免以旧换新时数据的完全拷贝，毕竟，完全拷贝听上去就很浪费。</p>
+<p>我们看看用 Java 程序用这两大武器实现赋值消失术。利用递归，将赋值转换成算出新值，然后作为参数传递给递归函数。因为此处的参数仅是原生类型，对于复合类型，持久性数据的威力才会发挥出来。</p>
+<p><img src="/images/sumFirstTenSquareHelperJava-Recursive_1723975974493_0.png" alt="sumFirstTenSquareHelperJava-Recursive.png"></p>
+<p>如此看来，我们已经完成了赋值的历史终结任务，但令人不安的是天边似乎还有一朵乌云——递归的代价。我们用 Clojure 同样实现一遍上面的简短程序。然后用 <code>cider-toggle-trace-ns</code>（如果你用 Emacs + Cider 写 Clojure 的话，顺便说一句，有兴趣的人足够多，那我会分享自己的 Emacs + Cider 配置），一旦调用该函数，就会有深深的调用栈出现。递归会让函数 call 栈桢增长，导致栈溢出。</p>
+<p><img src="/images/sum-first-ten-squares-helper-clj_1723976287213_0.png" alt="sum-first-ten-squares-helper-clj.png"></p>
+<p><img src="/images/sumFirstTenSquareHelper-CljRecursive_1723976829928_0.png" alt="sumFirstTenSquareHelper-CljRecursive.png"></p>
+<p>递归有代价，尾递归来优化。我们把上面的程序略作修改，把内部的函数调用名改成 recur，重新求值，再来观察一下调用栈。你会惊喜地发现，深深的栈不见了，尾递归优化（TCO）复用了栈桢，以此达到了循环的目的。所以，你会在这本书的多数程序中发现这样的结构 <code>(loop...recur)</code>。</p>
+<p><img src="/images/sum-first-ten-squares-helper-tco-clj_1723976955296_0.png" alt="sum-first-ten-squares-helper-tco-clj.png"></p>
+<p><img src="/images/sum-first-ten-squares-helper-tco-stack-clj_1723976968464_0.png" alt="sum-first-ten-squares-helper-tco-stack-clj.png">{:height 438, :width 780}</p>
+<p>我们用两段伪代码来通观下刚刚到底发生了什么事情。对，我们用尾递归去掉了循环赋值。我们回过头来看看。 尾递归看上去很复杂，但其实很简单。上面程序展示了过程式代码改造成函数式尾递归的过程，其中最大的差异点就是消除了变量的赋值。 其实，搞了这么多新奇的手法，又是尾递归优化又是持久性数据，那都是因为计算机的开山老祖是图灵的图灵机而不是阿隆佐·邱奇的 lambda 演算，我们一直在用图灵机的实现模拟 lambda 演算。所以，总结下来就是持久性数据 (persistent data) 在递归参数中的复制以代替赋值，用 TCO 减少栈桢增长。</p>
+<p><img src="/images/state-updates-java_1723977516519_0.png" alt="state-updates-java.png"></p>
+<p><img src="/images/state-updates-fp_1723977527346_0.png" alt="state-updates-fp.png"></p>
+<p><img src="/images/loop-recur-clj_1723980120018_0.png" alt="loop-recur-clj.png"></p>
+<p>归根结底，函数式编程遵循一个朴素的原则，追求不变性。甚至可以说，函数式设计的本质就是拿捏不变性。其余的绝妙功法，我们后续再聊。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/FP/" rel="tag"># FP</a>
+              <a href="/tags/emacs/" rel="tag"># emacs</a>
+          </div>
+
+        
+  <div class="social-like a2a_kit a2a_kit_size_32 a2a_default_style">
+    <a class="a2a_dd" target="_blank" rel="noopener" href="https://www.addtoany.com/share"></a>
+      <a class="a2a_button_facebook"></a>
+      <a class="a2a_button_twitter"></a>
+  </div>
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2024/06/14/mpc-explained/" rel="prev" title="多方安全计算的原理解释和代码说明">
+                  <i class="fa fa-angle-left"></i> 多方安全计算的原理解释和代码说明
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">lambeta</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+  <script src="/js/third-party/addtoany.js"></script>
+
+  
+
+
+
+
+
+</body>
+</html>
